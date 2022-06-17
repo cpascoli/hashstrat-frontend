@@ -1,0 +1,16 @@
+{
+    "kovan": {
+        "pool": "0x13eBDc730cA1f64a76Aef7FC8b400E982ef4B271",
+        "pool_lp": "0xD9E6A74D970B67C0c25b03D96cf4f9f4040C4D0a",
+        "strategy": "0x4Cb5BAb3555Ae81f41AC9999092aa610b9a49caa",
+        "usdc": "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa",
+        "weth": "0xd0A1E359811322d97991E03f863a0C30C2cF029C"
+    },
+    "polygon": {
+        "pool": "0x1Df1D2057D1d4126398C001ea855a60b277c249E",
+        "pool_lp": "0xC899BE41c7f0ADb202b1D7Ed7CB10365D8b8b0e2",
+        "strategy": "0x94b3dD1aEd189A419007100B35CA4d056e09500c",
+        "usdc": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+        "weth": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619"
+    }
+}

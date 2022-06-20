@@ -10,6 +10,7 @@ const useStyles = makeStyles( theme => ({
         gap: theme.spacing(1),
         border: '1px solid '+theme.palette.text.secondary,
         minWidth: 300,
+        borderRadius: 6,
         color: theme.palette.text.primary
     },
     label: {

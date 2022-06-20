@@ -1,50 +1,57 @@
-
-import React from 'react'
 import { useState } from "react"
+import { useEthers, useTokenBalance } from "@usedapp/core"
 
-
-import { styled } from "@material-ui/core/styles"
 import { Box, Grid, Paper, Button, makeStyles } from  "@material-ui/core"
 import { TitleValueBox } from './TitleValueBox'
 import { DepositWithdrawForm } from './DepositWithdrawForm'
 
 import { Modal } from "./Modal"
+import { Token } from "./Main"
+
+import { fromDecimals } from "../utils/formatter"
+
+
 
 interface DepositWithdrawViewProps {
   formType?: string,
-  balanceUSDC: string;
+  chainId: number,
+  token: Token;
   portfolioValue: string;
-  tokenSymbol: string
-  tokenImgSrc: string,
   handleSuccess: (result: any) => void,
   handleError: (error: any, message: string) => void,
 }
 
 
-
-
 const useStyle = makeStyles( theme => ({
   container: {
-    padding: theme.spacing(2),
+    margin: "auto",
+    padding: theme.spacing(1),
     textAlign: 'center',
-    width: "100%",
+    maxWidth: "500px",
+  },
+  balanceView: {
+    marginBottom: "20px",
   }
 }))
 
 
 
-export const DepositWithdrawView = ( { formType, balanceUSDC, portfolioValue, tokenSymbol, tokenImgSrc, handleSuccess, handleError } : DepositWithdrawViewProps ) => {
+export const DepositWithdrawView = ( { formType, chainId, token, portfolioValue, handleSuccess, handleError } : DepositWithdrawViewProps ) => {
 
   const classes = useStyle()
   const [showUpdateStakeModal, setShowUpdateStakeModal] = useState(false);
   const [formTypeValue, setFormTypeValue] = useState(formType);
 
 
-  const showModalPreseed = (buttonType: string) => {
+  const { symbol, image, address } = token
+  const { account } = useEthers()
+  const tokenBalance = useTokenBalance(address, account)
+  const formattedTokenBalance = tokenBalance && fromDecimals(tokenBalance, 6, 2) || "0.0"
 
+
+  const showModalPreseed = (buttonType: string) => {
     setShowUpdateStakeModal(true)
     setFormTypeValue(buttonType)
-
   }
 
   const hideModalPreseed = () => {
@@ -59,32 +66,35 @@ export const DepositWithdrawView = ( { formType, balanceUSDC, portfolioValue, to
   }
   
 
-    //const { showUpdateStakeModal, formType, balanceUSDC, portfolioValue, depositTokenSymbol } = this.state
-
     return (
-      <Box>
+      <Box className={classes.container}>
 
-          <TitleValueBox title="Available to deposit" value={balanceUSDC} tokenSymbol={tokenSymbol} />
-
+          <div className={classes.balanceView}>
+            <TitleValueBox title={`Available to ${formType}`} value={formattedTokenBalance} tokenSymbol={symbol} />
+          </div>
           <Box sx={{ flexGrow: 1, pt: 2 }}>
-              <Grid container >
-                  <Grid item xs={6}>
-                      <Box className={classes.container}>
-                          <Button name="stake" variant="contained" onClick={(e) => showModalPreseed("deposit")}>Deposit</Button>
+              <Grid container>
+                { formType === 'deposit' && 
+                  <Grid item xs={12}>
+                      <Box >
+                          <Button name="deposit" variant="contained" onClick={(e) => showModalPreseed("deposit")}>
+                            Deposit
+                          </Button>
                       </Box>
                   </Grid>
-                  <Grid item xs={6}>
-                      <Box className={classes.container}>
-                          <Button name="unstake" variant="contained" onClick={(e) => showModalPreseed("withdraw")}>Withdraw</Button>
+                }
+                { formType === 'withdraw' &&
+                  <Grid item xs={12}>
+                      <Box>
+                          <Button name="withdraw" variant="contained" onClick={(e) => showModalPreseed("withdraw")}>
+                            Withdraw
+                          </Button>
                       </Box>
                   </Grid>
+                }
               </Grid>
           </Box>
           
-
-          <div className="mt-4"></div>
-
-          {/* <RewardsInfo rewardRate={rewardRate} totalRewardsPaid={totalRewardsPaid} /> */}
 
           <div className="mt-4"></div>
 
@@ -92,13 +102,13 @@ export const DepositWithdrawView = ( { formType, balanceUSDC, portfolioValue, to
             <Modal onClose={(e) => hideModalPreseed()}>
               <DepositWithdrawForm
                 formType={formTypeValue}
+                balance={formattedTokenBalance}
+                chainId={chainId}
+                token={token}
                 handleSuccess={handleSuccess}
                 handleError={handleError}
                 allowanceUpdated={handleAllowanceUpdated}
-                balance={formType == "deposit" ? balanceUSDC : formType == "withdraw" ? portfolioValue : "0.0"}
-                tokenSymbol={tokenSymbol}
-                tokenImgSrc={tokenImgSrc}
-              />
+              /> 
             </Modal>
           )}
       </Box>

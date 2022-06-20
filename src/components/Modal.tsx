@@ -8,12 +8,13 @@ const useStyles = makeStyles( theme => ({
          left: "50%",
          top: "50%",
          transform: "translateX(-50%) translateY(-50%)",
-         width: "538px",
-         backgroundColor: "white",
+         minWidth: "400px",
+         backgroundColor: theme.palette.type == 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
          boxShadow: "0 1px 27px 0 rgba(0,0,0,0.19)",
          borderRadius: "3px",
          padding: "14px",
-         zIndex: 120
+         zIndex: 120,
+         color: theme.palette.text.primary,
      },
      overlay: {
          backgroundColor: "rgba(65,65,85,0.58)",
@@ -24,10 +25,6 @@ const useStyles = makeStyles( theme => ({
          right: 0,
          zIndex: 110
      },
-    //  modal: {
-    //      textAlign: "center",
-    //      margin: "10px 0"
-    //  }
 }))
  
 

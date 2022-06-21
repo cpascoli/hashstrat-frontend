@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Box } from "@material-ui/core"
-import { Alert } from "@material-ui/lab"
+import { Alert, AlertTitle } from "@material-ui/lab"
 
 import { ContentPanel } from "./panel"
 import usdc from "./img/usdc.png"
@@ -60,6 +60,28 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
     return (
         <Box>
            <Header toggleDark={toggleDark} setToggleDark={setToggleDark} setChainId={setChainId} setAccount={setAccount} />
+           
+           {(!chainId && account) &&
+                <Alert severity="warning" style={{textAlign: "center", margin: 30}} > 
+                    <AlertTitle>Wrong Network</AlertTitle>
+                    Please connect to the <strong>Polygon</strong> or <strong>Kovan</strong> networks to use the dapp
+                </Alert>
+            }
+
+            { (!chainId && !account) &&
+                <Alert severity="info" style={{textAlign: "center", margin: 30}} > 
+                    <AlertTitle>No account connected</AlertTitle>
+                    Please connect an account to the Polygon or Kovan networks to use the dapp
+                </Alert>
+            }
+
+            { (chainId && !account) &&
+                <Alert severity="info" style={{textAlign: "center", margin: 30}} > 
+                    <AlertTitle>No account connected</AlertTitle>
+                    Please connect an account to use the dapp
+                </Alert>
+            }
+
            { connected && 
             <Box py={4}>
                 <ContentPanel chainId={chainId!} account={account!} tokens={supportedTokens!} /> 

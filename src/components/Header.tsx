@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-
+import { useBlockNumber } from "@usedapp/core"
 import Switch from "@material-ui/core/Switch";
 import { useEthers } from "@usedapp/core";
 import { Box, Grid, Paper, Button, makeStyles, Menu, MenuProps, MenuList, MenuItem, ListItemIcon, Divider } from  "@material-ui/core"
@@ -24,7 +24,7 @@ const StyledMenu = styled((props: MenuProps) => (
       '& .MuiPaper-root': {
         borderRadius: 8,
         marginTop: theme.spacing(1),
-        minWidth: 180,
+        minWidth: 200,
         color: theme.palette.type === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
         boxShadow:
           'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
@@ -62,6 +62,10 @@ interface HeaderProps {
 export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : HeaderProps ) => {
 
     const classes = useStyles()
+
+    // const [blockNumber, setBlockNumber] = useState(0)
+
+    const blockNumber = useBlockNumber()
 
     const handleModeChange = () => {
         setToggleDark(!toggleDark);
@@ -129,21 +133,18 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
 
                         <StyledMenu
                           id="account-menu"
-                          MenuListProps={{
-                            'aria-labelledby': 'account-button',
-                          }}
                           anchorEl={anchorEl}
                           getContentAnchorEl={null}
                           open={open}
                           onClose={handleClose}
                         >
-                            <MenuItem onClick={handleClose} disableRipple>
-                                Block number
+                            <MenuItem onClick={handleClose}>
+                                Currnet Block: {blockNumber}
                             </MenuItem>
 
                             <Divider />
 
-                            <MenuItem onClick={handleClose} disableRipple>
+                            <MenuItem onClick={handleClose} >
                                 <Button color="secondary" variant="outlined" onClick={disconnectPressed}>Disconnect</Button>
                             </MenuItem>
                         </StyledMenu>

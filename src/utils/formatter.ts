@@ -1,7 +1,7 @@
 
 
 
-import { BigNumber } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 
 export const fromDecimals = (amount: BigNumber, decimals: Number, precision: Number) => {
 
@@ -13,9 +13,14 @@ export const fromDecimals = (amount: BigNumber, decimals: Number, precision: Num
     return decimal.toString()
 }
 
-export const toDecimals = (amount: string | number, decimals: Number) => {
-    const decimalsFactor =  BigNumber.from('10').pow( BigNumber.from(decimals) ); 
-    const formatted = BigNumber.from(amount.toString()).mul(decimalsFactor)
+export const toDecimals = (amount: string | number, decimals: number) => {
+
+    console.log("toDecimals 1 ", amount, typeof amount, "decimals: ", decimals)
+    const formatted = ethers.utils.parseUnits(amount.toString(), decimals)
+    // const decimalsFactor =  BigNumber.from('10').pow( BigNumber.from(decimals) ); 
+    // const formatted = BigNumber.from(Number(amount)).mul(decimalsFactor)
+    console.log("toDecimals 2 ", amount, typeof amount, "decimals: ", decimals," >> ", formatted.toString())
+
     return formatted.toString()
 }
 

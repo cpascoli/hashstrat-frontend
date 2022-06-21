@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import { Box } from "@material-ui/core"
+import { Alert } from "@material-ui/lab"
+
 import { ContentPanel } from "./panel"
 import usdc from "./img/usdc.png"
 import poollp from "./img/pool_lp.png"
@@ -20,12 +23,12 @@ interface MainProps {
 }
 
 
-
 export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  { 
   
     const [connected, setConnected] = useState(false);
     const [chainId, setChainId] = useState<number>();
     const [account, setAccount] = useState<string>();
+
 
     useEffect(() => {
         if (chainId && account) {
@@ -55,10 +58,14 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
     console.log(">>> Main: chainId: ", chainId, "account", account, "connected", connected)
 
     return (
-        <>
+        <Box>
            <Header toggleDark={toggleDark} setToggleDark={setToggleDark} setChainId={setChainId} setAccount={setAccount} />
-           { connected && <ContentPanel chainId={chainId!} account={account!} tokens={supportedTokens!} /> }
-        </>
+           { connected && 
+            <Box py={4}>
+                <ContentPanel chainId={chainId!} account={account!} tokens={supportedTokens!} /> 
+            </Box>
+           }
+        </Box>
     )
 
 }

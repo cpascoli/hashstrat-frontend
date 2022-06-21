@@ -1,12 +1,11 @@
 
 import { useEthers, useContractFunction, useCall, ERC20Interface } from "@usedapp/core"
-import { ERC20Contract, PoolAddress, UsdcContract } from "../utils/network"
+import { ERC20Contract, PoolAddress } from "../utils/network"
 
 
 // Approve spending of 'symbol' by the Pool contract
 export const useTokenApprove = (chainId: number, symbol: string) => {
- 
-    const tokenContract =  UsdcContract(chainId) 
+    const tokenContract =  ERC20Contract(chainId, symbol) 
     const spenderAddress = PoolAddress(chainId)
 
     const { send: approveErc20Send, state: approveErc20State } = useContractFunction(tokenContract, "approve", { 

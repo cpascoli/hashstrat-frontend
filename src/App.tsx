@@ -38,10 +38,7 @@ function App() {
         }}>
           
           <CssBaseline />
-
-
-     
-          <Container maxWidth="md">
+          <Container maxWidth="md" disableGutters>
               <Main toggleDark={toggleDark} setToggleDark={setToggleDark} />
           </Container>
 

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react"
-import { useEthers, useTokenBalance, useNotifications } from "@usedapp/core"
-import { Box, Grid, Button, Input, CircularProgress, Snackbar, Divider, Typography, Link, makeStyles } from "@material-ui/core"
-import Alert from "@material-ui/lab/Alert"
+import { useNotifications } from "@usedapp/core"
+import { Box, Grid, Button, Input, CircularProgress, Divider, Typography, Link, makeStyles } from "@material-ui/core"
 import { useTokenApprove, useTokenAllowance, useDeposit, useWithdraw } from "../hooks"
 import { Token } from "./Main"
 import { toDecimals, fromDecimals } from "../utils/formatter"
+import { NetworkExplorerHost } from "../utils/network"
+import { SnackInfo } from "./panel/ContentTabs"
+import { Horizontal } from "./Layout"
+
 
 export interface DepositWithdrawFormProps {
     formType? : string;
@@ -12,9 +15,10 @@ export interface DepositWithdrawFormProps {
     token : Token;
     balance: string;
 
-    handleSuccess: (result: any) => void;
-    handleError: (error: any, message: string) => void;
+    handleSuccess: (result: SnackInfo) => void,
+    handleError: (error: SnackInfo) => void,
     allowanceUpdated: () => void;
+    onClose: () => void
 }
 
 
@@ -24,14 +28,9 @@ const useStyle = makeStyles( theme => ({
         fontSize: 20,
     },
     container: {
-        // display: "grid",
-        // gridTemplateColumns: "repeat(1, 1fr)",
-        // gap: theme.spacing(0),
         padding: 0,
         width: '100%',
         maxWidth: 360,
-        // backgroundColor: theme.palette.background.default,
-        // backgroundColor: "red"
     },
     section1: {
         margin: `${theme.spacing(2)}px ${theme.spacing(2)}px`
@@ -41,15 +40,11 @@ const useStyle = makeStyles( theme => ({
         width: "30px",
         marginRight: 20,
         marginLeft: 0,
-        // margin: "auto",
     },
     amountWithLabel: {
-        // border: "1px solid black",
-        // margin: "auto",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        // gap: theme.spacing(2),
         marginTop: 20, 
         marginBottom: 50,
         marginLeft: 10,
@@ -62,14 +57,9 @@ const useStyle = makeStyles( theme => ({
     }
 }))
 
-export const DepositWithdrawForm = ({ formType, chainId, token, balance } : DepositWithdrawFormProps) => {
-
+export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleSuccess, handleError, onClose } : DepositWithdrawFormProps) => {
 
     const { symbol, image, address } = token
-
-    const [showErc20ApprovalSuccess, setShowErc20ApprovalSuccess] = useState(false)
-    const [showDepositTokenSuccess, setShowDepositTokenSuccess] = useState(false)
-    const [showWithdrawTokenSuccess, setShowWithdrawTokenSuccess] = useState(false)
 
     // Token Allowance 
     const allowance = useTokenAllowance(chainId, symbol) // in token decimals
@@ -100,40 +90,6 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance } : Depo
         console.log("approveButtonPressed - amount: ", amount, "amountDecimals", amountDecimals)
         return approveErc20(amountDecimals)
     }
-
-
-    const handleCloseSnack = () => {
-        setShowErc20ApprovalSuccess(false)
-        setShowDepositTokenSuccess(false)
-    }
-
-    useEffect(() => {
-        if (notifications.filter((notification) =>
-                notification.type === "transactionSucceed" &&
-                notification.transactionName === "Approve Token Transfer").length > 0) {
-            setShowErc20ApprovalSuccess(true)
-            setShowDepositTokenSuccess(false)
-            setShowWithdrawTokenSuccess(false)
-        }
-        if (notifications.filter((notification) =>
-                notification.type === "transactionSucceed" &&
-                notification.transactionName === "Deposit Tokens"
-        ).length > 0) {
-            setShowErc20ApprovalSuccess(false)
-            setShowDepositTokenSuccess(true)
-            setShowWithdrawTokenSuccess(false)
-        }
-
-        if (notifications.filter((notification) =>
-            notification.type === "transactionSucceed" &&
-            notification.transactionName === "Withdraw Tokens"
-        ).length > 0) {
-            setShowErc20ApprovalSuccess(false)
-            setShowDepositTokenSuccess(false)
-            setShowWithdrawTokenSuccess(true)
-        }
-    }, [notifications, showErc20ApprovalSuccess, showDepositTokenSuccess, showWithdrawTokenSuccess])
-
 
 
     const submitForm = () => {
@@ -169,20 +125,68 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance } : Depo
 
     const submitButtonTitle = (formType === 'deposit') ? "Deposit" :  (formType === 'withdraw') ? "Withdraw" : "n/a"
 
+    const explorerHost = NetworkExplorerHost(chainId)
+    const approveLink =  (approveErc20State.status == 'Success' && approveErc20State.receipt)? `https://${explorerHost}/tx/${approveErc20State.receipt.transactionHash}` : ""
+    const depositLink =  (depositState.status == 'Success' && depositState.receipt)? `https://${explorerHost}/tx/${depositState.receipt.transactionHash}` : ""
+    const withdrawLink =  (withdrawState.status == 'Success' && withdrawState.receipt)? `https://${explorerHost}/tx/${withdrawState.receipt.transactionHash}` : ""
+
+    useEffect(() => {
+        if (notifications.filter((notification) =>
+                notification.type === "transactionSucceed" &&
+                notification.transactionName === "Approve Token Transfer").length > 0) {
+            handleSuccess({
+                type: "info",
+                title: "Success",
+                message: "Token transfer approved!",
+                linkUrl: approveLink,
+                linkText: "View Transaction",
+                snackDuration: 30000
+            })
+        }
+        if (notifications.filter((notification) =>
+                notification.type === "transactionSucceed" &&
+                notification.transactionName === "Deposit Tokens"
+        ).length > 0) {
+            handleSuccess({
+                type: "info",
+                title: "Success",
+                message: "Tokens deposited into the Pool",
+                linkUrl: depositLink,
+                linkText: "View Transaction",
+                snackDuration: 30000
+            })
+        }
+
+        if (notifications.filter((notification) =>
+            notification.type === "transactionSucceed" &&
+            notification.transactionName === "Withdraw Tokens"
+        ).length > 0) {
+            handleSuccess({
+                type: "info",
+                title: "Success",
+                message: "Tokens withdrawn from the Pool",
+                linkUrl: withdrawLink,
+                linkText: "View Transaction",
+                snackDuration: 30000
+            })
+        }
+    }, [notifications])
+
 
     return (
         <>
         <div className={classes.container}>
                 
             <div className={classes.section1}>
-                <h1 className={classes.title}> {formType === 'deposit'? 'Add Liquidity' : 'Remove Liquidity' } </h1>
-                <Typography color="textSecondary"> Deposit tokens into the pool</Typography>
+                <h1 className={classes.title}> {formType === 'deposit'? `Deposit ${symbol}` : 'Withdraw Liquidity' } </h1>
+                <Typography color="textSecondary"> 
+                   First approve and then transfer the tokens.
+                </Typography>
             </div>
             
             <Divider />
 
             <Box  alignItems="center" mt={3}>
-               
                 <Grid container justifyContent="flex-end">
                     <Link href="#" color="inherit" variant="body2" onClick={() => balancePressed()} >
                         Balance: {balance}
@@ -198,66 +202,46 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance } : Depo
                 </Grid>
             </Box>
 
-
-                { formType === 'deposit' &&
-                    <Box mb={2} >
-                       { !allowanceOk && 
-                        <Button  variant="contained" color="primary" fullWidth disabled={allowanceOk}
-                            onClick={() => approveButtonPressed()} >
-                            {isApproveMining ? <CircularProgress size={26} title={`Approve ${symbol}`} /> : `Approve ${symbol}`}
-                        </Button>
-                        }
-                        { allowanceOk && 
-                        <Button variant="contained" color="primary" fullWidth  
-                            onClick={() => submitForm()} disabled={!allowanceOk} >
-                            {isDepositMining ? <CircularProgress size={26} title={submitButtonTitle} /> : submitButtonTitle }
-                        </Button>
-                        }
-                    </Box>
-                }  
-                { formType === 'withdraw' &&
-                    <Box  >
-                        <Button variant="contained" color="primary" fullWidth
-                            onClick={() => submitForm()}>
-                            {isWithdrawMining ? <CircularProgress size={26} title={submitButtonTitle} /> : submitButtonTitle }
-                        </Button>
-                    </Box>
-                }  
+            { formType === 'deposit' &&
+                <Box mb={2} >
+                    { !allowanceOk && 
+                    <Button variant="contained" color="primary" fullWidth disabled={allowanceOk}
+                        onClick={() => approveButtonPressed()} >
+                        Approve {symbol} 
+                        { isApproveMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
+                    </Button>
+                    }
+                    { allowanceOk && 
+                    <Button variant="contained" color="primary" fullWidth  
+                        onClick={() => submitForm()} disabled={!allowanceOk} >
+                        { submitButtonTitle }
+                        { isDepositMining && <Horizontal >  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
+                    </Button>
+                    }
+                </Box>
+            }  
+            { formType === 'withdraw' &&
+                <Box  >
+                    <Button variant="contained" color="primary" fullWidth
+                        onClick={() => submitForm()}>
+                        { submitButtonTitle }
+                        { isWithdrawMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
+                    </Button>
+                </Box>
+            }
 
 
             </div>
-
-            { approveErc20State.status !== 'None' && <Typography color="textSecondary" variant="body1" >Approve Erc20 state:{ approveErc20State.status} </Typography> } 
-            { depositState.status !== 'None' && <Typography color="textSecondary" variant="body1" > depositState state:{ depositState.status} </Typography> } 
-            <Typography color="textSecondary" variant="body2" > 
-                Current Allowance of {formattedAllowance} {symbol} is {allowanceOk ? "sufficient" : "insufficient"} to deposit
-            </Typography>
         
-            <Snackbar
-                open={showErc20ApprovalSuccess}
-                autoHideDuration={5000}
-                onClose={handleCloseSnack}
-            >
-                <Alert onClose={handleCloseSnack} severity="success">
-                    Token Transfer Approved!
-                </Alert>
-            </Snackbar>
-            <Snackbar
-                open={showDepositTokenSuccess}
-                autoHideDuration={5000}
-                onClose={handleCloseSnack}>
-                <Alert onClose={handleCloseSnack} severity="success">
-                    Tokens Deposited into the Pool!
-                </Alert>
-            </Snackbar>
-            <Snackbar
-                open={showWithdrawTokenSuccess}
-                autoHideDuration={5000}
-                onClose={handleCloseSnack}>
-                <Alert onClose={handleCloseSnack} severity="success">
-                    Tokens Withdrawn from the Pool!
-                </Alert>
-            </Snackbar>
+            {
+                (approveErc20State.status == 'Mining' || depositState.status  == 'Mining' || withdrawState.status == 'Mining' ) ? 
+                    <Typography color="textSecondary" variant="body2" >  Mining... </Typography> : 
+                (approveErc20State.status == 'Exception' || depositState.status  == 'Exception' || withdrawState.status == 'Exception' ) ? 
+                    <Typography color="textSecondary" variant="body2" >  
+                        { approveErc20State.errorMessage } { depositState.errorMessage } { withdrawState.errorMessage }
+                    </Typography> : ''
+            }
+
         </>
     )
 }

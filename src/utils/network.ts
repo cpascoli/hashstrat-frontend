@@ -1,10 +1,9 @@
-import { useEthers } from "@usedapp/core"
 import { constants, utils, Contract  } from "ethers"
 
 import networkMappings from "../chain-info/deployments.json"
 import helperConfig from "../helper-config.json"
 import abis from "../chain-info/abis.json"
-
+import explorerMappings from "../chain-info/explorers.json"
 
 // Contracts Addresses
 
@@ -37,6 +36,14 @@ export const DaiTokenAddress = (chainId: number) => {
     return networkMappings[networkName as keyof typeof networkMappings]["dai"]
 }
 
+export const NetworkExplorerHost = (chainId: number) => {
+    if (!chainId) return ""
+   const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+
+   return explorerMappings[networkName as keyof typeof networkMappings]
+}
+
+
 
 // Contracts
 
@@ -57,11 +64,11 @@ export const UsdcContract = (chainId: number) => {
 
 export const DaiContract = (chainId: number) => {
     const abi = abis[ "dai" as keyof typeof abis ]
-    return new Contract(DaiTokenAddress(chainId) , new utils.Interface(abi))
+    return new Contract(DaiTokenAddress(chainId), new utils.Interface(abi))
 }
 
 export const ERC20Contract = (chainId: number, symbol: string) => {
-    console.log("ERC20Contract symbol: ", symbol)
+    console.log("ERC20Contract symbol: ", symbol, "chainId", chainId)
 
     switch (symbol.toLowerCase()) {
         case "usdc" : {

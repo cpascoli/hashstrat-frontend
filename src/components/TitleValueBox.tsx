@@ -8,7 +8,7 @@ const useStyles = makeStyles( theme => ({
         display: "flex",
         justifyContent: "space-between",
         gap: theme.spacing(1),
-        border: '1px solid '+theme.palette.text.secondary,
+        border: '1px dotted '+theme.palette.text.secondary,
         minWidth: 300,
         borderRadius: 6,
         color: theme.palette.text.primary
@@ -36,12 +36,10 @@ export const TitleValueBox = ({ title, value, tokenSymbol } : TitleValueBoxProps
     const classes = useStyles()
     
     return (
-        <div>
-            <Box className={classes.container}>
-                <div  className={classes.label}  > {title} </div>
-                <div  className={classes.value} > {value} {tokenSymbol} </div>
-            </Box> 
-        </div>
+        <Box className={classes.container}>
+            <div  className={classes.label}  > {title} </div>
+            <div  className={classes.value} > {value} {tokenSymbol} </div>
+        </Box> 
   )}
 
 

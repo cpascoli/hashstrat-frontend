@@ -9,15 +9,15 @@ import { Modal } from "./Modal"
 import { Token } from "./Main"
 
 import { fromDecimals } from "../utils/formatter"
-
+import { SnackInfo } from "./panel/ContentTabs"
 
 
 interface DepositWithdrawViewProps {
   formType?: string,
   chainId: number,
   token: Token;
-  handleSuccess: (result: any) => void,
-  handleError: (error: any, message: string) => void,
+  handleSuccess: (result: SnackInfo) => void,
+  handleError: (error: SnackInfo) => void,
 }
 
 
@@ -27,6 +27,8 @@ const useStyle = makeStyles( theme => ({
     padding: theme.spacing(1),
     textAlign: 'center',
     maxWidth: "500px",
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
   },
   balanceView: {
     marginBottom: "20px",
@@ -36,6 +38,8 @@ const useStyle = makeStyles( theme => ({
 
 
 export const DepositWithdrawView = ( { formType, chainId, token, handleSuccess, handleError } : DepositWithdrawViewProps ) => {
+
+  console.log("DepositWithdrawView - formType: ", formType)
 
   const classes = useStyle()
   const [showUpdateStakeModal, setShowUpdateStakeModal] = useState(false);
@@ -54,7 +58,6 @@ export const DepositWithdrawView = ( { formType, chainId, token, handleSuccess, 
   }
 
   const hideModalPreseed = () => {
-
     console.log("hideModalPreseed")
     setShowUpdateStakeModal(false)
     setFormTypeValue(undefined)
@@ -75,7 +78,7 @@ export const DepositWithdrawView = ( { formType, chainId, token, handleSuccess, 
                 { formType === 'deposit' && 
                   <Grid item xs={12}>
                       <Box >
-                          <Button name="deposit" variant="contained" onClick={(e) => showModalPressed("deposit")}>
+                          <Button name="deposit" variant="contained" color="primary" onClick={(e) => showModalPressed("deposit")}>
                             Deposit
                           </Button>
                       </Box>
@@ -84,7 +87,7 @@ export const DepositWithdrawView = ( { formType, chainId, token, handleSuccess, 
                 { formType === 'withdraw' &&
                   <Grid item xs={12}>
                       <Box>
-                          <Button name="withdraw" variant="contained" onClick={(e) => showModalPressed("withdraw")}>
+                          <Button name="withdraw" variant="contained" color="primary" onClick={(e) => showModalPressed("withdraw")}>
                             Withdraw
                           </Button>
                       </Box>
@@ -104,6 +107,7 @@ export const DepositWithdrawView = ( { formType, chainId, token, handleSuccess, 
                 handleSuccess={handleSuccess}
                 handleError={handleError}
                 allowanceUpdated={handleAllowanceUpdated}
+                onClose={hideModalPreseed}
               /> 
             </Modal>
           )}

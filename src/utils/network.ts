@@ -6,6 +6,8 @@ import helperConfig from "../helper-config.json"
 import abis from "../chain-info/abis.json"
 
 
+// Contracts Addresses
+
 export const PoolAddress = (chainId: number) => {
     if (!chainId) return constants.AddressZero
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
@@ -21,7 +23,6 @@ export const PoolLPTokenAddress = (chainId: number) => {
     return networkMappings[networkName as keyof typeof networkMappings]["pool_lp"]
 }
 
-
 export const UsdcTokenAddress = (chainId: number) => {
     if (!chainId) return constants.AddressZero
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
@@ -31,17 +32,23 @@ export const UsdcTokenAddress = (chainId: number) => {
 
 export const DaiTokenAddress = (chainId: number) => {
      if (!chainId) return constants.AddressZero
-
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+
     return networkMappings[networkName as keyof typeof networkMappings]["dai"]
 }
 
+
+// Contracts
 
 export const PoolContract = (chainId: number) => {
     const abi = abis[ "pool" as keyof typeof abis ]
     return new Contract( PoolAddress(chainId), new utils.Interface(abi))
 }
 
+export const PoolLPContract = (chainId: number) => {
+    const abi = abis[ "pool_lp" as keyof typeof abis ]
+    return new Contract(PoolLPTokenAddress(chainId) , new utils.Interface(abi))
+}
 
 export const UsdcContract = (chainId: number) => {
     const abi = abis[ "usdc" as keyof typeof abis ]
@@ -54,6 +61,7 @@ export const DaiContract = (chainId: number) => {
 }
 
 export const ERC20Contract = (chainId: number, symbol: string) => {
+    console.log("ERC20Contract symbol: ", symbol)
 
     switch (symbol.toLowerCase()) {
         case "usdc" : {
@@ -62,7 +70,13 @@ export const ERC20Contract = (chainId: number, symbol: string) => {
         case "dai" : {
             return DaiContract(chainId)
         }
+        case "pool_lp": {
+            return PoolLPContract(chainId)
+        }
+        case "pool-lp": {
+            return PoolLPContract(chainId)
+        }
     } 
 
-    throw Error("ERC20Contract not supported")
+    throw Error(`ERC20Contract not supported: ${symbol}`)
 }

@@ -13,7 +13,7 @@ export const WalletBalance = ( { token }: WalletBalanceProps ) => {
     const { symbol, image, address } = token
     const { account } = useEthers()
     const tokenBalance = useTokenBalance(address, account)
-    const formattedTokenBalance = (tokenBalance) ? fromDecimals(tokenBalance, 6, 2) : ""
+    const formattedTokenBalance = (tokenBalance) ? fromDecimals(tokenBalance, token.decimals, 2) : ""
 
     console.log(">>> formattedTokenBalance", symbol, formattedTokenBalance)
 

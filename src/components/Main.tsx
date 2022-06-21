@@ -22,16 +22,10 @@ interface MainProps {
 
 
 export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  { 
-
-    // let chainId: number | undefined
-    // let account: string | undefined
-
+  
     const [connected, setConnected] = useState(false);
-
     const [chainId, setChainId] = useState<number>();
     const [account, setAccount] = useState<string>();
-    // const [connected, setConnected] = useState(false);
-  
 
     useEffect(() => {
         if (chainId && account) {
@@ -40,21 +34,6 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
             setConnected(false)
         }
     }, [chainId, account])
-
-
-    // const updateConnected = (_chainId: number, _account: string) => {
-   
-    //     if (chainId !== _chainId || account !== _account ) {
-    //         console.log(">>> updateConnected 1: ", _chainId, _account)
-    //         setChainId(_chainId)
-    //         setAccount(_account)
-    //         if (_account && _chainId) {
-    //             console.log(">>> updateConnected 2: ", _chainId, _account)
-    //             setConnected(true)
-    //         }
-          
-    //     }
-    //  }
 
 
     const tokenMap = (chainId)? {

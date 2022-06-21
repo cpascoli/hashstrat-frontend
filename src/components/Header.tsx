@@ -40,7 +40,8 @@ const useStyles = makeStyles( theme => ({
         display: "flex",
         justifyContent: "flex-end",
         gap: theme.spacing(4),
-        border: "1px solid black",
+        borderRadius: 0,
+        boxShadow: `0px 2px 0px  ${theme.palette.type == 'light' ? 'lightgrey': 'red'}`, /* offset-x | offset-y | blur-radius | color */
     }
 }))
 

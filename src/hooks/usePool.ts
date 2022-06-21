@@ -2,7 +2,8 @@
 import { useContractFunction, useCall } from "@usedapp/core"
 import { channel } from "diagnostics_channel"
 import { PoolContract } from "../utils/network"
-
+import { BigNumber } from 'ethers'
+import { useDebugValue, useEffect, useState } from "react"
 
 export const useDeposit = (chainId: number) => {
 
@@ -40,15 +41,10 @@ export const usePortfolioValue = (chainId: number, account: string) => {
             contract: poolContract,
             method: 'portfolioValue',
             args: [account],
-      }) ?? {}
+    }) ?? {}
 
-    if(error) {
-      console.error("Error getting portfolioValue: ", error.message)
-      return undefined
-    }
-    console.log("portfolioValue: ", value?.toString());
-
-    return value?.[0]
+    useDebugValue(value?.[0].toString())
+    return value?.[0].toString()
 }
 
 

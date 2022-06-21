@@ -16,7 +16,6 @@ interface DepositWithdrawViewProps {
   formType?: string,
   chainId: number,
   token: Token;
-  portfolioValue: string;
   handleSuccess: (result: any) => void,
   handleError: (error: any, message: string) => void,
 }
@@ -36,7 +35,7 @@ const useStyle = makeStyles( theme => ({
 
 
 
-export const DepositWithdrawView = ( { formType, chainId, token, portfolioValue, handleSuccess, handleError } : DepositWithdrawViewProps ) => {
+export const DepositWithdrawView = ( { formType, chainId, token, handleSuccess, handleError } : DepositWithdrawViewProps ) => {
 
   const classes = useStyle()
   const [showUpdateStakeModal, setShowUpdateStakeModal] = useState(false);
@@ -46,11 +45,11 @@ export const DepositWithdrawView = ( { formType, chainId, token, portfolioValue,
   const { symbol, image, address } = token
   const { account } = useEthers()
   const tokenBalance = useTokenBalance(address, account)
-  const formattedTokenBalance = tokenBalance && fromDecimals(tokenBalance, 6, 2) || "0.0"
+  const formattedTokenBalance = tokenBalance && fromDecimals(tokenBalance, token.decimals, 2) || "0.0"
 
-
-  const showModalPreseed = (buttonType: string) => {
+  const showModalPressed = (buttonType: string) => {
     setShowUpdateStakeModal(true)
+    console.log("handleAllowanceUpdated - buttonType: ", buttonType)
     setFormTypeValue(buttonType)
   }
 
@@ -68,7 +67,6 @@ export const DepositWithdrawView = ( { formType, chainId, token, portfolioValue,
 
     return (
       <Box className={classes.container}>
-
           <div className={classes.balanceView}>
             <TitleValueBox title={`Available to ${formType}`} value={formattedTokenBalance} tokenSymbol={symbol} />
           </div>
@@ -77,7 +75,7 @@ export const DepositWithdrawView = ( { formType, chainId, token, portfolioValue,
                 { formType === 'deposit' && 
                   <Grid item xs={12}>
                       <Box >
-                          <Button name="deposit" variant="contained" onClick={(e) => showModalPreseed("deposit")}>
+                          <Button name="deposit" variant="contained" onClick={(e) => showModalPressed("deposit")}>
                             Deposit
                           </Button>
                       </Box>
@@ -86,7 +84,7 @@ export const DepositWithdrawView = ( { formType, chainId, token, portfolioValue,
                 { formType === 'withdraw' &&
                   <Grid item xs={12}>
                       <Box>
-                          <Button name="withdraw" variant="contained" onClick={(e) => showModalPreseed("withdraw")}>
+                          <Button name="withdraw" variant="contained" onClick={(e) => showModalPressed("withdraw")}>
                             Withdraw
                           </Button>
                       </Box>
@@ -95,8 +93,6 @@ export const DepositWithdrawView = ( { formType, chainId, token, portfolioValue,
               </Grid>
           </Box>
           
-
-          <div className="mt-4"></div>
 
           {showUpdateStakeModal && (
             <Modal onClose={(e) => hideModalPreseed()}>

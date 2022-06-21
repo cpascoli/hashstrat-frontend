@@ -22,11 +22,11 @@ export const useTokenApprove = (chainId: number, symbol: string) => {
 
 
 export const useTokenAllowance =  (chainId: number, symbol: string) => {
+    console.log("useTokenAllowance () symbol: ", symbol)
+
     const tokenContract = ERC20Contract(chainId, symbol)
     const spenderAddress = PoolAddress(chainId)
     const { account : ownerAddress } = useEthers()
-
-    console.log(">>> allowance - spenderAddress: ", spenderAddress)
 
     const { value, error } = useCall({
             contract: tokenContract,
@@ -38,7 +38,6 @@ export const useTokenAllowance =  (chainId: number, symbol: string) => {
       console.error("Error getting token allowance: ", error.message)
       return undefined
     }
-    console.log("useTokenAllowance: ", value);
 
     return value?.[0]
 }

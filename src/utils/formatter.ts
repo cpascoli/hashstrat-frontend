@@ -4,11 +4,12 @@
 import { BigNumber } from 'ethers'
 
 export const fromDecimals = (amount: BigNumber, decimals: Number, precision: Number) => {
+
     const decimalsFactor =  BigNumber.from('10').pow( BigNumber.from(decimals) ); 
     const precisionFactor =  BigNumber.from('10').pow(BigNumber.from(precision)); 
-    const number = BigNumber.from(amount).mul(precisionFactor).div(decimalsFactor).toNumber()
-    const decimal = number / precisionFactor.toNumber()
-    
+    const number = BigNumber.from(amount).mul(precisionFactor).div(decimalsFactor)
+    const decimal = number.toNumber() / precisionFactor.toNumber()
+
     return decimal.toString()
 }
 

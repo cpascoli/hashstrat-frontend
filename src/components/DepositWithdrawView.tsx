@@ -9,7 +9,7 @@ import { Modal } from "./Modal"
 import { Token } from "./Main"
 
 import { fromDecimals } from "../utils/formatter"
-import { SnackInfo } from "./panel/ContentTabs"
+import { SnackInfo } from "./SnackInfo"
 
 
 interface DepositWithdrawViewProps {

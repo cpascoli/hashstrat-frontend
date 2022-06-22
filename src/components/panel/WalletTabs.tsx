@@ -8,7 +8,9 @@ import { Token } from  "../Main"
 import { DepositWithdrawView } from "../DepositWithdrawView"
 import { usePortfolioValue } from "../../hooks"
 import { fromDecimals } from "../../utils/formatter"
-import { BigNumber } from "ethers"
+import { StatsTabs } from "./StatsTabs"
+import { SnackInfo } from "../SnackInfo"
+
 
 interface TabPanelProps {
     chainId: number,
@@ -18,14 +20,21 @@ interface TabPanelProps {
 
 const useStyle = makeStyles( theme => ({
     container: {
+        margin: 0,
+        padding: 0,
+    },
+    tabList: { 
+        padding: 0,
         margin: "auto",
-        // paddingBottom: 20
+        maxWidth: 640,
+        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     },
     tab: { 
           padding: 0,
           maxWidth: 640,
           margin: "auto",
-          paddingTop: 20
+          paddingTop: 20,
+          backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     },
     portfolioInfo: {
         maxWidth: 640,
@@ -41,17 +50,9 @@ const TabContent = styled(Paper)(({ theme }) => ({
     width: "100%",
 }));
 
-export type SnackInfo = {
-    type: Severity,
-    title: string;
-    message: string;
-    linkUrl?: string
-    linkText?: string
-    snackDuration?: number 
-}
 
 
-const ContentTabs = ( { chainId, account, tokens } : TabPanelProps ) => {
+export const WalletTabs = ( { chainId, account, tokens } : TabPanelProps ) => {
 
     const portfolioValue = usePortfolioValue(chainId, account) // BigNumber.from("123000000" )
     const formattedPortfolioValue =  (portfolioValue) ? fromDecimals(portfolioValue, tokens[0].decimals, 2) : ""
@@ -72,13 +73,13 @@ const ContentTabs = ( { chainId, account, tokens } : TabPanelProps ) => {
     }
 
     const handleSuccess = (info: SnackInfo) => {
-        console.log("ContentTabs.handleSuccess() >>> ", info)
+        console.log("WalletTabs.handleSuccess() >>> ", info)
         setSnackContent(info)
         setShowSnack(true)
     }
 
     const handleError = (error: SnackInfo) => {
-        console.log("ContentTabs.handleError() >>> ", error)
+        console.log("WalletTabs.handleError() >>> ", error)
         setSnackContent(error)
         setShowSnack(true)
     }
@@ -88,12 +89,12 @@ const ContentTabs = ( { chainId, account, tokens } : TabPanelProps ) => {
         <Box className={classes.container}>
             
             <Box className={classes.portfolioInfo} >
-               <TitleValueBox title="Your Portfolio Value" value={formattedPortfolioValue} tokenSymbol={tokens[0].symbol} />
+                <StatsTabs  chainId={chainId} account={account} depositToken={tokens[0]}/>
             </Box>
 
             <Box my={4}>
                 <TabContext value={selectedTokenIndex.toString()}>
-                    <TabList onChange={handleChange}>
+                    <TabList onChange={handleChange} className={classes.tabList}>
                         {
                             tokens.map((token, index ) => {
                                 return (
@@ -110,7 +111,7 @@ const ContentTabs = ( { chainId, account, tokens } : TabPanelProps ) => {
                         tokens.map((token, index ) => {
                             return (
                                 <TabPanel className={classes.tab} value={index.toString()} key={index}>
-                                    <TabContent>
+                                    {/* <TabContent> */}
                                         <DepositWithdrawView 
                                             formType={ token.symbol == 'POOL-LP' ? "withdraw" :  "deposit" }
                                             chainId={chainId}
@@ -118,7 +119,7 @@ const ContentTabs = ( { chainId, account, tokens } : TabPanelProps ) => {
                                             handleSuccess={handleSuccess}
                                             handleError={handleError}
                                         />
-                                    </TabContent>
+                                    {/* </TabContent> */}
                                 </TabPanel>
                             )
                         })
@@ -144,4 +145,4 @@ const ContentTabs = ( { chainId, account, tokens } : TabPanelProps ) => {
     )
 }
 
-export default ContentTabs
+export default WalletTabs

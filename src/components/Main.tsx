@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { Box } from "@material-ui/core"
+import { Box, makeStyles } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
 
-import { ContentPanel } from "./panel"
+import { WalletTabs } from "./panel/WalletTabs"
 import usdc from "./img/usdc.png"
 import poollp from "./img/pool_lp.png"
 import { UsdcTokenAddress, DaiTokenAddress, PoolLPTokenAddress } from "../utils/network"
 
 import { Header } from '../components/Header';
+import { classicNameResolver } from "typescript";
+import { red } from "@material-ui/core/colors";
 
 
 export type Token = {
@@ -22,6 +24,14 @@ interface MainProps {
     setToggleDark: (dark: boolean) => void
 }
 
+const useStyle = makeStyles( theme => ({
+    container: {
+        margin: "auto",
+        padding: 0,
+        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
+    },
+}))
+
 
 export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  { 
   
@@ -29,6 +39,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
     const [chainId, setChainId] = useState<number>();
     const [account, setAccount] = useState<string>();
 
+    const classes = useStyle()
 
     useEffect(() => {
         if (chainId && account) {
@@ -58,7 +69,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
     console.log(">>> Main: chainId: ", chainId, "account", account, "connected", connected)
 
     return (
-        <Box>
+        <Box className={classes.container}>
            <Header toggleDark={toggleDark} setToggleDark={setToggleDark} setChainId={setChainId} setAccount={setAccount} />
            
            {(!chainId && account) &&
@@ -84,7 +95,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
 
            { connected && 
             <Box py={4}>
-                <ContentPanel chainId={chainId!} account={account!} tokens={supportedTokens!} /> 
+                <WalletTabs chainId={chainId!} account={account!} tokens={supportedTokens!} /> 
             </Box>
            }
         </Box>

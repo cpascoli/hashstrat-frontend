@@ -1,5 +1,5 @@
 
-import { Button, Box, TextField, makeStyles } from "@material-ui/core"
+import { Box, Divider, makeStyles } from "@material-ui/core"
 
 
 const useStyles = makeStyles( theme => ({
@@ -12,6 +12,13 @@ const useStyles = makeStyles( theme => ({
         minWidth: 300,
         borderRadius: 6,
         color: theme.palette.text.primary
+    },
+    containerNoBorder: {
+        padding: theme.spacing(1),
+        display: "flex",
+        justifyContent: "space-between",
+        gap: theme.spacing(0),
+        minWidth: 300,
     },
     label: {
         fontWeight: 100,
@@ -27,19 +34,23 @@ const useStyles = makeStyles( theme => ({
 interface TitleValueBoxProps {
     title: string,
     value: string,
-    tokenSymbol: string
+    tokenSymbol: string,
+    border?: boolean
 }
 
 
-export const TitleValueBox = ({ title, value, tokenSymbol } : TitleValueBoxProps ) => {
+export const TitleValueBox = ({ title, value, tokenSymbol, border=true } : TitleValueBoxProps ) => {
     
     const classes = useStyles()
     
     return (
-        <Box className={classes.container}>
-            <div  className={classes.label}  > {title} </div>
-            <div  className={classes.value} > {value} {tokenSymbol} </div>
-        </Box> 
+        <>
+            <Box className={border? classes.container : classes.containerNoBorder}>
+                <div  className={classes.label}> {title} </div>
+                <div  className={classes.value}> {value} {tokenSymbol} </div>
+            </Box>
+            <Divider />
+        </>
   )}
 
 

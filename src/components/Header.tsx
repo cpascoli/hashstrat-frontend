@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import { useBlockNumber } from "@usedapp/core"
 import Switch from "@material-ui/core/Switch";
 import { useEthers } from "@usedapp/core";
-import { Box, Grid, Paper, Button, makeStyles, Menu, MenuProps, MenuList, MenuItem, ListItemIcon, Divider } from  "@material-ui/core"
+import { Button, makeStyles, Menu, MenuProps, MenuItem, Divider } from  "@material-ui/core"
 import { styled, alpha} from "@material-ui/core/styles"
-
+import { NetworkName } from "../utils/network"
 
 
 import { Check, KeyboardArrowDown } from "@material-ui/icons"
@@ -36,6 +36,7 @@ const StyledMenu = styled((props: MenuProps) => (
 
 const useStyles = makeStyles( theme => ({
     container: {
+        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
         padding: theme.spacing(2),
         display: "flex",
         justifyContent: "flex-end",
@@ -63,9 +64,10 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
 
     const classes = useStyles()
 
-    // const [blockNumber, setBlockNumber] = useState(0)
+    const [networkName, setNetworkName] = useState<string>("")
 
     const blockNumber = useBlockNumber()
+
 
     const handleModeChange = () => {
         setToggleDark(!toggleDark);
@@ -77,6 +79,7 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
     useEffect(() => {
       if (chainId) {
         setChainId(chainId)
+        setNetworkName( NetworkName(chainId) )
       }
       if (account) {
         setAccount(account)
@@ -138,6 +141,9 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
                           open={open}
                           onClose={handleClose}
                         >
+                            <MenuItem onClick={handleClose}>
+                                Connectde to: {networkName}
+                            </MenuItem>
                             <MenuItem onClick={handleClose}>
                                 Currnet Block: {blockNumber}
                             </MenuItem>

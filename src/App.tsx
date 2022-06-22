@@ -2,14 +2,14 @@ import React, { useState } from "react";
 
 import { DAppProvider, Kovan, Polygon } from '@usedapp/core';
 
-import { Container } from '@material-ui/core'
+import { Container, makeStyles} from '@material-ui/core'
 import { Main } from './components/Main'
 import { getDefaultProvider } from 'ethers'
 import { ThemeProvider, createTheme } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 
-function App() {
+ const App = () => {
 
   const [toggleDark, setToggleDark] = useState(false);
 
@@ -21,9 +21,11 @@ function App() {
 
   console.log("dark: ", toggleDark, appTheme)
 
+
+
   return (
       <ThemeProvider theme={{ ...appTheme }}>
-       
+        
         <DAppProvider config={{
             networks: [Kovan, Polygon],
             // readOnlyChainId: Kovan.chainId,
@@ -44,7 +46,7 @@ function App() {
 
         </DAppProvider>
       </ThemeProvider>
-  );
+    )
 }
 
 export default App;

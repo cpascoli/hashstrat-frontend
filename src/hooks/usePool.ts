@@ -47,4 +47,71 @@ export const usePortfolioValue = (chainId: number, account: string) => {
     return value?.[0].toString()
 }
 
+// Account Stats
+export const useGetDeposits = (chainId: number, account: string) => {
+    const poolContract = PoolContract(chainId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'deposits',
+            args: [account],
+    }) ?? {}
+
+    useDebugValue(value?.[0].toString())
+    return value?.[0].toString()
+}
+
+
+export const useGetWithdrawals = (chainId: number, account: string) => {
+    const poolContract = PoolContract(chainId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'withdrawals',
+            args: [account],
+    }) ?? {}
+
+    useDebugValue(value?.[0].toString())
+    return value?.[0].toString()
+}
+
+
+
+// Pool Stats
+
+export const useTotalPortfolioValue = (chainId: number, account: string) => {
+    const poolContract = PoolContract(chainId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'totalPortfolioValue',
+            args: [],
+    }) ?? {}
+
+    useDebugValue(value?.[0].toString())
+    return value?.[0].toString()
+}
+
+
+export const useTotalDeposited = (chainId: number, account: string) => {
+    const poolContract = PoolContract(chainId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'totalDeposited',
+            args: [],
+    }) ?? {}
+
+    useDebugValue(value?.[0].toString())
+    return value?.[0].toString()
+}
+
+export const useTotalWithdrawn = (chainId: number, account: string) => {
+    const poolContract = PoolContract(chainId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'totalWithdrawn',
+            args: [],
+    }) ?? {}
+
+    useDebugValue(value?.[0].toString())
+    return value?.[0].toString()
+}
+
 

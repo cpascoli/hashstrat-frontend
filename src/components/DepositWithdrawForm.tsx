@@ -5,7 +5,7 @@ import { useTokenApprove, useTokenAllowance, useDeposit, useWithdraw } from "../
 import { Token } from "./Main"
 import { toDecimals, fromDecimals } from "../utils/formatter"
 import { NetworkExplorerHost } from "../utils/network"
-import { SnackInfo } from "./panel/ContentTabs"
+import { SnackInfo } from "./SnackInfo"
 import { Horizontal } from "./Layout"
 
 
@@ -123,7 +123,8 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
         return withdraw(amountDecimals)
     }
 
-    const submitButtonTitle = (formType === 'deposit') ? "Deposit" :  (formType === 'withdraw') ? "Withdraw" : "n/a"
+    const submitButtonTitle = (formType === 'deposit') ? "Deposit" : 
+                               (formType === 'withdraw') ? "Withdraw" : "n/a"
 
     const explorerHost = NetworkExplorerHost(chainId)
     const approveLink =  (approveErc20State.status == 'Success' && approveErc20State.receipt)? `https://${explorerHost}/tx/${approveErc20State.receipt.transactionHash}` : ""
@@ -140,7 +141,7 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
                 message: "Token transfer approved!",
                 linkUrl: approveLink,
                 linkText: "View Transaction",
-                snackDuration: 30000
+                snackDuration: 10000
             })
         }
         if (notifications.filter((notification) =>
@@ -153,7 +154,7 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
                 message: "Tokens deposited into the Pool",
                 linkUrl: depositLink,
                 linkText: "View Transaction",
-                snackDuration: 30000
+                snackDuration: 10000
             })
         }
 
@@ -167,7 +168,7 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
                 message: "Tokens withdrawn from the Pool",
                 linkUrl: withdrawLink,
                 linkText: "View Transaction",
-                snackDuration: 30000
+                snackDuration: 10000
             })
         }
     }, [notifications])

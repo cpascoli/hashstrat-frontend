@@ -38,11 +38,15 @@ export const DaiTokenAddress = (chainId: number) => {
 
 export const NetworkExplorerHost = (chainId: number) => {
     if (!chainId) return ""
-   const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+   const networkName = NetworkName(chainId)
 
    return explorerMappings[networkName as keyof typeof networkMappings]
 }
 
+export const NetworkName = (chainId: number) => {
+    if (!chainId) return ""
+    return helperConfig[chainId.toString() as keyof typeof helperConfig]
+}
 
 
 // Contracts

@@ -6,7 +6,7 @@ import { TabContext, TabList, TabPanel, Alert, AlertTitle, Color as Severity } f
 import { Token } from  "../Main"
 import { usePortfolioValue } from "../../hooks"
 import { fromDecimals } from "../../utils/formatter"
-import { MyStatsView } from "./MyStatsView"
+import { MyStatsView } from "../wallet/MyStatsView"
 import { PoolStatsView } from "./PoolStatsView"
 
 
@@ -53,14 +53,12 @@ interface TabPanelProps {
     formType?: string,
     chainId: number,
     token: Token;
-
 }
   
 
-export const StatsTabs = ( { chainId, account, depositToken } : StatsTabsProps ) => {
+export const PoolStatsTabs = ( { chainId, account, depositToken } : StatsTabsProps ) => {
 
     const [selectedTokenIndex, setSelectedTokenIndex] = useState<number>(0)
-
 
     const portfolioValue = usePortfolioValue(chainId, account) // BigNumber.from("123000000" )
     const formattedPortfolioValue =  (portfolioValue) ? fromDecimals(portfolioValue, depositToken.decimals, 2) : ""
@@ -88,4 +86,4 @@ export const StatsTabs = ( { chainId, account, depositToken } : StatsTabsProps )
     )
 }
 
-export default StatsTabs
+export default PoolStatsTabs

@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 import { Box, makeStyles } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
 
-import { WalletTabs } from "./panel/WalletTabs"
+import { WalletTabs } from "./wallet/WalletTabs"
 import usdc from "./img/usdc.png"
 import poollp from "./img/pool_lp.png"
 import { UsdcTokenAddress, DaiTokenAddress, PoolLPTokenAddress } from "../utils/network"
 
 import { Header } from '../components/Header';
-import { classicNameResolver } from "typescript";
-import { red } from "@material-ui/core/colors";
+import { PoolStatsTabs } from "./pool/PoolStatsTabs";
 
 
 export type Token = {
@@ -96,6 +95,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
 
            { connected && 
             <Box py={4}>
+                <PoolStatsTabs  chainId={chainId!} account={account!} depositToken={supportedTokens![0]} />
                 <WalletTabs chainId={chainId!} account={account!} tokens={supportedTokens!} /> 
             </Box>
            }

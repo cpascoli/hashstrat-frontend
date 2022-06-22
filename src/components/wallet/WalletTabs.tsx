@@ -8,7 +8,7 @@ import { Token } from  "../Main"
 import { DepositWithdrawView } from "../DepositWithdrawView"
 import { usePortfolioValue } from "../../hooks"
 import { fromDecimals } from "../../utils/formatter"
-import { StatsTabs } from "./StatsTabs"
+import { PoolStatsTabs } from "../pool/PoolStatsTabs"
 import { SnackInfo } from "../SnackInfo"
 
 
@@ -36,11 +36,6 @@ const useStyle = makeStyles( theme => ({
           paddingTop: 20,
           backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     },
-    portfolioInfo: {
-        maxWidth: 640,
-        margin: "auto",
-        padding: theme.spacing(1)
-    }
 }))
 
 
@@ -84,13 +79,14 @@ export const WalletTabs = ( { chainId, account, tokens } : TabPanelProps ) => {
         setShowSnack(true)
     }
 
+
+    // border: '1px dotted '+theme.palette.text.secondary,
+    // borderRadius: 20,
+
     return (
         
         <Box className={classes.container}>
             
-            <Box className={classes.portfolioInfo} >
-                <StatsTabs  chainId={chainId} account={account} depositToken={tokens[0]}/>
-            </Box>
 
             <Box my={4}>
                 <TabContext value={selectedTokenIndex.toString()}>

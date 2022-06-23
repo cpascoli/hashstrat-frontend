@@ -3,9 +3,13 @@ import { Box, makeStyles } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
 
 import { WalletTabs } from "./wallet/WalletTabs"
+import weth from "./img/weth.png"
 import usdc from "./img/usdc.png"
+import dai from "./img/dai.png"
 import poollp from "./img/pool_lp.png"
-import { UsdcTokenAddress, DaiTokenAddress, PoolLPTokenAddress } from "../utils/network"
+
+
+import { WethTokenAddress, UsdcTokenAddress, DaiTokenAddress, PoolLPTokenAddress } from "../utils/network"
 
 import { Header } from '../components/Header';
 import { PoolStatsTabs } from "./pool/PoolStatsTabs";
@@ -53,7 +57,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
     const tokenMap = (chainId)? {
         "42" :
             [
-                { image: usdc, address: DaiTokenAddress(chainId), symbol: "DAI", decimals: 18 },
+                { image: dai, address: DaiTokenAddress(chainId), symbol: "DAI", decimals: 18 },
                 { image: poollp, address: PoolLPTokenAddress(chainId), symbol: "POOL-LP", decimals: 18 },
             ],
         "137":
@@ -63,6 +67,8 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
             ]
     } : undefined
 
+    // WETH address
+    const investToken = (chainId)?  { image: weth, address: WethTokenAddress(chainId), symbol: "WETH", decimals: 18 } : undefined
 
     // const isConnected = account !== undefined
     const supportedTokens = tokenMap && tokenMap[chainId?.toString() as keyof typeof tokenMap || "137"]
@@ -95,7 +101,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
 
            { connected && 
             <Box py={4}>
-                <PoolStatsTabs  chainId={chainId!} account={account!} depositToken={supportedTokens![0]} />
+                <PoolStatsTabs chainId={chainId!} account={account!} depositToken={supportedTokens![0]} investToken={investToken!} />
                 <WalletTabs chainId={chainId!} account={account!} tokens={supportedTokens!} /> 
             </Box>
            }

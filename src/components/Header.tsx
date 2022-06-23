@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 
-import { useBlockNumber } from "@usedapp/core"
+import { useBlockNumber, shortenAddress } from "@usedapp/core"
 import Switch from "@material-ui/core/Switch";
 import { useEthers } from "@usedapp/core";
 import { Button, makeStyles, Menu, MenuProps, MenuItem, Divider } from  "@material-ui/core"
 import { styled, alpha} from "@material-ui/core/styles"
 import { NetworkName } from "../utils/network"
-
+import { Web3ModalButton } from "./Web3ModalButton"
 
 import { Check, KeyboardArrowDown } from "@material-ui/icons"
 import { shortenAccount } from "../utils/formatter"
@@ -16,7 +16,7 @@ const StyledMenu = styled((props: MenuProps) => (
       elevation={0}
       anchorOrigin={{
         vertical: 'bottom',
-        horizontal: 'right',
+        horizontal: 'left',
       }}
       {...props}
     />
@@ -42,9 +42,12 @@ const useStyles = makeStyles( theme => ({
         justifyContent: "flex-end",
         gap: theme.spacing(4),
         borderRadius: 0,
-        boxShadow: `0px 2px 0px  ${theme.palette.type == 'light' ? 'lightgrey': 'red'}`, /* offset-x | offset-y | blur-radius | color */
+        boxShadow: `0px 2px 0px ${theme.palette.secondary.main}`, /* offset-x | offset-y | blur-radius | color */
     }
 }))
+
+
+
 
 export interface ConnectedInfo {
   chainId: number | undefined,
@@ -105,7 +108,8 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
       window.location.reload()
     }
 
-    const shortAccount = shortenAccount(account)
+    //const shortAccount = shortenAccount(account)
+    const shortAccount = account ? shortenAddress(account) : ''
     
     return (
         <div className={classes.container}>
@@ -120,6 +124,9 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
                 { isConnected ? 
                     (
                     <div>
+
+                        {/* <Web3ModalButton /> */}
+
                         <Button
                           id="account-button"
                           aria-controls={open ? 'account-menu' : undefined}
@@ -131,7 +138,6 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
                           endIcon={<KeyboardArrowDown />}
                         >
                           {shortAccount}
-
                         </Button>
 
                         <StyledMenu
@@ -142,10 +148,10 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
                           onClose={handleClose}
                         >
                             <MenuItem onClick={handleClose}>
-                                Connectde to: {networkName}
+                                Connected to {networkName.toUpperCase()}
                             </MenuItem>
                             <MenuItem onClick={handleClose}>
-                                Currnet Block: {blockNumber}
+                                Block Number {blockNumber}
                             </MenuItem>
 
                             <Divider />

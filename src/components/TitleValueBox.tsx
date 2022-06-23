@@ -8,9 +8,9 @@ const useStyles = makeStyles( theme => ({
         display: "flex",
         justifyContent: "space-between",
         gap: theme.spacing(1),
-        border: '1px dotted '+theme.palette.text.secondary,
+        border: `1px solid ${theme.palette.secondary.main}`,
+        borderRadius: 12,
         minWidth: 300,
-        borderRadius: 6,
         color: theme.palette.text.primary
     },
     containerNoBorder: {
@@ -34,12 +34,12 @@ const useStyles = makeStyles( theme => ({
 interface TitleValueBoxProps {
     title: string,
     value: string,
-    tokenSymbol: string,
+    suffix?: string,
     border?: boolean
 }
 
 
-export const TitleValueBox = ({ title, value, tokenSymbol, border=true } : TitleValueBoxProps ) => {
+export const TitleValueBox = ({ title, value, suffix="", border=false } : TitleValueBoxProps ) => {
     
     const classes = useStyles()
     
@@ -47,9 +47,9 @@ export const TitleValueBox = ({ title, value, tokenSymbol, border=true } : Title
         <>
             <Box className={border? classes.container : classes.containerNoBorder}>
                 <div  className={classes.label}> {title} </div>
-                <div  className={classes.value}> {value} {tokenSymbol} </div>
+                <div  className={classes.value}> {value} {suffix} </div>
             </Box>
-            <Divider />
+            {(!border) && <Divider /> }
         </>
   )}
 

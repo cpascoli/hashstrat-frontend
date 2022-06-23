@@ -7,6 +7,7 @@ import { toDecimals, fromDecimals } from "../utils/formatter"
 import { NetworkExplorerHost } from "../utils/network"
 import { SnackInfo } from "./SnackInfo"
 import { Horizontal } from "./Layout"
+import { Alert, AlertTitle } from "@material-ui/lab"
 
 
 export interface DepositWithdrawFormProps {
@@ -54,6 +55,9 @@ const useStyle = makeStyles( theme => ({
         fontWeight: 200,
         textAlign: "right",
         marginRight: 20,
+    },
+    info:{
+        margin: "auto"
     }
 }))
 
@@ -71,6 +75,9 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
     // const initialAmount = parseFloat(balance)
     const [amount, setAmount] = useState<number | string>("")
     const formattedAllowance = allowance && fromDecimals(allowance, token.decimals, 4)
+
+    const [userMessage, setUserMessage] = useState<SnackInfo>()
+
 
     const balancePressed = () => {
         setAmount(balance)
@@ -94,6 +101,8 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
 
     const submitForm = () => {
         console.log("submitForm")
+        setUserMessage(undefined)
+
         if (formType === 'deposit') {
             submitDeposit()
         } else if (formType === 'withdraw') {
@@ -134,42 +143,63 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
     useEffect(() => {
         if (notifications.filter((notification) =>
                 notification.type === "transactionSucceed" &&
-                notification.transactionName === "Approve Token Transfer").length > 0) {
-            handleSuccess({
+                notification.transactionName === "Approve Token Transfer"
+        ).length > 0) {
+            const info : SnackInfo = {
                 type: "info",
                 title: "Success",
                 message: "Token transfer approved!",
                 linkUrl: approveLink,
                 linkText: "View Transaction",
                 snackDuration: 10000
+            }
+            setUserMessage({
+                type: "info",
+                title: "Transfer Approved",
+                message: "Now you can deposit the tokens",
             })
+            handleSuccess(info)
         }
         if (notifications.filter((notification) =>
                 notification.type === "transactionSucceed" &&
                 notification.transactionName === "Deposit Tokens"
         ).length > 0) {
-            handleSuccess({
+            const info : SnackInfo = {
                 type: "info",
                 title: "Success",
                 message: "Tokens deposited into the Pool",
                 linkUrl: depositLink,
                 linkText: "View Transaction",
                 snackDuration: 10000
+            }
+            setUserMessage({
+                type: "info",
+                title: "Deposit completed",
+                message: "",
             })
+            handleSuccess(info)
+            setAmount("")
         }
 
         if (notifications.filter((notification) =>
             notification.type === "transactionSucceed" &&
             notification.transactionName === "Withdraw Tokens"
         ).length > 0) {
-            handleSuccess({
+            const info : SnackInfo = {
                 type: "info",
                 title: "Success",
                 message: "Tokens withdrawn from the Pool",
                 linkUrl: withdrawLink,
                 linkText: "View Transaction",
                 snackDuration: 10000
+            }
+            setUserMessage({
+                type: "info",
+                title: "Withdrawals completed",
+                message: "",
             })
+            handleSuccess(info)
+            setAmount("")
         }
     }, [notifications])
 
@@ -177,6 +207,15 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
     return (
         <>
         <div className={classes.container}>
+
+            { userMessage &&
+                <div className={classes.info}>
+                     <Alert severity={userMessage?.type}>
+                        <AlertTitle> {userMessage?.title} </AlertTitle>
+                        {userMessage?.message}
+                    </Alert>
+                </div>
+            }
                 
             <div className={classes.section1}>
                 <h1 className={classes.title}> {formType === 'deposit'? `Deposit ${symbol}` : 'Withdraw Liquidity' } </h1>
@@ -205,16 +244,17 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
 
             { formType === 'deposit' &&
                 <Box mb={2} >
-                    { !allowanceOk && 
-                    <Button variant="contained" color="primary" fullWidth disabled={allowanceOk}
+                    { (isApproveMining || (!allowanceOk && !isDepositMining)) &&
+                    <Button variant="contained" color="primary" fullWidth
                         onClick={() => approveButtonPressed()} >
                         Approve {symbol} 
                         { isApproveMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
                     </Button>
                     }
-                    { allowanceOk && 
+                    { ( !(isApproveMining || (!allowanceOk && !isDepositMining))  && 
+                         (allowanceOk || isDepositMining)) && 
                     <Button variant="contained" color="primary" fullWidth  
-                        onClick={() => submitForm()} disabled={!allowanceOk} >
+                        onClick={() => submitForm()} >
                         { submitButtonTitle }
                         { isDepositMining && <Horizontal >  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
                     </Button>
@@ -222,7 +262,7 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
                 </Box>
             }  
             { formType === 'withdraw' &&
-                <Box  >
+                <Box mb={2} >
                     <Button variant="contained" color="primary" fullWidth
                         onClick={() => submitForm()}>
                         { submitButtonTitle }
@@ -230,7 +270,6 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
                     </Button>
                 </Box>
             }
-
 
             </div>
         

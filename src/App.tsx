@@ -16,7 +16,13 @@ import CssBaseline from '@material-ui/core/CssBaseline';
   const appTheme = createTheme({
     palette: {
       type: toggleDark ? "dark" : "light",
-    },
+      primary: {
+        main: toggleDark ?  '#0091EA' :  '#0091EA',
+      },
+      secondary: {
+        main: toggleDark ?  '#ffaf49' :  '#f47100',
+      }
+    }
   });
 
   console.log("dark: ", toggleDark, appTheme)

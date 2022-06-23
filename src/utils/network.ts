@@ -36,6 +36,13 @@ export const DaiTokenAddress = (chainId: number) => {
     return networkMappings[networkName as keyof typeof networkMappings]["dai"]
 }
 
+export const WethTokenAddress = (chainId: number) => {
+    if (!chainId) return constants.AddressZero
+    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+
+    return networkMappings[networkName as keyof typeof networkMappings]["weth"]
+}
+
 export const NetworkExplorerHost = (chainId: number) => {
     if (!chainId) return ""
    const networkName = NetworkName(chainId)

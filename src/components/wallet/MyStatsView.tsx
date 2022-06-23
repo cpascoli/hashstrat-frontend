@@ -46,10 +46,10 @@ export const MyStatsView = ( { chainId, account, depositToken } : MyStatsViewPro
     return (
         <Box className={classes.container}>
             <Box className={classes.portfolioInfo} >
-                <TitleValueBox title="My Portfolio Value" value={formattedPortfolioValue} tokenSymbol={depositToken.symbol} border={false} />
-                <TitleValueBox title="My Deposits Value" value={formattedDeposits} tokenSymbol={depositToken.symbol} border={false} />
-                <TitleValueBox title="My Withdrawals" value={formattedPWithdrawals} tokenSymbol={depositToken.symbol}border={false} />
-                <TitleValueBox title="My ROI" value={roiFormatted} tokenSymbol="%" border={false} />
+                <TitleValueBox title="My Portfolio Value" value={formattedPortfolioValue} suffix={depositToken.symbol} />
+                <TitleValueBox title="My Deposits Value" value={formattedDeposits} suffix={depositToken.symbol} />
+                <TitleValueBox title="My Withdrawals" value={formattedPWithdrawals} suffix={depositToken.symbol} />
+                <TitleValueBox title="My ROI" value={roiFormatted} suffix="%" />
             </Box>
         </Box>
     )

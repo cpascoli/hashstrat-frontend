@@ -71,7 +71,7 @@ export const DepositWithdrawView = ( { formType, chainId, token, handleSuccess, 
     return (
       <Box className={classes.container}>
           <div className={classes.balanceView}>
-            <TitleValueBox title={`Available to ${formType}`} value={formattedTokenBalance} tokenSymbol={symbol} />
+            <TitleValueBox title={`Available to ${formType}`} value={formattedTokenBalance} suffix={symbol} border={true} />
           </div>
           <Box sx={{ flexGrow: 1, pt: 2 }}>
               <Grid container>

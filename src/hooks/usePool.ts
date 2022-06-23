@@ -77,7 +77,7 @@ export const useGetWithdrawals = (chainId: number, account: string) => {
 
 // Pool Stats
 
-export const useTotalPortfolioValue = (chainId: number, account: string) => {
+export const useTotalPortfolioValue = (chainId: number) => {
     const poolContract = PoolContract(chainId)
     const { value, error } = useCall({
             contract: poolContract,
@@ -90,7 +90,7 @@ export const useTotalPortfolioValue = (chainId: number, account: string) => {
 }
 
 
-export const useTotalDeposited = (chainId: number, account: string) => {
+export const useTotalDeposited = (chainId: number) => {
     const poolContract = PoolContract(chainId)
     const { value, error } = useCall({
             contract: poolContract,
@@ -102,7 +102,7 @@ export const useTotalDeposited = (chainId: number, account: string) => {
     return value?.[0].toString()
 }
 
-export const useTotalWithdrawn = (chainId: number, account: string) => {
+export const useTotalWithdrawn = (chainId: number) => {
     const poolContract = PoolContract(chainId)
     const { value, error } = useCall({
             contract: poolContract,
@@ -113,5 +113,43 @@ export const useTotalWithdrawn = (chainId: number, account: string) => {
     useDebugValue(value?.[0].toString())
     return value?.[0].toString()
 }
+
+
+export const useDepositTokenBalance = (chainId: number) => {
+    const poolContract = PoolContract(chainId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'depositTokenBalance',
+            args: [],
+    }) ?? {}
+
+    useDebugValue(value?.[0].toString())
+    return value?.[0].toString()
+}
+
+export const useInvestTokenBalance = (chainId: number) => {
+    const poolContract = PoolContract(chainId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'investTokenBalance',
+            args: [],
+    }) ?? {}
+
+    useDebugValue(value?.[0].toString())
+    return value?.[0].toString()
+}
+
+export const useInvestedTokenValue = (chainId: number) => {
+    const poolContract = PoolContract(chainId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'investedTokenValue',
+            args: [],
+    }) ?? {}
+
+    useDebugValue(value?.[0].toString())
+    return value?.[0].toString()
+}
+
 
 

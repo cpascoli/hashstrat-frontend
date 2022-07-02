@@ -41,3 +41,18 @@ export const useTokenAllowance =  (chainId: number, symbol: string) => {
     return value?.[0]
 }
 
+
+
+export const useTokenBalance = (chainId: number, symbol: string, address: string) => {
+    const tokenContract =  ERC20Contract(chainId, symbol) 
+
+    const { value, error } = useCall({
+            contract: tokenContract,
+            method: 'balanceOf',
+            args: [address],
+    }) ?? {}
+
+    return value?.[0].toString()
+}
+
+

@@ -115,30 +115,6 @@ export const useTotalWithdrawn = (chainId: number) => {
 }
 
 
-export const useDepositTokenBalance = (chainId: number) => {
-    const poolContract = PoolContract(chainId)
-    const { value, error } = useCall({
-            contract: poolContract,
-            method: 'depositTokenBalance',
-            args: [],
-    }) ?? {}
-
-    useDebugValue(value?.[0].toString())
-    return value?.[0].toString()
-}
-
-export const useInvestTokenBalance = (chainId: number) => {
-    const poolContract = PoolContract(chainId)
-    const { value, error } = useCall({
-            contract: poolContract,
-            method: 'investTokenBalance',
-            args: [],
-    }) ?? {}
-
-    useDebugValue(value?.[0].toString())
-    return value?.[0].toString()
-}
-
 export const useInvestedTokenValue = (chainId: number) => {
     const poolContract = PoolContract(chainId)
     const { value, error } = useCall({
@@ -151,5 +127,66 @@ export const useInvestedTokenValue = (chainId: number) => {
     return value?.[0].toString()
 }
 
+
+export const useSwapCount = (chainId: number) => {
+    const poolContract = PoolContract(chainId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'swapCount',
+            args: [],
+    }) ?? {}
+
+    useDebugValue(value?.[0].toString())
+    return value?.[0].toString()
+}
+
+export const useSwapInfo = (chainId: number, index: number) => {
+    const poolContract = PoolContract(chainId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'swaps',
+            args: [index],
+    }) ?? {}
+
+    // console.log("useSwapInfo - ", index, " >>> ", value)
+    useDebugValue(value?.[0].toString())
+
+    return { 
+      timestamp:  value?.['timestamp'].toString(),
+      side:  value?.['side'],
+      swapPrice:  value?.['swapPrice'].toString(),
+      feedPrice:  value?.['feedPrice'].toString(),
+    }
+}
+
+
+export const useSwapInfoArray = (chainId: number) => {
+    const poolContract = PoolContract(chainId)
+
+    const { value, error } = useCall({
+        contract: poolContract,
+        method: 'getSwapsInfo',
+        args: [],
+    }) ?? {}
+
+    const info = value?.[0].map( (data: any, idx: number) => {
+        console.log("data >>> ", typeof(data), data.side, data.timestamp.toString())
+        
+        return {
+            index: idx,
+            timestamp: data['timestamp'].toString(),
+            side: data?.['side'],
+            swapPrice: data?.['swapPrice'].toString(),
+            feedPrice: data?.['feedPrice'].toString(),
+            depositTokenBalance: data?.['depositTokenBalance'].toString(),
+            investTokenBalance: data?.['investTokenBalance'].toString(),
+          }
+
+    })
+
+    console.log("useSwapInfoArray - ", info)
+
+    return info
+}
 
 

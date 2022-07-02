@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useEthers, shortenAddress, useLookupAddress } from '@usedapp/core'
 import { Box, Button } from  "@material-ui/core"
-import { styled } from "@material-ui/core/styles"
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 

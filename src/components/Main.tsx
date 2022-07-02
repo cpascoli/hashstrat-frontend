@@ -101,10 +101,10 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
 
            { connected && 
             <Box py={4}>
-                <PoolStatsTabs chainId={chainId!} account={account!} depositToken={supportedTokens![0]} investToken={investToken!} />
-                <WalletTabs chainId={chainId!} account={account!} tokens={supportedTokens!} /> 
+                <PoolStatsTabs chainId={chainId!} account={account!} tokens={supportedTokens!} investToken={investToken!} />
             </Box>
            }
+
         </Box>
     )
 

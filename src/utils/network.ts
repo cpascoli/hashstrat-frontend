@@ -78,6 +78,11 @@ export const DaiContract = (chainId: number) => {
     return new Contract(DaiTokenAddress(chainId), new utils.Interface(abi))
 }
 
+export const WethContract = (chainId: number) => {
+    const abi = abis[ "weth" as keyof typeof abis ]
+    return new Contract(WethTokenAddress(chainId), new utils.Interface(abi))
+}
+
 export const ERC20Contract = (chainId: number, symbol: string) => {
     console.log("ERC20Contract symbol: ", symbol, "chainId", chainId)
 
@@ -88,8 +93,8 @@ export const ERC20Contract = (chainId: number, symbol: string) => {
         case "dai" : {
             return DaiContract(chainId)
         }
-        case "pool_lp": {
-            return PoolLPContract(chainId)
+        case "weth": {
+            return WethContract(chainId)
         }
         case "pool-lp": {
             return PoolLPContract(chainId)

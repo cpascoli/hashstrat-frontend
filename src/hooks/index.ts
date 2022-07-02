@@ -1,6 +1,7 @@
 export { 
     useTokenApprove, 
-    useTokenAllowance 
+    useTokenAllowance,
+    useTokenBalance
 } from "./useErc20Tokens"
 
 export { 
@@ -8,12 +9,13 @@ export {
     useInvestedTokenValue,
     useTotalDeposited,
     useTotalWithdrawn,
-    useDepositTokenBalance,
-    useInvestTokenBalance,
 
     usePortfolioValue,
     useDeposit,
     useWithdraw,
     useGetDeposits,
-    useGetWithdrawals
+    useGetWithdrawals,
+    useSwapCount,
+    useSwapInfo,
+    useSwapInfoArray,
 } from "./usePool"

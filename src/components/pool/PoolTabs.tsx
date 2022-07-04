@@ -9,7 +9,7 @@ import { TradesView } from "./TradesView"
 import { WalletTabs } from "../wallet/WalletTabs"
 import { StrategyInfoView } from "./StrategyInfoView"
  
-interface StatsTabsProps {
+interface PoolTabsProps {
     chainId: number,
     account: string,
     tokens: Array<Token>,
@@ -38,7 +38,7 @@ const useStyle = makeStyles( theme => ({
 
 
 
-export const PoolStatsTabs = ( { chainId, account, tokens, investToken } : StatsTabsProps ) => {
+export const PoolTabs = ( { chainId, account, tokens, investToken } : PoolTabsProps ) => {
 
     const depositToken = tokens[0]
 
@@ -74,4 +74,4 @@ export const PoolStatsTabs = ( { chainId, account, tokens, investToken } : Stats
     )
 }
 
-export default PoolStatsTabs
+export default PoolTabs

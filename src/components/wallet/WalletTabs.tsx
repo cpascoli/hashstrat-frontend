@@ -3,12 +3,10 @@ import { Box, Tab, Paper, Snackbar, Link, makeStyles } from "@material-ui/core"
 import { styled } from "@material-ui/core/styles"
 import { TabContext, TabList, TabPanel, Alert, AlertTitle, Color as Severity } from "@material-ui/lab"
 
-import { TitleValueBox } from "../TitleValueBox"
 import { Token } from  "../Main"
 import { DepositWithdrawView } from "../DepositWithdrawView"
 import { usePortfolioValue } from "../../hooks"
 import { fromDecimals } from "../../utils/formatter"
-import { PoolStatsTabs } from "../pool/PoolStatsTabs"
 import { SnackInfo } from "../SnackInfo"
 
 

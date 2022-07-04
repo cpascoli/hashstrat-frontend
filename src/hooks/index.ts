@@ -15,7 +15,22 @@ export {
     useWithdraw,
     useGetDeposits,
     useGetWithdrawals,
-    useSwapCount,
     useSwapInfo,
     useSwapInfoArray,
 } from "./usePool"
+
+export { 
+    useStrategyName,
+    useStrategyDescription,
+    useStrategyDepositTokenAddress,
+    useStrategyInvestTokenAddress,
+    useStrategyFeedAddress,
+    useStrategyTargetInvestPerc,
+    useStrategyRebalancingThreshold
+} from "./useStrategy"
+
+export {
+    useFeedDecimals,
+    useFeedLatestPrice,
+    useFeedLatestTimestamp
+} from "./useFeed"

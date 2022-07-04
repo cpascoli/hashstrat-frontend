@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Box, Tab, makeStyles } from "@material-ui/core"
+import { Box, Tab, makeStyles, Divider } from "@material-ui/core"
 import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 
 import { Token } from  "../Main"
@@ -7,7 +7,8 @@ import { MyStatsView } from "../wallet/MyStatsView"
 import { PoolStatsView } from "./PoolStatsView"
 import { TradesView } from "./TradesView"
 import { WalletTabs } from "../wallet/WalletTabs"
-
+import { StrategyInfoView } from "./StrategyInfoView"
+ 
 interface StatsTabsProps {
     chainId: number,
     account: string,
@@ -61,7 +62,9 @@ export const PoolStatsTabs = ( { chainId, account, tokens, investToken } : Stats
                     <WalletTabs chainId={chainId!} account={account!} tokens={tokens!} /> 
                 </TabPanel>
                 <TabPanel className={classes.tab} value="1" key={1}>
-                    <PoolStatsView chainId={chainId} account={account} depositToken={depositToken} investToken={investToken} />
+                    <PoolStatsView chainId={chainId} depositToken={depositToken} investToken={investToken} />
+                    <Divider style={{marginTop: 40, marginBottom: 40}} />
+                    <StrategyInfoView chainId={chainId} depositToken={depositToken} investToken={investToken} />
                 </TabPanel>
                 <TabPanel className={classes.tab} value="2" key={2}>
                     <TradesView chainId={chainId} account={account} depositToken={depositToken} investToken={investToken} />

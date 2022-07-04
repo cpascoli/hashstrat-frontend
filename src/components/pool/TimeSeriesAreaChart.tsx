@@ -30,7 +30,7 @@ export interface ChartData {
 }
 
 
-export const TimeSeriesChart = ( chartData  : ChartData ) => (
+export const TimeSeriesAreaChart = ( chartData  : ChartData ) => (
   <ResponsiveContainer width = '95%' height = {300} >
     <AreaChart 
           margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
@@ -44,7 +44,9 @@ export const TimeSeriesChart = ( chartData  : ChartData ) => (
         tickFormatter = {(unixTime) => moment(unixTime).format('yyyy-MM-DD')}
         type = 'number'
       />
-      <YAxis name = 'Value' />
+
+      <YAxis name = "Asset 1" scale="auto" id="asset1" />
+      <YAxis name = "Asset 2" scale="auto" id="asset2"  />
 
       <Legend verticalAlign="top" height={30}/>
       <CartesianGrid strokeDasharray="1 1" />

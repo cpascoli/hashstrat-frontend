@@ -128,18 +128,6 @@ export const useInvestedTokenValue = (chainId: number) => {
 }
 
 
-export const useSwapCount = (chainId: number) => {
-    const poolContract = PoolContract(chainId)
-    const { value, error } = useCall({
-            contract: poolContract,
-            method: 'swapCount',
-            args: [],
-    }) ?? {}
-
-    useDebugValue(value?.[0].toString())
-    return value?.[0].toString()
-}
-
 export const useSwapInfo = (chainId: number, index: number) => {
     const poolContract = PoolContract(chainId)
     const { value, error } = useCall({
@@ -148,14 +136,14 @@ export const useSwapInfo = (chainId: number, index: number) => {
             args: [index],
     }) ?? {}
 
-    // console.log("useSwapInfo - ", index, " >>> ", value)
-    useDebugValue(value?.[0].toString())
-
     return { 
       timestamp:  value?.['timestamp'].toString(),
       side:  value?.['side'],
-      swapPrice:  value?.['swapPrice'].toString(),
       feedPrice:  value?.['feedPrice'].toString(),
+      bought:  value?.['bought'].toString(),
+      sold:  value?.['sold'].toString(),
+      depositTokenBalance: value?.['depositTokenBalance'].toString(),
+      investTokenBalance: value?.['investTokenBalance'].toString(),
     }
 }
 
@@ -170,22 +158,18 @@ export const useSwapInfoArray = (chainId: number) => {
     }) ?? {}
 
     const info = value?.[0].map( (data: any, idx: number) => {
-        console.log("data >>> ", typeof(data), data.side, data.timestamp.toString())
-        
         return {
-            index: idx,
             timestamp: data['timestamp'].toString(),
-            side: data?.['side'],
-            swapPrice: data?.['swapPrice'].toString(),
-            feedPrice: data?.['feedPrice'].toString(),
-            depositTokenBalance: data?.['depositTokenBalance'].toString(),
-            investTokenBalance: data?.['investTokenBalance'].toString(),
+            side: data['side'],
+            feedPrice: data['feedPrice'].toString(),
+            bought: data['bought'].toString(),
+            sold: data['sold'].toString(),
+            depositTokenBalance: data['depositTokenBalance'].toString(),
+            investTokenBalance: data['investTokenBalance'].toString(),
           }
 
     })
-
     console.log("useSwapInfoArray - ", info)
-
     return info
 }
 

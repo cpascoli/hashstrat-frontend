@@ -2,11 +2,8 @@ import { Box, makeStyles, Typography } from "@material-ui/core"
 import { Token } from  "../Main"
 import { fromDecimals } from "../../utils/formatter"
 import { DataGrid, GridColDef } from "@material-ui/data-grid"
-
-
 import { useSwapInfoArray } from "../../hooks"
-
-import { TimeSeriesChart } from "./TimeSeriesChart"
+import { TimeSeriesLineChart } from "./TimeSeriesLineChart"
 
 
 const useStyle = makeStyles( theme => ({
@@ -36,21 +33,21 @@ export const TradesView = ( { chainId, account, depositToken, investToken } : Po
     const classes = useStyle()
 
     const swaps = useSwapInfoArray(chainId)
-    const label1 = `${depositToken.symbol}`
-    const label2 = `${investToken.symbol}`
+    const label1 = `${depositToken.symbol} Amount`
+    const label2 = `${investToken.symbol} Amount`
   
     const chartData = swaps?.map( (data: any) => {
         const date = data.timestamp * 1000
         const price = parseFloat(fromDecimals(data.feedPrice, 8, 2))
-        const asset1 = parseFloat(fromDecimals(data.depositTokenBalance, depositToken.decimals, 2))
-        const asset2 = parseFloat(fromDecimals(data.investTokenBalance, investToken.decimals, 6))
+        const asset1 = parseFloat(fromDecimals(data.sold, depositToken.decimals, 2))
+        const asset2 = parseFloat(fromDecimals(data.bought, investToken.decimals, 6))
 
-        console.log("info >>>: ", price, asset1, asset2)
+        console.log("info >>>: ", price, asset1, asset2, " ===> percent: ", (asset2 * price) / (asset1 + asset2 * price) * 100)
 
         let record : any = {}
         record['time'] = date
         record[label1] = asset1
-        record[label2] = asset2 * price
+        record[label2] = asset2
         return record
     })
 
@@ -59,41 +56,44 @@ export const TradesView = ( { chainId, account, depositToken, investToken } : Po
         { field: 'date', headerName: 'Date', type: 'date', width: 130, sortable: true },
         { field: 'side', headerName: 'Side', width: 90, sortable: false },
         {
-            field: 'feedPrice',
-            headerName: 'Price',
-            type: 'number',
-            width: 120,
-            sortable: false,
-        },
-        {
             field: 'asset1',
-            headerName: `${depositToken.symbol} Balance`,
-            description: 'The amount of the stable asset held by the pool',
+            headerName: `${investToken.symbol} Traded`,
+            description: 'The amount of the risk asset bought or sold',
             type: 'number',
             sortable: false,
             width: 150,
         },
         {
             field: 'asset2',
-            headerName: `${investToken.symbol} Balance`,
-            description: 'The amount of the risk asset held by the pool',
+            headerName: `${depositToken.symbol} Traded`,
+            description: 'The amount of the stable asset sold or bought',
             type: 'number',
             sortable: false,
             width: 150,
           },
+          {
+            field: 'feedPrice',
+            headerName: 'Price',
+            type: 'number',
+            width: 120,
+            sortable: false,
+        },
       ];
 
      const rows = swaps?.map( (data: any, index: number) => {
         // timestamp:
         // side: 
-        // swapPrice: 
+        // bought: 
+        // sold:
         // feedPrice: 
         // depositTokenBalance:
         // investTokenBalance:
         const date = new Date(data.timestamp * 1000)
         const feedPrice = parseFloat(fromDecimals(data.feedPrice, 8, 2))
-        const asset1 = parseFloat(fromDecimals(data.depositTokenBalance, depositToken.decimals, 2))
-        const asset2 = parseFloat(fromDecimals(data.investTokenBalance, investToken.decimals, 6))
+
+        const factor = data.side === 'BUY' ? 1.0 : -1.0
+        const asset1 = factor * parseFloat(fromDecimals(data.investTokenBalance, investToken.decimals, 6))
+        const asset2 = -1 * factor * parseFloat(fromDecimals(data.depositTokenBalance, depositToken.decimals, 2))
 
         return {
             id: index,
@@ -102,28 +102,25 @@ export const TradesView = ( { chainId, account, depositToken, investToken } : Po
             feedPrice: feedPrice,
             asset1: asset1,
             asset2: asset2,
-            portfolioValue: asset1 + (asset2 * feedPrice)
         }
     })
   
-
   
 
     return (
         <Box className={classes.container} px={3}>
 
             <Typography align="center">
-                Assets held in the pool over time
+                Strategy Trades
             </Typography>
 
-            <TimeSeriesChart title="Assets Value in USD" 
+            <TimeSeriesLineChart title="Assets Value in USD" 
                 label1={label1} 
                 label2={label2} 
                 data={chartData}  
             /> 
 
             <br/>
-      
 
             { rows && 
                 <div style={{ height: rows.length * 56 + 110, width: '100%', marginTop: 20 }}>

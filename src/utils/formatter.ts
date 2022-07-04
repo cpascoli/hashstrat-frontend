@@ -29,3 +29,7 @@ export const shortenAccount = (account?: string) => {
     if (!account) return "n/a"
     return account.substring(0, 6) + "..." + account.substring(38)
 }
+
+export const round = (n : number, d=2) => {
+    return Math.round(n * (10**d)) / (10**d)
+}

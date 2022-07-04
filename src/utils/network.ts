@@ -14,13 +14,26 @@ export const PoolAddress = (chainId: number) => {
     return networkMappings[networkName as keyof typeof networkMappings]["pool"]
 }
 
-
 export const PoolLPTokenAddress = (chainId: number) => {
     if (!chainId) return constants.AddressZero
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
 
     return networkMappings[networkName as keyof typeof networkMappings]["pool_lp"]
 }
+
+export const StrategyAddress = (chainId: number) => {
+    if (!chainId) return constants.AddressZero
+    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+
+    return networkMappings[networkName as keyof typeof networkMappings]["strategy"]
+}
+
+export const FeedAddress = (chainId: number) => {
+    if (!chainId) return constants.AddressZero
+    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    return networkMappings[networkName as keyof typeof networkMappings]["price_feed"]
+}
+
 
 export const UsdcTokenAddress = (chainId: number) => {
     if (!chainId) return constants.AddressZero
@@ -66,6 +79,16 @@ export const PoolContract = (chainId: number) => {
 export const PoolLPContract = (chainId: number) => {
     const abi = abis[ "pool_lp" as keyof typeof abis ]
     return new Contract(PoolLPTokenAddress(chainId) , new utils.Interface(abi))
+}
+
+export const StrategyContract = (chainId: number) => {
+    const abi = abis[ "strategy" as keyof typeof abis ]
+    return new Contract(StrategyAddress(chainId) , new utils.Interface(abi))
+}
+
+export const FeedContract = (chainId: number) => {
+    const abi = abis[ "price_feed" as keyof typeof abis ]
+    return new Contract(FeedAddress(chainId) , new utils.Interface(abi))
 }
 
 export const UsdcContract = (chainId: number) => {

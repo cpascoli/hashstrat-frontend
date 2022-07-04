@@ -3,15 +3,16 @@
         "pool": "0xaB1A8f2AF48695355EA9AC5f5dC2438618CfEB3B",
         "pool_lp": "0xe7a6eE7A5ceC1426434cB19C2a5349b4B06dcF61",
         "strategy": "0xa5281a39D1Cd124c99c5126Fb3021b087A32Cc3a",
-        "price_feed":"0x3ca0Eb7A10e45eEBA087755AE483d99BfeDcAE84",
+        "price_feed": "0x3ca0Eb7A10e45eEBA087755AE483d99BfeDcAE84",
         "usdc": "",
         "dai": "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa",
         "weth": "0xd0A1E359811322d97991E03f863a0C30C2cF029C"
     },
     "polygon": {
-        "pool": "0x1Df1D2057D1d4126398C001ea855a60b277c249E",
-        "pool_lp": "0xC899BE41c7f0ADb202b1D7Ed7CB10365D8b8b0e2",
-        "strategy": "0x94b3dD1aEd189A419007100B35CA4d056e09500c",
+        "pool": "0xFB075249C0e2338849F791e6761E7c1319068d09",
+        "pool_lp": "0xB0dACF513D18E444c4326ECCC1dFC6855bd1842A",
+        "strategy": "0x98f503e9e32304dc545a19B081256C22Ab246dA0",
+        "price_feed": "0x1B7dc4839967A84946c54276a2C84519993b40d0",
         "usdc": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
         "dai": "",
         "weth": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619"

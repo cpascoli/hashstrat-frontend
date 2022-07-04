@@ -20,7 +20,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
         main: toggleDark ?  '#0091EA' :  '#0091EA',
       },
       secondary: {
-        main: toggleDark ?  '#ffaf49' :  '#f47100',
+        main: toggleDark ?  '#ffaf49' :  '#ffaf49',
       }
     }
   });
@@ -49,7 +49,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
           <Container maxWidth="md" disableGutters>
               <Main toggleDark={toggleDark} setToggleDark={setToggleDark} />
           </Container>
-
         </DAppProvider>
       </ThemeProvider>
     )

@@ -18,7 +18,7 @@ interface PoolTabsProps {
 
 const useStyle = makeStyles( theme => ({
     container: {
-        margin: 0,
+        marginTop: 22,
         padding: 0,
     },
     tabList: { 
@@ -50,7 +50,7 @@ export const PoolTabs = ( { chainId, account, tokens, investToken } : PoolTabsPr
     }
 
     return (
-        <Box className={classes.container} my={4}>
+        <Box className={classes.container}>
             <TabContext value={selectedTokenIndex.toString()}>
                 <TabList onChange={handleChange} className={classes.tabList}>
                     <Tab label="My Assets" value="0" key={0} />

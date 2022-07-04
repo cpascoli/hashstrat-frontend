@@ -45,7 +45,6 @@ interface StrategyInfoViewProps {
 
 export const StrategyInfoView = ( { chainId, depositToken, investToken } : StrategyInfoViewProps ) => {
 
-    const networkExplorerHost = NetworkExplorerHost(chainId)
     const poolAddress = PoolAddress(chainId)
 
     const name = useStrategyName(chainId)

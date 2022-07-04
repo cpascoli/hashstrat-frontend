@@ -6,13 +6,19 @@ import weth from "./img/weth.png"
 import usdc from "./img/usdc.png"
 import dai from "./img/dai.png"
 import poollp from "./img/pool_lp.png"
-
-
 import { WethTokenAddress, UsdcTokenAddress, DaiTokenAddress, PoolLPTokenAddress } from "../utils/network"
 
+import { Home } from "./Home"
 import { Header } from '../components/Header';
 import { PoolTabs } from "./pool/PoolTabs";
 
+
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    Link
+  } from "react-router-dom";
 
 export type Token = {
     symbol: string,
@@ -41,6 +47,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
     const [connected, setConnected] = useState(false);
     const [chainId, setChainId] = useState<number>();
     const [account, setAccount] = useState<string>();
+
 
     const classes = useStyle()
 
@@ -74,36 +81,45 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
     console.log(">>> Main: chainId: ", chainId, "account", account, "connected", connected)
 
     return (
-        <Box className={classes.container}>
+        <Box className={classes.container} >
+
            <Header toggleDark={toggleDark} setToggleDark={setToggleDark} setChainId={setChainId} setAccount={setAccount} />
            
            {(!chainId && account) &&
-                <Alert severity="warning" style={{textAlign: "center", margin: 30}} > 
+                <Alert severity="warning" style={{textAlign: "center", margin: 20}} > 
                     <AlertTitle>Wrong Network</AlertTitle>
-                    Please connect to the <strong>Polygon</strong> or <strong>Kovan</strong> networks to use the dapp
+                    Connect to the <strong>Polygon</strong> or <strong>Kovan</strong> networks to use the dapp
                 </Alert>
             }
 
             { (!chainId && !account) &&
-                <Alert severity="info" style={{textAlign: "center", margin: 30}} > 
+                <Alert severity="info" style={{textAlign: "center", margin: 20}} > 
                     <AlertTitle>No account connected</AlertTitle>
-                    Please connect an account to the Polygon or Kovan networks to use the dapp
+                    Connect an account to the Polygon or Kovan networks to use the dapp
                 </Alert>
             }
 
             { (chainId && !account) &&
-                <Alert severity="info" style={{textAlign: "center", margin: 30}} > 
+                <Alert severity="info" style={{textAlign: "center", margin: 20}} > 
                     <AlertTitle>No account connected</AlertTitle>
-                    Please connect an account to use the dapp
+                    Connect an account to use the dapp
                 </Alert>
             }
 
-           { connected && 
-            <Box py={4}>
-                <PoolTabs chainId={chainId!} account={account!} tokens={supportedTokens!} investToken={investToken!} />
-            </Box>
-           }
+           
+            <Box style={{marginTop: 2}}>
 
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/"  element={<Home chainId={chainId!}/>} />
+                        <Route path="pool" element={ connected && 
+                             <PoolTabs chainId={chainId!} account={account!} tokens={supportedTokens!} investToken={investToken!} />
+                           }
+                         />
+                    </Routes>
+                </BrowserRouter>
+            </Box>
+        
         </Box>
     )
 

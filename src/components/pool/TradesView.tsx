@@ -4,6 +4,7 @@ import { fromDecimals } from "../../utils/formatter"
 import { DataGrid, GridColDef } from "@material-ui/data-grid"
 import { useSwapInfoArray } from "../../hooks"
 import { TimeSeriesLineChart } from "./TimeSeriesLineChart"
+import { DataUsageSharp } from "@material-ui/icons"
 
 
 const useStyle = makeStyles( theme => ({
@@ -33,14 +34,14 @@ export const TradesView = ( { chainId, account, depositToken, investToken } : Po
     const classes = useStyle()
 
     const swaps = useSwapInfoArray(chainId)
-    const label1 = `${depositToken.symbol} Amount`
-    const label2 = `${investToken.symbol} Amount`
+    const label1 = `${investToken.symbol} Amount`
+    const label2 = `${depositToken.symbol} Amount`
   
     const chartData = swaps?.map( (data: any) => {
         const date = data.timestamp * 1000
         const price = parseFloat(fromDecimals(data.feedPrice, 8, 2))
-        const asset1 = parseFloat(fromDecimals(data.sold, depositToken.decimals, 2))
-        const asset2 = parseFloat(fromDecimals(data.bought, investToken.decimals, 6))
+        const asset1 = parseFloat(fromDecimals(data.investTokenBalance, investToken.decimals, 6))
+        const asset2 = parseFloat(fromDecimals(data.depositTokenBalance, depositToken.decimals, 2))
 
         console.log("info >>>: ", price, asset1, asset2, " ===> percent: ", (asset2 * price) / (asset1 + asset2 * price) * 100)
 
@@ -92,8 +93,10 @@ export const TradesView = ( { chainId, account, depositToken, investToken } : Po
         const feedPrice = parseFloat(fromDecimals(data.feedPrice, 8, 2))
 
         const factor = data.side === 'BUY' ? 1.0 : -1.0
-        const asset1 = factor * parseFloat(fromDecimals(data.investTokenBalance, investToken.decimals, 6))
-        const asset2 = -1 * factor * parseFloat(fromDecimals(data.depositTokenBalance, depositToken.decimals, 2))
+        const amount1 = data.side === 'BUY' ? data.bought : data.sold
+        const amount2 = data.side === 'BUY' ? data.sold : data.bought
+        const asset1 = factor * parseFloat(fromDecimals(amount1, investToken.decimals, 6))
+        const asset2 = -1 * factor * parseFloat(fromDecimals(amount2, depositToken.decimals, 2))
 
         return {
             id: index,

@@ -1,7 +1,7 @@
 import { Box, Typography, makeStyles } from "@material-ui/core"
 import { TitleValueBox } from "../TitleValueBox"
 import { Token } from  "../Main"
-import { fromDecimals } from "../../utils/formatter"
+import { fromDecimals, round } from "../../utils/formatter"
 import { PoolAddress } from "../../utils/network"
 import { useSwapInfoArray } from "../../hooks"
 import { TimeSeriesAreaChart } from "./TimeSeriesAreaChart"
@@ -71,8 +71,8 @@ export const PoolStatsView = ( { chainId, depositToken, investToken } : PoolStat
 
         let record : any = {}
         record['time'] = date
-        record[label1] = asset1
-        record[label2] = asset2 * price
+        record[label1] = round(asset1)
+        record[label2] = round(asset2 * price)
         return record
     })
 
@@ -98,8 +98,6 @@ export const PoolStatsView = ( { chainId, depositToken, investToken } : PoolStat
                 label2={label2} 
                 data={chartData}  
             /> 
-
-                       
 
         </Box>
     )

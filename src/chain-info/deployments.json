@@ -1,9 +1,9 @@
 {
     "kovan": {
-        "pool": "0xaB1A8f2AF48695355EA9AC5f5dC2438618CfEB3B",
-        "pool_lp": "0xe7a6eE7A5ceC1426434cB19C2a5349b4B06dcF61",
-        "strategy": "0xa5281a39D1Cd124c99c5126Fb3021b087A32Cc3a",
-        "price_feed": "0x3ca0Eb7A10e45eEBA087755AE483d99BfeDcAE84",
+        "pool": "0xa39959320eF33C92BA9fdA18F1A63fbc2a14c81D",
+        "pool_lp": "0x007d0532B28e59cf54F090C7833A2Fe60cf49437",
+        "strategy": "0xb3Af668d13304A27E79a69E98242bbba7D4DB2Bc",
+        "price_feed": "0x748B08B77Aab51fa7138680163E2B6Ee4e9221A1",
         "usdc": "",
         "dai": "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa",
         "weth": "0xd0A1E359811322d97991E03f863a0C30C2cF029C"

@@ -1,0 +1,27 @@
+{
+    "kovan": [
+        {
+            "poolId": "pool01",
+            "name": "WBTC-USDC 60/40",
+            "description": "A rebalancing pool targeting 60% WBTC and 40% DAI"
+        },
+        {
+            "poolId": "pool02",
+            "name": "ETH-USDC 60/40",
+            "description": "A rebalancing pool targeting 60% ETH and 40% DAI"
+        }
+    ],
+    
+    "polygon": [
+        {
+            "poolId": "pool01",
+            "name": "WBTC-USDC 60/40",
+            "description": "A rebalancing pool targeting 60% WBTC and 40% USDC"
+        },
+        {
+            "poolId": "pool02",
+            "name": "ETH-USDC 60/40",
+            "description": "A rebalancing pool targeting 60% ETH and 40% USDC"
+        }
+    ]
+}

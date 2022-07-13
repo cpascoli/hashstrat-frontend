@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react"
-import { Box, Tab, Paper, Snackbar, Link, makeStyles } from "@material-ui/core"
+import { Box, Tab, Paper, Snackbar, Link, makeStyles, Divider } from "@material-ui/core"
 import { styled } from "@material-ui/core/styles"
 import { TabContext, TabList, TabPanel, Alert, AlertTitle, Color as Severity } from "@material-ui/lab"
 
-import { Token } from  "../Main"
+import { Token } from  "../../types/Token"
 import { DepositWithdrawView } from "../DepositWithdrawView"
 import { usePortfolioValue } from "../../hooks"
 import { fromDecimals } from "../../utils/formatter"
 import { SnackInfo } from "../SnackInfo"
+import { Contracts } from "../pool/Contracts"
 
 
 interface TabPanelProps {
     chainId: number,
+    poolId: string,
     account: string,
     tokens: Array<Token>
 }
@@ -45,9 +47,9 @@ const TabContent = styled(Paper)(({ theme }) => ({
 
 
 
-export const WalletTabs = ( { chainId, account, tokens } : TabPanelProps ) => {
+export const WalletTabs = ( { chainId, poolId, account, tokens } : TabPanelProps ) => {
 
-    const portfolioValue = usePortfolioValue(chainId, account) // BigNumber.from("123000000" )
+    const portfolioValue = usePortfolioValue(chainId, poolId, account) // BigNumber.from("123000000" )
     const formattedPortfolioValue =  (portfolioValue) ? fromDecimals(portfolioValue, tokens[0].decimals, 2) : ""
     const [selectedTokenIndex, setSelectedTokenIndex] = useState<number>(0)
 
@@ -77,15 +79,9 @@ export const WalletTabs = ( { chainId, account, tokens } : TabPanelProps ) => {
         setShowSnack(true)
     }
 
-
-    // border: '1px dotted '+theme.palette.text.secondary,
-    // borderRadius: 20,
-
     return (
         
         <Box className={classes.container}>
-            
-
             <Box my={4}>
                 <TabContext value={selectedTokenIndex.toString()}>
                     <TabList onChange={handleChange} className={classes.tabList}>
@@ -105,21 +101,22 @@ export const WalletTabs = ( { chainId, account, tokens } : TabPanelProps ) => {
                         tokens.map((token, index ) => {
                             return (
                                 <TabPanel className={classes.tab} value={index.toString()} key={index}>
-                                    {/* <TabContent> */}
-                                        <DepositWithdrawView 
-                                            formType={ token.symbol == 'POOL-LP' ? "withdraw" :  "deposit" }
-                                            chainId={chainId}
-                                            token={token}
-                                            handleSuccess={handleSuccess}
-                                            handleError={handleError}
-                                        />
-                                    {/* </TabContent> */}
+                                    <DepositWithdrawView 
+                                        formType={ token.symbol == 'POOL-LP' ? "withdraw" :  "deposit" }
+                                        chainId={chainId}
+                                        poolId={poolId}
+                                        token={token}
+                                        handleSuccess={handleSuccess}
+                                        handleError={handleError}
+                                    />
                                 </TabPanel>
                             )
                         })
                     }
                 </TabContext>
             </Box>
+
+            <Divider style={{marginTop:30, marginBottom: 30}} />
 
 
             <Snackbar

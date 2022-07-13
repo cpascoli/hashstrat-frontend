@@ -1,13 +1,12 @@
 import { useState } from "react"
 import { useEthers, useTokenBalance } from "@usedapp/core"
 
-import { Box, Grid, Paper, Button, makeStyles } from  "@material-ui/core"
+import { Box, Grid, Button, makeStyles } from  "@material-ui/core"
 import { TitleValueBox } from './TitleValueBox'
 import { DepositWithdrawForm } from './DepositWithdrawForm'
 
 import { Modal } from "./Modal"
-import { Token } from "./Main"
-
+import { Token } from "../types/Token"
 import { fromDecimals } from "../utils/formatter"
 import { SnackInfo } from "./SnackInfo"
 
@@ -15,6 +14,7 @@ import { SnackInfo } from "./SnackInfo"
 interface DepositWithdrawViewProps {
   formType?: string,
   chainId: number,
+  poolId: string,
   token: Token;
   handleSuccess: (result: SnackInfo) => void,
   handleError: (error: SnackInfo) => void,
@@ -37,14 +37,11 @@ const useStyle = makeStyles( theme => ({
 
 
 
-export const DepositWithdrawView = ( { formType, chainId, token, handleSuccess, handleError } : DepositWithdrawViewProps ) => {
-
-  console.log("DepositWithdrawView - formType: ", formType)
+export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleSuccess, handleError } : DepositWithdrawViewProps ) => {
 
   const classes = useStyle()
   const [showUpdateStakeModal, setShowUpdateStakeModal] = useState(false);
   const [formTypeValue, setFormTypeValue] = useState(formType);
-
 
   const { symbol, image, address } = token
   const { account } = useEthers()
@@ -58,7 +55,6 @@ export const DepositWithdrawView = ( { formType, chainId, token, handleSuccess, 
   }
 
   const hideModalPreseed = () => {
-    console.log("hideModalPreseed")
     setShowUpdateStakeModal(false)
     setFormTypeValue(undefined)
   }
@@ -103,6 +99,7 @@ export const DepositWithdrawView = ( { formType, chainId, token, handleSuccess, 
                 formType={formTypeValue}
                 balance={formattedTokenBalance}
                 chainId={chainId}
+                poolId={poolId}
                 token={token}
                 handleSuccess={handleSuccess}
                 handleError={handleError}

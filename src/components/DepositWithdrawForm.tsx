@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useNotifications } from "@usedapp/core"
 import { Box, Grid, Button, Input, CircularProgress, Divider, Typography, Link, makeStyles } from "@material-ui/core"
 import { useTokenApprove, useTokenAllowance, useDeposit, useWithdraw } from "../hooks"
-import { Token } from "./Main"
+import { Token } from "../types/Token"
 import { toDecimals, fromDecimals } from "../utils/formatter"
 import { NetworkExplorerHost } from "../utils/network"
 import { SnackInfo } from "./SnackInfo"
@@ -13,6 +13,7 @@ import { Alert, AlertTitle } from "@material-ui/lab"
 export interface DepositWithdrawFormProps {
     formType? : string;
     chainId: number,
+    poolId: string,
     token : Token;
     balance: string;
 
@@ -61,13 +62,13 @@ const useStyle = makeStyles( theme => ({
     }
 }))
 
-export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleSuccess, handleError, onClose } : DepositWithdrawFormProps) => {
+export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance, handleSuccess, handleError, onClose } : DepositWithdrawFormProps) => {
 
     const { symbol, image, address } = token
 
     // Token Allowance 
-    const allowance = useTokenAllowance(chainId, symbol) // in token decimals
-    const { approveErc20, approveErc20State } = useTokenApprove(chainId, symbol)
+    const allowance = useTokenAllowance(chainId, poolId, symbol) // in token decimals
+    const { approveErc20, approveErc20State } = useTokenApprove(chainId, poolId, symbol)
 
     const classes = useStyle()
     const { notifications } = useNotifications()
@@ -84,10 +85,8 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
     }
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // const newAmount = event.target.value === "" ? "" : Number(event.target.value)
         const newAmount = event.target.value === "" ? "" : event.target.value.trim()
         setAmount(newAmount)
-        console.log("handleInputChange - amount: ", newAmount)
     }
 
     // Approve Tokens
@@ -100,7 +99,6 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
 
 
     const submitForm = () => {
-        console.log("submitForm")
         setUserMessage(undefined)
 
         if (formType === 'deposit') {
@@ -114,7 +112,7 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
     const allowanceOk = formattedAllowance && amount && (parseFloat(formattedAllowance) >= amount)
 
     // Deposit Tokens
-    const { deposit, depositState } = useDeposit(chainId)
+    const { deposit, depositState } = useDeposit(chainId, poolId)
     const isDepositMining = depositState.status === "Mining"
 
     const submitDeposit = () => {
@@ -124,7 +122,7 @@ export const DepositWithdrawForm = ({ formType, chainId, token, balance, handleS
     }
 
     // Withdraw Tokens
-    const { withdraw, withdrawState } = useWithdraw(chainId)
+    const { withdraw, withdrawState } = useWithdraw(chainId, poolId)
     const isWithdrawMining = withdrawState.status === "Mining"
     const submitWithdrawal = () => {
         const amountDecimals = toDecimals(amount.toString(), token.decimals)

@@ -1,6 +1,6 @@
 import { Box, makeStyles, Typography } from "@material-ui/core"
 import { TitleValueBox } from "../TitleValueBox"
-import { Token } from  "../Main"
+import { Token } from "../../types/Token"
 import { fromDecimals, round} from "../../utils/formatter"
 import { NetworkExplorerHost, PoolAddress } from "../../utils/network"
 import { BigNumber } from 'ethers'
@@ -37,28 +37,27 @@ const useStyle = makeStyles( theme => ({
 
 interface StrategyInfoViewProps {
     chainId: number,
+    poolId: string,
     depositToken: Token,
     investToken: Token
 }
 
 
 
-export const StrategyInfoView = ( { chainId, depositToken, investToken } : StrategyInfoViewProps ) => {
+export const StrategyInfoView = ( { chainId, poolId, depositToken, investToken } : StrategyInfoViewProps ) => {
 
-    const poolAddress = PoolAddress(chainId)
+    const poolAddress = PoolAddress(chainId, poolId)
 
-    const name = useStrategyName(chainId)
-    const description = useStrategyDescription(chainId)
-    const targetInvestPerc = useStrategyTargetInvestPerc(chainId)
-    const rebalancingThreshold = useStrategyRebalancingThreshold(chainId)
-    const latestFeedPrice = useFeedLatestPrice(chainId)
-    const feedDecimals = useFeedDecimals(chainId)
-    const feedLatestTimestamp = useFeedLatestTimestamp(chainId)
+    const name = useStrategyName(chainId, poolId)
+    const description = useStrategyDescription(chainId, poolId)
+    const targetInvestPerc = useStrategyTargetInvestPerc(chainId, poolId)
+    const rebalancingThreshold = useStrategyRebalancingThreshold(chainId, poolId)
+    const latestFeedPrice = useFeedLatestPrice(chainId, poolId)
+    const feedDecimals = useFeedDecimals(chainId, poolId)
+    const feedLatestTimestamp = useFeedLatestTimestamp(chainId, poolId)
 
-    const depositTokenBalance = useTokenBalance(chainId, depositToken.symbol, poolAddress)
-    const investTokenBalance = useTokenBalance(chainId, investToken.symbol, poolAddress)
-
-
+    const depositTokenBalance = useTokenBalance(chainId, poolId, depositToken.symbol, poolAddress)
+    const investTokenBalance = useTokenBalance(chainId, poolId, investToken.symbol, poolAddress)
 
     const investPercText =  targetInvestPerc && <span> {targetInvestPerc} %  / {(100 - targetInvestPerc )}%  </span>
     const targetPercUp =  (parseInt(targetInvestPerc) + parseInt(rebalancingThreshold) ) / 100

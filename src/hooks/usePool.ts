@@ -1,14 +1,10 @@
 
 import { useContractFunction, useCall } from "@usedapp/core"
-import { channel } from "diagnostics_channel"
 import { PoolContract } from "../utils/network"
-import { BigNumber } from 'ethers'
 import { useDebugValue, useEffect, useState } from "react"
 
-export const useDeposit = (chainId: number) => {
-
-    const poolContract = PoolContract(chainId)
-
+export const useDeposit = (chainId: number, poolId: string) => {
+    const poolContract = PoolContract(chainId, poolId)
     const { send: depositSend, state: depositState } = useContractFunction(poolContract, "deposit", { 
         transactionName: "Deposit Tokens"
     })
@@ -21,8 +17,8 @@ export const useDeposit = (chainId: number) => {
 }
 
 
-export const useWithdraw = (chainId: number) => {
-    const poolContract = PoolContract(chainId)
+export const useWithdraw = (chainId: number, poolId: string) => {
+    const poolContract = PoolContract(chainId, poolId)
     const { send: withdrawSend, state: withdrawState } = useContractFunction(poolContract, "withdrawLP", { 
         transactionName: "Withdraw Tokens"
     })
@@ -35,8 +31,8 @@ export const useWithdraw = (chainId: number) => {
 }
 
 
-export const usePortfolioValue = (chainId: number, account: string) => {
-    const poolContract = PoolContract(chainId)
+export const usePortfolioValue = (chainId: number, poolId: string, account: string) => {
+    const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'portfolioValue',
@@ -48,8 +44,8 @@ export const usePortfolioValue = (chainId: number, account: string) => {
 }
 
 // Account Stats
-export const useGetDeposits = (chainId: number, account: string) => {
-    const poolContract = PoolContract(chainId)
+export const useGetDeposits = (chainId: number, poolId: string, account: string) => {
+    const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'deposits',
@@ -61,8 +57,8 @@ export const useGetDeposits = (chainId: number, account: string) => {
 }
 
 
-export const useGetWithdrawals = (chainId: number, account: string) => {
-    const poolContract = PoolContract(chainId)
+export const useGetWithdrawals = (chainId: number, poolId: string, account: string) => {
+    const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'withdrawals',
@@ -77,8 +73,8 @@ export const useGetWithdrawals = (chainId: number, account: string) => {
 
 // Pool Stats
 
-export const useTotalPortfolioValue = (chainId: number) => {
-    const poolContract = PoolContract(chainId)
+export const useTotalPortfolioValue = (chainId: number, poolId: string) => {
+    const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'totalPortfolioValue',
@@ -90,8 +86,8 @@ export const useTotalPortfolioValue = (chainId: number) => {
 }
 
 
-export const useTotalDeposited = (chainId: number) => {
-    const poolContract = PoolContract(chainId)
+export const useTotalDeposited = (chainId: number, poolId: string) => {
+    const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'totalDeposited',
@@ -102,8 +98,8 @@ export const useTotalDeposited = (chainId: number) => {
     return value?.[0].toString()
 }
 
-export const useTotalWithdrawn = (chainId: number) => {
-    const poolContract = PoolContract(chainId)
+export const useTotalWithdrawn = (chainId: number, poolId: string) => {
+    const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'totalWithdrawn',
@@ -115,8 +111,8 @@ export const useTotalWithdrawn = (chainId: number) => {
 }
 
 
-export const useInvestedTokenValue = (chainId: number) => {
-    const poolContract = PoolContract(chainId)
+export const useInvestedTokenValue = (chainId: number, poolId: string) => {
+    const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'investedTokenValue',
@@ -128,8 +124,8 @@ export const useInvestedTokenValue = (chainId: number) => {
 }
 
 
-export const useSwapInfo = (chainId: number, index: number) => {
-    const poolContract = PoolContract(chainId)
+export const useSwapInfo = (chainId: number, index: number, poolId: string) => {
+    const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'swaps',
@@ -148,8 +144,8 @@ export const useSwapInfo = (chainId: number, index: number) => {
 }
 
 
-export const useSwapInfoArray = (chainId: number) => {
-    const poolContract = PoolContract(chainId)
+export const useSwapInfoArray = (chainId: number, poolId: string) => {
+    const poolContract = PoolContract(chainId, poolId)
 
     const { value, error } = useCall({
         contract: poolContract,
@@ -169,7 +165,6 @@ export const useSwapInfoArray = (chainId: number) => {
           }
 
     })
-    console.log("useSwapInfoArray - ", info)
     return info
 }
 

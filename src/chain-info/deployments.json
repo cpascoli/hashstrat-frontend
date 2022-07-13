@@ -1,20 +1,40 @@
 {
     "kovan": {
-        "pool": "0xa39959320eF33C92BA9fdA18F1A63fbc2a14c81D",
-        "pool_lp": "0x007d0532B28e59cf54F090C7833A2Fe60cf49437",
-        "strategy": "0xb3Af668d13304A27E79a69E98242bbba7D4DB2Bc",
-        "price_feed": "0x748B08B77Aab51fa7138680163E2B6Ee4e9221A1",
+        "pool01": {
+            "pool": "0x46471d98ce12D1003F664BfAe599983e2908e67C",
+            "pool_lp": "0xC899BE41c7f0ADb202b1D7Ed7CB10365D8b8b0e2",
+            "strategy": "0x19a801e436A76cBb62335d9Fee47585e01e1613b",
+            "price_feed": "0x3340E43A99A00212599E7d4C4CCD963d430Ed600"
+        },
+        "pool02": {
+            "pool": "0x7C6e5770e89C85894571ae3ed9A3758BB40896d8",
+            "pool_lp": "0x47f11C90aD362d1262eA02899cba63F5A286D865",
+            "strategy": "0x14F444F51df116096f552cDEcF84954cf1e351FB",
+            "price_feed": "0x42bf28D49382b37e18FF1EB2003F9Fbd566D5434"
+        },
+
         "usdc": "",
         "dai": "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa",
-        "weth": "0xd0A1E359811322d97991E03f863a0C30C2cF029C"
+        "weth": "0xd0A1E359811322d97991E03f863a0C30C2cF029C",
+        "wbtc": "0xe0C9275E44Ea80eF17579d33c55136b7DA269aEb"
     },
+    
     "polygon": {
-        "pool": "0xFB075249C0e2338849F791e6761E7c1319068d09",
-        "pool_lp": "0xB0dACF513D18E444c4326ECCC1dFC6855bd1842A",
-        "strategy": "0x98f503e9e32304dc545a19B081256C22Ab246dA0",
-        "price_feed": "0x1B7dc4839967A84946c54276a2C84519993b40d0",
+        "pool01": {
+            "pool": "0xFB075249C0e2338849F791e6761E7c1319068d09",
+            "pool_lp": "0xB0dACF513D18E444c4326ECCC1dFC6855bd1842A",
+            "strategy": "0x98f503e9e32304dc545a19B081256C22Ab246dA0",
+            "price_feed": "0x1B7dc4839967A84946c54276a2C84519993b40d0"
+        },
+        "pool02": {
+            "pool": "0xFB075249C0e2338849F791e6761E7c1319068d09",
+            "pool_lp": "0xB0dACF513D18E444c4326ECCC1dFC6855bd1842A",
+            "strategy": "0x98f503e9e32304dc545a19B081256C22Ab246dA0",
+            "price_feed": "0x1B7dc4839967A84946c54276a2C84519993b40d0"
+        },
         "usdc": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
         "dai": "",
-        "weth": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619"
+        "weth": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+        "wbtc": "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6"
     }
 }

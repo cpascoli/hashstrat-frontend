@@ -2,8 +2,6 @@
 
 
 import { Button, Typography, makeStyles, Menu, MenuProps, MenuItem, Divider, Hidden } from  "@material-ui/core"
-import { NetworkExplorerHost, PoolAddress, PoolLPTokenAddress, StrategyAddress, FeedAddress } from "../utils/network"
-import { useMatch } from "react-router-dom"
 import { Link } from "react-router-dom"
 
 import brainDark from "./img/brain-dark.png"
@@ -82,20 +80,7 @@ export interface HomeProps {
 export const Home = ( { chainId } : HomeProps ) => {
 
     const classes = useStyle()
-    const matchHome = useMatch("/")
-
-    const explorerHost = NetworkExplorerHost(chainId) ?? "polygonscan.com"
-    const poolAddress = PoolAddress(chainId)
-    const strategyAddress = StrategyAddress(chainId)
-    const lpTokenAddress = PoolLPTokenAddress(chainId)
-
-
-    const poolLink = `https://${explorerHost}/address/${poolAddress}#code` 
-    const strategyLink = `https://${explorerHost}/address/${strategyAddress}#code` 
-    const lpTokenLink = `https://${explorerHost}/address/${lpTokenAddress}#code` 
-
-    console.log("Home - poolLink", poolLink)
-
+  
 
     return (
         <div className={classes.container}>
@@ -111,7 +96,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                             Decentralised, automated, investment strategies for different levels of risk <br/>
                         </p>
                     </div>
-                    <Link to="/pool" style={{ textDecoration: 'none' }} > 
+                    <Link to="/pools" style={{ textDecoration: 'none' }} > 
                         <Button variant="contained" color="secondary" style={{ width: 280, height: 40 }} >Start the dapp </Button>
                     </Link>
                  </div>
@@ -141,21 +126,6 @@ export const Home = ( { chainId } : HomeProps ) => {
                     <br/>
                     When moves in the price of the risky assets determine a significant imbalance in the portfolio, the strategy would rebalance it to the target allocations.
                 </Typography>
-            </section>
-
-            <Divider style={{marginTop: 30, marginBottom: 30}} />
-
-            <section>
-                <Typography variant="body1">
-                    <strong> Contracts</strong>
-                </Typography>
-
-                <div className={classes.contracts}>
-                    <a href={poolLink}>ETH/USDC Pool</a>
-                    <a href={strategyLink}>Rebalancing Strategy</a>
-                    <a href={lpTokenLink}>LP Token</a>
-                </div>
-
             </section>
 
         </div>

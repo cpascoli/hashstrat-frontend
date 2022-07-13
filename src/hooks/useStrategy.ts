@@ -6,8 +6,8 @@ import { BigNumber } from 'ethers'
 import { useDebugValue } from "react"
 
 
-export const useStrategyName = (chainId: number) => {
-    const poolContract = StrategyContract(chainId)
+export const useStrategyName = (chainId: number, poolId: string) => {
+    const poolContract = StrategyContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'name',
@@ -18,8 +18,8 @@ export const useStrategyName = (chainId: number) => {
     return value?.[0].toString()
 }
 
-export const useStrategyDescription = (chainId: number) => {
-    const poolContract = StrategyContract(chainId)
+export const useStrategyDescription = (chainId: number, poolId: string) => {
+    const poolContract = StrategyContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'description',
@@ -30,8 +30,8 @@ export const useStrategyDescription = (chainId: number) => {
     return value?.[0].toString()
 }
 
-export const useStrategyDepositTokenAddress = (chainId: number) => {
-    const poolContract = StrategyContract(chainId)
+export const useStrategyDepositTokenAddress = (chainId: number, poolId: string) => {
+    const poolContract = StrategyContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'depositToken',
@@ -42,8 +42,8 @@ export const useStrategyDepositTokenAddress = (chainId: number) => {
     return value?.[0].toString()
 }
 
-export const useStrategyInvestTokenAddress = (chainId: number) => {
-    const poolContract = StrategyContract(chainId)
+export const useStrategyInvestTokenAddress = (chainId: number, poolId: string) => {
+    const poolContract = StrategyContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'investToken',
@@ -54,8 +54,8 @@ export const useStrategyInvestTokenAddress = (chainId: number) => {
     return value?.[0].toString()
 }
 
-export const useStrategyFeedAddress = (chainId: number) => {
-    const poolContract = StrategyContract(chainId)
+export const useStrategyFeedAddress = (chainId: number, poolId: string) => {
+    const poolContract = StrategyContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'feed',
@@ -67,8 +67,8 @@ export const useStrategyFeedAddress = (chainId: number) => {
 }
 
 
-export const useStrategyRebalancingThreshold = (chainId: number) => {
-    const poolContract = StrategyContract(chainId)
+export const useStrategyRebalancingThreshold = (chainId: number, poolId: string) => {
+    const poolContract = StrategyContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'rebalancingThreshold',
@@ -79,8 +79,8 @@ export const useStrategyRebalancingThreshold = (chainId: number) => {
     return value?.[0].toString()
 }
 
-export const useStrategyTargetInvestPerc = (chainId: number) => {
-    const poolContract = StrategyContract(chainId)
+export const useStrategyTargetInvestPerc = (chainId: number, poolId: string) => {
+    const poolContract = StrategyContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'targetInvestPerc',

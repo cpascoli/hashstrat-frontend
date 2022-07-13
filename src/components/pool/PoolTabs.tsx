@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Box, Tab, makeStyles, Divider } from "@material-ui/core"
 import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 
-import { Token } from  "../Main"
+import { Token } from "../../types/Token"
 import { MyStatsView } from "../wallet/MyStatsView"
 import { PoolStatsView } from "./PoolStatsView"
 import { TradesView } from "./TradesView"
@@ -10,6 +10,7 @@ import { WalletTabs } from "../wallet/WalletTabs"
 import { StrategyInfoView } from "./StrategyInfoView"
  
 interface PoolTabsProps {
+    poolId: string,
     chainId: number,
     account: string,
     tokens: Array<Token>,
@@ -38,7 +39,7 @@ const useStyle = makeStyles( theme => ({
 
 
 
-export const PoolTabs = ( { chainId, account, tokens, investToken } : PoolTabsProps ) => {
+export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : PoolTabsProps ) => {
 
     const depositToken = tokens[0]
 
@@ -58,16 +59,16 @@ export const PoolTabs = ( { chainId, account, tokens, investToken } : PoolTabsPr
                     <Tab label="Pool Trades" value="2" key={2} />
                 </TabList>
                 <TabPanel className={classes.tab} value="0" key={0}>
-                    <MyStatsView chainId={chainId} account={account} depositToken={depositToken} />
-                    <WalletTabs chainId={chainId!} account={account!} tokens={tokens!} /> 
+                    <MyStatsView chainId={chainId} poolId={poolId} account={account} depositToken={depositToken} />
+                    <WalletTabs chainId={chainId!} poolId={poolId} account={account!} tokens={tokens!} /> 
                 </TabPanel>
                 <TabPanel className={classes.tab} value="1" key={1}>
-                    <PoolStatsView chainId={chainId} depositToken={depositToken} investToken={investToken} />
+                    <PoolStatsView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                     <Divider style={{marginTop: 40, marginBottom: 40}} />
-                    <StrategyInfoView chainId={chainId} depositToken={depositToken} investToken={investToken} />
+                    <StrategyInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                 </TabPanel>
                 <TabPanel className={classes.tab} value="2" key={2}>
-                    <TradesView chainId={chainId} account={account} depositToken={depositToken} investToken={investToken} />
+                    <TradesView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                 </TabPanel>
             </TabContext>
         </Box>

@@ -1,7 +1,8 @@
 export { 
     useTokenApprove, 
     useTokenAllowance,
-    useTokenBalance
+    useTokenBalance,
+    useTokenTotalSupply,
 } from "./useErc20Tokens"
 
 export { 

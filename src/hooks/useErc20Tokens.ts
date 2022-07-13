@@ -1,12 +1,12 @@
 
-import { useEthers, useContractFunction, useCall, ERC20Interface } from "@usedapp/core"
+import { useEthers, useContractFunction, useCall } from "@usedapp/core"
 import { ERC20Contract, PoolAddress } from "../utils/network"
 
 
 // Approve spending of 'symbol' by the Pool contract
-export const useTokenApprove = (chainId: number, symbol: string) => {
-    const tokenContract =  ERC20Contract(chainId, symbol) 
-    const spenderAddress = PoolAddress(chainId)
+export const useTokenApprove = (chainId: number, poolId: string, symbol: string) => {
+    const tokenContract =  ERC20Contract(chainId, poolId, symbol) 
+    const spenderAddress = PoolAddress(chainId, poolId)
 
     const { send: approveErc20Send, state: approveErc20State } = useContractFunction(tokenContract, "approve", { 
         transactionName: "Approve Token Transfer"
@@ -20,11 +20,11 @@ export const useTokenApprove = (chainId: number, symbol: string) => {
 }
 
 
-export const useTokenAllowance =  (chainId: number, symbol: string) => {
-    console.log("useTokenAllowance () symbol: ", symbol)
+export const useTokenAllowance =  (chainId: number, poolId: string, symbol: string) => {
+    console.log("useTokenAllowance symbol: ", symbol, chainId, poolId)
 
-    const tokenContract = ERC20Contract(chainId, symbol)
-    const spenderAddress = PoolAddress(chainId)
+    const tokenContract = ERC20Contract(chainId, poolId, symbol)
+    const spenderAddress = PoolAddress(chainId, poolId)
     const { account : ownerAddress } = useEthers()
 
     const { value, error } = useCall({
@@ -43,16 +43,30 @@ export const useTokenAllowance =  (chainId: number, symbol: string) => {
 
 
 
-export const useTokenBalance = (chainId: number, symbol: string, address: string) => {
-    const tokenContract =  ERC20Contract(chainId, symbol) 
+export const useTokenBalance = (chainId: number, poolId: string, symbol: string, address: string) => {
+    const tokenContract =  ERC20Contract(chainId, poolId, symbol) 
 
     const { value, error } = useCall({
             contract: tokenContract,
             method: 'balanceOf',
             args: [address],
     }) ?? {}
+    console.log("useTokenBalance >>> ", chainId, poolId, symbol, address, "balance: ", value?.[0].toString(), "error: ", error)
 
     return value?.[0].toString()
 }
+
+export const useTokenTotalSupply = (chainId: number, poolId: string, symbol: string) => {
+    const tokenContract =  ERC20Contract(chainId, poolId, symbol) 
+
+    const { value, error } = useCall({
+            contract: tokenContract,
+            method: 'totalSupply',
+            args: [],
+    }) ?? {}
+
+    return value?.[0].toString()
+}
+
 
 

@@ -1,7 +1,7 @@
 import { Box, makeStyles } from "@material-ui/core"
 
 import { TitleValueBox } from "../TitleValueBox"
-import { Token } from  "../Main"
+import { Token } from  "../../types/Token"
 import { usePortfolioValue, useGetDeposits, useGetWithdrawals } from "../../hooks"
 import { fromDecimals } from "../../utils/formatter"
 
@@ -21,17 +21,18 @@ const useStyle = makeStyles( theme => ({
 
 interface MyStatsViewProps {
     chainId: number,
+    poolId: string,
     account: string,
     depositToken: Token
 }
 
 
-export const MyStatsView = ( { chainId, account, depositToken } : MyStatsViewProps ) => {
+export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStatsViewProps ) => {
 
-    const portfolioValue = usePortfolioValue(chainId, account) // BigNumber.from("123000000" )
+    const portfolioValue = usePortfolioValue(chainId, poolId, account) // BigNumber.from("123000000" )
 
-    const deposits = useGetDeposits(chainId, account)
-    const withdrawals = useGetWithdrawals(chainId, account)
+    const deposits = useGetDeposits(chainId, poolId, account)
+    const withdrawals = useGetWithdrawals(chainId, poolId, account)
     
     const formattedPortfolioValue =  (portfolioValue) ? fromDecimals(portfolioValue, depositToken.decimals, 2) : ""
     const formattedDeposits =  (deposits) ? fromDecimals(deposits, depositToken.decimals, 2) : ""

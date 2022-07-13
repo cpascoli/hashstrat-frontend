@@ -1,5 +1,5 @@
 import { Box, makeStyles, Typography } from "@material-ui/core"
-import { Token } from  "../Main"
+import { Token } from "../../types/Token"
 import { fromDecimals } from "../../utils/formatter"
 import { DataGrid, GridColDef } from "@material-ui/data-grid"
 import { useSwapInfoArray } from "../../hooks"
@@ -22,18 +22,18 @@ const useStyle = makeStyles( theme => ({
 
 interface PoolStatsViewProps {
     chainId: number,
-    account: string,
+    poolId: string,
     depositToken: Token,
     investToken: Token
 }
 
 
 
-export const TradesView = ( { chainId, account, depositToken, investToken } : PoolStatsViewProps ) => {
+export const TradesView = ( { chainId, poolId, depositToken, investToken } : PoolStatsViewProps ) => {
 
     const classes = useStyle()
 
-    const swaps = useSwapInfoArray(chainId)
+    const swaps = useSwapInfoArray(chainId, poolId)
     const label1 = `${investToken.symbol} Amount`
     const label2 = `${depositToken.symbol} Amount`
   
@@ -42,8 +42,6 @@ export const TradesView = ( { chainId, account, depositToken, investToken } : Po
         const price = parseFloat(fromDecimals(data.feedPrice, 8, 2))
         const asset1 = parseFloat(fromDecimals(data.investTokenBalance, investToken.decimals, 6))
         const asset2 = parseFloat(fromDecimals(data.depositTokenBalance, depositToken.decimals, 2))
-
-        console.log("info >>>: ", price, asset1, asset2, " ===> percent: ", (asset2 * price) / (asset1 + asset2 * price) * 100)
 
         let record : any = {}
         record['time'] = date

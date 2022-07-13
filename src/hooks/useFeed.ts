@@ -4,8 +4,8 @@ import { FeedContract } from "../utils/network"
 import { useDebugValue } from "react"
 
 
-export const useFeedLatestPrice = (chainId: number) => {
-    const contract = FeedContract(chainId)
+export const useFeedLatestPrice = (chainId: number, poolId: string) => {
+    const contract = FeedContract(chainId, poolId)
     const { value, error } = useCall({
             contract: contract,
             method: 'getLatestPrice',
@@ -16,8 +16,8 @@ export const useFeedLatestPrice = (chainId: number) => {
     return value?.[0].toString()
 }
 
-export const useFeedDecimals = (chainId: number) => {
-    const contract = FeedContract(chainId)
+export const useFeedDecimals = (chainId: number, poolId: string) => {
+    const contract = FeedContract(chainId, poolId)
     const { value, error } = useCall({
             contract: contract,
             method: 'decimals',
@@ -28,8 +28,8 @@ export const useFeedDecimals = (chainId: number) => {
     return value?.[0].toString()
 }
 
-export const useFeedLatestTimestamp = (chainId: number) => {
-    const contract = FeedContract(chainId)
+export const useFeedLatestTimestamp = (chainId: number, poolId: string) => {
+    const contract = FeedContract(chainId, poolId)
     const { value, error } = useCall({
             contract: contract,
             method: 'getLatestTimestamp',

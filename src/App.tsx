@@ -25,9 +25,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
     }
   });
 
-  console.log("dark: ", toggleDark, appTheme)
-
-
 
   return (
       <ThemeProvider theme={{ ...appTheme }}>

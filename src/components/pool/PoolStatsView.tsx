@@ -1,11 +1,14 @@
 import { Box, Typography, makeStyles } from "@material-ui/core"
 import { TitleValueBox } from "../TitleValueBox"
-import { Token } from  "../Main"
+import { Token } from "../../types/Token"
 import { fromDecimals, round } from "../../utils/formatter"
 import { PoolAddress } from "../../utils/network"
 import { useSwapInfoArray } from "../../hooks"
 import { TimeSeriesAreaChart } from "./TimeSeriesAreaChart"
 
+import helperConfig from "../../helper-config.json"
+import poolsInfo from "../../chain-info/pools.json"
+import { PoolInfo } from "../../types/PoolInfo"
 
 import { useTotalPortfolioValue, useTotalDeposited, useTotalWithdrawn, 
          useTokenBalance, useInvestedTokenValue } from "../../hooks"
@@ -26,40 +29,47 @@ const useStyle = makeStyles( theme => ({
 
 interface PoolStatsViewProps {
     chainId: number,
+    poolId: string,
     depositToken: Token,
     investToken: Token
 }
 
 
 
-export const PoolStatsView = ( { chainId, depositToken, investToken } : PoolStatsViewProps ) => {
+export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : PoolStatsViewProps ) => {
 
-    const poolAddress = PoolAddress(chainId)
-    const totalPortfolioValue = useTotalPortfolioValue(chainId)
-    const totalDeposited = useTotalDeposited(chainId)
-    const totalWithdrawn = useTotalWithdrawn(chainId)
-    const depositTokenBalance = useTokenBalance(chainId, depositToken.symbol, poolAddress)
-    const investTokenBalance = useTokenBalance(chainId, investToken.symbol, poolAddress)
-    const investedTokenValue = useInvestedTokenValue(chainId)
+    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const pools = poolsInfo[networkName as keyof typeof poolsInfo]
+
+    const infos = pools.filter( pool =>  { return (pool.poolId === poolId) })
+    const { name, description } = infos[0]
+
+    const poolAddress = PoolAddress(chainId, poolId)
+    const totalPortfolioValue = useTotalPortfolioValue(chainId, poolId)
+    const totalDeposited = useTotalDeposited(chainId, poolId)
+    const totalWithdrawn = useTotalWithdrawn(chainId, poolId)
+    const depositTokenBalance = useTokenBalance(chainId, poolId, depositToken.symbol, poolAddress)
+    const investTokenBalance = useTokenBalance(chainId, poolId, investToken.symbol, poolAddress)
+    const investedTokenValue = useInvestedTokenValue(chainId, poolId)
 
     const formattedPortfolioValue =  (totalPortfolioValue) ? fromDecimals(totalPortfolioValue, depositToken.decimals, 2) : ""
     const formattedDeposited =  (totalDeposited) ? fromDecimals(totalDeposited, depositToken.decimals, 2) : ""
     const formatteWithdrawn =  (totalWithdrawn) ? fromDecimals(totalWithdrawn, depositToken.decimals, 2) : ""
     const formattedDepositTokenBalance = (depositTokenBalance) ? fromDecimals(depositTokenBalance, depositToken.decimals, 2) : ""
-    const formattedIinvestTokenBalance = (investTokenBalance) ? fromDecimals(investTokenBalance, investToken.decimals, 6) : ""
+    const formattedIinvestTokenBalance = (investTokenBalance) ? fromDecimals(investTokenBalance, investToken.decimals, 8) : ""
     const formattedInvestedTokenValue = (investedTokenValue) ? fromDecimals(investedTokenValue, depositToken.decimals, 2) : ""
     const investTokenValue = (formattedInvestedTokenValue)? parseFloat(formattedInvestedTokenValue) : undefined
     const totalPortfoliovalue = (formattedPortfolioValue)? parseFloat(formattedPortfolioValue) : undefined
-    const investTokenWeight = (investTokenValue && totalPortfoliovalue && totalPortfoliovalue > 0) ? Math.round(10000 * investTokenValue / totalPortfoliovalue) / 100 : undefined
-    const depositTokenWeight = (investTokenWeight) ? Math.round( 100 * (100 - investTokenWeight)) / 100 : undefined
+    const investTokenWeight = (!investTokenValue || !totalPortfoliovalue) ? 0 : (totalPortfoliovalue > 0) ? Math.round(10000 * investTokenValue / totalPortfoliovalue) / 100 : undefined
+    const depositTokenWeight = (investTokenWeight !== undefined) ? Math.round( 100 * (100 - investTokenWeight)) / 100 : undefined
   
-    const asset1Formatted = (formattedIinvestTokenBalance && investTokenWeight) ? `${formattedIinvestTokenBalance} ${investToken.symbol}  (${investTokenWeight}%)` : `0 ${investToken.symbol}`
-    const asset2Formatted = (formattedDepositTokenBalance && depositTokenWeight) ? `${formattedDepositTokenBalance} ${depositToken.symbol} (${depositTokenWeight}%)` : `0  ${depositToken.symbol}`
+    const asset1Formatted = (formattedIinvestTokenBalance) ? `${formattedIinvestTokenBalance} ${investToken.symbol}  (${investTokenWeight}%)` : `n/a ${investToken.symbol}`
+    const asset2Formatted = (formattedDepositTokenBalance) ? `${formattedDepositTokenBalance} ${depositToken.symbol} (${depositTokenWeight}%)` : `n/a  ${depositToken.symbol}`
 
     const classes = useStyle()
+    console.log(">>> investTokenBalance", investTokenBalance, investToken.symbol, formattedIinvestTokenBalance, asset1Formatted)
 
-
-    const swaps = useSwapInfoArray(chainId)
+    const swaps = useSwapInfoArray(chainId, poolId)
     const label1 = `${depositToken.symbol} Value (USD)`
     const label2 = `${investToken.symbol} Value (USD)`
   
@@ -81,6 +91,8 @@ export const PoolStatsView = ( { chainId, depositToken, investToken } : PoolStat
     return (
         <Box className={classes.container}>
             <Box className={classes.portfolioInfo} >
+                <TitleValueBox title="Pool Name" value={name} />
+            
                 <TitleValueBox title="Pool Value" value={formattedPortfolioValue} suffix={depositToken.symbol} />
                 <TitleValueBox title="Asset 1" value={asset1Formatted} />
                 <TitleValueBox title="Asset 2" value={asset2Formatted} />

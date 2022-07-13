@@ -7,31 +7,36 @@ import explorerMappings from "../chain-info/explorers.json"
 
 // Contracts Addresses
 
-export const PoolAddress = (chainId: number) => {
+export const PoolAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
 
-    return networkMappings[networkName as keyof typeof networkMappings]["pool"]
+    const deployments = networkMappings as any
+    return deployments[networkName][poolId]["pool"]
 }
 
-export const PoolLPTokenAddress = (chainId: number) => {
+export const PoolLPTokenAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
 
-    return networkMappings[networkName as keyof typeof networkMappings]["pool_lp"]
+    const deployments = networkMappings as any
+    return deployments[networkName][poolId]["pool_lp"]
 }
 
-export const StrategyAddress = (chainId: number) => {
+export const StrategyAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
 
-    return networkMappings[networkName as keyof typeof networkMappings]["strategy"]
+    const deployments = networkMappings as any
+    return deployments[networkName][poolId]["strategy"]
 }
 
-export const FeedAddress = (chainId: number) => {
+export const FeedAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
-    return networkMappings[networkName as keyof typeof networkMappings]["price_feed"]
+
+    const deployments = networkMappings as any
+    return deployments[networkName][poolId]["price_feed"]
 }
 
 
@@ -40,6 +45,7 @@ export const UsdcTokenAddress = (chainId: number) => {
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
 
     return networkMappings[networkName as keyof typeof networkMappings]["usdc"]
+
 }
 
 export const DaiTokenAddress = (chainId: number) => {
@@ -49,7 +55,14 @@ export const DaiTokenAddress = (chainId: number) => {
     return networkMappings[networkName as keyof typeof networkMappings]["dai"]
 }
 
-export const WethTokenAddress = (chainId: number) => {
+export const WbtcTokenAddress = (chainId: number, poolId: string) => {
+    if (!chainId) return constants.AddressZero
+    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+
+    return networkMappings[networkName as keyof typeof networkMappings]["wbtc"]
+}
+
+export const WethTokenAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
 
@@ -71,24 +84,24 @@ export const NetworkName = (chainId: number) => {
 
 // Contracts
 
-export const PoolContract = (chainId: number) => {
+export const PoolContract = (chainId: number, poolId: string) => {
     const abi = abis[ "pool" as keyof typeof abis ]
-    return new Contract( PoolAddress(chainId), new utils.Interface(abi))
+    return new Contract( PoolAddress(chainId, poolId), new utils.Interface(abi))
 }
 
-export const PoolLPContract = (chainId: number) => {
+export const PoolLPContract = (chainId: number, poolId: string) => {
     const abi = abis[ "pool_lp" as keyof typeof abis ]
-    return new Contract(PoolLPTokenAddress(chainId) , new utils.Interface(abi))
+    return new Contract(PoolLPTokenAddress(chainId, poolId) , new utils.Interface(abi))
 }
 
-export const StrategyContract = (chainId: number) => {
+export const StrategyContract = (chainId: number, poolId: string) => {
     const abi = abis[ "strategy" as keyof typeof abis ]
-    return new Contract(StrategyAddress(chainId) , new utils.Interface(abi))
+    return new Contract(StrategyAddress(chainId, poolId) , new utils.Interface(abi))
 }
 
-export const FeedContract = (chainId: number) => {
+export const FeedContract = (chainId: number, poolId: string) => {
     const abi = abis[ "price_feed" as keyof typeof abis ]
-    return new Contract(FeedAddress(chainId) , new utils.Interface(abi))
+    return new Contract(FeedAddress(chainId, poolId) , new utils.Interface(abi))
 }
 
 export const UsdcContract = (chainId: number) => {
@@ -101,13 +114,19 @@ export const DaiContract = (chainId: number) => {
     return new Contract(DaiTokenAddress(chainId), new utils.Interface(abi))
 }
 
-export const WethContract = (chainId: number) => {
+export const WethContract = (chainId: number, poolId: string) => {
     const abi = abis[ "weth" as keyof typeof abis ]
-    return new Contract(WethTokenAddress(chainId), new utils.Interface(abi))
+    return new Contract(WethTokenAddress(chainId, poolId), new utils.Interface(abi))
 }
 
-export const ERC20Contract = (chainId: number, symbol: string) => {
-    console.log("ERC20Contract symbol: ", symbol, "chainId", chainId)
+export const WbtcContract = (chainId: number, poolId: string) => {
+    const abi = abis[ "wbtc" as keyof typeof abis ]
+    return new Contract(WbtcTokenAddress(chainId, poolId), new utils.Interface(abi))
+}
+
+
+
+export const ERC20Contract = (chainId: number, poolId: string, symbol: string) => {
 
     switch (symbol.toLowerCase()) {
         case "usdc" : {
@@ -117,10 +136,13 @@ export const ERC20Contract = (chainId: number, symbol: string) => {
             return DaiContract(chainId)
         }
         case "weth": {
-            return WethContract(chainId)
+            return WethContract(chainId, poolId)
+        }
+        case "wbtc": {
+            return WbtcContract(chainId, poolId)
         }
         case "pool-lp": {
-            return PoolLPContract(chainId)
+            return PoolLPContract(chainId, poolId)
         }
     } 
 

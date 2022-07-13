@@ -5,8 +5,9 @@ import { useEthers } from "@usedapp/core";
 import { Button, makeStyles, Menu, MenuProps, MenuItem, Divider } from  "@material-ui/core"
 import { styled } from "@material-ui/core/styles"
 import { NetworkName } from "../utils/network"
-
 import { KeyboardArrowDown } from "@material-ui/icons"
+
+
 
 import home from "./img/home.png"
 
@@ -80,7 +81,6 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
 
     const handleModeChange = () => {
         setToggleDark(!toggleDark);
-        console.log("handleModeChange: ", typeof toggleDark, !toggleDark)
     };
 
     const { account, activateBrowserWallet, deactivate, chainId }  = useEthers()
@@ -130,6 +130,9 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
                       onChange={handleModeChange}
                       name="toggleDark"
                       color="default"
+                      // icon={<NightsStayRounded  />}
+                      // checkedIcon={<WbSunnyTwoTone />}
+                      // style={{width:300}}
                   />
 
                   { isConnected ? 

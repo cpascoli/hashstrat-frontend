@@ -1,5 +1,5 @@
 import { useEthers, useTokenBalance } from "@usedapp/core"
-import { Token } from "../Main"
+import { Token } from  "../../types/Token"
 import { BalanceMsg } from "./BalanceMsg"
 import { fromDecimals } from "../../utils/formatter"
 
@@ -14,8 +14,6 @@ export const WalletBalance = ( { token }: WalletBalanceProps ) => {
     const { account } = useEthers()
     const tokenBalance = useTokenBalance(address, account)
     const formattedTokenBalance = (tokenBalance) ? fromDecimals(tokenBalance, token.decimals, 2) : ""
-
-    console.log(">>> formattedTokenBalance", symbol, formattedTokenBalance)
 
     return (
         <BalanceMsg label={`Your available ${name} to deposit`} tokenImgSrc={image} amount={formattedTokenBalance} />

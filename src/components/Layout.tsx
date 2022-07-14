@@ -3,6 +3,7 @@ import { makeStyles, Box } from "@material-ui/core"
 
 interface ChildrenProps {
     children: React.ReactNode,
+    align?: "center" | "left"
 }
 
 const useStyles = makeStyles( theme => ({
@@ -11,8 +12,16 @@ const useStyles = makeStyles( theme => ({
     },
     horizontal: {
         display: "flex",
+        justifyContent: "space-around",
         alignItems: "top",
+        flexDirection: "row",
+        flexFlow: "row wrap",
+        gap: theme.spacing(2),
+    },
+    horizontalLeft: {
+        display: "flex",
         justifyContent: "left",
+        alignItems: "top",
         flexDirection: "row",
         flexFlow: "row wrap",
         gap: theme.spacing(2),
@@ -31,10 +40,10 @@ export const Page = ({ children } : ChildrenProps) => {
 }
 
 
-export const Horizontal = ({ children } : ChildrenProps) => {
+export const Horizontal = ({ children, align = "left" } : ChildrenProps) => {
     const classes = useStyles()
     return (
-        <div className={classes.horizontal}>
+        <div className={align == "center" ? classes.horizontal : classes.horizontalLeft}>
             {children}
         </div>
     )

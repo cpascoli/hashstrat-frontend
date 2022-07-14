@@ -1,8 +1,6 @@
 
-import { useContractFunction, useCall } from "@usedapp/core"
-import { channel } from "diagnostics_channel"
+import { useCall } from "@usedapp/core"
 import { StrategyContract } from "../utils/network"
-import { BigNumber } from 'ethers'
 import { useDebugValue } from "react"
 
 

@@ -6,9 +6,6 @@ import { Button, makeStyles, Menu, MenuProps, MenuItem, Divider } from  "@materi
 import { styled } from "@material-ui/core/styles"
 import { NetworkName } from "../utils/network"
 import { KeyboardArrowDown } from "@material-ui/icons"
-
-
-
 import home from "./img/home.png"
 
 const StyledMenu = styled((props: MenuProps) => (

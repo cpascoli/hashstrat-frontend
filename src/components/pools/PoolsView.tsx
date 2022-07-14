@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-import { Divider, makeStyles, Typography, Accordion, AccordionDetails, AccordionSummary, Paper } from "@material-ui/core"
+import { Box, Divider, makeStyles, Typography, Accordion, AccordionDetails, AccordionSummary, Paper } from "@material-ui/core"
 import { PoolSummaryView } from "./PoolSummaryView"
 
 import { Horizontal } from "../Layout"
@@ -54,43 +54,43 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
 
 
     return (
-        <div>
+        <Box mt={2}>
             <Accordion expanded={expanded} onChange={handleChange}>
                 
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
                     <Typography style={{fontSize: 20, fontWeight: 400}} >
-                     Pools are unstoppable crypto-funds automated on-chain
+                     HashStrat Pools
                     </Typography>
                     
                 </AccordionSummary>
 
                 <AccordionDetails >
                     <Typography variant="body2" >
-               
-                        Pools receive capital in the form of a stable asset (e.g. USDC) and manage it through on-chain Strategies.
+                        HashStrat Pools are crypto-funds automated on-chain.
+                        <br/> <br/>
+                        Users deposit funds into a Pool via stable assets (e.g. USDC) and the Pool will manage it through its on-chain Strategy.
                         <br/>
-                        Strategies can allocate capital to a risk asset  ad can perform trades between stable and risk assets.
+                        Strategies can allocate capital to a risk asset and trade between stable and risk assets.
                         <br/>
-                        Different Strategies have different risk/reward characteristics but all aim to grow the Pool value over time.
+                        Different Strategies offer different risk/reward characteristics but all aim to grow the Pool value over time.
                         <br/><br/>
-                        When users deposit funds into a Pool, they receive "LP Tokens" that represent their share of the Pool value.
-                        
-                        Users can withdraw their funds from the pool at any time by returning their "LP Tokens".
+                        When users deposit funds into a Pool, they receive "LP Tokens" that represent ownership of their share of the Pool value.
+                        Users can withdraw their funds off the pool at any time by returning their "LP Tokens".
                       
                     </Typography>
                 </AccordionDetails>
             </Accordion>
       
-            <Divider style={{marginTop: 10, marginBottom: 10}}/>
+            <Divider variant="middle"  style={{marginTop: 20, marginBottom: 0}}/>
 
             <Typography className={classes.container}>
                 Choose a pool and deposit {depositToken.symbol} tokens to grow your capital over time.
             </Typography>
 
-            <Horizontal> 
+            <Horizontal align="center"> 
                   { poolsView }
             </Horizontal>
-        </div>
+        </Box>
     )
 }
 

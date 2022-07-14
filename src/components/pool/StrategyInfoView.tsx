@@ -9,9 +9,6 @@ import { BigNumber } from 'ethers'
 import { 
     useStrategyName, 
     useStrategyDescription,
-    useStrategyDepositTokenAddress, 
-    useStrategyInvestTokenAddress, 
-    useStrategyFeedAddress, 
     useStrategyTargetInvestPerc, 
     useStrategyRebalancingThreshold,
     useFeedDecimals,

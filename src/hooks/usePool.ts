@@ -1,7 +1,7 @@
 
 import { useContractFunction, useCall } from "@usedapp/core"
 import { PoolContract } from "../utils/network"
-import { useDebugValue, useEffect, useState } from "react"
+import { useDebugValue } from "react"
 
 export const useDeposit = (chainId: number, poolId: string) => {
     const poolContract = PoolContract(chainId, poolId)

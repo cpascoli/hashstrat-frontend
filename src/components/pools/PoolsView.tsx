@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Divider, makeStyles, Typography, Accordion, AccordionDetails, AccordionSummary } from "@material-ui/core"
+import { Divider, makeStyles, Typography, Accordion, AccordionDetails, AccordionSummary, Paper } from "@material-ui/core"
 import { PoolSummaryView } from "./PoolSummaryView"
 
 import { Horizontal } from "../Layout"
@@ -10,7 +10,7 @@ import { PoolInfo } from "../../types/PoolInfo"
 import poolsInfo from "../../chain-info/pools.json"
 import { Token } from "../../types/Token"
 
-import { InfoRounded, ExpandMore} from "@material-ui/icons"
+import { ExpandMore } from "@material-ui/icons"
 
 interface PoolsViewProps {
     chainId: number,
@@ -54,34 +54,42 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
 
 
     return (
-        <div className={classes.container}>
-              
+        <div>
             <Accordion expanded={expanded} onChange={handleChange}>
                 
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
-                    <Typography variant="body1" >
-                            <strong> HashStrat Pools  </strong> are automated, on-chain, crypto-funds 
+                    <Typography variant="h6" >
+                     HashStrat Pools are crypto-funds automated on-chain
                     </Typography>
                     
                 </AccordionSummary>
 
                 <AccordionDetails >
                     <Typography variant="body2" >
-                        Pools receive capital from users in the form of stable asset (e.g. USDC) and manage it through dedicated Strategies.
+               
+                        Pools receive capital from users in the form of a stable asset (e.g. USDC) and manage it through on-chain Strategies.
                         <br/><br/>
-                        <strong>Strategies</strong> are responsible to allocate capital to a risk asset (e.g. BTC, ETH) 
-                        and can perform trades between stable and risk assets.
+                        <strong>Strategies</strong> can allocate capital to a risk asset  ad can perform trades between stable and risk assets.
+                        <br/><br/>
                         Different Strategies have different risk/reward characteristics but all aim to grow the Pool value over time.
                         <br/><br/>
-                        Users that deposit funds into a Pool receive "LP Tokens" that represent their share of the value held in the Pool.
-                        <br/>
+                        When users deposit funds into a Pool, they receive "LP Tokens" that represent their share of the Pool value.
+                        
                         Users can withdraw their funds from the pool at any time by returning their "LP Tokens".
+                      
                     </Typography>
                 </AccordionDetails>
             </Accordion>
       
-            { poolsView }
+            <Divider style={{marginTop: 10, marginBottom: 10}}/>
 
+            <Typography className={classes.container}>
+                Choose a pool and deposit {depositToken.symbol} tokens to grow your capital over time.
+            </Typography>
+
+            <Horizontal> 
+                  { poolsView }
+            </Horizontal>
         </div>
     )
 }

@@ -61,7 +61,7 @@ export const PoolSummaryView = ({ chainId, account, poolId, depositToken } : Poo
 
                             <Divider variant="fullWidth"  style={{marginTop: 20, marginBottom: 20}} />
 
-                            <TitleValueBox title="Pool Value" value={formattedPortfolioValue} suffix={depositToken.symbol} mode="small" />
+                            <TitleValueBox title="Total Value" value={formattedPortfolioValue} suffix={depositToken.symbol} mode="small" />
                             <TitleValueBox title="My Share" value={lpPercFormatted} suffix="%" mode="small" />
 
                         </Box>

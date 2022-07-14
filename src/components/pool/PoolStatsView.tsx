@@ -91,11 +91,11 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
     return (
         <Box className={classes.container}>
             <Box className={classes.portfolioInfo} >
-                <TitleValueBox title="Pool Name" value={name} />
+                <TitleValueBox title="Name" value={name} />
             
-                <TitleValueBox title="Pool Value" value={formattedPortfolioValue} suffix={depositToken.symbol} />
-                <TitleValueBox title="Asset 1" value={asset1Formatted} />
-                <TitleValueBox title="Asset 2" value={asset2Formatted} />
+                <TitleValueBox title="Total Value" value={formattedPortfolioValue} suffix={depositToken.symbol} />
+                <TitleValueBox title="Risk Asset" value={asset1Formatted} />
+                <TitleValueBox title="Stable Asset" value={asset2Formatted} />
 
                 <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
                 <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>

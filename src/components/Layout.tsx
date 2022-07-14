@@ -13,6 +13,8 @@ const useStyles = makeStyles( theme => ({
         display: "flex",
         alignItems: "top",
         justifyContent: "left",
+        flexDirection: "row",
+        flexFlow: "row wrap",
         gap: theme.spacing(2),
     }
 }))

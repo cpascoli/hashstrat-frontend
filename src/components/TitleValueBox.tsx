@@ -108,7 +108,7 @@ export const TitleValueBox = ({ title, value, suffix="", border=false, mode="reg
                 <div  className={classes.label}> {title} </div>
                 <div  className={classes.value}> {value} {suffix} </div>
             </Box>
-            {(!border) && <Divider /> }
+            {(!border) && <Divider variant="fullWidth"  /> }
         </>
   )}
 

@@ -11,7 +11,7 @@ const useStyles = makeStyles( theme => ({
     },
     horizontal: {
         display: "flex",
-        alignItems: "center",
+        alignItems: "top",
         justifyContent: "left",
         gap: theme.spacing(2),
     }

@@ -73,7 +73,16 @@ export const NetworkExplorerHost = (chainId: number) => {
     if (!chainId) return ""
    const networkName = NetworkName(chainId)
 
-   return explorerMappings[networkName as keyof typeof networkMappings]
+   const explorers = explorerMappings as any
+   return explorers[networkName]["host"]
+}
+
+export const NetworkExplorerName = (chainId: number) => {
+    if (!chainId) return ""
+   const networkName = NetworkName(chainId)
+
+   const explorers = explorerMappings as any
+   return explorers[networkName]["name"]
 }
 
 export const NetworkName = (chainId: number) => {

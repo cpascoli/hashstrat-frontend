@@ -4,7 +4,7 @@ import { Box, Grid, Button, Input, CircularProgress, Divider, Typography, Link, 
 import { useTokenApprove, useTokenAllowance, useDeposit, useWithdraw } from "../hooks"
 import { Token } from "../types/Token"
 import { toDecimals, fromDecimals } from "../utils/formatter"
-import { NetworkExplorerHost } from "../utils/network"
+import { NetworkExplorerHost, NetworkExplorerName } from "../utils/network"
 import { SnackInfo } from "./SnackInfo"
 import { Horizontal } from "./Layout"
 import { Alert, AlertTitle } from "@material-ui/lab"
@@ -146,14 +146,14 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             const info : SnackInfo = {
                 type: "info",
                 title: "Success",
-                message: "Token transfer approved!",
+                message: "Token transfer approved",
                 linkUrl: approveLink,
-                linkText: "View Transaction",
+                linkText: `View on ${NetworkExplorerName(chainId)}`,
                 snackDuration: 10000
             }
             setUserMessage({
                 type: "info",
-                title: "Transfer Approved",
+                title: "Token transfer approved",
                 message: "Now you can deposit the tokens",
             })
             handleSuccess(info)
@@ -165,15 +165,15 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             const info : SnackInfo = {
                 type: "info",
                 title: "Success",
-                message: "Tokens deposited into the Pool",
+                message: "Deposit completed",
                 linkUrl: depositLink,
-                linkText: "View Transaction",
+                linkText: `View on ${NetworkExplorerName(chainId)}`,
                 snackDuration: 10000
             }
             setUserMessage({
                 type: "info",
                 title: "Deposit completed",
-                message: "",
+                message: "Now you can close the window",
             })
             handleSuccess(info)
             setAmount("")
@@ -186,15 +186,15 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             const info : SnackInfo = {
                 type: "info",
                 title: "Success",
-                message: "Tokens withdrawn from the Pool",
+                message: "Withdrawal completed",
                 linkUrl: withdrawLink,
-                linkText: "View Transaction",
+                linkText: `View on ${NetworkExplorerName(chainId)}`,
                 snackDuration: 10000
             }
             setUserMessage({
                 type: "info",
                 title: "Withdrawals completed",
-                message: "",
+                message: "Now you can close the window",
             })
             handleSuccess(info)
             setAmount("")
@@ -243,12 +243,13 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             { formType === 'deposit' &&
                 <Box mb={2} >
                     { (isApproveMining || (!allowanceOk && !isDepositMining)) &&
-                    <Button variant="contained" color="primary" fullWidth
+                    <Button variant="contained" color="primary" fullWidth disabled={amount == ''}
                         onClick={() => approveButtonPressed()} >
                         Approve {symbol} 
                         { isApproveMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
                     </Button>
                     }
+
                     { ( !(isApproveMining || (!allowanceOk && !isDepositMining))  && 
                          (allowanceOk || isDepositMining)) && 
                     <Button variant="contained" color="primary" fullWidth  
@@ -257,15 +258,31 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
                         { isDepositMining && <Horizontal >  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
                     </Button>
                     }
+
+                    { userMessage && userMessage.title === 'Deposit completed' &&
+                        <Box mt={2} >
+                            <Button variant="contained" color="primary" fullWidth onClick={onClose} >
+                                Close
+                            </Button>
+                        </Box>
+                    }
                 </Box>
+  
             }  
             { formType === 'withdraw' &&
                 <Box mb={2} >
-                    <Button variant="contained" color="primary" fullWidth
+                    <Button variant="contained" color="primary" fullWidth disabled={amount == ''}
                         onClick={() => submitForm()}>
                         { submitButtonTitle }
                         { isWithdrawMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
                     </Button>
+                    { userMessage && userMessage.title === 'Withdrawals completed' &&
+                        <Box mt={2} >
+                            <Button variant="contained" color="primary" fullWidth onClick={onClose} >
+                                Close
+                            </Button>
+                        </Box>
+                    }
                 </Box>
             }
 

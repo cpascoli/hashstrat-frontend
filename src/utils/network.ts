@@ -55,14 +55,14 @@ export const DaiTokenAddress = (chainId: number) => {
     return networkMappings[networkName as keyof typeof networkMappings]["dai"]
 }
 
-export const WbtcTokenAddress = (chainId: number, poolId: string) => {
+export const WbtcTokenAddress = (chainId: number) => {
     if (!chainId) return constants.AddressZero
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
 
     return networkMappings[networkName as keyof typeof networkMappings]["wbtc"]
 }
 
-export const WethTokenAddress = (chainId: number, poolId: string) => {
+export const WethTokenAddress = (chainId: number) => {
     if (!chainId) return constants.AddressZero
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
 
@@ -114,14 +114,14 @@ export const DaiContract = (chainId: number) => {
     return new Contract(DaiTokenAddress(chainId), new utils.Interface(abi))
 }
 
-export const WethContract = (chainId: number, poolId: string) => {
+export const WethContract = (chainId: number) => {
     const abi = abis[ "weth" as keyof typeof abis ]
-    return new Contract(WethTokenAddress(chainId, poolId), new utils.Interface(abi))
+    return new Contract(WethTokenAddress(chainId), new utils.Interface(abi))
 }
 
-export const WbtcContract = (chainId: number, poolId: string) => {
+export const WbtcContract = (chainId: number) => {
     const abi = abis[ "wbtc" as keyof typeof abis ]
-    return new Contract(WbtcTokenAddress(chainId, poolId), new utils.Interface(abi))
+    return new Contract(WbtcTokenAddress(chainId), new utils.Interface(abi))
 }
 
 
@@ -136,10 +136,10 @@ export const ERC20Contract = (chainId: number, poolId: string, symbol: string) =
             return DaiContract(chainId)
         }
         case "weth": {
-            return WethContract(chainId, poolId)
+            return WethContract(chainId)
         }
         case "wbtc": {
-            return WbtcContract(chainId, poolId)
+            return WbtcContract(chainId)
         }
         case "pool-lp": {
             return PoolLPContract(chainId, poolId)

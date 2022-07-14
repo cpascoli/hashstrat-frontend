@@ -64,7 +64,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                 { image: poollp, address: PoolLPTokenAddress(chainId, "pool01"), symbol: "POOL-LP", decimals: 6 },
             ]
     } : undefined
-    const investToken01 = (chainId)?  { image: weth, address: WbtcTokenAddress(chainId, "pool02"), symbol: "WBTC", decimals: 8 } : undefined
+    const investToken01 = (chainId)?  { image: weth, address: WbtcTokenAddress(chainId), symbol: "WBTC", decimals: 8 } : undefined
 
 
     // POOL02 (ETH/USD)
@@ -81,7 +81,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
             ]
     } : undefined
 
-    const investToken02 = (chainId)?  { image: weth, address: WethTokenAddress(chainId, "pool02"), symbol: "WETH", decimals: 18 } : undefined
+    const investToken02 = (chainId)?  { image: weth, address: WethTokenAddress(chainId), symbol: "WETH", decimals: 18 } : undefined
 
     const depositToken = (chainId == 42) ?  { image: dai, address: DaiTokenAddress(chainId), symbol: "DAI", decimals: 18 } : 
                          (chainId == 137) ? { image: usdc, address: UsdcTokenAddress(chainId), symbol: "USDC", decimals: 6 } : undefined

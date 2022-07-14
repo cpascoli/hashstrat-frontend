@@ -58,8 +58,8 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
             <Accordion expanded={expanded} onChange={handleChange}>
                 
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
-                    <Typography variant="h6" >
-                     HashStrat Pools are crypto-funds automated on-chain
+                    <Typography style={{fontSize: 20, fontWeight: 400}} >
+                     Pools are unstoppable crypto-funds automated on-chain
                     </Typography>
                     
                 </AccordionSummary>
@@ -67,10 +67,10 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
                 <AccordionDetails >
                     <Typography variant="body2" >
                
-                        Pools receive capital from users in the form of a stable asset (e.g. USDC) and manage it through on-chain Strategies.
-                        <br/><br/>
-                        <strong>Strategies</strong> can allocate capital to a risk asset  ad can perform trades between stable and risk assets.
-                        <br/><br/>
+                        Pools receive capital in the form of a stable asset (e.g. USDC) and manage it through on-chain Strategies.
+                        <br/>
+                        Strategies can allocate capital to a risk asset  ad can perform trades between stable and risk assets.
+                        <br/>
                         Different Strategies have different risk/reward characteristics but all aim to grow the Pool value over time.
                         <br/><br/>
                         When users deposit funds into a Pool, they receive "LP Tokens" that represent their share of the Pool value.

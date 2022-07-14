@@ -9,7 +9,6 @@ export const fromDecimals = (amount: BigNumber, decimals: Number, precision: Num
     const precisionFactor =  BigNumber.from('10').pow(BigNumber.from(precision)); 
     const number = BigNumber.from(amount).mul(precisionFactor).div(decimalsFactor)
     const decimal =  number.toNumber() / precisionFactor.toNumber()//number.div(precisionFactor)
-    console.log("decimal >>> ", amount.toString(), decimals.toString(), precision, ">>>", decimal.toLocaleString('en-US', { useGrouping: false, maximumFractionDigits: 20 }))
 
     return decimal.toLocaleString('en-US', { useGrouping: false, maximumFractionDigits: 20 })
 }

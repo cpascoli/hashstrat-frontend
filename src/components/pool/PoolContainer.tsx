@@ -52,7 +52,6 @@ export const PoolContainer = ({ chainId, poolId, account, tokens, investToken } 
 
             <Contracts chainId={chainId} poolId={poolId}/>
 
-
         </div>
     )
 }

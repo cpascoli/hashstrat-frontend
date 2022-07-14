@@ -20,7 +20,7 @@ interface TabPanelProps {
 
 const useStyle = makeStyles( theme => ({
     container: {
-        margin: 0,
+        marginTop: 20,
         padding: 0,
     },
     tabList: { 
@@ -82,7 +82,7 @@ export const WalletTabs = ( { chainId, poolId, account, tokens } : TabPanelProps
     return (
         
         <Box className={classes.container}>
-            <Box my={4}>
+            <Box>
                 <TabContext value={selectedTokenIndex.toString()}>
                     <TabList onChange={handleChange} className={classes.tabList}>
                         {
@@ -115,8 +115,6 @@ export const WalletTabs = ( { chainId, poolId, account, tokens } : TabPanelProps
                     }
                 </TabContext>
             </Box>
-
-            <Divider style={{marginTop:30, marginBottom: 30}} />
 
 
             <Snackbar

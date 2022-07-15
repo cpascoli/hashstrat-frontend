@@ -59,7 +59,7 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
                 
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
                     <Typography style={{fontSize: 20, fontWeight: 400}} >
-                     HashStrat Pools
+                     What are HashStrat Pools?
                     </Typography>
                     
                 </AccordionSummary>
@@ -68,15 +68,15 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
                     <Typography variant="body2" >
                         HashStrat Pools are crypto-funds automated on-chain.
                         <br/> <br/>
-                        Users deposit funds into a Pool via stable assets (e.g. USDC) and the Pool will manage it through its on-chain Strategy.
+                        Users deposit capital into a Pool in the form of stable crypto-assets (e.g. USDC) to be invested by an on-chain Strategy.
                         <br/>
-                        Strategies can allocate capital to a risk asset and trade between stable and risk assets.
+                        Strategies can allocate capital to risk assets (e.g. BTC or ETH) and can manage risk trading back into stable assets.
                         <br/>
-                        Different Strategies offer different risk/reward characteristics but all aim to grow the Pool value over time.
+                        Different Strategies offer different risk/reward characteristics but all aim to grow their Pool value over time.
                         <br/><br/>
-                        When users deposit funds into a Pool, they receive "LP Tokens" that represent ownership of their share of the Pool value.
-                        Users can withdraw their funds off the pool at any time by returning their "LP Tokens".
-                      
+                        When users deposit funds into a Pool, they receive "LP Tokens" that represent ownership of their share of the Pool.
+                        Users can withdraw their funds at any time by returning their "LP Tokens".
+                    
                     </Typography>
                 </AccordionDetails>
             </Accordion>

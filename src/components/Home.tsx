@@ -80,7 +80,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <div className={classes.titleSection}> 
                     <div>
                         <p className={classes.title}>
-                            HashStrat, the transparent crypto-fund on the blockchain
+                            HashStrat, self-sovereign crypto-funds on the blockchain
                         </p>
                         <p className={classes.subtitle}>
                             Choose your decentralised, investment strategies executed on-chain <br/>

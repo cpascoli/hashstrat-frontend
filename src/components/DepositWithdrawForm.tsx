@@ -292,7 +292,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
                 (approveErc20State.status == 'Mining' || depositState.status  == 'Mining' || withdrawState.status == 'Mining' ) ? 
                     <Typography color="textSecondary" variant="body2" >  Mining... </Typography> : 
                 (approveErc20State.status == 'Exception' || depositState.status  == 'Exception' || withdrawState.status == 'Exception' ) ? 
-                    <Typography color="textSecondary" variant="body2" >  
+                    <Typography color="error" variant="body2" >  
                         { approveErc20State.errorMessage } { depositState.errorMessage } { withdrawState.errorMessage }
                     </Typography> : ''
             }

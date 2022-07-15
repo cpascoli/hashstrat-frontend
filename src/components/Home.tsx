@@ -87,7 +87,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                         </p>
                     </div>
                     <Link to="/pools" style={{ textDecoration: 'none' }} > 
-                        <Button variant="contained" color="secondary" style={{ width: 280, height: 40 }} >Start the dapp </Button>
+                        <Button variant="contained" color="secondary" style={{ width: 280, height: 40 }} >Launch App</Button>
                     </Link>
                  </div>
 

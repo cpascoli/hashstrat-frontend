@@ -21,7 +21,7 @@
     
     "polygon": {
         "pool01": {
-            "pool": "0xa290dC3e5936064F784040Bef6869c558082ECCC",
+            "pool": "0x07755Dfb7A87A7ffC44BC0C6aB9815d919d9d784",
             "pool_lp": "0x397841AaF3ad9d4149e7a728E23a981FC7A551Dc",
             "strategy": "0x40aF5D4EbD51B78f55D230745D5D4C96DC939F59",
             "price_feed": "0xCBbCB45d63CC0C26f9B6b92d9BCb4f4dd72F697D"

@@ -11,7 +11,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
  const App = () => {
 
-  const [toggleDark, setToggleDark] = useState(false);
+  const darkMode = localStorage.getItem("darkMode") == "dark"
+  const [toggleDark, setToggleDark] = useState(darkMode);
+
 
   const appTheme = createTheme({
     palette: {

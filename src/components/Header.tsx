@@ -77,7 +77,8 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
 
 
     const handleModeChange = () => {
-        setToggleDark(!toggleDark);
+      localStorage.setItem("darkMode", toggleDark ? 'light' : 'dark');
+      setToggleDark(!toggleDark);
     };
 
     const { account, activateBrowserWallet, deactivate, chainId }  = useEthers()

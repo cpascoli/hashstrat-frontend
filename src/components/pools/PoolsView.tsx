@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Box, Divider, makeStyles, Typography, Accordion, AccordionDetails, AccordionSummary, Paper } from "@material-ui/core"
+import { Box, Divider, makeStyles, Typography, Accordion, AccordionDetails, AccordionSummary, Link } from "@material-ui/core"
 import { PoolSummaryView } from "./PoolSummaryView"
 
 import { Horizontal } from "../Layout"
@@ -21,17 +21,13 @@ interface PoolsViewProps {
 const useStyles = makeStyles( theme => ({
     container: {
         padding: theme.spacing(2),
-        display: "flex",
-        flexDirection: "row",
-        flexFlow: "row wrap",
-        columnGap: "1rem",
-        rowGap: "1rem",
     }
 }))
 
 
 export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) => {
 
+    console.log("chainId >>> ", chainId)
     const [expanded, setExpanded] = useState<boolean>(false);
 
     const handleChange = () => {
@@ -82,10 +78,18 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
             </Accordion>
       
             <Divider variant="middle"  style={{marginTop: 20, marginBottom: 0}}/>
+            <div className={classes.container}> 
+                <Typography >
+                    Choose a pool and deposit {depositToken.symbol} tokens into it. 
+                </Typography>
 
-            <Typography className={classes.container}>
-                Choose a pool and deposit {depositToken.symbol} tokens to grow your capital over time.
-            </Typography>
+                { (chainId == 137) && 
+                    <Typography variant="body2" style={{marginTop:10}}>
+                        You can buy {depositToken.symbol} tokens directly on Polygon using <Link href="https://quickswap.exchange/#/swap" target="_blank"> QuickSwap &gt; Buy </Link>,
+                        or transfer {depositToken.symbol} from Ethereum to Polygon via the <Link href="https://wallet.polygon.technology/bridge" target="_blank">Polygon Bridge</Link>.
+                    </Typography> 
+                }
+            </div>
 
             <Horizontal align="center"> 
                   { poolsView }

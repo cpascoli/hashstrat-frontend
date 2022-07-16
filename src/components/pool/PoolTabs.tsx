@@ -64,7 +64,7 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
                 </TabPanel>
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <PoolStatsView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
-                    <Divider style={{marginTop: 40, marginBottom: 40}} />
+                    <Divider style={{marginTop: 20, marginBottom: 20}} />
                     <StrategyInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                 </TabPanel>
                 <TabPanel className={classes.tab} value="2" key={2}>

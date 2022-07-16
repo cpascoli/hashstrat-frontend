@@ -20,7 +20,8 @@ interface PoolContainerProps {
 
 const useStyles = makeStyles( theme => ({
     container: {
-        padding: theme.spacing(2),
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
     }
 }))
 
@@ -41,17 +42,14 @@ export const PoolContainer = ({ chainId, poolId, account, tokens, investToken } 
 
     return (
         <div className={classes.container}>
-            
-            <Breadcrumbs aria-label="breadcrumb">
+            <Breadcrumbs aria-label="breadcrumb" style={{paddingLeft: 10, paddingRight: 10}}>
                 <Link href="/">Home</Link>
                 <Link href={'/pools/'}>Pools</Link>
                 <Typography>{name}</Typography>
             </Breadcrumbs>
 
             <PoolTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens} investToken={investToken} />
-
-            <Contracts chainId={chainId} poolId={poolId}/>
-
+            <Contracts chainId={chainId} poolId={poolId} />
         </div>
     )
 }

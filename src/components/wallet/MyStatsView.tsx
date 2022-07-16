@@ -45,9 +45,9 @@ export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStat
         <Box className={classes.container}>
             <Box className={classes.portfolioInfo} >
                 <TitleValueBox title="My Portfolio Value" value={formattedPortfolioValue} suffix={depositToken.symbol} />
-                <TitleValueBox title="My Deposits Value" value={formattedDeposits} suffix={depositToken.symbol} />
+                <TitleValueBox title="My Deposits" value={formattedDeposits} suffix={depositToken.symbol} />
                 <TitleValueBox title="My Withdrawals" value={formattedWithdrawals} suffix={depositToken.symbol} />
-                <TitleValueBox title="My ROI" value={roiFormatted} suffix="%" />
+                <TitleValueBox title="ROI" value={roiFormatted} suffix="%" />
             </Box>
         </Box>
     )

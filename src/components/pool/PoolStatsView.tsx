@@ -101,11 +101,11 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
                 <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>
             </Box>
 
-            <Typography align="center">
-                Assets held in the pool over time
+            <Typography align="center" style={{textTransform: "uppercase", marginTop: 20}}>
+                Assets held in the pool
             </Typography>
 
-            <TimeSeriesAreaChart title="Assets held in the pool over time" 
+            <TimeSeriesAreaChart title="Assets held in the pool" 
                 label1={label1} 
                 label2={label2} 
                 data={chartData}  

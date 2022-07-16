@@ -49,8 +49,6 @@ export const PoolSummaryView = ({ chainId, account, poolId, depositToken } : Poo
     const lpPerc =  (balance && totalSupply > 0) ? balance * 10000 / totalSupply : 0
     const lpPercFormatted = `${round( lpPerc / 100)}`
 
-    console.log("PoolSummaryView poolId >>> ", poolId, "balance: ", balance)
-
     return (
         <div className={classes.container} >
                 <Link href={`/pools/${poolId}`} style={{ textDecoration: 'none' }} > 

@@ -78,7 +78,7 @@ export const StrategyInfoView = ( { chainId, poolId, depositToken, investToken }
 
     return (
         <Box className={classes.container}>
-            <Typography align="center" >
+            <Typography align="center" style={{textTransform: "uppercase"}} >
                 Strategy Info
             </Typography>
 

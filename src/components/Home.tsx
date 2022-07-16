@@ -29,12 +29,14 @@ const useStyle = makeStyles( theme => ({
 
     titleSection: {
         textAlign: "center",
-        maxWidth: 480
+        maxWidth: 480,
+        paddingLeft: 10,
+        paddingRight: 10,
     },
     title: {
-        margin:0,
+        margin: 0,
         fontWeight: 200,
-        fontSize: "2.2rem",
+        fontSize: "2.1rem",
         textAlign: "center",
     },
     subtitle: {
@@ -80,7 +82,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <div className={classes.titleSection}> 
                     <div>
                         <p className={classes.title}>
-                            HashStrat, self-sovereign crypto-funds on the blockchain
+                            HashStrat: self-sovereign crypto-funds on the blockchain
                         </p>
                         <p className={classes.subtitle}>
                             Choose your decentralised, investment strategies executed on-chain <br/>

@@ -46,7 +46,7 @@ export const InfoBox = ({ children, title, image,  } : InfoBoxProps) => {
                     </div>
             }
             <div>
-                <Typography variant="h6" align="center"> {title} </Typography>
+                <Typography variant="h5" align="center"> {title} </Typography>
                 <br/>
                 {children}
             </div>

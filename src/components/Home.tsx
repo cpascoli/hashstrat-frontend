@@ -118,9 +118,7 @@ export const Home = ( { chainId } : HomeProps ) => {
             <section className={classes.midSection}>
 
                 <img className={classes.imagePhone} />
-                <Typography variant="body1">
-                    <strong> What is HashStrat?</strong>
-                </Typography>
+                <Typography variant="h5">What is HashStrat?</Typography>
                 <br/>
                 <Typography variant="body2">
                     HashStrat allows to allocate capital to transparent, permissionless investment strategies executed on-chain. 

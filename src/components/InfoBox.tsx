@@ -26,7 +26,7 @@ const useStyles = makeStyles( theme => ({
         },
     },
     image: {
-        maxWidth: 200,
+        maxWidth: 140,
         margin: "auto",
         [theme.breakpoints.down('xs')]: {
             margin: "auto",
@@ -46,9 +46,10 @@ export const InfoBox = ({ children, title, image,  } : InfoBoxProps) => {
                     </div>
             }
             <div>
-                <Typography variant="h5" align="center"> {title} </Typography>
-                <br/>
-                {children}
+                <Box py={1}>
+                    <Typography variant="h5" align="center"> {title} </Typography>
+                </Box>
+                {children} 
             </div>
         </div>
     )

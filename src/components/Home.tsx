@@ -132,8 +132,9 @@ export const Home = ( { chainId } : HomeProps ) => {
             <section className={classes.bottomSecion}>
                 <InfoBox title="Self-sovereign" image={key}>
                     <Typography variant="body2">
-                        HashStrat crypto-funds are immutable smart contracts executed on the blockchain. <br/>
-                        Nobody can stop them or change their behaviour and users stay in control of their funds at all times.
+                        HashStrat crypto-funds are immutable smart contracts executed on the blockchain.
+                        Nobody can stop them or change their behaviour.  <br/>
+                        Users stay in control of their funds at all times.
                     </Typography>
                 </InfoBox>
 
@@ -148,9 +149,9 @@ export const Home = ( { chainId } : HomeProps ) => {
 
                 <InfoBox title="Secure" image={lock}>
                     <Typography variant="body2">
-                        All code is opensource and smart contracts verified on-chain
-                        which means their behavious is transparent and predictable.<br/>
-                        Uses inteact directly with the smart contracts through their wallet and no personal information is ever leaked.
+                        All code is open source and all smart contracts verified on-chain.
+                        This means their behaviour is predictable and transparent.<br/>
+                        Users interact directly with the blockchain through their wallets and no personal information is ever shared or leaked.
                     </Typography>
                 </InfoBox>
 

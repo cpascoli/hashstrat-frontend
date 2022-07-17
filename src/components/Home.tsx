@@ -1,14 +1,16 @@
 
 
 
-import { Button, Typography, makeStyles, Menu, MenuProps, MenuItem, Divider, Hidden } from  "@material-ui/core"
+import { Button, Typography, makeStyles,  Divider, Link as LinkMUI } from  "@material-ui/core"
 import { Link } from "react-router-dom"
 
-import { Socials } from "./Socials"
+import { InfoBox } from "./InfoBox"
 
 import brainDark from "./img/brain-dark.png"
 import brainLignt from "./img/brain-light.png"
-
+import key from "./img/key.svg"
+import automated from "./img/automated.svg"
+import lock from "./img/lock.svg"
 
 const useStyle = makeStyles( theme => ({
 
@@ -28,6 +30,18 @@ const useStyle = makeStyles( theme => ({
         paddingBottom: 40,
         color: theme.palette.type === 'light' ? theme.palette.grey[800] : theme.palette.grey[100],
     },
+
+    bottomSecion: {
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr 1fr",
+        gap: theme.spacing(0),
+        // border: "1px solid black "
+
+        [theme.breakpoints.down('sm')]: {
+            gridTemplateColumns: "1fr",
+        },
+    },
+
 
     titleSection: {
         textAlign: "center",
@@ -105,9 +119,8 @@ export const Home = ( { chainId } : HomeProps ) => {
 
                 <img className={classes.imagePhone} />
                 <Typography variant="body1">
-                    <strong> How does it work?</strong>
+                    <strong> What is HashStrat?</strong>
                 </Typography>
-           
                 <br/>
                 <Typography variant="body2">
                     HashStrat allows to allocate capital to transparent, permissionless investment strategies executed on-chain. 
@@ -116,12 +129,34 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <Typography variant="body2">
                     Different strategies offer different levels of risk and it's possible to tweak your risk/reward further by allocating to an index over multiple strategies.  
                 </Typography>
-                <br/>
-                <Typography variant="body2">
-                    For example, a rebalancing strategy over a 2 asset portfolio would target a 60%/40% allocation to each.
-                    <br/>
-                    When moves in the price of the assets produce a significant imbalance in the portfolio, the strategy would rebalance it to the target allocations.
-                </Typography>
+            </section>
+
+            <section className={classes.bottomSecion}>
+                <InfoBox title="Self-sovereign" image={key}>
+                    <Typography variant="body2">
+                        HashStrat crypto-funds are immutable smart contracts executed on the blockchain. <br/>
+                        Nobody can stop them or change their behaviour and users stay in control of their funds at all times.
+                    </Typography>
+                </InfoBox>
+
+                <InfoBox title="Automated" image={automated}>
+                    <Typography variant="body2">
+                        HashStrat uses <LinkMUI href="https://docs.chain.link/docs/chainlink-keepers/introduction/" target="_blank">Chainlink Keepers</LinkMUI> to automate
+                        the execution of on-chain strategies. <br/>
+                        This means you can trust a decentralised networks of independent nodes to keep running the 
+                        strategies so you don't have to.
+                    </Typography>
+                </InfoBox>
+
+                <InfoBox title="Secure" image={lock}>
+                    <Typography variant="body2">
+                        All code is opensource and smart contracts verified on-chain
+                        which means their behavious is transparent and predictable.<br/>
+                        Uses inteact directly with the smart contracts through their wallet and no personal information is ever leaked.
+                    </Typography>
+                </InfoBox>
+
+
             </section>
 
         </div>

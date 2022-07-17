@@ -11675,6 +11675,13 @@ react-smooth@^2.0.1:
     fast-equals "^2.0.0"
     react-transition-group "2.9.0"
 
+react-social-icons@^5.14.0:
+  version "5.14.0"
+  resolved "https://registry.yarnpkg.com/react-social-icons/-/react-social-icons-5.14.0.tgz#3db266d400a3f313df63d1926e9ef556d7f46a82"
+  integrity sha512-E5pR2pIJM0vW1BhX7LdMlQS6MD2qOF8wdIm+PEfqFpW3Pn/VwLtbrjywE3/DG+rZ1YYM0GM8M11jaBxelbz/yQ==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-transition-group@2.9.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.9.0.tgz#df9cdb025796211151a436c69a8f3b97b5b07c8d"

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, makeStyles } from "@material-ui/core"
+import { Box,Typography, makeStyles } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
 
 import weth from "./img/weth.png"
@@ -12,6 +12,7 @@ import { Home } from "./Home"
 import { Header } from '../components/Header';
 import { PoolContainer } from "./pool/PoolContainer";
 import { PoolsContainer } from "../components/pools/PoolsContainer"
+import { Socials } from "./Socials"
 
 import {
     BrowserRouter,
@@ -30,8 +31,12 @@ const useStyle = makeStyles( theme => ({
         margin: "auto",
         padding: 0,
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
-        paddingBottom: theme.spacing(1),
     },
+    footer: {
+        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+        textAlign: "center",
+        padding: theme.spacing(2)
+    }
 }))
 
 
@@ -138,6 +143,11 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                     </Routes>
                 </BrowserRouter>
             </Box>
+
+            <footer className={classes.footer}>
+                <Socials />
+                <Typography variant="body2"> Copyright © 2022 HashStrat </Typography>
+            </footer>
         
         </Box>
     )

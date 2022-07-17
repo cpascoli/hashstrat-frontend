@@ -4,6 +4,8 @@
 import { Button, Typography, makeStyles, Menu, MenuProps, MenuItem, Divider, Hidden } from  "@material-ui/core"
 import { Link } from "react-router-dom"
 
+import { Socials } from "./Socials"
+
 import brainDark from "./img/brain-dark.png"
 import brainLignt from "./img/brain-light.png"
 
@@ -57,12 +59,13 @@ const useStyle = makeStyles( theme => ({
         content:`url(  ${theme.palette.type === 'light' ? brainLignt : brainDark } )`,
         border: `1px solid ${theme.palette.type === 'light' ? 'black' : 'white' }`,
         maxWidth: "100%",
-   
+        paddingLeft: 80,
+        paddingRight: 80,
         marginBottom: 20,
         [theme.breakpoints.up('sm')]: {
             display: "none"
         },
-    },
+    }
 }))
 
 

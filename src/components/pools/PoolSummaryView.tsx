@@ -25,7 +25,7 @@ const useStyles = makeStyles( theme => ({
         // padding: theme.spacing(2),
         // border: `1px solid ${theme.palette.secondary.main}`,
         // borderRadius: 12,
-        // maxWidth: 300,
+        width: 320,
         color: theme.palette.text.secondary,
         textTransform: "none"
     }

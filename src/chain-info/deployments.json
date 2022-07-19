@@ -12,6 +12,12 @@
             "strategy": "0x14F444F51df116096f552cDEcF84954cf1e351FB",
             "price_feed": "0x42bf28D49382b37e18FF1EB2003F9Fbd566D5434"
         },
+        "pool03": {
+            "pool": "0xC1E30817047bdc680d66c7AA51D28f8D01986b66",
+            "pool_lp": "0x3886658C02C0137f364A8050857A43Adf3771065",
+            "strategy": "0x21b188AC0CDEAfef4351558ebf0C582dF4E2f534",
+            "price_feed": "0x9cA7Fe9E8ba18F61359137D7Ff26FE96506e0750"
+        },
 
         "usdc": "",
         "dai": "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa",

@@ -122,17 +122,15 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <br/>
                 <Typography variant="body2">
                     HashStrat allows to allocate capital to transparent, permissionless investment strategies executed on-chain. 
-                </Typography>
                 <br/>
-                <Typography variant="body2">
-                    Different strategies offer different levels of risk and it's possible to tweak your risk/reward further by allocating to an index over multiple strategies.  
+                    Different strategies offer different levels of risk, and it's possible to tweak your risk/reward further by allocating to an index over multiple strategies.  
                 </Typography>
             </section>
 
             <section className={classes.bottomSecion}>
                 <InfoBox title="Self-sovereign" image={key}>
                     <Typography variant="body2">
-                        HashStrat crypto-funds are immutable smart contracts executed on the blockchain.
+                        HashStrat crypto-funds are immutable smart contracts executed on the blockchain.  <br/>
                         Nobody can stop them or change their behaviour.  <br/>
                         Users stay in control of their funds at all times.
                     </Typography>
@@ -142,16 +140,16 @@ export const Home = ( { chainId } : HomeProps ) => {
                     <Typography variant="body2">
                         HashStrat uses <LinkMUI href="https://docs.chain.link/docs/chainlink-keepers/introduction/" target="_blank">Chainlink Keepers</LinkMUI> to automate
                         the execution of on-chain strategies. <br/>
-                        This means you can trust a decentralised networks of independent nodes to keep running the 
-                        strategies so you don't have to.
+                        This means you can trust a decentralised networks of independent nodes to keep running your 
+                        strategies.
                     </Typography>
                 </InfoBox>
 
                 <InfoBox title="Secure" image={lock}>
                     <Typography variant="body2">
-                        All code is open source and all smart contracts verified on-chain.
-                        This means their behaviour is predictable and transparent.<br/>
-                        Users interact directly with the blockchain through their wallets and no personal information is ever shared or leaked.
+                        All code is open source and all smart contracts verified on-chain. <br/>
+                        This means their behaviour is predictable and transparent. <br/>
+                        Users interact directly with the blockchain through their digital wallets and no personal information is ever shared or leaked.
                     </Typography>
                 </InfoBox>
 

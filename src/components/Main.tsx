@@ -2,11 +2,7 @@ import { useState, useEffect } from "react";
 import { Box,Typography, makeStyles } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
 
-import weth from "./img/weth.png"
-import usdc from "./img/usdc.png"
-import dai from "./img/dai.png"
-import poollp from "./img/pool_lp.png"
-import { WbtcTokenAddress, WethTokenAddress, UsdcTokenAddress, DaiTokenAddress, PoolLPTokenAddress } from "../utils/network"
+import { TokensForPool, PoolIds, DepositToken } from "../utils/pools"
 
 import { Home } from "./Home"
 import { Header } from '../components/Header';
@@ -56,45 +52,9 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
         }
     }, [chainId, account])
 
-     // POOL01 (BTC/USD)
-    const tokenMap01 = (chainId)? {
-        "42" :
-            [
-                { image: dai, address: DaiTokenAddress(chainId), symbol: "DAI", decimals: 18 },
-                { image: poollp, address: PoolLPTokenAddress(chainId, "pool01"), symbol: "POOL-LP", decimals: 18 },
-            ],
-        "137":
-            [
-                { image: usdc, address: UsdcTokenAddress(chainId), symbol: "USDC", decimals: 6 },
-                { image: poollp, address: PoolLPTokenAddress(chainId, "pool01"), symbol: "POOL-LP", decimals: 6 },
-            ]
-    } : undefined
-    const investToken01 = (chainId)?  { image: weth, address: WbtcTokenAddress(chainId), symbol: "WBTC", decimals: 8 } : undefined
 
-
-    // POOL02 (ETH/USD)
-    const tokenMap02 = (chainId)? {
-        "42" :
-            [
-                { image: dai, address: DaiTokenAddress(chainId), symbol: "DAI", decimals: 18 },
-                { image: poollp, address: PoolLPTokenAddress(chainId, "pool02"), symbol: "POOL-LP", decimals: 18 },
-            ],
-        "137":
-            [
-                { image: usdc, address: UsdcTokenAddress(chainId), symbol: "USDC", decimals: 6 },
-                { image: poollp, address: PoolLPTokenAddress(chainId, "pool02"), symbol: "POOL-LP", decimals: 6 },
-            ]
-    } : undefined
-
-    const investToken02 = (chainId)?  { image: weth, address: WethTokenAddress(chainId), symbol: "WETH", decimals: 18 } : undefined
-
-    const depositToken = (chainId == 42) ?  { image: dai, address: DaiTokenAddress(chainId), symbol: "DAI", decimals: 18 } : 
-                         (chainId == 137) ? { image: usdc, address: UsdcTokenAddress(chainId), symbol: "USDC", decimals: 6 } : undefined
-
-
-    // const isConnected = account !== undefined
-    const supportedTokens01 = tokenMap01 && tokenMap01[chainId?.toString() as keyof typeof tokenMap01 || "137"]
-    const supportedTokens02 = tokenMap02 && tokenMap02[chainId?.toString() as keyof typeof tokenMap02 || "137"]
+    const poolIds = chainId && PoolIds(chainId)
+    const depositToken = chainId && DepositToken(chainId)
 
     return (
         <Box className={classes.container} >
@@ -122,24 +82,33 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                 </Alert>
             }
 
+            
            
             <Box style={{marginTop: 2}}>
 
                 <BrowserRouter>
                     <Routes>
                         <Route path="/"  element={<Home chainId={chainId!}/>} />
-                        <Route path="/pools" element={ connected && 
-                                <PoolsContainer chainId={chainId!} account={account!} depositToken={depositToken!} />
+                        <Route path="/pools" element={ connected && depositToken &&
+                                <PoolsContainer chainId={chainId!} account={account!} depositToken={depositToken} />
                            }
                          />
-                        <Route path="/pools/pool01" element={ connected && 
-                                <PoolContainer chainId={chainId!} poolId="pool01" account={account!} tokens={supportedTokens01!} investToken={investToken01!} />
-                           }
-                         />
-                        <Route path="/pools/pool02" element={ connected && 
-                                <PoolContainer chainId={chainId!} poolId="pool02" account={account!} tokens={supportedTokens02!} investToken={investToken02!} />
-                           }
-                         />
+
+                         {
+                             poolIds && poolIds.map( (poolId: string) => {
+                                const tokens = TokensForPool(chainId, poolId)
+                                const supportedTokens = [tokens.depositToken, tokens.lpToken]
+                                const investToken = tokens.investToken
+                                return (
+                                    <Route  path={`/pools/${poolId}`} 
+                                            element={ connected && 
+                                                <PoolContainer chainId={chainId!} poolId={`${poolId}`} account={account!} tokens={supportedTokens} investToken={investToken} />
+                                            }
+                                    />
+                                )
+                             })
+                         }
+
                     </Routes>
                 </BrowserRouter>
             </Box>

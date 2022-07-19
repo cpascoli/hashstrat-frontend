@@ -2,18 +2,24 @@
     "kovan": [
         {
             "poolId": "pool01",
-            "name": "WBTC-USDC 60/40",
-            "description": "Pool with a rebalancing strategy targeting 60% WBTC and 40% DAI"
+            "name": "WBTC-DAI 60/40",
+            "description": "Pool with a rebalancing strategy targeting 60% WBTC and 40% DAI",
+            "depositToken": "DAI",
+            "investToken": "WBTC"
         },
         {
             "poolId": "pool02",
-            "name": "ETH-USDC 60/40",
-            "description": "Pool with a rebalancing strategy targeting 60% ETH and 40% DAI"
+            "name": "WETH-DAI 60/40",
+            "description": "Pool with a rebalancing strategy targeting 60% ETH and 40% DAI",
+            "depositToken": "DAI",
+            "investToken": "WETH"
         },
         {
             "poolId": "pool03",
-            "name": "ETH-USDC MEAN REV 01",
-            "description": "Pool with a 350 day mean reversion strategy"
+            "name": "WETH-DAI MEAN REV 01",
+            "description": "Pool with a 350 day mean reversion strategy",
+            "depositToken": "DAI",
+            "investToken": "WETH"
         }
     ],
     
@@ -21,12 +27,16 @@
         {
             "poolId": "pool01",
             "name": "WBTC-USDC 60/40",
-            "description": "A rebalancing pool targeting 60% WBTC and 40% USDC"
+            "description": "A rebalancing pool targeting 60% WBTC and 40% USDC",
+            "depositToken": "USDC",
+            "investToken": "WBTC"
         },
         {
             "poolId": "pool02",
-            "name": "ETH-USDC 60/40",
-            "description": "A rebalancing pool targeting 60% ETH and 40% USDC"
+            "name": "WETH-USDC 60/40",
+            "description": "A rebalancing pool targeting 60% ETH and 40% USDC",
+            "depositToken": "USDC",
+            "investToken": "WETH"
         }
     ]
 }

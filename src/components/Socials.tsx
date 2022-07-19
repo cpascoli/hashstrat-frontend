@@ -25,13 +25,9 @@ const useStyle = makeStyles( theme => ({
 
 
 export const Socials = () => {
-
     const classes = useStyle()
-
     const theme = useTheme();
     const bgcolor = theme.palette.type === 'light' ? '#555' : '#ccc'
-
-    console.log("classes >>> ", classes)
 
     return (
         <Box className={classes.socials}>

@@ -5,7 +5,6 @@ import helperConfig from "../helper-config.json"
 import abis from "../chain-info/abis.json"
 import explorerMappings from "../chain-info/explorers.json"
 
-// Contracts Addresses
 
 export const PoolAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero

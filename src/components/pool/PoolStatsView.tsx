@@ -67,7 +67,6 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
     const asset2Formatted = (formattedDepositTokenBalance) ? `${formattedDepositTokenBalance} ${depositToken.symbol} (${depositTokenWeight}%)` : `n/a  ${depositToken.symbol}`
 
     const classes = useStyle()
-    console.log(">>> investTokenBalance", investTokenBalance, investToken.symbol, formattedIinvestTokenBalance, asset1Formatted)
 
     const swaps = useSwapInfoArray(chainId, poolId)
     const label1 = `${depositToken.symbol} Value (USD)`

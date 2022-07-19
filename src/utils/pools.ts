@@ -16,7 +16,7 @@ export const PoolInfo = (chainId: number, poolId: string) => {
     const pools = poolsInfo[networkName as keyof typeof poolsInfo]
  
     const infos = pools.filter( (pool: { poolId: string }) =>  { return (pool.poolId === poolId) })
-    if (infos.length == 0) throw Error(`Pool ${poolId} not found on ${networkName} nework`)
+    if (infos.length === 0) throw Error(`Pool ${poolId} not found on ${networkName} nework`)
     
     return infos[0]
 }
@@ -44,8 +44,8 @@ export const Tokens = (chainId: number, poolId: string) => {
 }
 
 export const DepositToken = (chainId: number) => {
-    return  (chainId == 42) ?  { image: dai, address: DaiTokenAddress(chainId), symbol: "DAI", decimals: 18 } : 
-            (chainId == 137) ? { image: usdc, address: UsdcTokenAddress(chainId), symbol: "USDC", decimals: 6 } : undefined
+    return  (chainId === 42) ?  { image: dai, address: DaiTokenAddress(chainId), symbol: "DAI", decimals: 18 } : 
+            (chainId === 137) ? { image: usdc, address: UsdcTokenAddress(chainId), symbol: "USDC", decimals: 6 } : undefined
 
 }
 
@@ -56,7 +56,6 @@ export const PoolIds = (chainId: number) => {
         return pool["poolId"]
     })
 
-
-    console.log("poolIds", poolIds)
     return poolIds
 }
+

@@ -51,7 +51,6 @@ export const useTokenBalance = (chainId: number, poolId: string, symbol: string,
             method: 'balanceOf',
             args: [address],
     }) ?? {}
-    console.log("useTokenBalance >>> ", chainId, poolId, symbol, address, "balance: ", value?.[0].toString(), "error: ", error)
 
     return value?.[0].toString()
 }

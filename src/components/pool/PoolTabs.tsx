@@ -7,8 +7,11 @@ import { MyStatsView } from "../wallet/MyStatsView"
 import { PoolStatsView } from "./PoolStatsView"
 import { TradesView } from "./TradesView"
 import { WalletTabs } from "../wallet/WalletTabs"
-import { StrategyInfoView } from "./StrategyInfoView"
- 
+import { RebalanceStrategyInfoView } from "./RebalanceStrategyInfoView"
+import { MeanRevStrategyInfoView } from "./MeanRevStrategyInfoView"
+import { PoolInfo } from "../../utils/pools"
+
+
 interface PoolTabsProps {
     poolId: string,
     chainId: number,
@@ -50,6 +53,11 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
         setSelectedTokenIndex(parseInt(newValue))
     }
 
+    const { strategy } = PoolInfo(chainId, poolId)
+
+    const isRebalanceStrategy = strategy === "rebalance_01"
+    const isMeanRevStrategy = strategy === "meanrev_01"
+
     return (
         <Box className={classes.container}>
             <TabContext value={selectedTokenIndex.toString()}>
@@ -65,7 +73,13 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <PoolStatsView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                     <Divider style={{marginTop: 20, marginBottom: 20}} />
-                    <StrategyInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
+                    {
+                       isRebalanceStrategy && <RebalanceStrategyInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
+                    }
+                    {
+                       isMeanRevStrategy && <MeanRevStrategyInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
+                    }
+
                 </TabPanel>
                 <TabPanel className={classes.tab} value="2" key={2}>
                     <TradesView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />

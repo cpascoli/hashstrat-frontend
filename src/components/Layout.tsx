@@ -43,7 +43,7 @@ export const Page = ({ children } : ChildrenProps) => {
 export const Horizontal = ({ children, align = "left" } : ChildrenProps) => {
     const classes = useStyles()
     return (
-        <div className={align == "center" ? classes.horizontal : classes.horizontalLeft}>
+        <div className={align === "center" ? classes.horizontal : classes.horizontalLeft}>
             {children}
         </div>
     )

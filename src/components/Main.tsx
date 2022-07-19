@@ -100,7 +100,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                                 const supportedTokens = [tokens.depositToken, tokens.lpToken]
                                 const investToken = tokens.investToken
                                 return (
-                                    <Route  path={`/pools/${poolId}`} 
+                                    <Route key={`${poolId}`} path={`/pools/${poolId}`} 
                                             element={ connected && 
                                                 <PoolContainer chainId={chainId!} poolId={`${poolId}`} account={account!} tokens={supportedTokens} investToken={investToken} />
                                             }

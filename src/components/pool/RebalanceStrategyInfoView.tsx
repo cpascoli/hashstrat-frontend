@@ -41,7 +41,7 @@ interface StrategyInfoViewProps {
 
 
 
-export const StrategyInfoView = ( { chainId, poolId, depositToken, investToken } : StrategyInfoViewProps ) => {
+export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, investToken } : StrategyInfoViewProps ) => {
 
     const poolAddress = PoolAddress(chainId, poolId)
 
@@ -67,8 +67,6 @@ export const StrategyInfoView = ( { chainId, poolId, depositToken, investToken }
     const rebalancingUpperBandPrice = (depositTokens && investTokens) ? round( targetPercUp  * depositTokens / (investTokens - targetPercUp  * investTokens)) : undefined
     const rebalancingLowerBandPrice = (depositTokens && investTokens) ? round( targetPercDown  * depositTokens / (investTokens - targetPercDown  * investTokens)) : undefined
     const rebalancingText = (rebalancingUpperBandPrice && rebalancingLowerBandPrice) ? `${investToken.symbol} ≤ ${rebalancingLowerBandPrice} or ${investToken.symbol} ≥ ${rebalancingUpperBandPrice} ` : ''
-
-    console.log("rebalancingUpperBandPrice : ", investTokenBalance, depositTokenBalance, targetPercUp, targetPercDown)
 
     const formattedPriceTimestant = new Date(feedLatestTimestamp * 1000).toLocaleTimeString()
     const formattedPrice = latestFeedPrice ? fromDecimals( BigNumber.from(latestFeedPrice), parseInt(feedDecimals), 2) : ''

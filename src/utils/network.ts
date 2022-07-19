@@ -4,7 +4,7 @@ import networkMappings from "../chain-info/deployments.json"
 import helperConfig from "../helper-config.json"
 import abis from "../chain-info/abis.json"
 import explorerMappings from "../chain-info/explorers.json"
-
+import { PoolInfo } from "./pools"
 
 export const PoolAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero
@@ -93,42 +93,44 @@ export const NetworkName = (chainId: number) => {
 // Contracts
 
 export const PoolContract = (chainId: number, poolId: string) => {
-    const abi = abis[ "pool" as keyof typeof abis ]
+    const abi = abis[ "pool" as keyof typeof abis ] as any
     return new Contract( PoolAddress(chainId, poolId), new utils.Interface(abi))
 }
 
 export const PoolLPContract = (chainId: number, poolId: string) => {
-    const abi = abis[ "pool_lp" as keyof typeof abis ]
+    const abi = abis[ "pool_lp" as keyof typeof abis ] as any
     return new Contract(PoolLPTokenAddress(chainId, poolId) , new utils.Interface(abi))
 }
 
 export const StrategyContract = (chainId: number, poolId: string) => {
-    const abi = abis[ "strategy" as keyof typeof abis ]
+    const strategies = abis[ "strategy" as keyof typeof abis ] as any
+    const { strategy } = PoolInfo(chainId, poolId)
+    const abi = strategies[strategy]
     return new Contract(StrategyAddress(chainId, poolId) , new utils.Interface(abi))
 }
 
 export const FeedContract = (chainId: number, poolId: string) => {
-    const abi = abis[ "price_feed" as keyof typeof abis ]
+    const abi = abis[ "price_feed" as keyof typeof abis ] as any
     return new Contract(FeedAddress(chainId, poolId) , new utils.Interface(abi))
 }
 
 export const UsdcContract = (chainId: number) => {
-    const abi = abis[ "usdc" as keyof typeof abis ]
+    const abi = abis[ "usdc" as keyof typeof abis ] as any
     return new Contract(UsdcTokenAddress(chainId) , new utils.Interface(abi))
 }
 
 export const DaiContract = (chainId: number) => {
-    const abi = abis[ "dai" as keyof typeof abis ]
+    const abi = abis[ "dai" as keyof typeof abis ] as any
     return new Contract(DaiTokenAddress(chainId), new utils.Interface(abi))
 }
 
 export const WethContract = (chainId: number) => {
-    const abi = abis[ "weth" as keyof typeof abis ]
+    const abi = abis[ "weth" as keyof typeof abis ] as any
     return new Contract(WethTokenAddress(chainId), new utils.Interface(abi))
 }
 
 export const WbtcContract = (chainId: number) => {
-    const abi = abis[ "wbtc" as keyof typeof abis ]
+    const abi = abis[ "wbtc" as keyof typeof abis ] as any
     return new Contract(WbtcTokenAddress(chainId), new utils.Interface(abi))
 }
 

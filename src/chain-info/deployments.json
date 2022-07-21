@@ -13,12 +13,17 @@
             "price_feed": "0x42bf28D49382b37e18FF1EB2003F9Fbd566D5434"
         },
         "pool03": {
+            "pool": "0x650D477C025745Ae1118647343DA46315651D95a",
+            "pool_lp": "0x338393Cedaaa6C3481B38Acc4a5603c4Af8e048c",
+            "strategy": "0x1baf6B2ECd61802c90D4F68A09eA5af81815e3c6",
+            "price_feed": "0xbdF9128E66917599388DAB135450696BA103318e"
+        },
+        "pool04": {
             "pool": "0xC1E30817047bdc680d66c7AA51D28f8D01986b66",
             "pool_lp": "0x3886658C02C0137f364A8050857A43Adf3771065",
             "strategy": "0x21b188AC0CDEAfef4351558ebf0C582dF4E2f534",
             "price_feed": "0x9cA7Fe9E8ba18F61359137D7Ff26FE96506e0750"
         },
-
         "usdc": "",
         "dai": "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa",
         "weth": "0xd0A1E359811322d97991E03f863a0C30C2cF029C",
@@ -37,6 +42,18 @@
             "pool_lp": "0x36E6926bc834aCcb8Ec41ba182475b9a086528f1",
             "strategy": "0x482cd47f0960E35E78Ff747b6ADe7464159e5Abe",
             "price_feed": "0xB0e5B40C9A7AD291eDfa395B8814EEAc57E7F0e5"
+        },
+        "pool03": {
+            "pool": "0xaF21551dF8EB9449f291B66d8A54a5aBF430ccAd",
+            "pool_lp": "0xAa99437CdBB9e843d27Adf62263acDf7db7Fc6cA",
+            "strategy": "0xf37116A08D5Fb795c953D9ED52a53eC2c8ab6331",
+            "price_feed": "0xd43a4877ca30Cd5546eEb937A8AF04B6c9403C56"
+        },
+        "pool04": {
+            "pool": "0xe5d3e40C4151F78FBa77934A6dba1e472ACcDd56",
+            "pool_lp": "0x192D5c006A7c5f6e8e522800c7f5458f97f3C445",
+            "strategy": "0x63Ca9C2f29620589AA7c0fCcB2D817B694480301",
+            "price_feed": "0xe20dbF99A79e41c301f0dAaD4237e975376e8246"
         },
         "usdc": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
         "dai": "",

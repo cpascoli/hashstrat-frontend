@@ -10,15 +10,14 @@ const useStyles = makeStyles( theme => ({
     container: {
         body: theme.spacing(1),
     },
-    horizontal: {
+    center: {
         display: "flex",
         justifyContent: "space-around",
-        alignItems: "top",
         flexDirection: "row",
         flexFlow: "row wrap",
         gap: theme.spacing(2),
     },
-    horizontalLeft: {
+    left: {
         display: "flex",
         justifyContent: "left",
         alignItems: "top",
@@ -43,7 +42,7 @@ export const Page = ({ children } : ChildrenProps) => {
 export const Horizontal = ({ children, align = "left" } : ChildrenProps) => {
     const classes = useStyles()
     return (
-        <div className={align === "center" ? classes.horizontal : classes.horizontalLeft}>
+        <div className={align === "center" ? classes.center : classes.left}>
             {children}
         </div>
     )

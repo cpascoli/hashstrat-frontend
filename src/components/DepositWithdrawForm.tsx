@@ -64,7 +64,7 @@ const useStyle = makeStyles( theme => ({
 
 export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance, handleSuccess, handleError, onClose } : DepositWithdrawFormProps) => {
 
-    const { symbol, image, address } = token
+    const { symbol, image } = token
 
     // Token Allowance 
     const allowance = useTokenAllowance(chainId, poolId, symbol) // in token decimals
@@ -134,9 +134,9 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
                                (formType === 'withdraw') ? "Withdraw" : "n/a"
 
     const explorerHost = NetworkExplorerHost(chainId)
-    const approveLink =  (approveErc20State.status == 'Success' && approveErc20State.receipt)? `https://${explorerHost}/tx/${approveErc20State.receipt.transactionHash}` : ""
-    const depositLink =  (depositState.status == 'Success' && depositState.receipt)? `https://${explorerHost}/tx/${depositState.receipt.transactionHash}` : ""
-    const withdrawLink =  (withdrawState.status == 'Success' && withdrawState.receipt)? `https://${explorerHost}/tx/${withdrawState.receipt.transactionHash}` : ""
+    const approveLink =  (approveErc20State.status === 'Success' && approveErc20State.receipt)? `https://${explorerHost}/tx/${approveErc20State.receipt.transactionHash}` : ""
+    const depositLink =  (depositState.status === 'Success' && depositState.receipt)? `https://${explorerHost}/tx/${depositState.receipt.transactionHash}` : ""
+    const withdrawLink =  (withdrawState.status === 'Success' && withdrawState.receipt)? `https://${explorerHost}/tx/${withdrawState.receipt.transactionHash}` : ""
 
     useEffect(() => {
         if (notifications.filter((notification) =>
@@ -199,7 +199,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             handleSuccess(info)
             setAmount("")
         }
-    }, [notifications])
+    }, [notifications, chainId, approveLink, depositLink, withdrawLink])
 
 
     return (
@@ -243,7 +243,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             { formType === 'deposit' &&
                 <Box mb={2} >
                     { (isApproveMining || (!allowanceOk && !isDepositMining)) &&
-                    <Button variant="contained" color="primary" fullWidth disabled={amount == ''}
+                    <Button variant="contained" color="primary" fullWidth disabled={amount === ''}
                         onClick={() => approveButtonPressed()} >
                         Approve {symbol} 
                         { isApproveMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
@@ -271,7 +271,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             }  
             { formType === 'withdraw' &&
                 <Box mb={2} >
-                    <Button variant="contained" color="primary" fullWidth disabled={amount == ''}
+                    <Button variant="contained" color="primary" fullWidth disabled={amount === ''}
                         onClick={() => submitForm()}>
                         { submitButtonTitle }
                         { isWithdrawMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
@@ -289,9 +289,9 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             </div>
         
             {
-                (approveErc20State.status == 'Mining' || depositState.status  == 'Mining' || withdrawState.status == 'Mining' ) ? 
+                (approveErc20State.status === 'Mining' || depositState.status  === 'Mining' || withdrawState.status === 'Mining' ) ? 
                     <Typography color="textSecondary" variant="body2" >  Mining... </Typography> : 
-                (approveErc20State.status == 'Exception' || depositState.status  == 'Exception' || withdrawState.status == 'Exception' ) ? 
+                (approveErc20State.status === 'Exception' || depositState.status  === 'Exception' || withdrawState.status === 'Exception' ) ? 
                     <Typography color="error" variant="body2" >  
                         { approveErc20State.errorMessage } { depositState.errorMessage } { withdrawState.errorMessage }
                     </Typography> : ''

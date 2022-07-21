@@ -43,9 +43,8 @@ export const useTokenAllowance =  (chainId: number, poolId: string, symbol: stri
 
 
 
-export const useTokenBalance = (chainId: number, poolId: string, symbol: string, address: string) => {
+export const useTokenBalance = (chainId: number, poolId: string, symbol: string, address: string = '0x0000000000000000000000000000000000000000') => {
     const tokenContract =  ERC20Contract(chainId, poolId, symbol) 
-
     const { value, error } = useCall({
             contract: tokenContract,
             method: 'balanceOf',

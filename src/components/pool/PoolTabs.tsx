@@ -15,7 +15,7 @@ import { PoolInfo } from "../../utils/pools"
 interface PoolTabsProps {
     poolId: string,
     chainId: number,
-    account: string,
+    account?: string,
     tokens: Array<Token>,
     investToken: Token,
 }
@@ -44,6 +44,9 @@ const useStyle = makeStyles( theme => ({
 
 export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : PoolTabsProps ) => {
 
+    console.log("PoolTabs >>> tokens", chainId, poolId, account, tokens)
+
+
     const depositToken = tokens[0]
 
     const [selectedTokenIndex, setSelectedTokenIndex] = useState<number>(0)
@@ -62,14 +65,17 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
         <Box className={classes.container}>
             <TabContext value={selectedTokenIndex.toString()}>
                 <TabList onChange={handleChange} className={classes.tabList}>
-                    <Tab label="My Assets" value="0" key={0} />
-                    <Tab label="Pool Info" value="1" key={1} />
+                    {<Tab label="My Assets" value="0" key={0} /> }
+                    <Tab label="Pool Info" value="1" key={1}  />
                     <Tab label="Pool Trades" value="2" key={2} />
+
                 </TabList>
-                <TabPanel className={classes.tab} value="0" key={0}>
-                    <MyStatsView chainId={chainId} poolId={poolId} account={account} depositToken={depositToken} />
-                    <WalletTabs chainId={chainId!} poolId={poolId} account={account!} tokens={tokens!} /> 
-                </TabPanel>
+                { account &&
+                    <TabPanel className={classes.tab} value="0" key={0}>
+                        <MyStatsView chainId={chainId} poolId={poolId} account={account} depositToken={depositToken} />
+                        <WalletTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens!} />
+                    </TabPanel>
+                }
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <PoolStatsView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                     <Divider style={{marginTop: 20, marginBottom: 20}} />

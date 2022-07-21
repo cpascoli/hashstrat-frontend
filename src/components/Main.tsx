@@ -9,12 +9,14 @@ import { Header } from '../components/Header';
 import { PoolContainer } from "./pool/PoolContainer";
 import { PoolsContainer } from "../components/pools/PoolsContainer"
 import { Socials } from "./Socials"
+import { ConnectButton } from '../main/ConnectButton'
 
 import {
     BrowserRouter,
     Routes,
     Route,
   } from "react-router-dom";
+import { Horizontal } from "./Layout";
 
 
 interface MainProps {
@@ -39,27 +41,35 @@ const useStyle = makeStyles( theme => ({
 export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  { 
   
     const [connected, setConnected] = useState(false);
-    const [chainId, setChainId] = useState<number>();
-    const [account, setAccount] = useState<string>();
+    const [chainId, setChainId] = useState<number | undefined>(137); // default to Polygon Network
+    const [account, setAccount] = useState<string | undefined>();
 
     const classes = useStyle()
 
+    const [demoChainId, setDemoChainId] = useState<number>(137);
+
+
     useEffect(() => {
-        if (chainId && account) {
+        if (account) {
             setConnected(true)
-        }else {
+        } else {
             setConnected(false)
         }
+
+        if (!chainId) {
+            setDemoChainId(137)
+        } else {
+            setDemoChainId(chainId)
+        }
+        
     }, [chainId, account])
 
 
-    const poolIds = chainId && PoolIds(chainId)
-    const depositToken = chainId && DepositToken(chainId)
+    const poolIds = chainId ?  PoolIds(chainId) : PoolIds(demoChainId)
+    const depositToken = chainId ? DepositToken(chainId) : DepositToken(demoChainId)
 
     return (
         <Box className={classes.container} >
-
-           <Header toggleDark={toggleDark} setToggleDark={setToggleDark} setChainId={setChainId} setAccount={setAccount} />
            
            {(!chainId && account) &&
                 <Alert severity="warning" style={{textAlign: "center", margin: 20}} > 
@@ -68,42 +78,51 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                 </Alert>
             }
 
-            { (!chainId && !account) &&
+            { !account &&
                 <Alert severity="info" style={{textAlign: "center", margin: 20}} > 
-                    <AlertTitle>No account connected</AlertTitle>
-                    Connect an account to the Polygon or Kovan networks to use the dapp
+                    <Horizontal align="center">
+                        <div>
+                             <AlertTitle>No account connected</AlertTitle>
+                             Connect an account to the Polygon or Kovan networks to use the dapp
+                        </div>
+                        <div style={{padding: 10}}>
+                            <ConnectButton setAccount={setAccount} setChainId={setChainId} />
+                        </div>
+                    </Horizontal>
                 </Alert>
             }
 
-            { (chainId && !account) &&
-                <Alert severity="info" style={{textAlign: "center", margin: 20}} > 
-                    <AlertTitle>No account connected</AlertTitle>
-                    Connect an account to use the dapp
-                </Alert>
-            }
 
-            
-           
-            <Box style={{marginTop: 2}}>
-
+            <Box>
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/"  element={<Home chainId={chainId!}/>} />
-                        <Route path="/pools" element={ connected && depositToken &&
-                                <PoolsContainer chainId={chainId!} account={account!} depositToken={depositToken} />
+                        <Route path="/"  element={
+                            <Box>
+                                <Header toggleDark={toggleDark} setToggleDark={setToggleDark} />
+                                <Home chainId={demoChainId}/> 
+                            </Box>
+                        } />
+                        <Route path="/pools" element={
+                                <Box>  
+                                    <Header toggleDark={toggleDark} setToggleDark={setToggleDark} />
+                                    <PoolsContainer chainId={demoChainId} account={account} depositToken={depositToken!} />
+                                </Box>
                            }
                          />
 
                          {
-                             poolIds && poolIds.map( (poolId: string) => {
-                                const tokens = TokensForPool(chainId, poolId)
+                            poolIds && poolIds.map( (poolId: string) => {
+                                const tokens = TokensForPool(demoChainId, poolId)
                                 const supportedTokens = [tokens.depositToken, tokens.lpToken]
                                 const investToken = tokens.investToken
                                 return (
                                     <Route key={`${poolId}`} path={`/pools/${poolId}`} 
-                                            element={ connected && 
-                                                <PoolContainer chainId={chainId!} poolId={`${poolId}`} account={account!} tokens={supportedTokens} investToken={investToken} />
-                                            }
+                                            element={
+                                            <Box>
+                                                <Header toggleDark={toggleDark} setToggleDark={setToggleDark} />
+                                                <PoolContainer chainId={demoChainId} poolId={`${poolId}`} account={account} tokens={supportedTokens} investToken={investToken} />
+                                            </Box>
+                                        }
                                     />
                                 )
                              })

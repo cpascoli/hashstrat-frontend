@@ -14,7 +14,7 @@ import { ExpandMore } from "@material-ui/icons"
 
 interface PoolsViewProps {
     chainId: number,
-    account: string,
+    account?: string,
     depositToken: Token
 }
 
@@ -27,7 +27,7 @@ const useStyles = makeStyles( theme => ({
 
 export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) => {
 
-    console.log("chainId >>> ", chainId)
+    console.log("PoolsView chainId >>> ", chainId)
     const [expanded, setExpanded] = useState<boolean>(false);
 
     const handleChange = () => {

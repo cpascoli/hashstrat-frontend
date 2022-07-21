@@ -2,11 +2,14 @@ import { useState, useEffect } from 'react';
 import { useBlockNumber, shortenAddress } from "@usedapp/core"
 import Switch from "@material-ui/core/Switch";
 import { useEthers } from "@usedapp/core";
-import { Button, makeStyles, Menu, MenuProps, MenuItem, Divider } from  "@material-ui/core"
+import { Button, Link, Menu, MenuProps, MenuItem, Divider, Typography, makeStyles } from  "@material-ui/core"
 import { styled } from "@material-ui/core/styles"
 import { NetworkName } from "../utils/network"
 import { KeyboardArrowDown } from "@material-ui/icons"
+import { Link as RouterLink } from "react-router-dom"
+import { Horizontal } from './Layout';
 import home from "./img/home.png"
+
 
 const StyledMenu = styled((props: MenuProps) => (
     <Menu
@@ -61,13 +64,10 @@ export interface ConnectedInfo {
 interface HeaderProps {
     toggleDark: boolean,
     setToggleDark: (arg0: boolean) => void
-    setChainId: (chainId: number | undefined) => void
-    setAccount: (arg0: string | undefined) => void
-    // updateConnected: (chainId: number, account: string) => void
 }
 
 
-export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : HeaderProps ) => {
+export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
 
     const classes = useStyles()
 
@@ -81,15 +81,11 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
       setToggleDark(!toggleDark);
     };
 
-    const { account, activateBrowserWallet, deactivate, chainId }  = useEthers()
+    const { account, deactivate, chainId }  = useEthers()
 
     useEffect(() => {
       if (chainId) {
-        setChainId(chainId)
         setNetworkName( NetworkName(chainId) )
-      }
-      if (account) {
-        setAccount(account)
       }
     }, [chainId, account])
 
@@ -112,7 +108,6 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
       window.location.reload()
     }
 
-    //const shortAccount = shortenAccount(account)
     const shortAccount = account ? shortenAddress(account) : ''
     
     return (
@@ -123,61 +118,71 @@ export const Header = ( { toggleDark, setToggleDark, setChainId, setAccount } : 
           </a>
         
           <div className={classes.rightItmesContainer}>
-                  <Switch
-                      checked={toggleDark}
-                      onChange={handleModeChange}
-                      name="toggleDark"
-                      color="default"
-                      // icon={<NightsStayRounded  />}
-                      // checkedIcon={<WbSunnyTwoTone />}
-                      // style={{width:300}}
-                  />
+                  <div>
+                      <Button
+                        id="account-button"
+                        aria-controls={open ? 'account-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        variant="contained"
+                        disableElevation
+                        onClick={handleClick}
+                        endIcon={<KeyboardArrowDown />}
+                      >
+                        {isConnected ? shortAccount : "Menu"}
+                      </Button>
 
-                  { isConnected ? 
-                      (
-                      <div>
+                      <StyledMenu
+                        id="account-menu"
+                        anchorEl={anchorEl}
+                        getContentAnchorEl={null}
+                        open={open}
+                        onClose={handleClose}
+                      >
 
-                          {/* <Web3ModalButton /> */}
+                        <MenuItem onClick={handleClose}>
+                            <Link component={RouterLink} to="/pools">
+                               Pools
+                            </Link>
+                        </MenuItem>
 
-                          <Button
-                            id="account-button"
-                            aria-controls={open ? 'account-menu' : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? 'true' : undefined}
-                            variant="contained"
-                            disableElevation
-                            onClick={handleClick}
-                            endIcon={<KeyboardArrowDown />}
-                          >
-                            {shortAccount}
-                          </Button>
+                        <MenuItem onClick={handleClose}>
+                           <Horizontal>
+                              <Typography>
+                                 { toggleDark ? "Light Mode" : "Dark Mode" }
+                              </Typography>
+                              <Switch
+                                  checked={toggleDark}
+                                  onChange={handleModeChange}
+                                  name="toggleDark"
+                                  color="default"
+                              />
+                              </Horizontal>
+                        </MenuItem>
 
-                          <StyledMenu
-                            id="account-menu"
-                            anchorEl={anchorEl}
-                            getContentAnchorEl={null}
-                            open={open}
-                            onClose={handleClose}
-                          >
-                              <MenuItem onClick={handleClose}>
-                                  Connected to {networkName.toUpperCase()}
-                              </MenuItem>
-                              <MenuItem onClick={handleClose}>
-                                  Block Number {blockNumber}
-                              </MenuItem>
-
+                        {isConnected &&    
                               <Divider />
+                        }
 
-                              <MenuItem onClick={handleClose} >
-                                  <Button color="secondary" variant="outlined" onClick={disconnectPressed}>Disconnect</Button>
-                              </MenuItem>
-                          </StyledMenu>
-                        </div>
+                        {isConnected &&
+                            <MenuItem onClick={handleClose}>
+                                Connected to {networkName.toUpperCase()}
+                            </MenuItem>
+                        }
+                        {isConnected &&
+                            <MenuItem onClick={handleClose}>
+                                Block Number {blockNumber}
+                            </MenuItem>
+                        }
 
-                      )
-                      :
-                      (<Button color="primary" variant="contained" onClick={() => activateBrowserWallet() }>Connect</Button>)
-                  }
+                        {isConnected &&   
+                            <MenuItem onClick={handleClose} >
+                                <Button color="secondary" variant="contained" onClick={disconnectPressed}>Disconnect</Button>
+                            </MenuItem>
+                        }
+                      </StyledMenu>
+                    </div>
+
           </div>
 
       </div>

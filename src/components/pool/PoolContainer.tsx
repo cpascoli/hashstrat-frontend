@@ -9,10 +9,13 @@ import helperConfig from "../../helper-config.json"
 import poolsInfo from "../../chain-info/pools.json"
 import { Contracts } from "./Contracts"
 
+import { Link as RouterLink } from "react-router-dom"
+
+
 interface PoolContainerProps {
     poolId: string,
     chainId: number,
-    account: string,
+    account?: string,
     tokens: Array<Token>,
     investToken: Token,
 }
@@ -43,8 +46,8 @@ export const PoolContainer = ({ chainId, poolId, account, tokens, investToken } 
     return (
         <div className={classes.container}>
             <Breadcrumbs aria-label="breadcrumb" style={{paddingLeft: 10, paddingRight: 10}}>
-                <Link href="/">Home</Link>
-                <Link href={'/pools/'}>Pools</Link>
+                <Link component={RouterLink} to="/"> Home </Link>
+                <Link component={RouterLink} to="/pools"> Pools </Link>
                 <Typography>{name}</Typography>
             </Breadcrumbs>
 

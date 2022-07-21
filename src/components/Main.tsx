@@ -72,14 +72,14 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
         <Box className={classes.container} >
            
            {(!chainId && account) &&
-                <Alert severity="warning" style={{textAlign: "center", margin: 20}} > 
+                <Alert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
                     <AlertTitle>Wrong Network</AlertTitle>
                     Connect to the <strong>Polygon</strong> or <strong>Kovan</strong> networks to use the dapp
                 </Alert>
             }
 
             { !account &&
-                <Alert severity="info" style={{textAlign: "center", margin: 20}} > 
+                <Alert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
                     <Horizontal align="center">
                         <div>
                              <AlertTitle>No account connected</AlertTitle>

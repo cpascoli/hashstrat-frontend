@@ -45,11 +45,29 @@ const useStyles = makeStyles( theme => ({
     boxShadow: `0px 2px 0px ${theme.palette.secondary.main}`, /* offset-x | offset-y | blur-radius | color */
     alignContent: "middle",
   },
+  menuItems: {
+    display: "flex",
+    justifyContent: "space-around",
+    flexDirection: "row",
+    flexFlow: "row wrap",
+    alignItems: "center",
+    gap: theme.spacing(2),
+
+    [theme.breakpoints.down('xs')]: {
+      display: "none"
+    },
+  },
+  menuItemsSmall: {
+    [theme.breakpoints.up('sm')]: {
+      display: "none"
+    },
+  },
   rightItmesContainer: {
       padding: theme.spacing(2),
       display: "flex",
       justifyContent: "flex-end",
       gap: theme.spacing(4),
+
     }
 }))
 
@@ -116,6 +134,12 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
           <a href="/" style={{ textDecoration: 'none'}} > 
             <Button> <img src={home} style={{width: 55, height: 55}} /> </Button>
           </a>
+
+          <div className={classes.menuItems}>      
+              <Link component={RouterLink} to="/pools">Pools</Link>
+              <Link component={RouterLink} to="/strategies">Strategies</Link>
+              <Link component={RouterLink} to="/faq">FAQ</Link>
+          </div>
         
           <div className={classes.rightItmesContainer}>
                   <div>
@@ -140,14 +164,22 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
                         onClose={handleClose}
                       >
 
-                        <MenuItem onClick={handleClose}>
-                            <Link component={RouterLink} to="/pools">
-                               Pools
-                            </Link>
-                        </MenuItem>
+                        <div  className={classes.menuItemsSmall} > 
+                            <MenuItem onClick={handleClose}>
+                                <Link component={RouterLink} to="/pools">Pools</Link>
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <Link component={RouterLink} to="/strategies">Strategies</Link>
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <Link component={RouterLink} to="/faq">FAQ</Link>
+                            </MenuItem>
+
+                            <Divider />
+                        </div>
 
                         <MenuItem onClick={handleClose}>
-                           <Horizontal>
+                           <Horizontal valign='center'>
                               <Typography>
                                  { toggleDark ? "Light Mode" : "Dark Mode" }
                               </Typography>
@@ -160,26 +192,18 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
                               </Horizontal>
                         </MenuItem>
 
-                        {isConnected &&    
+                        {isConnected &&
+                          <div>
                               <Divider />
+                              <MenuItem onClick={handleClose}>
+                                  <Typography variant='body2'> Connected to {networkName.toUpperCase()} </Typography>
+                              </MenuItem>
+                              <MenuItem onClick={handleClose} >
+                                  <Button color="secondary" variant="contained" onClick={disconnectPressed}>Disconnect</Button>
+                              </MenuItem>
+                          </div>
                         }
-
-                        {isConnected &&
-                            <MenuItem onClick={handleClose}>
-                                Connected to {networkName.toUpperCase()}
-                            </MenuItem>
-                        }
-                        {isConnected &&
-                            <MenuItem onClick={handleClose}>
-                                Block Number {blockNumber}
-                            </MenuItem>
-                        }
-
-                        {isConnected &&   
-                            <MenuItem onClick={handleClose} >
-                                <Button color="secondary" variant="contained" onClick={disconnectPressed}>Disconnect</Button>
-                            </MenuItem>
-                        }
+         
                       </StyledMenu>
                     </div>
 

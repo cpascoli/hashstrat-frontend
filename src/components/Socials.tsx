@@ -2,9 +2,6 @@
 
 
 import { makeStyles, useTheme, Box } from  "@material-ui/core"
-import { Height } from "@material-ui/icons"
-
-
 import { SocialIcon } from "react-social-icons"
 import { Horizontal } from "./Layout"
 
@@ -20,8 +17,6 @@ const useStyle = makeStyles( theme => ({
         bgcolor: theme.palette.type === 'light' ? 'black' : 'white'
     }
 }))
-
-
 
 
 export const Socials = () => {

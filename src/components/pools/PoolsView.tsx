@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Box, Divider, makeStyles, Typography, Accordion, AccordionDetails, AccordionSummary, Link } from "@material-ui/core"
+import { Box, Divider, makeStyles, Typography, Link } from "@material-ui/core"
 import { PoolSummaryView } from "./PoolSummaryView"
 
 import { Horizontal } from "../Layout"
@@ -51,42 +51,18 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
 
     return (
         <Box mt={2}>
-            <Accordion expanded={expanded} onChange={handleChange}>
-                
-                <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
-                    <Typography style={{fontSize: 20, fontWeight: 400}} >
-                     What are HashStrat Pools?
-                    </Typography>
-                    
-                </AccordionSummary>
-
-                <AccordionDetails >
-                    <Typography variant="body2" >
-                        HashStrat Pools are crypto-funds automated on-chain.
-                        <br/> <br/>
-                        Users deposit capital into a Pool in the form of stable crypto-assets (e.g. USDC) to be invested by an on-chain Strategy.
-                        <br/>
-                        Strategies can allocate capital to risk assets (e.g. BTC or ETH) and can manage risk trading back into stable assets.
-                        <br/>
-                        Different Strategies offer different risk/reward characteristics but all aim to grow their Pool value over time.
-                        <br/><br/>
-                        When users deposit funds into a Pool, they receive "LP Tokens" that represent ownership of their share of the Pool.
-                        Users can withdraw their funds at any time by returning their "LP Tokens".
-                    
-                    </Typography>
-                </AccordionDetails>
-            </Accordion>
+ 
       
             <Divider variant="middle"  style={{marginTop: 20, marginBottom: 0}}/>
             <div className={classes.container}> 
                 <Typography >
-                    Choose a pool and deposit {depositToken.symbol} tokens into it. 
+                   Pools are crypto-funds where you deposit {depositToken.symbol} tokens and let the pool's strategy invest into a risk asset (e.g BTC or ETH).
                 </Typography>
 
                 { (chainId == 137) && 
-                    <Typography variant="body2" style={{marginTop:10}}>
-                        You can buy {depositToken.symbol} tokens directly on Polygon using <Link href="https://quickswap.exchange/#/swap" target="_blank"> QuickSwap &gt; Buy </Link>,
-                        or transfer {depositToken.symbol} from Ethereum to Polygon via the <Link href="https://wallet.polygon.technology/bridge" target="_blank">Polygon Bridge</Link>.
+                    <Typography variant="body1" style={{marginTop:10}}>
+                        You can get {depositToken.symbol} tokens directly on Polygon using <Link href="https://quickswap.exchange/#/swap" target="_blank"> QuickSwap &gt; Buy </Link>,
+                        or transfer {depositToken.symbol} from Ethereum to Polygon via the <Link href="https://wallet.polygon.technology/bridge" target="_blank">Polygon Bridge</Link>
                     </Typography> 
                 }
             </div>

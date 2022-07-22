@@ -17,6 +17,9 @@ import {
     Route,
   } from "react-router-dom";
 import { Horizontal } from "./Layout";
+import { FaqHome } from "./faq/FaqHome";
+import { StrategiesHome } from "./strategies/StrategiesHome";
+
 
 
 interface MainProps {
@@ -106,6 +109,23 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                                 <Box>  
                                     <Header toggleDark={toggleDark} setToggleDark={setToggleDark} />
                                     <PoolsContainer chainId={demoChainId} account={account} depositToken={depositToken!} />
+                                </Box>
+                           }
+                         />
+
+                        <Route path="/strategies" element={
+                                <Box>  
+                                    <Header toggleDark={toggleDark} setToggleDark={setToggleDark} />
+                                    <StrategiesHome />
+                                </Box>
+                           }
+                         />
+
+
+                        <Route path="/faq" element={
+                                <Box>  
+                                    <Header toggleDark={toggleDark} setToggleDark={setToggleDark} />
+                                    <FaqHome  />
                                 </Box>
                            }
                          />

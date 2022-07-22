@@ -6,6 +6,21 @@ The `ethers` and `@usedapp` libraries to facilitate the integration with web3 wa
 `material-ui` is used to help making the interface responsive and and the look and feel consistent.
 
 
+## Available Scripts
+
+In the project directory, you can run:
+
+### `yarn start`
+
+Runs the app in the development mode.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+
+### `yarn build`
+
+Builds the app for production to the `build` folder.
+
+
 ## Web3 app
 
 This frontend is deployed here: [https://hashstrat.herokuapp.com/](https://hashstrat.herokuapp.com/)
@@ -22,17 +37,3 @@ This frontend is deployed here: [https://hashstrat.herokuapp.com/](https://hashs
 ![Pools page (dark)](./doc/img/pools-page-dark.png?raw=true)
 ![Deposit modal (dark)](./doc/img/deposit-modal-dark.png?raw=true)
 
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.

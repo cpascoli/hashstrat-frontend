@@ -63,8 +63,7 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
     console.log("handleAllowanceUpdated")
   }
   
-
-    return (
+  return (
       <Box className={classes.container}>
           <div className={classes.balanceView}>
             <TitleValueBox title={`Available to ${formType}`} value={formattedTokenBalance} suffix={symbol} border={true} />

@@ -9,7 +9,7 @@ import weth from "../components/img/weth.png"
 import wbtc from "../components/img/wbtc.png"
 import usdc from "../components/img/usdc.png"
 import dai from "../components/img/dai.png"
-
+import poollp from "../components/img/pool_lp.png"
 
 export const PoolInfo = (chainId: number, poolId: string) => {
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
@@ -34,12 +34,17 @@ export const TokensForPool = (chainId: number, poolId: string) => {
 
 
 export const Tokens = (chainId: number, poolId: string) => {
+
+    const { depositToken } = PoolInfo(chainId, poolId)
+    const depositTokenDecimals = depositToken.toLowerCase() === 'dai' ? 18 :
+                                 depositToken.toLowerCase() === 'usdc' ? 6 : 18
+   
     return {
         "dai":  { address: DaiTokenAddress(chainId), symbol: "DAI", decimals: 18, image: dai},
         "usdc": { address: UsdcTokenAddress(chainId), symbol: "USDC", decimals: 6, image: usdc},
         "wbtc": { address: WbtcTokenAddress(chainId), symbol: "WBTC", decimals: 8, image: wbtc},
         "weth": { address: WethTokenAddress(chainId), symbol: "WETH", decimals: 18, image: weth },
-        "pool-lp": { address: PoolLPTokenAddress(chainId, poolId), symbol: "POOL-LP", decimals: 18 },
+        "pool-lp": { address: PoolLPTokenAddress(chainId, poolId), symbol: "POOL-LP", decimals: depositTokenDecimals, image: poollp },
     } as any
 }
 

@@ -1,12 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useBlockNumber, shortenAddress } from "@usedapp/core"
-import Switch from "@material-ui/core/Switch";
+import { useEffect } from 'react';
 import { useEthers } from "@usedapp/core";
-import { Button, makeStyles, Menu, MenuProps, MenuItem, Divider } from  "@material-ui/core"
-import { styled } from "@material-ui/core/styles"
-import { NetworkName } from "../utils/network"
-import { KeyboardArrowDown } from "@material-ui/icons"
-import home from "./img/home.png"
+import { Button, makeStyles } from  "@material-ui/core"
 
 
 

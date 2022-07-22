@@ -4,7 +4,7 @@
             "poolId": "pool01",
             "name": "BTC-USDC REB01",
             "description": "A rebalancing pool targeting 60% BTC and 40% USDC",
-            "depositToken": "USDC",
+            "depositToken": "DAI",
             "investToken": "WBTC",
             "strategy": "rebalance_01"
         },
@@ -12,7 +12,7 @@
             "poolId": "pool02",
             "name": "ETH-USDC REB01",
             "description": "A rebalancing pool targeting 60% ETH and 40% USDC",
-            "depositToken": "USDC",
+            "depositToken": "DAI",
             "investToken": "WETH",
             "strategy": "rebalance_01"
         },
@@ -20,7 +20,7 @@
             "poolId": "pool03",
             "name": "BTC-USDC MEANREV01",
             "description": "Pool dca-ing in and out of BTC using a 350D mean reversion strategy",
-            "depositToken": "USDC",
+            "depositToken": "DAI",
             "investToken": "WBTC",
             "strategy": "meanrev_01"
         },
@@ -28,7 +28,7 @@
             "poolId": "pool04",
             "name": "ETH-USDC MEANREV01",
             "description": "Pool dca-ing in and out of ETH using a 350D mean reversion strategy",
-            "depositToken": "USDC",
+            "depositToken": "DAI",
             "investToken": "WETH",
             "strategy": "meanrev_01"
         }

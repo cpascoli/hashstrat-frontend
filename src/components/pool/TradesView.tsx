@@ -61,6 +61,9 @@ export const TradesView = ( { chainId, poolId, depositToken, investToken } : Poo
             type: 'number',
             sortable: false,
             width: 150,
+            valueFormatter: (params) => {
+                return params.value;
+            },
         },
         {
             field: 'asset2',
@@ -69,6 +72,9 @@ export const TradesView = ( { chainId, poolId, depositToken, investToken } : Poo
             type: 'number',
             sortable: false,
             width: 150,
+            valueFormatter: (params) => {
+                return params.value;
+            },
           },
           {
             field: 'feedPrice',
@@ -93,15 +99,14 @@ export const TradesView = ( { chainId, poolId, depositToken, investToken } : Poo
         const factor = data.side === 'BUY' ? 1.0 : -1.0
         const amount1 = data.side === 'BUY' ? data.bought : data.sold
         const amount2 = data.side === 'BUY' ? data.sold : data.bought
-        const asset1 = factor * parseFloat(fromDecimals(amount1, investToken.decimals, 6))
+        const asset1 = factor * parseFloat(fromDecimals(amount1, investToken.decimals, 8))
         const asset2 = -1 * factor * parseFloat(fromDecimals(amount2, depositToken.decimals, 2))
-
         return {
             id: index,
             date: date,
             side: data.side,
             feedPrice: feedPrice,
-            asset1: asset1,
+            asset1: asset1 ,
             asset2: asset2,
         }
     })

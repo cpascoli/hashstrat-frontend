@@ -56,7 +56,7 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
             <Divider variant="middle"  style={{marginTop: 20, marginBottom: 0}}/>
             <div className={classes.container}> 
                 <Typography >
-                   Pools are crypto-funds where you deposit {depositToken.symbol} tokens and let the pool's strategy invest into a risk asset (e.g BTC or ETH).
+                   Pools are crypto-funds where you deposit {depositToken.symbol} tokens and let the pool's strategy invest into a risk asset (BTC or ETH).
                 </Typography>
 
                 { (chainId == 137) && 

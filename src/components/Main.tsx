@@ -154,7 +154,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
 
             <footer className={classes.footer}>
                 <Socials />
-                <Typography variant="body2"> Copyright © 2022 HashStrat </Typography>
+                <Typography variant="body2"> © 2022 HashStrat. All rights reserved </Typography>
             </footer>
         
         </Box>

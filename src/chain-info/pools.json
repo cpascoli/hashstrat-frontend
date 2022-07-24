@@ -2,7 +2,7 @@
     "kovan": [
         {
             "poolId": "pool01",
-            "name": "BTC-USDC REB01",
+            "name": "BTC-DAI REB01",
             "description": "A rebalancing pool targeting 60% BTC and 40% USDC",
             "depositToken": "DAI",
             "investToken": "WBTC",
@@ -10,7 +10,7 @@
         },
         {
             "poolId": "pool02",
-            "name": "ETH-USDC REB01",
+            "name": "ETH-DAI REB01",
             "description": "A rebalancing pool targeting 60% ETH and 40% USDC",
             "depositToken": "DAI",
             "investToken": "WETH",
@@ -18,7 +18,7 @@
         },
         {
             "poolId": "pool03",
-            "name": "BTC-USDC MEANREV01",
+            "name": "BTC-DAI MEANREV01",
             "description": "Pool dca-ing in and out of BTC using a 350D mean reversion strategy",
             "depositToken": "DAI",
             "investToken": "WBTC",
@@ -26,11 +26,27 @@
         },
         {
             "poolId": "pool04",
-            "name": "ETH-USDC MEANREV01",
+            "name": "ETH-DAI MEANREV01",
             "description": "Pool dca-ing in and out of ETH using a 350D mean reversion strategy",
             "depositToken": "DAI",
             "investToken": "WETH",
             "strategy": "meanrev_01"
+        },
+        {
+            "poolId": "pool05",
+            "name": "BTC-DAI TRDFLW01",
+            "description": "Pool allocating to BTC with a trend following strategy",
+            "depositToken": "DAI",
+            "investToken": "WBTC",
+            "strategy": "trendfollow_01"
+        },
+        {
+            "poolId": "pool06",
+            "name": "ETH-DAI TRDFLW01",
+            "description": "Pool allocating to ETH with a trend following strategy",
+            "depositToken": "DAI",
+            "investToken": "WETH",
+            "strategy": "trendfollow_01"
         }
     ],
     
@@ -57,7 +73,8 @@
             "description": "Pool dollar-cost averaging in/out BTC using a 350D mean reversion strategy",
             "depositToken": "USDC",
             "investToken": "WBTC",
-            "strategy": "meanrev_01"
+            "strategy": "meanrev_01",
+            "upkeep": "https://keepers.chain.link/polygon/238"
         },
         {
             "poolId": "pool04",
@@ -65,7 +82,24 @@
             "description": "Pool dollar-cost averaging in/out ETH using a 350D mean reversion strategy",
             "depositToken": "USDC",
             "investToken": "WETH",
-            "strategy": "meanrev_01"
+            "strategy": "meanrev_01",
+            "upkeep": "https://keepers.chain.link/polygon/239"
+        },
+        {
+            "poolId": "pool05",
+            "name": "BTC-USDC TRDFLW01",
+            "description": "Pool allocating to BTC with a trend following strategy",
+            "depositToken": "USDC",
+            "investToken": "WBTC",
+            "strategy": "trendfollow_01"
+        },
+        {
+            "poolId": "pool06",
+            "name": "ETH-USDC TRDFLW01",
+            "description": "Pool allocating to ETH with a trend following strategy",
+            "depositToken": "USDC",
+            "investToken": "WETH",
+            "strategy": "trendfollow_01"
         }
     ]
 }

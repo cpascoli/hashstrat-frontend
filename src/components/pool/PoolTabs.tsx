@@ -60,6 +60,7 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
 
     const isRebalanceStrategy = strategy === "rebalance_01"
     const isMeanRevStrategy = strategy === "meanrev_01"
+    const isTrendFollowStrategy = strategy === "trendfollow_01"
 
     return (
         <Box className={classes.container}>
@@ -84,6 +85,9 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
                     }
                     {
                        isMeanRevStrategy && <MeanRevStrategyInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
+                    }
+                    {
+                        isTrendFollowStrategy && <div>TODO</div>
                     }
 
                 </TabPanel>

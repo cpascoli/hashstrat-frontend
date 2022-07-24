@@ -67,8 +67,9 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
             <TabContext value={selectedTokenIndex.toString()}>
                 <TabList onChange={handleChange} className={classes.tabList}>
                     {<Tab label="My Assets" value="0" key={0} /> }
-                    <Tab label="Pool Info" value="1" key={1}  />
-                    <Tab label="Pool Trades" value="2" key={2} />
+                    <Tab label="Pool" value="1" key={1}  />
+                    <Tab label="Strategy" value="2" key={2}  />
+                    <Tab label="Trades" value="3" key={3} />
 
                 </TabList>
                 { account &&
@@ -79,7 +80,8 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
                 }
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <PoolStatsView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
-                    <Divider style={{marginTop: 20, marginBottom: 20}} />
+                </TabPanel>
+                <TabPanel className={classes.tab} value="2" key={2}>
                     {
                        isRebalanceStrategy && <RebalanceStrategyInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                     }
@@ -89,9 +91,8 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
                     {
                         isTrendFollowStrategy && <div>TODO</div>
                     }
-
                 </TabPanel>
-                <TabPanel className={classes.tab} value="2" key={2}>
+                <TabPanel className={classes.tab} value="3" key={3}>
                     <TradesView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                 </TabPanel>
             </TabContext>

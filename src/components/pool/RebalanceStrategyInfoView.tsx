@@ -7,16 +7,18 @@ import { BigNumber } from 'ethers'
 
 
 import { 
-    useStrategyName, 
-    useStrategyDescription,
-    useStrategyTargetInvestPerc, 
-    useStrategyRebalancingThreshold,
     useFeedDecimals,
     useFeedLatestPrice,
     useFeedLatestTimestamp,
     useTokenBalance,
-    
 } from "../../hooks"
+
+import { 
+    useStrategyName, 
+    useStrategyDescription,
+    useStrategyTargetInvestPerc, 
+    useStrategyRebalancingThreshold,
+} from "../../hooks/useRebalancingStrategy"
 
 
 const useStyle = makeStyles( theme => ({

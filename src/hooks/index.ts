@@ -21,14 +21,14 @@ export {
 } from "./usePool"
 
 export { 
-    useStrategyName,
-    useStrategyDescription,
-    useStrategyDepositTokenAddress,
-    useStrategyInvestTokenAddress,
-    useStrategyFeedAddress,
-    useStrategyTargetInvestPerc,
-    useStrategyRebalancingThreshold
-} from "./useStrategy"
+    useStrategyName as useRebalancingStrategyName,
+    useStrategyDescription as useRebalancingStrategyDescription,
+    useStrategyDepositTokenAddress as useRebalancingStrategyDepositTokenAddress,
+    useStrategyInvestTokenAddress as useRebalancingStrategyInvestTokenAddress,
+    useStrategyFeedAddress as useRebalancingStrategyFeedAddress,
+    useStrategyTargetInvestPerc as useRebalancingStrategyTargetInvestPerc,
+    useStrategyRebalancingThreshold as useRebalancingStrategyRebalancingThreshold
+} from "./useRebalancingStrategy"
 
 export {
     useFeedDecimals,

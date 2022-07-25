@@ -35,7 +35,6 @@ const useStyles = makeStyles( theme => ({
 export const PoolSummaryView = ({ chainId, account, poolId, depositToken } : PoolSummaryViewProps) => {
     const classes = useStyles()
 
-    console.log("PoolSummaryView - account", account)
 
     const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
     const pools : Array<PoolInfo> = poolsInfo[networkName as keyof typeof poolsInfo]

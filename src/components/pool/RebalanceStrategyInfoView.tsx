@@ -85,9 +85,9 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
             <Box className={classes.portfolioInfo} >
                 <TitleValueBox title="Name" value={name} mode="small" />
                 <TitleValueBox title="Description" value={description} mode="small" />
-                <TitleValueBox title="Target Pool Allocation" value={investPercText} mode="small"  />
+                <TitleValueBox title="Target Allocation" value={investPercText} mode="small"  />
                 <TitleValueBox title="Rebalancing Band" value={`± ${rebalancingThreshold}%`} mode="small"  />
-                <TitleValueBox title="Rebalancing Prices" value={rebalancingText} mode="small"  />
+                <TitleValueBox title="Rebalancing Targets" value={rebalancingText} mode="small"  />
                 <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small"  />
             </Box>
 

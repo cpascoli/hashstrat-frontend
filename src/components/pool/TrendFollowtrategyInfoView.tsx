@@ -20,10 +20,9 @@ import {
     useStrategyMovingAveragePeriod,
     useStrategyTargetPricePercUp,
     useStrategyTargetPricePercDown,
-    useStrategyTokensToSwapPerc,
-    useStrategyMinAllocationPerc
+    useStrategyTokensToSwapPerc
 
-} from "../../hooks/useMeanRevStrategy"
+} from "../../hooks/useTrendFollowStrategy"
 
 
 const useStyle = makeStyles( theme => ({
@@ -44,7 +43,7 @@ interface StrategyInfoViewProps {
 
 
 
-export const MeanRevStrategyInfoView = ( { chainId, poolId, depositToken, investToken } : StrategyInfoViewProps ) => {
+export const TrendFollowtrategyInfoView = ( { chainId, poolId, depositToken, investToken } : StrategyInfoViewProps ) => {
 
     const poolAddress = PoolAddress(chainId, poolId)
 
@@ -71,12 +70,12 @@ export const MeanRevStrategyInfoView = ( { chainId, poolId, depositToken, invest
     const deltaPricePerc = round((latestFeedPrice - movingAverage) / movingAverage, 4)
     const targetPricePercUp = useStrategyTargetPricePercUp(chainId, poolId)
     const targetPricePercDown = useStrategyTargetPricePercDown(chainId, poolId)
-    const minAllocationPerc = useStrategyMinAllocationPerc(chainId, poolId)
-
+  
     const targetPriceUp = round( parseInt(formattedMovingAverage) *  (1 +  parseInt(targetPricePercUp) / 100) )
     const targetPriceDown = round( parseInt(formattedMovingAverage) *  (1 - parseInt(targetPricePercDown) / 100) )
-    const buyTargetText = (targetPriceDown) ? `Buy when ${investToken.symbol} ≤ ${targetPriceDown}` : ''
-    const sellTargetText = (targetPriceUp) ? `Sell when ${investToken.symbol} ≥ ${targetPriceUp} ` : ''
+    
+    const buyTargetText = (targetPriceDown) ? `Buy when ${investToken.symbol} ≥  ${targetPriceUp}` : ''
+    const sellTargetText = (targetPriceUp) ? `Sell when ${investToken.symbol} < ${targetPriceDown} ` : ''
 
     const classes = useStyle()
 
@@ -87,14 +86,9 @@ export const MeanRevStrategyInfoView = ( { chainId, poolId, depositToken, invest
             <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small"  />
             <TitleValueBox title={`Trend (${movingAveragePeriod}D MA)`} value={movingAverageText} mode="small"  />
             <TitleValueBox title="Deviation From Trend" value={`${round(deltaPricePerc * 100)}`} mode="small"  suffix="%" />
-            <TitleValueBox title="Upper Target Price %" value={`${targetPricePercUp}`} mode="small"  suffix="%" />
-            <TitleValueBox title="Lower Target Price %" value={`- ${targetPricePercDown}`} mode="small"  suffix="%" />
-            <TitleValueBox title="Trade Size" value={`${tokensToSwapPerc}`} mode="small"  suffix="%" />
-            <TitleValueBox title="Min allocation" value={`${minAllocationPerc}`} mode="small"  suffix="%" />
-            
             <TitleValueBox title="Go Long Target" value={`${buyTargetText}`} mode="small"  />
-            <TitleValueBox title="De-risk Target" value={`${sellTargetText}`} mode="small"  />
-
+            <TitleValueBox title="De-risk Target" value={`${sellTargetText}`} mode="small" />
+            <TitleValueBox title="Trade Size" value={`${tokensToSwapPerc}`} mode="small"  suffix="%" />
         </Box>
     )
 }

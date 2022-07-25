@@ -33,7 +33,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
         
         <DAppProvider config={{
             networks: [Kovan, Polygon],
-            // readOnlyChainId: Kovan.chainId,
+            readOnlyChainId: Polygon.chainId,
             readOnlyUrls: {
               [Kovan.chainId]: getDefaultProvider('kovan'),
               [Polygon.chainId]: getDefaultProvider('matic'),

@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Box, Tab, makeStyles, Divider } from "@material-ui/core"
+import { Box, Tab, makeStyles, Divider, Typography } from "@material-ui/core"
 import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 
 import { Token } from "../../types/Token"
@@ -9,6 +9,7 @@ import { TradesView } from "./TradesView"
 import { WalletTabs } from "../wallet/WalletTabs"
 import { RebalanceStrategyInfoView } from "./RebalanceStrategyInfoView"
 import { MeanRevStrategyInfoView } from "./MeanRevStrategyInfoView"
+import { TrendFollowtrategyInfoView } from "./TrendFollowtrategyInfoView"
 import { PoolInfo } from "../../utils/pools"
 
 
@@ -72,12 +73,19 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
                     <Tab label="Trades" value="3" key={3} />
 
                 </TabList>
-                { account &&
-                    <TabPanel className={classes.tab} value="0" key={0}>
-                        <MyStatsView chainId={chainId} poolId={poolId} account={account} depositToken={depositToken} />
-                        <WalletTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens!} />
-                    </TabPanel>
-                }
+                <TabPanel className={classes.tab} value="0" key={0}>
+                    { account &&
+                        <>
+                            <MyStatsView chainId={chainId} poolId={poolId} account={account} depositToken={depositToken} />
+                            <WalletTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens!} />
+                        </>
+                    || 
+                        <Box py={8}>
+                            <Typography align="center"> Connect an acount to view your assets</Typography>
+                        </Box>
+                    }
+
+                </TabPanel>
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <PoolStatsView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                 </TabPanel>
@@ -89,7 +97,7 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
                        isMeanRevStrategy && <MeanRevStrategyInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                     }
                     {
-                        isTrendFollowStrategy && <div>TODO</div>
+                        isTrendFollowStrategy && <TrendFollowtrategyInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                     }
                 </TabPanel>
                 <TabPanel className={classes.tab} value="3" key={3}>

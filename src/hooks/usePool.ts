@@ -80,7 +80,6 @@ export const useTotalPortfolioValue = (chainId: number, poolId: string) => {
             method: 'totalPortfolioValue',
             args: [],
     }) ?? {}
-
     useDebugValue(value?.[0].toString())
     return value?.[0].toString()
 }

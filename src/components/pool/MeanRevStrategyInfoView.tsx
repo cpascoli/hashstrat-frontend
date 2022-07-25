@@ -27,10 +27,6 @@ import {
 
 
 const useStyle = makeStyles( theme => ({
-    container: {
-        margin: 0,
-        padding: 0,
-    },
     portfolioInfo: {
         maxWidth: 640,
         margin: "auto",
@@ -81,8 +77,8 @@ export const MeanRevStrategyInfoView = ( { chainId, poolId, depositToken, invest
     const depositTokenBalance = useTokenBalance(chainId, poolId, depositToken.symbol, poolAddress)
     const investTokenBalance = useTokenBalance(chainId, poolId, investToken.symbol, poolAddress)
 
-    const targetPriceUp =  parseInt(formattedMovingAverage) *  (1 +  parseInt(targetPricePercUp) / 100)
-    const targetPriceDown =  parseInt(formattedMovingAverage) *  (1 - parseInt(targetPricePercDown) / 100)
+    const targetPriceUp = round( parseInt(formattedMovingAverage) *  (1 +  parseInt(targetPricePercUp) / 100) )
+    const targetPriceDown = round( parseInt(formattedMovingAverage) *  (1 - parseInt(targetPricePercDown) / 100) )
     
     const depositTokens = depositTokenBalance ? parseFloat(fromDecimals( BigNumber.from(depositTokenBalance), depositToken.decimals, 2)) : undefined
     const investTokens = investTokenBalance ? parseFloat(fromDecimals( BigNumber.from(investTokenBalance), investToken.decimals, 6)) : undefined
@@ -94,26 +90,19 @@ export const MeanRevStrategyInfoView = ( { chainId, poolId, depositToken, invest
     const classes = useStyle()
 
     return (
-        <Box className={classes.container}>
-            <Typography align="center" style={{textTransform: "uppercase"}} >
-                Strategy Info
-            </Typography>
-
-            <Box className={classes.portfolioInfo} >
-                <TitleValueBox title="Name" value={name} mode="small" />
-                <TitleValueBox title="Description" value={description} mode="small" />
-                <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small"  />
-                <TitleValueBox title={`Trend (${movingAveragePeriod}D MA)`} value={movingAverageText} mode="small"  />
-                <TitleValueBox title="Deviation From Trend" value={`${round(deltaPricePerc * 100)}`} mode="small"  suffix="%" />
-                <TitleValueBox title="Upper Target Price %" value={`${targetPricePercUp}`} mode="small"  suffix="%" />
-                <TitleValueBox title="Lower Target Price %" value={`- ${targetPricePercDown}`} mode="small"  suffix="%" />
-                <TitleValueBox title="Trade Size" value={`${tokensToSwapPerc}`} mode="small"  suffix="%" />
-                <TitleValueBox title="Min allocation" value={`${minAllocationPerc}`} mode="small"  suffix="%" />
-                
-                <TitleValueBox title="De-risking Target" value={`${upTradeTargetText}`} mode="small"  />
-                <TitleValueBox title="Accumulation Target" value={`${downTradeTargetText}`} mode="small"  />
-            </Box>
-
+        <Box className={classes.portfolioInfo} >
+            <TitleValueBox title="Name" value={name} mode="small" />
+            <TitleValueBox title="Description" value={description} mode="small" />
+            <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small"  />
+            <TitleValueBox title={`Trend (${movingAveragePeriod}D MA)`} value={movingAverageText} mode="small"  />
+            <TitleValueBox title="Deviation From Trend" value={`${round(deltaPricePerc * 100)}`} mode="small"  suffix="%" />
+            <TitleValueBox title="Upper Target Price %" value={`${targetPricePercUp}`} mode="small"  suffix="%" />
+            <TitleValueBox title="Lower Target Price %" value={`- ${targetPricePercDown}`} mode="small"  suffix="%" />
+            <TitleValueBox title="Trade Size" value={`${tokensToSwapPerc}`} mode="small"  suffix="%" />
+            <TitleValueBox title="Min allocation" value={`${minAllocationPerc}`} mode="small"  suffix="%" />
+            
+            <TitleValueBox title="De-risking Target" value={`${upTradeTargetText}`} mode="small"  />
+            <TitleValueBox title="Accumulation Target" value={`${downTradeTargetText}`} mode="small"  />
         </Box>
     )
 }

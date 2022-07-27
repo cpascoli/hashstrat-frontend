@@ -95,40 +95,22 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                 </Alert>
             }
 
-
-            <Box>
-                <BrowserRouter>
+            <BrowserRouter>
+                <Header toggleDark={toggleDark} setToggleDark={setToggleDark} />
+                <main>
                     <Routes>
                         <Route path="/"  element={
-                            <Box>
-                                <Header toggleDark={toggleDark} setToggleDark={setToggleDark} />
-                                <Home chainId={demoChainId}/> 
-                            </Box>
+                            <Home chainId={demoChainId}/> 
                         } />
                         <Route path="/pools" element={
-                                <Box>  
-                                    <Header toggleDark={toggleDark} setToggleDark={setToggleDark} />
-                                    <PoolsContainer chainId={demoChainId} account={account} depositToken={depositToken!} />
-                                </Box>
-                           }
-                         />
-
+                            <PoolsContainer chainId={demoChainId} account={account} depositToken={depositToken!} />
+                        } />
                         <Route path="/strategies" element={
-                                <Box>  
-                                    <Header toggleDark={toggleDark} setToggleDark={setToggleDark} />
-                                    <StrategiesHome />
-                                </Box>
-                           }
-                         />
-
-
+                            <StrategiesHome />
+                        } />
                         <Route path="/faq" element={
-                                <Box>  
-                                    <Header toggleDark={toggleDark} setToggleDark={setToggleDark} />
-                                    <FaqHome  />
-                                </Box>
-                           }
-                         />
+                             <FaqHome  />
+                        } />
 
                          {
                             poolIds && poolIds.map( (poolId: string) => {
@@ -136,21 +118,15 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                                 const supportedTokens = [tokens.depositToken, tokens.lpToken]
                                 const investToken = tokens.investToken
                                 return (
-                                    <Route key={`${poolId}`} path={`/pools/${poolId}`} 
-                                            element={
-                                            <Box>
-                                                <Header toggleDark={toggleDark} setToggleDark={setToggleDark} />
-                                                <PoolContainer chainId={demoChainId} poolId={`${poolId}`} account={account} tokens={supportedTokens} investToken={investToken} />
-                                            </Box>
-                                        }
-                                    />
+                                    <Route key={`${poolId}`} path={`/pools/${poolId}`} element={
+                                        <PoolContainer chainId={demoChainId} poolId={`${poolId}`} account={account} tokens={supportedTokens} investToken={investToken} />
+                                    } />
                                 )
                              })
                          }
-
                     </Routes>
-                </BrowserRouter>
-            </Box>
+            </main>
+            </BrowserRouter>
 
             <footer className={classes.footer}>
                 <Socials />

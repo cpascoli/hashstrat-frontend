@@ -74,7 +74,7 @@
             "depositToken": "USDC",
             "investToken": "WBTC",
             "strategy": "meanrev_01",
-            "upkeep": "https://keepers.chain.link/polygon/238"
+            "upkeep": "https://keepers.chain.link/polygon/241"
         },
         {
             "poolId": "pool04",
@@ -83,7 +83,7 @@
             "depositToken": "USDC",
             "investToken": "WETH",
             "strategy": "meanrev_01",
-            "upkeep": "https://keepers.chain.link/polygon/239"
+            "upkeep": "https://keepers.chain.link/polygon/242"
         },
         {
             "poolId": "pool05",

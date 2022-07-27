@@ -129,17 +129,17 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
     const shortAccount = account ? shortenAddress(account) : ''
     
     return (
-        <div className={classes.container}>
+        <header className={classes.container}>
 
           <a href="/" style={{ textDecoration: 'none'}} > 
             <Button> <img src={home} style={{width: 55, height: 55}} /> </Button>
           </a>
 
-          <div className={classes.menuItems}>      
+          <nav className={classes.menuItems}>      
               <Link component={RouterLink} to="/pools">Pools</Link>
               <Link component={RouterLink} to="/strategies">Strategies</Link>
               <Link component={RouterLink} to="/faq">FAQ</Link>
-          </div>
+          </nav>
         
           <div className={classes.rightItmesContainer}>
                   <div>
@@ -164,7 +164,7 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
                         onClose={handleClose}
                       >
 
-                        <div  className={classes.menuItemsSmall} > 
+                        <nav  className={classes.menuItemsSmall} > 
                             <MenuItem onClick={handleClose}>
                                 <Link component={RouterLink} to="/pools">Pools</Link>
                             </MenuItem>
@@ -176,7 +176,7 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
                             </MenuItem>
 
                             <Divider />
-                        </div>
+                        </nav>
 
                         <MenuItem onClick={handleClose}>
                            <Horizontal valign='center'>
@@ -209,6 +209,6 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
 
           </div>
 
-      </div>
+      </header>
     )
 }

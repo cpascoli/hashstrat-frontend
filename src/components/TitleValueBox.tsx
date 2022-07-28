@@ -1,5 +1,5 @@
 
-import { Box, Divider, makeStyles } from "@material-ui/core"
+import { Box, Divider, Link, makeStyles } from "@material-ui/core"
 
 
 const useStyles0 = makeStyles( theme => ({
@@ -106,7 +106,12 @@ export const TitleValueBox = ({ title, value, suffix="", border=false, mode="reg
         <>
             <Box className={border? classes.container : classes.containerNoBorder}>
                 <div  className={classes.label}> {title} </div>
-                <div  className={classes.value}> {value} {suffix} </div>
+                {
+                    value.startsWith("https://") ? <Link href={value}> {value} </Link>
+                        :
+                        <div  className={classes.value}> {value} {suffix} </div>
+                }
+               
             </Box>
             {(!border) && <Divider variant="fullWidth"  /> }
         </>

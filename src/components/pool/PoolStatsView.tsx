@@ -42,7 +42,7 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
     const pools = poolsInfo[networkName as keyof typeof poolsInfo]
 
     const infos = pools.filter( pool =>  { return (pool.poolId === poolId) })
-    const { name, description } = infos[0]
+    const { name, description, upkeep } = infos[0]
 
     const poolAddress = PoolAddress(chainId, poolId)
     const totalPortfolioValue = useTotalPortfolioValue(chainId, poolId)
@@ -98,6 +98,8 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
 
                 <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
                 <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>
+                <TitleValueBox title="Chainlink Keeper" value={upkeep} />
+
             </Box>
 
             <Typography align="center" style={{textTransform: "uppercase", marginTop: 20}}>

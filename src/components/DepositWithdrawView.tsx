@@ -50,7 +50,6 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
 
   const showModalPressed = (buttonType: string) => {
     setShowUpdateStakeModal(true)
-    console.log("handleAllowanceUpdated - buttonType: ", buttonType)
     setFormTypeValue(buttonType)
   }
 

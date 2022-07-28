@@ -105,11 +105,11 @@ export const TitleValueBox = ({ title, value, suffix="", border=false, mode="reg
     return (
         <>
             <Box className={border? classes.container : classes.containerNoBorder}>
-                <div  className={classes.label}> {title} </div>
+                <div className={classes.label}> {title} </div>
                 {
-                    value.startsWith("https://") ? <Link href={value}> {value} </Link>
+                    value && value.startsWith("https://") ? <Link href={value}> {value} </Link>
                         :
-                        <div  className={classes.value}> {value} {suffix} </div>
+                    <div  className={classes.value}> {value} {suffix} </div>
                 }
                
             </Box>

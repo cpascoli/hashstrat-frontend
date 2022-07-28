@@ -58,7 +58,7 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
     const depositTokenBalance = useTokenBalance(chainId, poolId, depositToken.symbol, poolAddress)
     const investTokenBalance = useTokenBalance(chainId, poolId, investToken.symbol, poolAddress)
 
-    const investPercText =  targetInvestPerc && <span> {targetInvestPerc} %  / {(100 - targetInvestPerc )}%  </span>
+    const investPercText =  targetInvestPerc && `${targetInvestPerc} %  / ${(100 - targetInvestPerc )}%`
     const targetPercUp =  (parseInt(targetInvestPerc) + parseInt(rebalancingThreshold) ) / 100
     const targetPercDown =  (parseInt(targetInvestPerc) - parseInt(rebalancingThreshold) ) / 100
 

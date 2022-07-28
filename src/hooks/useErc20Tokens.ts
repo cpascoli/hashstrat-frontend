@@ -21,8 +21,6 @@ export const useTokenApprove = (chainId: number, poolId: string, symbol: string)
 
 
 export const useTokenAllowance =  (chainId: number, poolId: string, symbol: string) => {
-    console.log("useTokenAllowance symbol: ", symbol, chainId, poolId)
-
     const tokenContract = ERC20Contract(chainId, poolId, symbol)
     const spenderAddress = PoolAddress(chainId, poolId)
     const { account : ownerAddress } = useEthers()

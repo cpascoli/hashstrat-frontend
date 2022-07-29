@@ -58,13 +58,6 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
                 <Typography >
                    Pools are crypto-funds where you deposit {depositToken.symbol} tokens and let the pool's strategy invest into a risk asset (BTC or ETH).
                 </Typography>
-
-                { (chainId == 137) && 
-                    <Typography variant="body1" style={{marginTop:10}}>
-                        You can get {depositToken.symbol} tokens directly on Polygon using <Link href="https://quickswap.exchange/#/swap" target="_blank"> QuickSwap &gt; Buy </Link>,
-                        or transfer {depositToken.symbol} from Ethereum to Polygon via the <Link href="https://wallet.polygon.technology/bridge" target="_blank">Polygon Bridge</Link>
-                    </Typography> 
-                }
             </div>
 
             <Horizontal align="center"> 

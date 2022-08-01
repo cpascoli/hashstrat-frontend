@@ -40,12 +40,15 @@ export const StrategiesHome = () => {
         <Box className={classes.strategies}>
             <Box my={3} >
                 <Typography>Strategies are set of rules, coded into smart contracts, to manage the assets held into the HashStrat Pools.</Typography>
-                <br />
-                <Typography>These are the Strategies currently available:</Typography>
+                <Typography>All strategies aim to grow the Pools' capital over the long term. </Typography>
+                <br/>
+                <Typography>As new strategies are developed they'll be added to this list:</Typography>
             </Box>
 
             <Box>
 
+<ul style={{listStyleType: "none", listStyle: "none", paddingLeft: 0}}>
+    <li>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
                     <div>
@@ -60,7 +63,7 @@ export const StrategiesHome = () => {
                         <div>
                             <strong>Goal</strong> <br/>
                             Capture volatility in the risk asset by rebalancing the Pool whenever the value of either assets
-                            deviates from the Pool target allocation by a given percentage.
+                            deviates significantly from the Pool's target allocation.
                         </div>
                         <br />
                         <div>     
@@ -89,7 +92,8 @@ export const StrategiesHome = () => {
                     </div>
                 </AccordionDetails>
             </Accordion>
-
+    </li>
+    <li>
 
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
@@ -135,8 +139,8 @@ export const StrategiesHome = () => {
                     </div>
                 </AccordionDetails>
             </Accordion>
-
-
+    </li>
+    <li>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
 
@@ -181,7 +185,8 @@ export const StrategiesHome = () => {
                     </div>
                 </AccordionDetails>
             </Accordion>
-
+        </li>
+    </ul>
      
             </Box>
         </Box>

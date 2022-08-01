@@ -7,7 +7,7 @@
             "depositToken": "DAI",
             "investToken": "WBTC",
             "strategy": "rebalance_01",
-            "upkeep": "https://keepers.chain.link/kovan/"
+            "upkeep": "https://keepers.chain.link/kovan/3737"
         },
         {
             "poolId": "pool02",
@@ -16,7 +16,7 @@
             "depositToken": "DAI",
             "investToken": "WETH",
             "strategy": "rebalance_01",
-            "upkeep": "https://keepers.chain.link/kovan/"
+            "upkeep": "https://keepers.chain.link/kovan/3738"
         },
         {
             "poolId": "pool03",
@@ -25,7 +25,7 @@
             "depositToken": "DAI",
             "investToken": "WBTC",
             "strategy": "meanrev_01",
-            "upkeep": "https://keepers.chain.link/kovan/"
+            "upkeep": "https://keepers.chain.link/kovan/3739"
         },
         {
             "poolId": "pool04",
@@ -34,7 +34,7 @@
             "depositToken": "DAI",
             "investToken": "WETH",
             "strategy": "meanrev_01",
-            "upkeep": "https://keepers.chain.link/kovan/"
+            "upkeep": "https://keepers.chain.link/kovan/3740"
         },
         {
             "poolId": "pool05",
@@ -43,7 +43,7 @@
             "depositToken": "DAI",
             "investToken": "WBTC",
             "strategy": "trendfollow_01",
-            "upkeep": "https://keepers.chain.link/kovan/"
+            "upkeep": "https://keepers.chain.link/kovan/3741"
         },
         {
             "poolId": "pool06",
@@ -52,7 +52,7 @@
             "depositToken": "DAI",
             "investToken": "WETH",
             "strategy": "trendfollow_01",
-            "upkeep": "https://keepers.chain.link/kovan/"
+            "upkeep": "https://keepers.chain.link/kovan/3742"
         }
     ],
     

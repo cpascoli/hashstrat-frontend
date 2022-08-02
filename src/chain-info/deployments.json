@@ -1,16 +1,16 @@
 {
     "kovan": {
         "pool01": {
-            "pool": "0xd03571f6570d986e6c9209b8d4c97d74C49d6040",
-            "pool_lp": "0x1Aa727Bd0966093801287d4E0993F583E099b91c",
-            "strategy": "0xd5de44DBA40dd79BCf99871F08f06618cDE23e06",
-            "price_feed": "0x81d2B3e7611eb794e2218dBd85c7737306c6CCF6"
+            "pool": "0xe7a77915e7f779a5B39C90CfA86007AB17d3a28e",
+            "pool_lp": "0xF7234f7875F04520d14114B516FB4042e171B504",
+            "strategy": "0x2eA91b98EC963D58ea29416381ED9E1b2422378a",
+            "price_feed": "0x6135b13325bfC4B00278B4abC5e20bbce2D6580e"
         },
         "pool02": {
-            "pool": "0x506EF94d660d86B23e7f33378c445B970AdD1055",
-            "pool_lp": "0xe5d3e40C4151F78FBa77934A6dba1e472ACcDd56",
-            "strategy": "0x192D5c006A7c5f6e8e522800c7f5458f97f3C445",
-            "price_feed": "0x63Ca9C2f29620589AA7c0fCcB2D817B694480301"
+            "pool": "0x22ee99178f6a619c492e1d3c0b3E2A83bbda4849",
+            "pool_lp": "0x626110C8351A3285047730A3C4c36f9a5FC6c022",
+            "strategy": "0xc60d1925fD3019C2a174Cc8C8d7bCe507c22a4e8",
+            "price_feed": "0x9326BFA02ADD2366b30bacB125260Af641031331"
         },
         "pool03": {
             "pool": "0x3303BFD7d919ef7b04ec80728153268CECf962e5",
@@ -44,16 +44,16 @@
     
     "polygon": {
         "pool01": {
-            "pool": "0x5F7621d43fa646C3e7838266DD12ccCb390Dc933",
-            "pool_lp": "0xAE013eD73fc72f4361aECed322612A973fd36085",
-            "strategy": "0xCa548B32c9DA8F88fE02b5860baFB66DD0BB0f1b",
-            "price_feed": "0x5aEF11156E01f186aB6F2e370b7FeBA1314ffcbD"
+            "pool": "0x7b8b3fc7563689546217cFa1cfCEC2541077170f",
+            "pool_lp": "0x2EbF538B3E0F556621cc33AB5799b8eF089b2D8C",
+            "strategy": "0x6aa3D1CB02a20cff58B402852FD5e8666f9AD4bd",
+            "price_feed": "0xc907E116054Ad103354f2D350FD2514433D57F6f"
         },
         "pool02": {
-            "pool": "0xeA2addD56cef3757ed9e473e5Bb39E5aF00531F0",
-            "pool_lp": "0x23De455b52537c442c00F8eC5c11fC64d4e9811E",
-            "strategy": "0xf1D820d6cd6420ED9332E5ec616022F8136722d4",
-            "price_feed": "0x814C6312792f95593D133E7b60b4dDAc0F474ba0"
+            "pool": "0x62464FfFAe0120E662169922730d4e96b7A59700",
+            "pool_lp": "0x26b80F5970bC835751e2Aabf4e9Bc5B873713f17",
+            "strategy": "0xca5B24b63D929Ddd5856866BdCec17cf13bDB359",
+            "price_feed": "0xF9680D99D6C9589e2a93a78A04A279e509205945"
         },
         "pool03": {
             "pool": "0xc60CE76892138d9E0cE722eB552C5d8DE70375a5",

@@ -40,9 +40,8 @@ export const IndexesView = ({ chainId, account, depositToken } : IndexesViewProp
             <Divider variant="middle"  style={{marginTop: 20, marginBottom: 0}}/>
             <div className={classes.container}> 
                 <Typography >
-                    HashStrat Indexes allow to invest on a basket of HashSttap Pools and their assocaited strategies. <br/>
-                    When users deposit funds into an Index, these funds get allocated to the corresponding pools proportionally to the pools' weights within the Index. <br/>
-                    Indexes allow to easily invest into a combination of strategies and assets held withing multiple pools for smoother risk/return profiles.
+                    HashStrat Indexes allow to invest on a weighted basket of <Link href={`/pools`} style={{ textDecoration: 'none' }} >HashSttap Pools </Link> and their assocaited strategies. <br/>
+                    Indexes allow to easily invest into a combination of strategies and assets for improved risk/return profiles.
                 </Typography>
             </div>
 

@@ -1,7 +1,7 @@
 
 
-import poolsInfo from "../chain-info/pools.json"
-import helperConfig from "../helper-config.json"
+import poolsInfo from "../config/pools.json"
+import helperConfig from "../config/networks.json"
 
 import { UsdcTokenAddress, DaiTokenAddress, WethTokenAddress, WbtcTokenAddress, PoolLPTokenAddress } from "./network"
 

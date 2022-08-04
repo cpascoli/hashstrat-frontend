@@ -5,9 +5,9 @@ import { PoolSummaryView } from "./PoolSummaryView"
 
 import { Horizontal } from "../Layout"
 
-import helperConfig from "../../helper-config.json"
+import networksConfig from "../../config/networks.json"
 import { PoolInfo } from "../../types/PoolInfo"
-import poolsInfo from "../../chain-info/pools.json"
+import poolsInfo from "../../config/pools.json"
 import { Token } from "../../types/Token"
 
 import { ExpandMore } from "@material-ui/icons"
@@ -37,7 +37,7 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
 
 
     const classes = useStyles()
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
     const pools : Array<PoolInfo> = poolsInfo[networkName as keyof typeof poolsInfo]
 
     const poolsView = pools.map( pool => {

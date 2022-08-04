@@ -2,9 +2,9 @@ import { makeStyles, Box, Divider, Typography, Button, Link } from "@material-ui
 import { TitleValueBox } from "../TitleValueBox"
 import { fromDecimals, round } from "../../utils/formatter"
 
-import helperConfig from "../../helper-config.json"
+import networksConfig from "../../config/networks.json"
 import { PoolInfo } from "../../types/PoolInfo"
-import poolsInfo from "../../chain-info/pools.json"
+import poolsInfo from "../../config/pools.json"
 import { useTotalPortfolioValue, useTokenBalance, useTokenTotalSupply } from "../../hooks"
 import { Token } from "../../types/Token"
 
@@ -36,7 +36,7 @@ export const PoolSummaryView = ({ chainId, account, poolId, depositToken } : Poo
     const classes = useStyles()
 
 
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
     const pools : Array<PoolInfo> = poolsInfo[networkName as keyof typeof poolsInfo]
     const infos = pools.filter( pool =>  { return (pool.poolId === poolId) })
     const { name, description } = infos[0]

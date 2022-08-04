@@ -1,14 +1,14 @@
 import { constants, utils, Contract  } from "ethers"
 
-import networkMappings from "../chain-info/deployments.json"
-import helperConfig from "../helper-config.json"
-import abis from "../chain-info/abis.json"
-import explorerMappings from "../chain-info/explorers.json"
+import networkMappings from "../config/deployments.json"
+import networksConfig from "../config/networks.json"
+import abis from "../config/abis.json"
+import explorerMappings from "../config/explorers.json"
 import { PoolInfo } from "./pools"
 
 export const PoolAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
 
     const deployments = networkMappings as any
     return deployments[networkName][poolId]["pool"]
@@ -16,7 +16,7 @@ export const PoolAddress = (chainId: number, poolId: string) => {
 
 export const PoolLPTokenAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
 
     const deployments = networkMappings as any
     return deployments[networkName][poolId]["pool_lp"]
@@ -24,7 +24,7 @@ export const PoolLPTokenAddress = (chainId: number, poolId: string) => {
 
 export const StrategyAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
 
     const deployments = networkMappings as any
     return deployments[networkName][poolId]["strategy"]
@@ -32,7 +32,7 @@ export const StrategyAddress = (chainId: number, poolId: string) => {
 
 export const FeedAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
 
     const deployments = networkMappings as any
     return deployments[networkName][poolId]["price_feed"]
@@ -41,7 +41,7 @@ export const FeedAddress = (chainId: number, poolId: string) => {
 
 export const UsdcTokenAddress = (chainId: number) => {
     if (!chainId) return constants.AddressZero
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
 
     return networkMappings[networkName as keyof typeof networkMappings]["usdc"]
 
@@ -49,21 +49,21 @@ export const UsdcTokenAddress = (chainId: number) => {
 
 export const DaiTokenAddress = (chainId: number) => {
      if (!chainId) return constants.AddressZero
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
 
     return networkMappings[networkName as keyof typeof networkMappings]["dai"]
 }
 
 export const WbtcTokenAddress = (chainId: number) => {
     if (!chainId) return constants.AddressZero
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
 
     return networkMappings[networkName as keyof typeof networkMappings]["wbtc"]
 }
 
 export const WethTokenAddress = (chainId: number) => {
     if (!chainId) return constants.AddressZero
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
 
     return networkMappings[networkName as keyof typeof networkMappings]["weth"]
 }
@@ -86,7 +86,7 @@ export const NetworkExplorerName = (chainId: number) => {
 
 export const NetworkName = (chainId: number) => {
     if (!chainId) return ""
-    return helperConfig[chainId.toString() as keyof typeof helperConfig]
+    return networksConfig[chainId.toString() as keyof typeof networksConfig]
 }
 
 

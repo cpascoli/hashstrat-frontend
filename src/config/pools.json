@@ -64,7 +64,7 @@
             "depositToken": "USDC",
             "investToken": "WBTC",
             "strategy": "rebalance_01",
-            "upkeep": "hhttps://keepers.chain.link/polygon/257"
+            "upkeep": "https://keepers.chain.link/polygon/257"
         },
         {
             "poolId": "pool02",

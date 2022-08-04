@@ -6,9 +6,8 @@ import { PoolAddress } from "../../utils/network"
 import { useSwapInfoArray } from "../../hooks"
 import { TimeSeriesAreaChart } from "./TimeSeriesAreaChart"
 
-import helperConfig from "../../helper-config.json"
-import poolsInfo from "../../chain-info/pools.json"
-import { PoolInfo } from "../../types/PoolInfo"
+import networksConfig from "../../config/networks.json"
+import poolsInfo from "../../config/pools.json"
 
 import { useTotalPortfolioValue, useTotalDeposited, useTotalWithdrawn, 
          useTokenBalance, useInvestedTokenValue } from "../../hooks"
@@ -38,7 +37,7 @@ interface PoolStatsViewProps {
 
 export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : PoolStatsViewProps ) => {
 
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
     const pools = poolsInfo[networkName as keyof typeof poolsInfo]
 
     const infos = pools.filter( pool =>  { return (pool.poolId === poolId) })

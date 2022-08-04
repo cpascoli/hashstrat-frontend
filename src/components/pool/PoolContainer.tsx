@@ -5,8 +5,8 @@ import { useLocation } from "react-router-dom"
 import { PoolTabs } from "./PoolTabs"
 import { Token } from "../../types/Token"
 
-import helperConfig from "../../helper-config.json"
-import poolsInfo from "../../chain-info/pools.json"
+import networksConfig from "../../config/networks.json"
+import poolsInfo from "../../config/pools.json"
 import { Contracts } from "./Contracts"
 
 import { Link as RouterLink } from "react-router-dom"
@@ -36,7 +36,7 @@ export const PoolContainer = ({ chainId, poolId, account, tokens, investToken } 
     const classes = useStyles()
 
 
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
     const pools = poolsInfo[networkName as keyof typeof poolsInfo]
 
     const infos = pools.filter( pool =>  { return (pool.poolId === poolId) })

@@ -1,9 +1,9 @@
 import React, { useState } from "react"
-import { Box, Tab, makeStyles, Divider, Typography } from "@material-ui/core"
+import { Box, Tab, makeStyles, Typography } from "@material-ui/core"
 import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 
 import { Token } from "../../types/Token"
-import { MyStatsView } from "../wallet/MyStatsView"
+import { MyStatsView } from "./MyStatsView"
 import { PoolStatsView } from "./PoolStatsView"
 import { TradesView } from "./TradesView"
 import { WalletTabs } from "../wallet/WalletTabs"
@@ -44,9 +44,6 @@ const useStyle = makeStyles( theme => ({
 
 
 export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : PoolTabsProps ) => {
-
-    console.log("PoolTabs >>> tokens", chainId, poolId, account, tokens)
-
 
     const depositToken = tokens[0]
 

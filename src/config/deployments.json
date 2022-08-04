@@ -40,10 +40,18 @@
         "dai": "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa",
         "weth": "0xd0A1E359811322d97991E03f863a0C30C2cF029C",
         "wbtc": "0xe0C9275E44Ea80eF17579d33c55136b7DA269aEb",
-        "multiPools": {
-            "multiPool01": {
-                "pool": "0xCa548B32c9DA8F88fE02b5860baFB66DD0BB0f1b",
-                "pool_lp": "0x5aEF11156E01f186aB6F2e370b7FeBA1314ffcbD"
+        "indexes": {
+            "index01": {
+                "pool": "0xc7Ac011529AFCe67AEBD7941523A773F341Eab1b",
+                "pool_lp": "0x0c7e579a8a2Af3204AE15Ad6389CCaB0B638a3Ad"
+            },
+            "index02": {
+                "pool": "0xe948064F4e5d27b982c225178d36C4976669D8ec",
+                "pool_lp": "0x101337286dEDdFbb7bf87c3C9eAF23f70d211466"
+            },
+            "index03": {
+                "pool": "0xe62A17b61e4E309c491F1BD26bA7BfE9e463610e",
+                "pool_lp": "0x46cfDDc7ab8348b44b4a0447F0e5077188c4ff14"
             }
         }
     },
@@ -89,18 +97,18 @@
         "dai": "",
         "weth": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
         "wbtc": "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
-        "multiPools": {
-            "multiPool01": {
-                "pool": "0x9Abb51AC3A84787A2Fe2a829B890cb00ea8bCdfb",
-                "pool_lp": "0x99644c65345AB9C8CA198593F27BB83053774D1e"
+        "indexes": {
+            "index01": {
+                "pool": "0x371B94a526A0aA76A2fa30b6Dcaf871c4449edCA",
+                "pool_lp": "0x6dB28fA2325E9Fa4A2Ed24120FC89D8849Ec6596"
             },
-            "multiPool02": {
-                "pool": "0x36de93a7d635F957A5E8533058786e3c96B3C9e1",
-                "pool_lp": "0x46c1DaE18e8DF4758eB535a8Be97Ca7a94563D39"
+            "index02": {
+                "pool": "0x4244fA37A32231Bd6d35A9f81e43fB0a8b25AA55",
+                "pool_lp": "0x7851086E8A77940067B22540a9661Fe7D716b9FB"
             },
-            "multiPool03": {
-                "pool": "0xd7689E9f3F38673cF56fa5C60b3764b69cfd20Bc",
-                "pool_lp": "0x7046310BaB92d4547f9fb23700346aa1dC1d679E"
+            "index03": {
+                "pool": "0x826c28BB9d308E46D97E12ef95bDC5653f796bdC",
+                "pool_lp": "0x5A832F1C84E1365ea52897B3463CA4FECFf2D4eE"
             }
         }
     }

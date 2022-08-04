@@ -6,8 +6,7 @@ import { PoolAddress } from "../../utils/network"
 import { useSwapInfoArray } from "../../hooks"
 import { TimeSeriesAreaChart } from "./TimeSeriesAreaChart"
 
-import networksConfig from "../../config/networks.json"
-import poolsInfo from "../../config/pools.json"
+import { PoolInfo } from "../../utils/pools"
 
 import { useTotalPortfolioValue, useTotalDeposited, useTotalWithdrawn, 
          useTokenBalance, useInvestedTokenValue } from "../../hooks"
@@ -37,11 +36,7 @@ interface PoolStatsViewProps {
 
 export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : PoolStatsViewProps ) => {
 
-    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
-    const pools = poolsInfo[networkName as keyof typeof poolsInfo]
-
-    const infos = pools.filter( pool =>  { return (pool.poolId === poolId) })
-    const { name, description, upkeep } = infos[0]
+    const { name, upkeep } = PoolInfo(chainId, poolId)
 
     const poolAddress = PoolAddress(chainId, poolId)
     const totalPortfolioValue = useTotalPortfolioValue(chainId, poolId)

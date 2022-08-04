@@ -20,7 +20,7 @@ const useStyle = makeStyles( theme => ({
 
 export interface ContractsProps {
     chainId: number,
-    poolId: string
+    poolId: string,
 }
 
 
@@ -31,14 +31,12 @@ export const Contracts = ( { chainId, poolId } : ContractsProps ) => {
     const explorerHost = NetworkExplorerHost(chainId) ?? "polygonscan.com"
 
     const poolAddress = PoolAddress(chainId, poolId)
-    const strategyAddress = StrategyAddress(chainId, poolId)
     const lpTokenAddress = PoolLPTokenAddress(chainId, poolId)
-    const feedAddress = FeedAddress(chainId, poolId)
+    
+    const isIndex = poolId.startsWith("index")
+    const strategyAddress = !isIndex && StrategyAddress(chainId, poolId)
+    const feedAddress = !isIndex && FeedAddress(chainId, poolId)
 
-    const { depositToken : depositTokenSymbol, investToken : investTokenSymbol } = PoolInfo(chainId, poolId)
-    const tokens = Tokens(chainId, poolId)
-    const depositToken = tokens[depositTokenSymbol?.toLowerCase()] 
-    const investToken = tokens[investTokenSymbol?.toLowerCase()]
 
     return (
 
@@ -46,12 +44,13 @@ export const Contracts = ( { chainId, poolId } : ContractsProps ) => {
             <Horizontal>
                 <Typography variant="body2">Contracts:</Typography>
                 <Link href={`https://${explorerHost}/address/${poolAddress}#code` } target="_blank">Pool</Link>
-                <Link href={`https://${explorerHost}/address/${strategyAddress}#code` } target="_blank">Strategy</Link>
                 <Link href={`https://${explorerHost}/address/${lpTokenAddress}#code` } target="_blank">LP Token</Link>
-                <Link href={`https://${explorerHost}/address/${feedAddress}#code` } target="_blank">Price feed</Link>
 
-                <Link href={`https://${explorerHost}/address/${depositToken?.address}#code` } target="_blank">{depositToken?.symbol}</Link>
-                <Link href={`https://${explorerHost}/address/${investToken?.address}#code` } target="_blank">{investToken?.symbol}</Link>
+                { strategyAddress && <Link href={`https://${explorerHost}/address/${strategyAddress}#code` } target="_blank">Strategy</Link> }
+                { feedAddress && <Link href={`https://${explorerHost}/address/${feedAddress}#code` } target="_blank">Price feed</Link> }
+
+                {/* <Link href={`https://${explorerHost}/address/${depositToken?.address}#code` } target="_blank">{depositToken?.symbol}</Link>
+                <Link href={`https://${explorerHost}/address/${investToken?.address}#code` } target="_blank">{investToken?.symbol}</Link> */}
             </Horizontal>
         </div>
 

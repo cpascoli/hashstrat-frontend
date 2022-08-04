@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from "react"
-import { Box, Tab, Paper, Snackbar, Link, makeStyles, Divider } from "@material-ui/core"
+import React, { useState } from "react"
+import { Box, Tab, Paper, Snackbar, Link, makeStyles } from "@material-ui/core"
 import { styled } from "@material-ui/core/styles"
 import { TabContext, TabList, TabPanel, Alert, AlertTitle, Color as Severity } from "@material-ui/lab"
 
 import { Token } from  "../../types/Token"
 import { DepositWithdrawView } from "../DepositWithdrawView"
-import { usePortfolioValue } from "../../hooks"
-import { fromDecimals } from "../../utils/formatter"
 import { SnackInfo } from "../SnackInfo"
-import { Contracts } from "../pool/Contracts"
 
 
 interface TabPanelProps {
@@ -49,8 +46,6 @@ const TabContent = styled(Paper)(({ theme }) => ({
 
 export const WalletTabs = ( { chainId, poolId, account, tokens } : TabPanelProps ) => {
 
-    const portfolioValue = usePortfolioValue(chainId, poolId, account) // BigNumber.from("123000000" )
-    const formattedPortfolioValue =  (portfolioValue) ? fromDecimals(portfolioValue, tokens[0].decimals, 2) : ""
     const [selectedTokenIndex, setSelectedTokenIndex] = useState<number>(0)
 
     const [showSnack, setShowSnack] = useState(false)

@@ -136,6 +136,7 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
           </a>
 
           <nav className={classes.menuItems}>      
+              <Link component={RouterLink} to="/indexes">Indexes</Link>
               <Link component={RouterLink} to="/pools">Pools</Link>
               <Link component={RouterLink} to="/strategies">Strategies</Link>
               <Link component={RouterLink} to="/faq">FAQ</Link>
@@ -165,6 +166,9 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
                       >
 
                         <nav  className={classes.menuItemsSmall} > 
+                            <MenuItem onClick={handleClose}>
+                                <Link component={RouterLink} to="/indexes">Indexes</Link>
+                            </MenuItem>
                             <MenuItem onClick={handleClose}>
                                 <Link component={RouterLink} to="/pools">Pools</Link>
                             </MenuItem>

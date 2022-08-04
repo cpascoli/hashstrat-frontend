@@ -30,12 +30,6 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
     console.log("PoolsView chainId >>> ", chainId)
     const [expanded, setExpanded] = useState<boolean>(false);
 
-    const handleChange = () => {
-        console.log("handleChange", expanded)
-        setExpanded(!expanded);
-    };
-
-
     const classes = useStyles()
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
     const pools : Array<PoolInfo> = poolsInfo[networkName as keyof typeof poolsInfo]
@@ -51,7 +45,6 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
 
     return (
         <Box mt={2}>
- 
       
             <Divider variant="middle"  style={{marginTop: 20, marginBottom: 0}}/>
             <div className={classes.container}> 

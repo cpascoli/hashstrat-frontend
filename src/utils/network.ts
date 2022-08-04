@@ -7,20 +7,26 @@ import explorerMappings from "../config/explorers.json"
 import { PoolInfo } from "./pools"
 
 export const PoolAddress = (chainId: number, poolId: string) => {
+
     if (!chainId) return constants.AddressZero
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
-
+    const isIndex = poolId.startsWith("index")
     const deployments = networkMappings as any
-    return deployments[networkName][poolId]["pool"]
+    return isIndex ? deployments[networkName]["indexes"][poolId]["pool"] :
+                     deployments[networkName][poolId]["pool"]
 }
 
 export const PoolLPTokenAddress = (chainId: number, poolId: string) => {
+    const isIndex = poolId.startsWith("index")
+
     if (!chainId) return constants.AddressZero
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
 
     const deployments = networkMappings as any
-    return deployments[networkName][poolId]["pool_lp"]
+    return isIndex ? deployments[networkName]["indexes"][poolId]["pool_lp"] :
+                     deployments[networkName][poolId]["pool_lp"]
 }
+
 
 export const StrategyAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero
@@ -93,13 +99,15 @@ export const NetworkName = (chainId: number) => {
 // Contracts
 
 export const PoolContract = (chainId: number, poolId: string) => {
-    const abi = abis[ "pool" as keyof typeof abis ] as any
+    const isIndex = poolId.startsWith("index")
+    const abi = isIndex ? abis[ "multipool" as keyof typeof abis ] as any :
+                          abis[ "pool" as keyof typeof abis ] as any
     return new Contract( PoolAddress(chainId, poolId), new utils.Interface(abi))
 }
 
 export const PoolLPContract = (chainId: number, poolId: string) => {
     const abi = abis[ "pool_lp" as keyof typeof abis ] as any
-    return new Contract(PoolLPTokenAddress(chainId, poolId) , new utils.Interface(abi))
+    return new Contract(PoolLPTokenAddress(chainId, poolId), new utils.Interface(abi))
 }
 
 export const StrategyContract = (chainId: number, poolId: string) => {

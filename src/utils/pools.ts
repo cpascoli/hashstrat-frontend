@@ -1,7 +1,8 @@
 
 
 import poolsInfo from "../config/pools.json"
-import helperConfig from "../config/networks.json"
+import indexesInfo from "../config/indexes.json"
+import networksConfig from "../config/networks.json"
 
 import { UsdcTokenAddress, DaiTokenAddress, WethTokenAddress, WbtcTokenAddress, PoolLPTokenAddress } from "./network"
 
@@ -12,7 +13,7 @@ import dai from "../components/img/dai.png"
 import poollp from "../components/img/pool_lp.png"
 
 export const PoolInfo = (chainId: number, poolId: string) => {
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
     const pools = poolsInfo[networkName as keyof typeof poolsInfo]
  
     const infos = pools.filter( (pool: { poolId: string }) =>  { return (pool.poolId === poolId) })
@@ -21,21 +22,48 @@ export const PoolInfo = (chainId: number, poolId: string) => {
     return infos[0]
 }
 
+export const IndexInfo = (chainId: number, poolId: string) => {
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
+    const indexes = indexesInfo[networkName as keyof typeof indexesInfo]
+ 
+    const infos = indexes.filter( (pool: { poolId: string }) =>  { return (pool.poolId === poolId) })
+    if (infos.length === 0) throw Error(`Index ${poolId} not found on ${networkName} nework`)
+
+    return infos[0]
+}
+
 
 export const TokensForPool = (chainId: number, poolId: string) => {
     const { depositToken : depositTokenSymbol, investToken : investTokenSymbol} = PoolInfo(chainId, poolId)
+    const tokens = Tokens(chainId, poolId)
+    return {
+        depositToken: tokens[depositTokenSymbol.toLowerCase()],
+        investToken : tokens[investTokenSymbol.toLowerCase()],
+        lpToken : tokens["pool-lp"],
+    }
+}
+
+export const TokensForIndex = (chainId: number, indexId: string) => {
+
+    const { depositToken : depositTokenSymbol, investTokens : investTokenSymbols } = IndexInfo(chainId, indexId)
+    const tokens = Tokens(chainId, indexId)
+  
+    console.log("TokensForIndex - ", chainId, "indexId", indexId, "depositToken", depositTokenSymbol,  "tokens", tokens)
 
     return {
-        depositToken: Tokens(chainId, poolId)[depositTokenSymbol.toLowerCase()],
-        investToken : Tokens(chainId, poolId)[investTokenSymbol.toLowerCase()],
-        lpToken : Tokens(chainId, poolId)["pool-lp"],
+        depositToken: tokens[depositTokenSymbol.toLowerCase()],
+        investTokens: investTokenSymbols.map( symbol => {
+            return tokens[symbol.toLowerCase()]
+        }),
+        lpToken: tokens["pool-lp"],
     }
 }
 
 
 export const Tokens = (chainId: number, poolId: string) => {
+    const isIndex = poolId.startsWith("index")
+    const { depositToken } = isIndex ? IndexInfo(chainId, poolId) : PoolInfo(chainId, poolId)
 
-    const { depositToken } = PoolInfo(chainId, poolId)
     const depositTokenDecimals = depositToken.toLowerCase() === 'dai' ? 18 :
                                  depositToken.toLowerCase() === 'usdc' ? 6 : 18
    
@@ -55,7 +83,7 @@ export const DepositToken = (chainId: number) => {
 }
 
 export const PoolIds = (chainId: number) => {
-    const networkName = helperConfig[chainId.toString() as keyof typeof helperConfig]
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
     const pools = poolsInfo[networkName as keyof typeof poolsInfo] as any
     const poolIds = pools.map( (pool: { [x: string]: any }) => {
         return pool["poolId"]
@@ -63,4 +91,15 @@ export const PoolIds = (chainId: number) => {
 
     return poolIds
 }
+
+export const IndexesIds = (chainId: number) => {
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
+    const indexes = indexesInfo[networkName as keyof typeof poolsInfo] as any
+    const indexesIds = indexes.map( (index: { [x: string]: any }) => {
+        return index["poolId"]
+    })
+
+    return indexesIds
+}
+
 

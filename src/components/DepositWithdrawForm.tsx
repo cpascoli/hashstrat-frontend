@@ -16,7 +16,7 @@ export interface DepositWithdrawFormProps {
     poolId: string,
     token : Token;
     balance: string;
-
+    
     handleSuccess: (result: SnackInfo) => void,
     handleError: (error: SnackInfo) => void,
     allowanceUpdated: () => void;

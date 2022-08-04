@@ -2,22 +2,23 @@
 import { makeStyles, Link, Box, Divider, Typography, Button, Breadcrumbs } from "@material-ui/core"
 import { useLocation } from "react-router-dom"
 
-import { PoolTabs } from "./PoolTabs"
-import { Token } from "../../types/Token"
+import { IndexInfo } from "../../../utils/pools"
 
-import networksConfig from "../../config/networks.json"
-import { PoolInfo } from "../../utils/pools"
-import { Contracts } from "../shared/Contracts"
+import { IndexTabs } from "./IndexTabs"
+import { Token } from "../../../types/Token"
+
+import networksConfig from "../../../config/networks.json"
+import { Contracts } from "../../shared/Contracts"
 
 import { Link as RouterLink } from "react-router-dom"
 
 
-interface PoolContainerProps {
+interface IndexHomeProps {
     poolId: string,
     chainId: number,
     account?: string,
     tokens: Array<Token>,
-    investToken: Token,
+    investTokens: Array<Token>,
 }
 
 
@@ -29,23 +30,24 @@ const useStyles = makeStyles( theme => ({
 }))
 
 
-export const PoolContainer = ({ chainId, poolId, account, tokens, investToken } : PoolContainerProps) => {
+export const IndexHome = ({ chainId, poolId, account, tokens, investTokens } : IndexHomeProps) => {
     
     const location = useLocation();
-    console.log("pathname: ", location.pathname);
+    console.log("IndexHome: ", location.pathname, "chainId: ", chainId, "tokens: ", tokens);
     const classes = useStyles()
-
-    const { name } = PoolInfo(chainId, poolId)
+  
+    const { name, description } = IndexInfo(chainId, poolId)
+ 
 
     return (
         <div className={classes.container}>
             <Breadcrumbs aria-label="breadcrumb" style={{paddingLeft: 10, paddingRight: 10}}>
                 <Link component={RouterLink} to="/"> Home </Link>
-                <Link component={RouterLink} to="/pools"> Pools </Link>
+                <Link component={RouterLink} to="/indexes"> Indexes </Link>
                 <Typography>{name}</Typography>
             </Breadcrumbs>
 
-            <PoolTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens} investToken={investToken} />
+            <IndexTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens} investTokens={investTokens} />
             <Contracts chainId={chainId} poolId={poolId} />
         </div>
     )

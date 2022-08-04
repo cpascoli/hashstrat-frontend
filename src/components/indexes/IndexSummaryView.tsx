@@ -2,14 +2,17 @@ import { makeStyles, Box, Divider, Typography, Button, Link } from "@material-ui
 import { TitleValueBox } from "../TitleValueBox"
 import { fromDecimals, round } from "../../utils/formatter"
 
-import networksConfig from "../../config/networks.json"
-import { PoolInfo } from "../../utils/pools"
+import { IndexInfo } from "../../utils/pools"
 
-import { useTotalPortfolioValue, useTokenBalance, useTokenTotalSupply } from "../../hooks"
+// import indexesInfo from "../../config/indexes.json"
+import { useTokenBalance, useTokenTotalSupply } from "../../hooks"
+
+import { useMultiPoolValue } from "../../hooks/useIndex"
+
 import { Token } from "../../types/Token"
 
 
-interface PoolSummaryViewProps {
+interface IndexSummaryViewProps {
     chainId: number,
     poolId: string,
     account?: string,
@@ -22,9 +25,6 @@ const useStyles = makeStyles( theme => ({
     },
 
     pool: {
-        // padding: theme.spacing(2),
-        // border: `1px solid ${theme.palette.secondary.main}`,
-        // borderRadius: 12,
         width: 320,
         color: theme.palette.text.secondary,
         textTransform: "none"
@@ -32,13 +32,14 @@ const useStyles = makeStyles( theme => ({
 }))
 
 
-export const PoolSummaryView = ({ chainId, account, poolId, depositToken } : PoolSummaryViewProps) => {
+export const IndexSummaryView = ({ chainId, account, poolId, depositToken } : IndexSummaryViewProps) => {
     const classes = useStyles()
 
-    const { name, description } = PoolInfo(chainId, poolId)
+
+
+    const { name, description, investTokens } = IndexInfo(chainId, poolId)
  
-    const totalPortfolioValue = useTotalPortfolioValue(chainId, poolId)
-    const formattedPortfolioValue =  (totalPortfolioValue) ? fromDecimals(totalPortfolioValue, depositToken.decimals, 2) : ""
+    const multiPoolValue = useMultiPoolValue(chainId, poolId)
 
     const balance = useTokenBalance(chainId, poolId, "pool-lp", account)
     const totalSupply = useTokenTotalSupply(chainId, poolId, "pool-lp")
@@ -46,9 +47,13 @@ export const PoolSummaryView = ({ chainId, account, poolId, depositToken } : Poo
     const lpPerc =  (balance && totalSupply > 0) ? balance * 10000 / totalSupply : 0
     const lpPercFormatted = `${round( lpPerc / 100)}`
 
+    const multiPoolValueFormatted =  (multiPoolValue !== undefined) ? fromDecimals(multiPoolValue, depositToken.decimals, 2) : ""
+
+    console.log("IndexSummaryView - chainId", chainId, "poolId", poolId, "lpPerc", lpPerc, "multiPoolValue", multiPoolValue, "multiPoolValueFormatted", multiPoolValueFormatted)
+
     return (
         <div className={classes.container} >
-                <Link href={`/pools/${poolId}`} style={{ textDecoration: 'none' }} > 
+                <Link href={`/indexes/${poolId}`} style={{ textDecoration: 'none' }} > 
                     <Button variant="outlined" color="primary" >
                         <Box className={classes.pool}>
                             <Typography variant="h5" align="center"> {name} </Typography>
@@ -56,9 +61,8 @@ export const PoolSummaryView = ({ chainId, account, poolId, depositToken } : Poo
 
                             <Divider variant="fullWidth"  style={{marginTop: 20, marginBottom: 20}} />
 
-                            <TitleValueBox title="Total Value" value={formattedPortfolioValue} suffix={depositToken.symbol} mode="small" />
+                            <TitleValueBox title="Total Value" value={multiPoolValueFormatted} suffix={depositToken.symbol} mode="small" />
                             <TitleValueBox title="My Share" value={lpPercFormatted} suffix="%" mode="small" />
-
                         </Box>
                     </Button>
                 </Link>

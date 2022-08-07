@@ -40,8 +40,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
             },
             notifications: {
               expirationPeriod: 1000,
-              checkInterval: 100,
+              // checkInterval: 100,
             },
+            refresh: 10, // "never"| "everyBlock"
         }}>
           
           <CssBaseline />

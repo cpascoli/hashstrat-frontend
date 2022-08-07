@@ -7,7 +7,6 @@ import { IndexInfo } from "../../../utils/pools"
 import { IndexTabs } from "./IndexTabs"
 import { Token } from "../../../types/Token"
 
-import networksConfig from "../../../config/networks.json"
 import { Contracts } from "../../shared/Contracts"
 
 import { Link as RouterLink } from "react-router-dom"
@@ -17,8 +16,8 @@ interface IndexHomeProps {
     poolId: string,
     chainId: number,
     account?: string,
-    tokens: Array<Token>,
-    investTokens: Array<Token>,
+    tokens: Token[],
+    investTokens: Token[],
 }
 
 

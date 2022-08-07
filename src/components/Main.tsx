@@ -3,6 +3,8 @@ import { Box,Typography, makeStyles } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
 
 import { TokensForPool, TokensForIndex, PoolIds, IndexesIds, DepositToken } from "../utils/pools"
+import { InvestTokens } from "../utils/pools"
+
 
 import { Home } from "./Home"
 import { Header } from '../components/Header';
@@ -21,7 +23,7 @@ import {
 import { Horizontal } from "./Layout";
 import { FaqHome } from "./faq/FaqHome";
 import { StrategiesHome } from "./strategies/StrategiesHome";
-
+import { Dashboard } from './dashboard/Dashboard'
 
 
 interface MainProps {
@@ -53,7 +55,8 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
 
     // the chain to show to the user. 
     // use default chain (Polygon) if no account is connected from a supported chain.
-    const [demoChainId, setDemoChainId] = useState<number>(137);
+    //const [demoChainId, setDemoChainId] = useState<number>(137);
+    const defaultChainId = 137
 
     useEffect(() => {
         if (account) {
@@ -62,19 +65,21 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
             setConnected(false)
         }
 
-        if (!chainId) {
-            setDemoChainId(137)
-        } else {
-            setDemoChainId(chainId)
-        }
+        // if (!chainId) {
+        //     setDemoChainId(137)
+        // } else {
+        //     setDemoChainId(chainId)
+        // }
         
     }, [chainId, account])
 
 
-    const poolIds = chainId ?  PoolIds(chainId) : PoolIds(demoChainId)
-    const indexesIds = chainId ?  IndexesIds(chainId) : IndexesIds(demoChainId)
-
-    const depositToken = chainId ? DepositToken(chainId) : DepositToken(demoChainId)
+    const poolIds = PoolIds(chainId || defaultChainId)
+    const indexesIds = IndexesIds(chainId || defaultChainId)
+    const depositToken =  DepositToken(chainId || defaultChainId) 
+    const investTokens =  InvestTokens(chainId || defaultChainId)
+    
+    console.log("investTokens: ", investTokens)
 
     return (
         <Box className={classes.container} >
@@ -105,13 +110,16 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                 <main>
                     <Routes>
                         <Route path="/"  element={
-                            <Home chainId={demoChainId}/> 
+                            <Home chainId={chainId || defaultChainId} /> 
+                        } />
+                        <Route path="/home"  element={
+                            <Dashboard chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} investTokens={investTokens}  /> 
                         } />
                         <Route path="/indexes" element={
-                            <IndexesHome chainId={demoChainId} account={account} depositToken={depositToken!} />
+                            <IndexesHome chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} />
                         } />
                         <Route path="/pools" element={
-                            <PoolsContainer chainId={demoChainId} account={account} depositToken={depositToken!} />
+                            <PoolsContainer chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} />
                         } />
                         <Route path="/strategies" element={
                             <StrategiesHome />
@@ -121,12 +129,12 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                         } />
                         {
                             poolIds && poolIds.map( (poolId: string) => {
-                                const tokens = TokensForPool(demoChainId, poolId)
+                                const tokens = TokensForPool(chainId || defaultChainId, poolId)
                                 const supportedTokens = [tokens.depositToken, tokens.lpToken]
                                 const investToken = tokens.investToken
                                 return (
                                     <Route key={`${poolId}`} path={`/pools/${poolId}`} element={
-                                        <PoolContainer chainId={demoChainId} poolId={`${poolId}`} account={account} tokens={supportedTokens} investToken={investToken} />
+                                        <PoolContainer chainId={chainId || defaultChainId} poolId={`${poolId}`} account={account} tokens={supportedTokens} investToken={investToken} />
                                     } />
                                 )
                              })
@@ -134,12 +142,12 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
 
                         {
                             indexesIds && indexesIds.map( (indexId: string) => {
-                                const tokens = TokensForIndex(demoChainId, indexId)
+                                const tokens = TokensForIndex(chainId || defaultChainId, indexId)
                                 const supportedTokens = [tokens.depositToken, tokens.lpToken]
                                 const investTokens = tokens.investTokens
                                 return (
                                     <Route key={`${indexId}`} path={`/indexes/${indexId}`} element={
-                                        <IndexHome chainId={demoChainId} poolId={`${indexId}`} account={account} tokens={supportedTokens} investTokens={investTokens} />
+                                        <IndexHome chainId={chainId || defaultChainId} poolId={`${indexId}`} account={account} tokens={supportedTokens} investTokens={investTokens} />
                                     } />
                                 )
                              })

@@ -8,7 +8,7 @@ export const useFeedLatestPrice = (chainId: number, poolId: string) => {
     const contract = FeedContract(chainId, poolId)
     const { value, error } = useCall({
             contract: contract,
-            method: 'getLatestPrice',
+            method: 'latestAnswer',
             args: [],
     }) ?? {}
 
@@ -32,7 +32,7 @@ export const useFeedLatestTimestamp = (chainId: number, poolId: string) => {
     const contract = FeedContract(chainId, poolId)
     const { value, error } = useCall({
             contract: contract,
-            method: 'getLatestTimestamp',
+            method: 'latestTimestamp',
             args: [],
     }) ?? {}
 

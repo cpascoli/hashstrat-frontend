@@ -27,7 +27,6 @@ const useStyles = makeStyles( theme => ({
 
 export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) => {
 
-    console.log("PoolsView chainId >>> ", chainId)
     const [expanded, setExpanded] = useState<boolean>(false);
 
     const classes = useStyles()

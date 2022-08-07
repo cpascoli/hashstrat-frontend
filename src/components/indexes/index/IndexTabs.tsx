@@ -39,8 +39,6 @@ const useStyle = makeStyles( theme => ({
 
 export const IndexTabs = ( { chainId, poolId, account, tokens, investTokens } : IndexTabsProps ) => {
 
-    console.log("IndexTabs >>> tokens", chainId, poolId, account, tokens)
-
     const depositToken = tokens[0]
 
     const [selectedTokenIndex, setSelectedTokenIndex] = useState<number>(0)

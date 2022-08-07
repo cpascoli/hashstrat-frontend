@@ -16,7 +16,7 @@ interface PoolContainerProps {
     poolId: string,
     chainId: number,
     account?: string,
-    tokens: Array<Token>,
+    tokens: Token[],
     investToken: Token,
 }
 

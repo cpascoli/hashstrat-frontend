@@ -27,3 +27,15 @@ export const shortenAccount = (account?: string) => {
 export const round = (n : number, d=2) => {
     return Math.round(n * (10**d)) / (10**d)
 }
+
+
+export const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => K) =>
+    list.reduce((previous, currentItem) => {
+        const group = getKey(currentItem);
+        if (!previous[group]) previous[group] = [];
+        previous[group].push(currentItem);
+        
+        return previous;
+    }, {} as Record<K, T[]>);
+
+

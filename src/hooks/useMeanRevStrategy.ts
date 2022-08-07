@@ -11,7 +11,6 @@ export const useStrategyName = (chainId: number, poolId: string) => {
             method: 'name',
             args: [],
     }) ?? {}
-
     useDebugValue(value?.[0].toString())
     return value?.[0].toString()
 }

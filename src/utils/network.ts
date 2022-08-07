@@ -16,6 +16,7 @@ export const PoolAddress = (chainId: number, poolId: string) => {
                      deployments[networkName][poolId]["pool"]
 }
 
+
 export const PoolLPTokenAddress = (chainId: number, poolId: string) => {
     const isIndex = poolId.startsWith("index")
 
@@ -35,6 +36,7 @@ export const StrategyAddress = (chainId: number, poolId: string) => {
     const deployments = networkMappings as any
     return deployments[networkName][poolId]["strategy"]
 }
+
 
 export const FeedAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero
@@ -123,26 +125,24 @@ export const FeedContract = (chainId: number, poolId: string) => {
 }
 
 export const UsdcContract = (chainId: number) => {
-    const abi = abis[ "usdc" as keyof typeof abis ] as any
+    const abi = abis[ "erc20" as keyof typeof abis ] as any
     return new Contract(UsdcTokenAddress(chainId) , new utils.Interface(abi))
 }
 
 export const DaiContract = (chainId: number) => {
-    const abi = abis[ "dai" as keyof typeof abis ] as any
+    const abi = abis[ "erc20" as keyof typeof abis ] as any
     return new Contract(DaiTokenAddress(chainId), new utils.Interface(abi))
 }
 
 export const WethContract = (chainId: number) => {
-    const abi = abis[ "weth" as keyof typeof abis ] as any
+    const abi = abis[ "erc20" as keyof typeof abis ] as any
     return new Contract(WethTokenAddress(chainId), new utils.Interface(abi))
 }
 
 export const WbtcContract = (chainId: number) => {
-    const abi = abis[ "wbtc" as keyof typeof abis ] as any
+    const abi = abis[ "erc20" as keyof typeof abis ] as any
     return new Contract(WbtcTokenAddress(chainId), new utils.Interface(abi))
 }
-
-
 
 export const ERC20Contract = (chainId: number, poolId: string, symbol: string) => {
 
@@ -166,3 +166,4 @@ export const ERC20Contract = (chainId: number, poolId: string, symbol: string) =
 
     throw Error(`ERC20Contract not supported: ${symbol}`)
 }
+

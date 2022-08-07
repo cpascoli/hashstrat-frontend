@@ -45,6 +45,8 @@ interface StrategyInfoViewProps {
 
 export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, investToken } : StrategyInfoViewProps ) => {
 
+    console.log("RebalanceStrategyInfoView", chainId, poolId)
+
     const poolAddress = PoolAddress(chainId, poolId)
 
     const name = useStrategyName(chainId, poolId)
@@ -78,9 +80,6 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
 
     return (
         <Box className={classes.container}>
-            <Typography align="center" style={{textTransform: "uppercase"}} >
-                Strategy Info
-            </Typography>
 
             <Box className={classes.portfolioInfo} >
                 <TitleValueBox title="Name" value={name} mode="small" />

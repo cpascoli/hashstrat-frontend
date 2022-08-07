@@ -2,14 +2,30 @@
 
 
 
-import { Link, Box, Accordion, AccordionDetails, AccordionSummary, Typography,  } from  "@material-ui/core"
+import { makeStyles,  Link, Box, Accordion, AccordionDetails, AccordionSummary, Typography, Breadcrumbs, Divider } from  "@material-ui/core"
 import { ExpandMore } from "@material-ui/icons"
 import { Alert, AlertTitle } from "@material-ui/lab"
+import { Link as RouterLink } from "react-router-dom"
+
+const useStyles = makeStyles( theme => ({
+    container: {
+        padding: theme.spacing(2),
+    }
+}))
 
 export const FaqHome = () => {
 
+    const classes = useStyles()
+    
     return (
-        <Box>
+        <div className={classes.container}>
+
+            <Breadcrumbs aria-label="breadcrumb">
+                <Link component={RouterLink} to="/home"> Home </Link>
+                <Typography>FAQ</Typography>
+            </Breadcrumbs>
+
+            <Divider variant="middle" style={{marginTop: 20, marginBottom: 0}}/>
 
 
             <Box my={2}>
@@ -92,6 +108,6 @@ export const FaqHome = () => {
             </Accordion>
  
 
-        </Box>
+        </div>
     )
 }

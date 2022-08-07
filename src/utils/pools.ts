@@ -36,7 +36,7 @@ export const IndexInfo = (chainId: number, poolId: string) => {
 export const TokensForPool = (chainId: number, poolId: string) => {
     const { depositToken : depositTokenSymbol, investToken : investTokenSymbol} = PoolInfo(chainId, poolId)
     const tokens = Tokens(chainId, poolId)
-    console.log("TokensForPool", tokens, ">> ", typeof tokens)
+    //console.log("TokensForPool", tokens, ">> ", typeof tokens)
 
     const depositToken : Token = tokens[depositTokenSymbol.toLowerCase() as keyof typeof tokens] as any 
     const investToken : Token = tokens[investTokenSymbol.toLowerCase() as keyof typeof tokens]! as any
@@ -52,12 +52,8 @@ export const TokensForIndex = (chainId: number, indexId: string) => {
 
     const { depositToken : depositTokenSymbol, investTokens : investTokenSymbols } = IndexInfo(chainId, indexId)
     const tokens = Tokens(chainId, indexId)
-  
-    console.log("TokensForIndex - ", chainId, "indexId", indexId, "depositToken", depositTokenSymbol,  "tokens", tokens)
-
     const depositToken : Token =  tokens[depositTokenSymbol.toLowerCase() as keyof typeof tokens]! as any 
     const lptoken : Token = tokens["pool-lp" as keyof typeof tokens]! as any
-
     return {
         depositToken: depositToken,
         investTokens: investTokenSymbols.map( symbol => {
@@ -150,7 +146,6 @@ export const InvestTokens = (chainId: number) : Array<Token> =>  {
     poolids.forEach(poolId => {
         const { investToken } = TokensForPool(chainId, poolId)
         if (investToken && !tokenSymbols.has(investToken["symbol"])) {
-            console.log("adding >> ", investToken)
             tokenSymbols.add(investToken["symbol"])
             tokenSet.add(investToken)
         }

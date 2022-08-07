@@ -105,7 +105,6 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
                 label2={label2} 
                 data={chartData}  
             /> 
-
         </Box>
     )
 }

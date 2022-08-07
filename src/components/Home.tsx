@@ -105,7 +105,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                             Choose your decentralised, investment strategies executed on-chain <br/>
                         </p>
                     </div>
-                    <Link to="/pools" style={{ textDecoration: 'none' }} > 
+                    <Link to="/home" style={{ textDecoration: 'none' }} > 
                         <Button variant="contained" color="secondary" style={{ width: 280, height: 40 }} >Launch App</Button>
                     </Link>
                  </div>

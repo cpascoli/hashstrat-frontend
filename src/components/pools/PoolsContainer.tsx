@@ -20,15 +20,13 @@ const useStyles = makeStyles( theme => ({
 
 export const PoolsContainer = ({ chainId, account, depositToken } : PoolsContainerProps) => {
     const classes = useStyles()
-
     const location = useLocation();
-    console.log("pathname: ", location.pathname);
 
     return (
         <div className={classes.container}>
             
             <Breadcrumbs aria-label="breadcrumb">
-                <Link component={RouterLink} to="/"> Home </Link>
+                <Link component={RouterLink} to="/home"> Home </Link>
                 <Typography>Pools</Typography>
             </Breadcrumbs>
 

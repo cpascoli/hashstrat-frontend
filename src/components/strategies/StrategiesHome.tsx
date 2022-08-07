@@ -1,7 +1,7 @@
 
 
 
-import { makeStyles, useTheme, Box, Typography, Link, Accordion, AccordionDetails, AccordionSummary } from  "@material-ui/core"
+import { makeStyles, useTheme, Box, Typography, Link, Accordion, AccordionDetails, AccordionSummary, Breadcrumbs, Divider } from  "@material-ui/core"
 import { Horizontal } from "../Layout";
 import { ExpandMore } from "@material-ui/icons"
 import { Link as RouterLink } from "react-router-dom"
@@ -37,7 +37,16 @@ export const StrategiesHome = () => {
     const theme = useTheme();
 
     return (
-        <Box className={classes.strategies}>
+        <Box className={classes.strategies} >
+
+            <Breadcrumbs aria-label="breadcrumb">
+                <Link component={RouterLink} to="/home"> Home </Link>
+                <Typography>Strategies</Typography>
+            </Breadcrumbs>
+
+            <Divider variant="middle" style={{marginTop: 20, marginBottom: 0}}/>
+
+
             <Box my={3} >
                 <Typography>Strategies are set of rules, coded into smart contracts, to manage the assets held into the HashStrat Pools.</Typography>
                 <Typography>All strategies aim to grow the Pools' capital over the long term. </Typography>

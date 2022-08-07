@@ -53,6 +53,16 @@
                 "pool": "0xe62A17b61e4E309c491F1BD26bA7BfE9e463610e",
                 "pool_lp": "0x46cfDDc7ab8348b44b4a0447F0e5077188c4ff14"
             }
+        },
+        "tokens": {
+            "wbtc": {
+                "address": "0xe0C9275E44Ea80eF17579d33c55136b7DA269aEb",
+                "feed": "0x6135b13325bfC4B00278B4abC5e20bbce2D6580e"
+            },
+            "weth": {
+                "address": "0xd0A1E359811322d97991E03f863a0C30C2cF029C",
+                "feed": "0x9326BFA02ADD2366b30bacB125260Af641031331"
+            }
         }
     },
     
@@ -109,6 +119,16 @@
             "index03": {
                 "pool": "0x826c28BB9d308E46D97E12ef95bDC5653f796bdC",
                 "pool_lp": "0x5A832F1C84E1365ea52897B3463CA4FECFf2D4eE"
+            }
+        },
+        "tokens": {
+            "wbtc": {
+                "address": "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
+                "feed": "0xc907E116054Ad103354f2D350FD2514433D57F6f"
+            },
+            "weth": {
+                "address": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+                "feed": "0xF9680D99D6C9589e2a93a78A04A279e509205945"
             }
         }
     }

@@ -131,9 +131,9 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
     return (
         <header className={classes.container}>
 
-          <a href="/" style={{ textDecoration: 'none'}} > 
+          <Link component={RouterLink} to="/" style={{ textDecoration: 'none'}} > 
             <Button> <img src={home} style={{width: 55, height: 55}} /> </Button>
-          </a>
+          </Link>
 
           <nav className={classes.menuItems}>      
               <Link component={RouterLink} to="/indexes">Indexes</Link>

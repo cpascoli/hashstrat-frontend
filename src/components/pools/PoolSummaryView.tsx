@@ -1,12 +1,11 @@
 import { makeStyles, Box, Divider, Typography, Button, Link } from "@material-ui/core"
+import { Link as RouterLink } from "react-router-dom"
+
 import { TitleValueBox } from "../TitleValueBox"
 import { fromDecimals, round } from "../../utils/formatter"
-
-import networksConfig from "../../config/networks.json"
 import { PoolInfo } from "../../utils/pools"
-
-import { useTotalPortfolioValue, useTokenBalance, useTokenTotalSupply } from "../../hooks"
 import { Token } from "../../types/Token"
+import { useTotalPortfolioValue, useTokenBalance, useTokenTotalSupply } from "../../hooks"
 
 
 interface PoolSummaryViewProps {
@@ -48,7 +47,7 @@ export const PoolSummaryView = ({ chainId, account, poolId, depositToken } : Poo
 
     return (
         <div className={classes.container} >
-                <Link href={`/pools/${poolId}`} style={{ textDecoration: 'none' }} > 
+                <Link component={RouterLink} to={`/pools/${poolId}`} style={{ textDecoration: 'none' }} > 
                     <Button variant="outlined" color="primary" >
                         <Box className={classes.pool}>
                             <Typography variant="h5" align="center"> {name} </Typography>

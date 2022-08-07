@@ -28,7 +28,7 @@ export const IndexesHome = ({ chainId, account, depositToken } : IndexesHomeProp
         <div className={classes.container}>
             
             <Breadcrumbs aria-label="breadcrumb">
-                <Link component={RouterLink} to="/"> Home </Link>
+                <Link component={RouterLink} to="/home"> Home </Link>
                 <Typography>Indexes</Typography>
             </Breadcrumbs>
 

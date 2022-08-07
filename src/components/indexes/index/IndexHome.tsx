@@ -41,7 +41,7 @@ export const IndexHome = ({ chainId, poolId, account, tokens, investTokens } : I
     return (
         <div className={classes.container}>
             <Breadcrumbs aria-label="breadcrumb" style={{paddingLeft: 10, paddingRight: 10}}>
-                <Link component={RouterLink} to="/"> Home </Link>
+                <Link component={RouterLink} to="/home"> Home </Link>
                 <Link component={RouterLink} to="/indexes"> Indexes </Link>
                 <Typography>{name}</Typography>
             </Breadcrumbs>

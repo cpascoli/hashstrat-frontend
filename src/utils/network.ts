@@ -124,6 +124,28 @@ export const FeedContract = (chainId: number, poolId: string) => {
     return new Contract(FeedAddress(chainId, poolId) , new utils.Interface(abi))
 }
 
+
+// returns a map of { token_symbol => price_feed_contract }
+export const FeedContractsForTokens = (chainId: number) : { [x: string]: Contract } => {
+
+    if (!chainId) return {}
+
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
+    const abi = abis[ "price_feed" as keyof typeof abis ] as any
+    const deployments = networkMappings as any
+    const tokens = deployments[networkName as keyof typeof networkMappings]["tokens"]
+
+    let contracts = {} as { [x: string]: Contract };
+    Object.keys(tokens).forEach( symbol => {
+        const feedAddress = tokens[symbol]["feed"]
+        contracts[symbol.toLowerCase()] = new Contract(feedAddress , new utils.Interface(abi))
+    })
+
+    return contracts
+}
+
+
+
 export const UsdcContract = (chainId: number) => {
     const abi = abis[ "erc20" as keyof typeof abis ] as any
     return new Contract(UsdcTokenAddress(chainId) , new utils.Interface(abi))

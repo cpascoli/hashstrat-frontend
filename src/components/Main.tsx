@@ -76,11 +76,9 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
 
     const poolIds = PoolIds(chainId || defaultChainId)
     const indexesIds = IndexesIds(chainId || defaultChainId)
-    const depositToken =  DepositToken(chainId || defaultChainId) 
-    const investTokens =  InvestTokens(chainId || defaultChainId)
+    const depositToken = DepositToken(chainId || defaultChainId) 
+    const investTokens = InvestTokens(chainId || defaultChainId)
     
-    console.log("investTokens: ", investTokens)
-
     return (
         <Box className={classes.container} >
            

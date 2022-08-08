@@ -3,9 +3,12 @@ import { TitleValueBox } from "../../TitleValueBox"
 import { Token } from "../../../types/Token"
 import { fromDecimals } from "../../../utils/formatter"
 
-import { IndexInfo } from "../../../utils/pools"
-
+import { IndexInfo, InvestTokens } from "../../../utils/pools"
 import { useTotalDeposited, useTotalWithdrawn, useMultiPoolValue } from "../../../hooks/useIndex"
+import { useTokensInfoForIndexes }  from "../../../hooks/usePoolInfo"
+
+import { PieChartWithLabels } from "../../shared/PieChartWithLabels"
+import { Horizontal } from "../../Layout"
 
 
 const useStyle = makeStyles( theme => ({
@@ -25,13 +28,19 @@ interface IndexStatsViewProps {
     chainId: number,
     poolId: string,
     depositToken: Token,
+    account?: string
 }
 
 
 
-export const IndexStatsView = ( { chainId, poolId, depositToken } : IndexStatsViewProps ) => {
 
-    const { name, description, investTokens } = IndexInfo(chainId, poolId)
+export const IndexStatsView = ( { chainId, poolId, depositToken, account } : IndexStatsViewProps ) => {
+
+    const { name, description } = IndexInfo(chainId, poolId)
+
+ 
+    const tokens =  [depositToken, ... InvestTokens(chainId)]
+    const indexBalances = useTokensInfoForIndexes(chainId, [poolId], tokens)
 
     const multiPoolValue = useMultiPoolValue(chainId, poolId)
     const totalDeposited = useTotalDeposited(chainId, poolId)
@@ -43,16 +52,59 @@ export const IndexStatsView = ( { chainId, poolId, depositToken } : IndexStatsVi
  
     const classes = useStyle()
 
+  
+    const chartData = Object.keys(indexBalances[poolId]).map( symbol => {
+        const value = indexBalances[poolId][symbol].value
+        const accountValueFormatted = fromDecimals(value, depositToken.decimals, 2 ) as any
+
+        return {
+            name: symbol,
+            value: Number(accountValueFormatted),
+        }
+    }).filter( it => it.value > 0)
+
+    
+    const assetViews = Object.keys(indexBalances[poolId]).map( symbol => {
+        const amount = indexBalances[poolId][symbol].amount
+        const value = indexBalances[poolId][symbol].value
+
+        const decimals = tokens.find( t => t.symbol === symbol)?.decimals ?? 2
+        const accountBalanceFormatted =  fromDecimals(amount, decimals, 4 ) as any
+        const accountValueFormatted = fromDecimals(value, depositToken.decimals, 2 ) as any
+
+        const valueFormatted = `${accountBalanceFormatted} (${accountValueFormatted} ${ depositToken.symbol }) `
+
+        return { symbol, valueFormatted, amount, value }
+
+    }).filter(it => it.valueFormatted )
+        .map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted}  /> )
+
+
+
+
     return (
         <Box className={classes.container}>
             <Box className={classes.portfolioInfo} >
-                <TitleValueBox title="Name" value={name} />
-                <TitleValueBox title="Description" value={description} />
-                <TitleValueBox title="Risk Assets" value={ investTokens.join(',') } />
-               
-                <TitleValueBox title="Total Value" value={formattedMultiPoolValue} suffix={depositToken.symbol} />
-                <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
-                <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>
+
+                 <Typography color="textSecondary" align="center" variant="h5">  {name} </Typography>
+                 <Typography color="textSecondary" align="center" variant="body2" style={{marginBottom: 30}}> {description} </Typography>
+
+                { formattedMultiPoolValue && 
+                   <Horizontal align="center" valign="center"> 
+                        { chartData && chartData.length > 0 && 
+                            <PieChartWithLabels data={chartData} title="Assets Chart" />  
+                        }
+                        <Box>
+                             { assetViews }
+                             <TitleValueBox title="Total Value" value={formattedMultiPoolValue} suffix={depositToken.symbol} />
+                            <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
+                            <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>
+                        </Box>
+                    </Horizontal>
+                 }
+
+
+                <div style={{marginBottom: 50}} />
 
             </Box>
 

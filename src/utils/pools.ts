@@ -22,6 +22,21 @@ export const PoolInfo = (chainId: number, poolId: string) => {
     return infos[0]
 }
 
+export const PoolsInfo = (chainId: number, poolIds: string[]) => {
+   
+    const poolsInfo = poolIds.map( poolId => {
+        return {
+            poolId,
+            pool: PoolAddress(chainId, poolId),
+            lptoken: PoolLPTokenAddress(chainId, poolId),
+            depositToken: DepositToken(chainId)
+        } 
+    })
+
+    return poolsInfo
+}
+
+
 export const IndexInfo = (chainId: number, poolId: string) => {
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
     const indexes = indexesInfo[networkName as keyof typeof indexesInfo]
@@ -31,6 +46,23 @@ export const IndexInfo = (chainId: number, poolId: string) => {
 
     return infos[0]
 }
+
+export const IndexesInfo = (chainId: number, poolIds: string[]) => {
+    const indexesInfo = poolIds.map( poolId => {
+        return {
+            poolId,
+            pool: PoolAddress(chainId, poolId),
+            lptoken: PoolLPTokenAddress(chainId, poolId),
+            depositToken: DepositToken(chainId)
+        } 
+    })
+
+    return indexesInfo
+}
+
+
+ 
+
 
 
 export const TokensForPool = (chainId: number, poolId: string) => {
@@ -107,34 +139,7 @@ export const IndexesIds = (chainId: number) : string[] => {
     return indexesIds
 }
 
-export const PoolsInfo = (chainId: number) => {
-    const poolIds = PoolIds(chainId)
-    const poolsInfo = poolIds.map( poolId => {
-        return {
-            poolId,
-            pool: PoolAddress(chainId, poolId),
-            lptoken: PoolLPTokenAddress(chainId, poolId),
-            depositToken: DepositToken(chainId)
-        } 
-    })
 
-    return poolsInfo
-}
-
-
-export const IndexesInfo = (chainId: number) => {
-    const poolIds = IndexesIds(chainId)
-    const indexesInfo = poolIds.map( poolId => {
-        return {
-            poolId,
-            pool: PoolAddress(chainId, poolId),
-            lptoken: PoolLPTokenAddress(chainId, poolId),
-            depositToken: DepositToken(chainId)
-        } 
-    })
-
-    return indexesInfo
-}
 
 
 //// TOKENS HELPERS

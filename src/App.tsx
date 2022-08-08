@@ -38,11 +38,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
               [Kovan.chainId]: getDefaultProvider('kovan'),
               [Polygon.chainId]: getDefaultProvider('matic'),
             },
+            // pollingInterval
             notifications: {
               expirationPeriod: 1000,
-              // checkInterval: 100,
+              checkInterval: 100,
             },
-            refresh: 10, // "never"| "everyBlock"
+            refresh: "everyBlock", // "never"| "everyBlock"
         }}>
           
           <CssBaseline />

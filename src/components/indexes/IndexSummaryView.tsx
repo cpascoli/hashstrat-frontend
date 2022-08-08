@@ -2,12 +2,13 @@ import { makeStyles, Box, Divider, Typography, Button, Link } from "@material-ui
 import { TitleValueBox } from "../TitleValueBox"
 import { fromDecimals, round } from "../../utils/formatter"
 
-import { IndexInfo } from "../../utils/pools"
+import { IndexInfo, InvestTokens } from "../../utils/pools"
 
 // import indexesInfo from "../../config/indexes.json"
 import { useTokenBalance, useTokenTotalSupply } from "../../hooks"
 
 import { useMultiPoolValue } from "../../hooks/useIndex"
+import { useTokensInfoForIndexes }  from "../../hooks/usePoolInfo"
 
 import { Token } from "../../types/Token"
 
@@ -16,7 +17,7 @@ interface IndexSummaryViewProps {
     chainId: number,
     poolId: string,
     account?: string,
-    depositToken: Token
+    depositToken: Token,
 }
 
 const useStyles = makeStyles( theme => ({
@@ -36,8 +37,8 @@ export const IndexSummaryView = ({ chainId, account, poolId, depositToken } : In
     const classes = useStyles()
 
 
-
-    const { name, description, investTokens } = IndexInfo(chainId, poolId)
+    
+    const { name, description } = IndexInfo(chainId, poolId)
  
     const multiPoolValue = useMultiPoolValue(chainId, poolId)
 
@@ -49,7 +50,13 @@ export const IndexSummaryView = ({ chainId, account, poolId, depositToken } : In
 
     const multiPoolValueFormatted =  (multiPoolValue !== undefined) ? fromDecimals(multiPoolValue, depositToken.decimals, 2) : ""
 
-    console.log("IndexSummaryView - chainId", chainId, "poolId", poolId, "lpPerc", lpPerc, "multiPoolValue", multiPoolValue, "multiPoolValueFormatted", multiPoolValueFormatted)
+    //const investTokens = InvestTokens(chainId)
+    // console.log("IndexSummaryView - chainId", chainId, "poolId", poolId, "lpPerc", lpPerc, "multiPoolValue", multiPoolValue, "multiPoolValueFormatted", multiPoolValueFormatted)
+    // const indexIds = [poolId] // IndexesIds(chainId) // ["index02"] 
+    // const indexBalances = useTokensInfoForIndexes(chainId, indexIds, [depositToken, ...investTokens], account)
+    // console.log("IndexSummaryView indexBalances", indexBalances)
+
+
 
     return (
         <div className={classes.container} >

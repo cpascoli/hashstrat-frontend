@@ -1,7 +1,9 @@
 
 
-import { makeStyles, Box, Typography, Breadcrumbs } from "@material-ui/core"
-import { useTokensInfoForPools } from "../../hooks/usePoolInfo"
+import { makeStyles, Box, Typography, Link } from "@material-ui/core"
+import { Alert, AlertTitle } from "@material-ui/lab"
+
+import { useTokensInfoForPools, useTokensInfoForIndexes } from "../../hooks/usePoolInfo"
 
 import { Token } from "../../types/Token"
 import { fromDecimals, round} from "../../utils/formatter"
@@ -11,6 +13,9 @@ import { Horizontal } from "../Layout"
 
 import { TitleValueBox } from "../TitleValueBox"
 import { PieChartWithLabels } from "../shared/PieChartWithLabels"
+import { Link as RouterLink } from "react-router-dom"
+
+import { PoolIds, IndexesIds } from "../../utils/pools"
 
 
 interface DashboardProps {
@@ -23,8 +28,7 @@ interface DashboardProps {
 
 const useStyles = makeStyles( theme => ({
     container: {
-        paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2),
+        padding: theme.spacing(2),
     },
     portfolioSummary: {
         maxWidth: 700,
@@ -42,10 +46,21 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
     
     // const location = useLocation();
     const classes = useStyles()
-    const poolsBalances = useTokensInfoForPools(chainId, [depositToken, ...investTokens], account)
+
+
+    //////// TODO  ///////////
+    //   combine pools and indexes stats and return aggeragated token amount & value totals 
+    const poolsBalances = useTokensInfoForPools(chainId, PoolIds(chainId), [depositToken, ...investTokens], account)
+    const indexBalances = useTokensInfoForIndexes(chainId, IndexesIds(chainId), [depositToken, ...investTokens], account)
+    
+
+
+    console.log("Dashboard indexBalances", indexBalances)
+
 
     const tokens = [depositToken, ...investTokens] 
 
+    //////// TODO  aggreagate pools and indexes balances here
     const portfolioInfo = tokens.map( token => {
        return {
             symbol: token.symbol,
@@ -61,7 +76,7 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
             name: tokens.symbol,
             value: Number(tokens.value),
         }
-    })
+    }).filter( it => it.value > 0)
 
 
     //  pool info for the pools the account has some tokens (e.g. LP > 0)
@@ -103,6 +118,7 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
 
 
     const poolSummaryViews = poolsInfo.map( pool => {
+        console.log("pool.tokensInfos", pool.tokensInfos)
         return <PoolSummary key={pool.poolId} chainId={chainId} poolId={pool.poolId} tokens={pool.tokensInfos} depositToken={depositToken}/>
     })
 
@@ -115,9 +131,25 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
             <Typography variant="h4" align="center" >
                     Portfolio Summary
             </Typography>
-            <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
-                Your assets across all Pools
-            </Typography>
+
+            { account && poolsTotalFormatted && Number(poolsTotalFormatted) == 0 && 
+                <Alert severity="info" style={{marginTop: 20, marginBottom: 20}}>
+                    <AlertTitle> You currently have no assets in your portfolio </AlertTitle>
+                    When you deposit into a <Link component={RouterLink} to="/pools">Pool</Link> or
+                    an <Link component={RouterLink} to="/indexes">Index</Link> a summary of your assets across all Pools will show here. 
+                </Alert>
+            }
+
+            { account && account?.length > 0 && 
+                <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
+                    Your assets across all Pools
+                </Typography>
+            }
+            { !account && 
+                <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
+                   Total Assets Across All Pools 
+                </Typography>
+            }
 
             <div className={classes.portfolioSummary} > 
 
@@ -131,26 +163,25 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
                 }
                     <TitleValueBox title="Total Invested" value={`${poolsTotalFormatted} ${depositToken.symbol}` }  />
                 </Box>
-                <PieChartWithLabels data={chartData} title="Pie Chart"/>
+
+                { poolsTotalFormatted && Number(poolsTotalFormatted) > 0 && <PieChartWithLabels data={chartData} title="Pie Chart"/> }
 
             </Horizontal>
 
+
             </div>
 
-            <Box my={4} >
-                <Typography variant="h4" align="center" >
-                    Assets Allocation
-                </Typography>
-
-                <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
-                    Your assets allocation in the different Pools
-                </Typography>
-
-
-                <Horizontal align="center" > 
-                    { poolSummaryViews }
-                </Horizontal>
-            </Box>
+            {  account && account?.length > 0 && 
+                <Box my={4} >
+                    <Typography variant="h4" align="center" >Asset Allocation</Typography>
+                    <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
+                        Your assets allocation in the different Pools
+                    </Typography>
+                    <Horizontal align="center" > 
+                        { poolSummaryViews }
+                    </Horizontal>
+                </Box>
+            }
 
         </div>
     )

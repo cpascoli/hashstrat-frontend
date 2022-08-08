@@ -44,9 +44,7 @@ interface StrategyInfoViewProps {
 
 
 export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, investToken } : StrategyInfoViewProps ) => {
-
-    console.log("RebalanceStrategyInfoView", chainId, poolId)
-
+    
     const poolAddress = PoolAddress(chainId, poolId)
 
     const name = useStrategyName(chainId, poolId)

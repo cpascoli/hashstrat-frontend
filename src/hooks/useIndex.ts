@@ -2,6 +2,9 @@
 import { useContractFunction, useCall } from "@usedapp/core"
 import { PoolContract } from "../utils/network"
 import { useDebugValue } from "react"
+import { IndexInfo } from "../utils/pools"
+
+// Actions
 
 export const useDeposit = (chainId: number, poolId: string) => {
     const indexContract = PoolContract(chainId, poolId)
@@ -60,7 +63,7 @@ export const useGetWithdrawals = (chainId: number, poolId: string, account: stri
 
 
 
-// Pool Stats
+// MultiPool Info
 
 export const useMultiPoolValue = (chainId: number, poolId: string) => {
     const indexContract = PoolContract(chainId, poolId)
@@ -138,5 +141,6 @@ export const usePoolInfoArray = (chainId: number, poolId: string) => {
     })
     return info
 }
+
 
 

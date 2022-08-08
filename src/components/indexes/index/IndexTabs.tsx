@@ -7,6 +7,7 @@ import { MyStatsView } from "./MyStatsView"
 import { IndexStatsView } from "./IndexStatsView"
 import { WalletTabs } from "../../wallet/WalletTabs"
 
+
 interface IndexTabsProps {
     poolId: string,
     chainId: number,
@@ -71,7 +72,7 @@ export const IndexTabs = ( { chainId, poolId, account, tokens, investTokens } : 
 
                 </TabPanel>
                 <TabPanel className={classes.tab} value="1" key={1}>
-                    <IndexStatsView chainId={chainId} poolId={poolId} depositToken={depositToken} />
+                    <IndexStatsView chainId={chainId} poolId={poolId} depositToken={depositToken} account={account} />
                 </TabPanel>
                 
             </TabContext>

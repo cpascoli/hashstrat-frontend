@@ -36,7 +36,7 @@ export const IndexesView = ({ chainId, account, depositToken } : IndexesViewProp
 
     return (
         <Box mt={2}>
- 
+
             <Divider variant="middle"  style={{marginTop: 20, marginBottom: 0}}/>
             <div className={classes.container}> 
                 <Typography >

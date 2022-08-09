@@ -48,6 +48,8 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
     const classes = useStyles()
     const tokens = [depositToken, ...investTokens]
 
+    console.log("Dashboard - account", account)
+
     const { poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool } = useDashboardModel(chainId, tokens, depositToken, account)
 
     // console.log(">>> indexesInfo: ", indexesInfo)
@@ -79,9 +81,7 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
     return (
         <div className={classes.container}>
          
-            <Typography variant="h4" align="center" >
-                    Portfolio Summary
-            </Typography>
+
 
             {/* { account  && totalValueFormatted && Number(totalValueFormatted) == 0 && 
                 <Alert severity="info" style={{marginTop: 20, marginBottom: 20}}>
@@ -92,14 +92,21 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
             } */}
 
             { account && account?.length > 0 && 
-                <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
-                    Your Assets across all Pools &amp; Indexes
-                </Typography>
+                <Box>
+                    <Typography variant="h4" align="center" >Portfolio Summary </Typography>
+                    <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
+                        Your Assets across all Pools &amp; Indexes
+                    </Typography>
+                </Box>
             }
             { !account && 
-                <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
-                   Total Assets Across All Pools  &amp; Indexes
-                </Typography>
+
+                <Box>
+                    <Typography variant="h4" align="center" >Asset Summary</Typography>
+                    <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
+                        Total assets across all Pools &amp; Indexes
+                    </Typography>
+                </Box>
             }
 
             <div className={classes.portfolioSummary} > 

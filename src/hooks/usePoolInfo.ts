@@ -5,7 +5,7 @@ import { PoolIds, IndexesInfo, PoolsInfo, IndexesIds } from "../utils/pools"
 import { Token } from "../types/Token"
 import { groupBy } from "../utils/formatter"
 
-import { BigNumber } from "ethers"
+import { BigNumber, constants } from "ethers"
 
 // import { useFeedLatestPrice, useGetDeposits, useGetWithdrawals } from "../hooks/usePool"
 import { FeedContractsForTokens, ERC20Contract, PoolLPContract, PoolContract } from "../utils/network"
@@ -172,7 +172,7 @@ const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string[], acc
         const calls1 = lpTokensRequests.map(req => ({
             contract: PoolLPContract(chainId, req.indexId),
             method: 'balanceOf',
-            args: account? [account] : []
+            args: account? [account] : [constants.AddressZero]
         })) ?? []
       
     
@@ -250,7 +250,7 @@ const usePoolsLPBalancesForIndexes = (chainId: number, indexIds: string[], poolI
     const calls1 = lpTokensRequests.map(req => ({
         contract: PoolLPContract(chainId, req.poolId),
         method: 'balanceOf',
-        args: req.indexAddress? [req.indexAddress] : []
+        args: req.indexAddress? [req.indexAddress] : [constants.AddressZero]
     })) ?? []
   
 
@@ -433,7 +433,7 @@ const useTokensPoolsBalances = (chainId : number, tokens: Token[],  poolsInfo: a
     const calls = tokenPoolsRequestsParams.map(req => ({
         contract: ERC20Contract(chainId, req.poolId, req.tokenSymbol), // new Contract(req.tokenAddress, new utils.Interface(abi)),
         method: 'balanceOf',
-        args: req.poolAddress? [req.poolAddress] : []
+        args: req.poolAddress? [req.poolAddress] : [constants.AddressZero]
     })) ?? []
   
     const results = useCalls(calls) ?? []
@@ -475,7 +475,7 @@ const useLPBalances = (chainId : number, account: string | undefined, poolsInfo:
     const lpBalanceCalls = lptokensRequests.map(req => ({
         contract: PoolLPContract(chainId, req.poolId),
         method: 'balanceOf',
-        args: req.account? [req.account] : []
+        args: req.account? [req.account] : [constants.AddressZero]
     })) ?? []
 
     const lpBalanceResults = useCalls(lpBalanceCalls) ?? []

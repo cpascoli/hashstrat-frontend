@@ -1,8 +1,7 @@
-import React, { PureComponent } from 'react';
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
-const COLORS = ['#0088FE', '#FF8042', '#00C49F' , '#9187A2'];
+const COLORS = ['#0088FE', '#FF8042', '#00C49F', '#F9D423', '#9187A2', '#CC527A', '#2F9599', '#45ADA8'];
 
 const RADIAN = Math.PI / 180;
 
@@ -14,6 +13,9 @@ export type PieChartsData = {
 export type ChartData = {
     title: string;
     data: PieChartsData[];
+    width?: number
+    height?: number
+    includePercent?: boolean
 }
 
 
@@ -28,22 +30,24 @@ export const PieChartWithLabels = ( chartData  : ChartData ) => {
     const symbol = chartData.data[index].name
   
     return (
-      <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-        {`${symbol} ${(percent * 100).toFixed(0)}%`}
+      <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" >
+        { chartData.includePercent ? `${symbol} ${(percent * 100).toFixed(0)}%` :  `${symbol}`  }
       </text>
     );
   };
 
   
   return (
-        <PieChart width={300} height={250}>
+
+      <PieChart width={chartData.width?? 800} height={chartData.height?? 800}>
           <Pie
             data={chartData.data}
             cx="50%"
-            cy="50%"
+            cy="50%"  
             labelLine={false}
             label={renderCustomizedLabel}
-            outerRadius={100}
+            innerRadius={0}
+            outerRadius={90}
             fill="#8884d8"
             dataKey="value"
           >

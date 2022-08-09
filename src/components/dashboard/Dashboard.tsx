@@ -48,7 +48,7 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
     const classes = useStyles()
     const tokens = [depositToken, ...investTokens]
 
-    const { poolsInfo, indexesInfo, portfolioInfo, chartData } = useDashboardModel(chainId, tokens, depositToken, account)
+    const { poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool } = useDashboardModel(chainId, tokens, depositToken, account)
 
     // console.log(">>> indexesInfo: ", indexesInfo)
 
@@ -83,13 +83,13 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
                     Portfolio Summary
             </Typography>
 
-            { account && totalValueFormatted && Number(totalValueFormatted) == 0 && 
+            {/* { account  && totalValueFormatted && Number(totalValueFormatted) == 0 && 
                 <Alert severity="info" style={{marginTop: 20, marginBottom: 20}}>
                     <AlertTitle> You currently have no assets in your portfolio </AlertTitle>
                     When you deposit into a <Link component={RouterLink} to="/pools">Pool</Link> or
                     an <Link component={RouterLink} to="/indexes">Index</Link> a summary of your assets will show here. 
                 </Alert>
-            }
+            } */}
 
             { account && account?.length > 0 && 
                 <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
@@ -103,8 +103,6 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
             }
 
             <div className={classes.portfolioSummary} > 
-
-            <Horizontal align="center">
                 <Box className={classes.portfolioInfo} >
                 {
                     tokenBalancesoFormatted && tokenBalancesoFormatted.map( (token : any)=> {
@@ -115,9 +113,10 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
                     <TitleValueBox title="Total Invested" value={`${totalValueFormatted} ${depositToken.symbol}` }  />
                 </Box>
 
-                { totalValueFormatted && Number(totalValueFormatted) > 0 && <PieChartWithLabels data={chartData.data} title={chartData.title} /> }
-
-            </Horizontal>
+                <Horizontal align="center">
+                    { totalValueFormatted  &&  <PieChartWithLabels { ...chartValueByAsset } /> }
+                    { totalValueFormatted  &&  <PieChartWithLabels  { ...chartValueByPool } /> }
+                </Horizontal>
 
 
             </div>

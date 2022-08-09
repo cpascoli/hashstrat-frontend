@@ -45,7 +45,7 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken } : PoolSumm
 
     const tokenViews = tokens && tokens.map( token => {
 
-        console.log("PoolSummary tokens: ", poolId, ">>", token.accountBalance, token.accountValue, "token", token)
+        // console.log("PoolSummary tokens: ", poolId, ">>", token.accountBalance, token.accountValue, "token", token)
 
         const accountBalanceFormatted = token.accountBalance && fromDecimals(token.accountBalance ?? BigNumber.from(0), token.decimals, 4 )
         const accountValueFormatted = token.accountValue && fromDecimals(token.accountValue ?? BigNumber.from(0), depositToken.decimals, 2 )

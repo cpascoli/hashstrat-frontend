@@ -136,7 +136,7 @@ export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], to
             }
         })
 
-        console.log("tokensBalances",indexId,  tokensBalances)
+        // console.log("tokensBalances",indexId,  tokensBalances)
         
         return {
             indexId: indexId,
@@ -309,8 +309,6 @@ const useIndexPools = (chainId: number, poodIds: string[]) => {
 
     const results = useCalls(calls) ?? []
 
-    console.log("getPoolsInfo: ", results)
-
     results.forEach((result, idx) => {
         if(result && result.error) {
             console.error(`Error encountered calling 'balanceOf' on ${calls[idx]?.contract.address}: ${result.error.message}`)
@@ -334,8 +332,6 @@ const useIndexPools = (chainId: number, poodIds: string[]) => {
             }),
         }
     })
-
-    console.log("poolsForIndexes", poolsForIndexes)
 
     return poolsForIndexes
 }

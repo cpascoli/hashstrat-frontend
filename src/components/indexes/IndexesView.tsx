@@ -2,7 +2,7 @@ import { Box, Divider, makeStyles, Typography, Link } from "@material-ui/core"
 import { IndexSummaryView } from "./IndexSummaryView"
 import { Horizontal } from "../Layout"
 import networksConfig from "../../config/networks.json"
-import { IndexInfo } from "../../types/IndexInfo"
+import { PoolInfo } from "../../types/PoolInfo"
 import indexesInfo from "../../config/indexes.json"
 import { Token } from "../../types/Token"
 
@@ -23,7 +23,7 @@ export const IndexesView = ({ chainId, account, depositToken } : IndexesViewProp
 
     const classes = useStyles()
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
-    const indexes : Array<IndexInfo> = indexesInfo[networkName as keyof typeof indexesInfo]
+    const indexes : Array<PoolInfo> = indexesInfo[networkName as keyof typeof indexesInfo] as any
 
     const indexexView = indexes.map( index => {
         return (

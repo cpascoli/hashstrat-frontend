@@ -3,7 +3,7 @@ import { makeStyles, Box, Accordion, AccordionDetails, AccordionSummary, Typogra
 import { TitleValueBox } from "../../TitleValueBox"
 import { Token } from  "../../../types/Token"
 import { useMultiPoolValue, useGetDeposits, useGetWithdrawals } from "../../../hooks/useIndex"
-import { useTokenBalance, useTokenTotalSupply } from "../../../hooks/useErc20Tokens"
+import { useIndexModel } from "./IndexModel"
 
 import { fromDecimals, round } from "../../../utils/formatter"
 import { BigNumber } from "ethers"
@@ -35,53 +35,50 @@ interface MyStatsViewProps {
 
 export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStatsViewProps ) => {
 
-    console.log("MyStatsView - index'", poolId, "account", account)
-
+  
     const multiPoolValue = useMultiPoolValue(chainId, poolId)
-    
-    const lpBalance = useTokenBalance(chainId, poolId, "pool-lp", account)
-    const lpTotalSupply = useTokenTotalSupply(chainId, poolId, "pool-lp")
-    
-    const lpPerc =  (lpBalance && lpTotalSupply > 0) ? lpBalance * 10000 / lpTotalSupply : 0
-    const lpPercFormatted = `${round( lpPerc / 100)}`
 
-
-    // show non zero asset balances
     const tokens =  [depositToken, ... InvestTokens(chainId)]
-    const indexBalances = useTokensInfoForIndexes(chainId, [poolId], tokens)
+    const { indexInfo, portfolioInfo, chartData } = useIndexModel(chainId, poolId, tokens, depositToken, account)
+    
+    console.log("MyStatsView", indexInfo)  //indexInfo:  {poolId: 'index02', tokenInfoArray: Array(2), totalValue: BigNumber}
+    
+   
 
-    const lpBalanceNumber = lpBalance && BigNumber.from(lpTotalSupply)
-    const lpTotalSupplyNumber = lpTotalSupply && BigNumber.from(lpTotalSupply)
-    const haveBalance = lpBalanceNumber && lpTotalSupplyNumber && !lpTotalSupplyNumber.isZero()
 
-    const assetViews = haveBalance && Object.keys(indexBalances[poolId]).map( symbol => {
+    // const indexBalances = useTokensInfoForIndexes(chainId, [poolId], tokens, account)
 
-        const amount = indexBalances[poolId][symbol].amount.mul(lpBalanceNumber).div(lpTotalSupplyNumber)
-        const value = indexBalances[poolId][symbol].value.mul(lpBalanceNumber).div(lpTotalSupplyNumber)
+    // const lpBalanceNumber = lpBalance && BigNumber.from(lpTotalSupply)
+    // const lpTotalSupplyNumber = lpTotalSupply && BigNumber.from(lpTotalSupply)
+    // const haveBalance = lpBalanceNumber && lpTotalSupplyNumber && !lpTotalSupplyNumber.isZero()
+
+    const assetViews = indexInfo.tokenInfoArray.map( token => {
+
+        // console.log("MyStatsView", poolId,  symbol, " values", indexBalances[poolId][symbol])
+
+        const balance = token.accountBalance ?? BigNumber.from(0)
+        const value = token.accountValue ?? BigNumber.from(0)
        
-        const decimals = tokens.find( t => t.symbol === symbol)?.decimals ?? 2
-        const accountBalanceFormatted =  fromDecimals(amount, decimals, 4 ) as any
+        const decimals = token.decimals //    tokens.find( t => t.symbol === symbol)?.decimals ?? 2
+        const accountBalanceFormatted = fromDecimals(balance, decimals, 4 ) as any
         const accountValueFormatted = fromDecimals(value, depositToken.decimals, 2 ) as any
 
         const valueFormatted = `${accountBalanceFormatted} (${accountValueFormatted} ${ depositToken.symbol }) `
 
-        return { symbol, valueFormatted, amount, value }
-        // return <TitleValueBox key={symbol} title={symbol} value={valueFormatted}  />
+        return { symbol: token.symbol, valueFormatted, balance, value }
 
-    }).filter(it => it.amount && !it.amount.isZero() )
-        .map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted} /> )
+    }).map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted} /> )
 
   
 
-    
-    const portfolioValue = (lpTotalSupply && lpTotalSupply > 0) ? BigNumber.from(multiPoolValue).mul(lpBalance).div(lpTotalSupply) : undefined
     const deposits = useGetDeposits(chainId, poolId, account)
     const withdrawals = useGetWithdrawals(chainId, poolId, account)
     
-    const formattedPortfolioValue = portfolioValue ? fromDecimals(portfolioValue, depositToken.decimals, 2) : "0"
+    const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : undefined
     const formattedDeposits = deposits ? fromDecimals(deposits, depositToken.decimals, 2) : ""
     const formattedWithdrawals = withdrawals ? fromDecimals(withdrawals, depositToken.decimals, 2) : ""
-    const roiFormatted = (portfolioValue && deposits && withdrawals && parseFloat(formattedDeposits) > 0) ? String(Math.round( 10000 * (parseFloat(formattedWithdrawals) + parseFloat(formattedPortfolioValue) - parseFloat(formattedDeposits)) / parseFloat(formattedDeposits)) / 100 ) : "0"
+    const roiFormatted = (formattedPortfolioValue && formattedWithdrawals && formattedDeposits && parseFloat(formattedDeposits) > 0) ? 
+                        String(Math.round( 10000 * (parseFloat(formattedWithdrawals) + parseFloat(formattedPortfolioValue) - parseFloat(formattedDeposits)) / parseFloat(formattedDeposits)) / 100 ) : 'n/a'
 
     const classes = useStyle()
 
@@ -99,11 +96,11 @@ export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStat
                     </AccordionSummary>
                     <AccordionDetails >
                         <Box>
-                            <TitleValueBox mode="small" title="My Portfolio Value" value={formattedPortfolioValue} suffix={depositToken.symbol} />
-                            <TitleValueBox mode="small" title="My Index share" value={lpPercFormatted} suffix="%" />
+                            <TitleValueBox mode="small" title="My Portfolio Value" value={formattedPortfolioValue??""} suffix={depositToken.symbol} />
+                            {/* <TitleValueBox mode="small" title="My Index share" value={lpPercFormatted} suffix="%" /> */}
                             <TitleValueBox mode="small" title="My Deposits" value={formattedDeposits} suffix={depositToken.symbol} />
                             <TitleValueBox mode="small" title="My Withdrawals" value={formattedWithdrawals} suffix={depositToken.symbol} />
-                            <TitleValueBox mode="small" title="ROI" value={roiFormatted} suffix="%" />
+                            <TitleValueBox mode="small" title="ROI" value={roiFormatted??""} suffix="%" />
                         </Box>
                     </AccordionDetails>
                 </Accordion>

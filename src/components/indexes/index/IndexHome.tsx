@@ -2,7 +2,7 @@
 import { makeStyles, Link, Box, Divider, Typography, Button, Breadcrumbs } from "@material-ui/core"
 import { useLocation } from "react-router-dom"
 
-import { IndexInfo } from "../../../utils/pools"
+import { PoolInfo } from "../../../utils/pools"
 
 import { IndexTabs } from "./IndexTabs"
 import { Token } from "../../../types/Token"
@@ -35,7 +35,7 @@ export const IndexHome = ({ chainId, poolId, account, tokens, investTokens } : I
     console.log("IndexHome: ", location.pathname, "chainId: ", chainId, "tokens: ", tokens);
     const classes = useStyles()
   
-    const { name, description } = IndexInfo(chainId, poolId)
+    const { name } = PoolInfo(chainId, poolId)
  
 
     return (

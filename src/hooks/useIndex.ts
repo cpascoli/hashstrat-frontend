@@ -2,7 +2,7 @@
 import { useContractFunction, useCall } from "@usedapp/core"
 import { PoolContract } from "../utils/network"
 import { useDebugValue } from "react"
-import { IndexInfo } from "../utils/pools"
+import { PoolInfo } from "../utils/pools"
 
 // Actions
 

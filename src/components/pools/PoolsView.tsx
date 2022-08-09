@@ -31,7 +31,7 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
 
     const classes = useStyles()
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
-    const pools : Array<PoolInfo> = poolsInfo[networkName as keyof typeof poolsInfo]
+    const pools : Array<PoolInfo> = poolsInfo[networkName as keyof typeof poolsInfo] as any
 
     const poolsView = pools.map( pool => {
         return (

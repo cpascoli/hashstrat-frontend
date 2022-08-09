@@ -60,10 +60,10 @@ export const IndexTabs = ( { chainId, poolId, account, tokens, investTokens } : 
                 </TabList>
                 <TabPanel className={classes.tab} value="0" key={0}>
                     { account &&
-                        <>
+                        <Box>
                             <MyStatsView chainId={chainId} poolId={poolId} account={account} depositToken={depositToken} />
                             <WalletTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens!} />
-                        </>
+                        </Box>
                     || 
                         <Box py={8}>
                             <Typography align="center"> Connect an acount to view your assets</Typography>

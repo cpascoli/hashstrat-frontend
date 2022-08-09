@@ -5,7 +5,7 @@
             "name": "BTC-DAI REB01",
             "description": "A rebalancing pool targeting 60% BTC and 40% USDC",
             "depositToken": "DAI",
-            "investToken": "WBTC",
+            "investTokens": ["WBTC"],
             "strategy": "rebalance_01",
             "upkeep": "https://keepers.chain.link/kovan/3737"
         },
@@ -14,7 +14,7 @@
             "name": "ETH-DAI REB01",
             "description": "A rebalancing pool targeting 60% ETH and 40% USDC",
             "depositToken": "DAI",
-            "investToken": "WETH",
+            "investTokens": ["WETH"],
             "strategy": "rebalance_01",
             "upkeep": "https://keepers.chain.link/kovan/3738"
         },
@@ -23,7 +23,7 @@
             "name": "BTC-DAI MEANREV01",
             "description": "Pool dca-ing in and out of BTC using a 350D mean reversion strategy",
             "depositToken": "DAI",
-            "investToken": "WBTC",
+            "investTokens": ["WBTC"],
             "strategy": "meanrev_01",
             "upkeep": "https://keepers.chain.link/kovan/3739"
         },
@@ -32,7 +32,7 @@
             "name": "ETH-DAI MEANREV01",
             "description": "Pool dca-ing in and out of ETH using a 350D mean reversion strategy",
             "depositToken": "DAI",
-            "investToken": "WETH",
+            "investTokens": ["WETH"],
             "strategy": "meanrev_01",
             "upkeep": "https://keepers.chain.link/kovan/3740"
         },
@@ -41,7 +41,7 @@
             "name": "BTC-DAI TRDFLW01",
             "description": "Pool allocating to BTC with a trend following strategy",
             "depositToken": "DAI",
-            "investToken": "WBTC",
+            "investTokens": ["WBTC"],
             "strategy": "trendfollow_01",
             "upkeep": "https://keepers.chain.link/kovan/3741"
         },
@@ -50,7 +50,7 @@
             "name": "ETH-DAI TRDFLW01",
             "description": "Pool allocating to ETH with a trend following strategy",
             "depositToken": "DAI",
-            "investToken": "WETH",
+            "investTokens": ["WETH"],
             "strategy": "trendfollow_01",
             "upkeep": "https://keepers.chain.link/kovan/3742"
         }
@@ -62,7 +62,7 @@
             "name": "BTC-USDC REB01",
             "description": "A self-balancing Pool targeting 60% BTC and 40% USDC allocation",
             "depositToken": "USDC",
-            "investToken": "WBTC",
+            "investTokens": ["WBTC"],
             "strategy": "rebalance_01",
             "upkeep": "https://keepers.chain.link/polygon/257"
         },
@@ -71,7 +71,7 @@
             "name": "ETH-USDC REB01",
             "description": "A self-balancing Pool targeting 60% ETH and 40% USDC allocation",
             "depositToken": "USDC",
-            "investToken": "WETH",
+            "investTokens": ["WETH"],
             "strategy": "rebalance_01",
             "upkeep": "https://keepers.chain.link/polygon/258"
         },
@@ -80,7 +80,7 @@
             "name": "BTC-USDC MEANREV01",
             "description": "Pool dollar-cost averaging in/out BTC using a 350D mean reversion strategy",
             "depositToken": "USDC",
-            "investToken": "WBTC",
+            "investTokens": ["WBTC"],
             "strategy": "meanrev_01",
             "upkeep": "https://keepers.chain.link/polygon/253"
         },
@@ -89,7 +89,7 @@
             "name": "ETH-USDC MEANREV01",
             "description": "Pool dollar-cost averaging in/out ETH using a 350D mean reversion strategy",
             "depositToken": "USDC",
-            "investToken": "WETH",
+            "investTokens": ["WETH"],
             "strategy": "meanrev_01",
             "upkeep": "https://keepers.chain.link/polygon/254"
         },
@@ -98,7 +98,7 @@
             "name": "BTC-USDC TRDFLW01",
             "description": "Pool allocating to BTC with a trend following strategy",
             "depositToken": "USDC",
-            "investToken": "WBTC",
+            "investTokens": ["WBTC"],
             "strategy": "trendfollow_01",
             "upkeep": "https://keepers.chain.link/polygon/259"
         },
@@ -107,7 +107,7 @@
             "name": "ETH-USDC TRDFLW01",
             "description": "Pool allocating to ETH with a trend following strategy",
             "depositToken": "USDC",
-            "investToken": "WETH",
+            "investTokens": ["WETH"],
             "strategy": "trendfollow_01",
             "upkeep": "https://keepers.chain.link/polygon/260"
         }

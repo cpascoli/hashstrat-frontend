@@ -3,7 +3,7 @@ import { TitleValueBox } from "../../TitleValueBox"
 import { Token } from "../../../types/Token"
 import { fromDecimals } from "../../../utils/formatter"
 
-import { IndexInfo, InvestTokens } from "../../../utils/pools"
+import { PoolInfo, InvestTokens } from "../../../utils/pools"
 import { useTotalDeposited, useTotalWithdrawn, useMultiPoolValue } from "../../../hooks/useIndex"
 import { useTokensInfoForIndexes }  from "../../../hooks/usePoolInfo"
 
@@ -36,8 +36,7 @@ interface IndexStatsViewProps {
 
 export const IndexStatsView = ( { chainId, poolId, depositToken, account } : IndexStatsViewProps ) => {
 
-    const { name, description } = IndexInfo(chainId, poolId)
-
+    const { name, description, investTokens } = PoolInfo(chainId, poolId)
  
     const tokens =  [depositToken, ... InvestTokens(chainId)]
     const indexBalances = useTokensInfoForIndexes(chainId, [poolId], tokens)
@@ -65,18 +64,18 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
 
     
     const assetViews = Object.keys(indexBalances[poolId]).map( symbol => {
-        const amount = indexBalances[poolId][symbol].amount
+        const balance = indexBalances[poolId][symbol].balance
         const value = indexBalances[poolId][symbol].value
 
         const decimals = tokens.find( t => t.symbol === symbol)?.decimals ?? 2
-        const accountBalanceFormatted =  fromDecimals(amount, decimals, 4 ) as any
+        const accountBalanceFormatted =  fromDecimals(balance, decimals, 4 ) as any
         const accountValueFormatted = fromDecimals(value, depositToken.decimals, 2 ) as any
 
         const valueFormatted = `${accountBalanceFormatted} (${accountValueFormatted} ${ depositToken.symbol }) `
 
-        return { symbol, valueFormatted, amount, value }
+        return { symbol, valueFormatted, balance, value }
 
-    }).filter(it => it.valueFormatted )
+    }).filter(it => it.valueFormatted && [...investTokens, depositToken.symbol].includes(it.symbol) )
         .map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted}  /> )
 
 

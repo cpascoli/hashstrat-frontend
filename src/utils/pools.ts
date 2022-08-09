@@ -14,7 +14,11 @@ import { Token } from "../types/Token"
 
 export const PoolInfo = (chainId: number, poolId: string) => {
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
-    const pools = poolsInfo[networkName as keyof typeof poolsInfo]
+
+    // const indexes = indexesInfo[networkName as keyof typeof indexesInfo]
+    const pools : {[poolId: string] : any} = poolId.startsWith("index") ? 
+                                    indexesInfo[networkName as keyof typeof indexesInfo] :
+                                    poolsInfo[networkName as keyof typeof poolsInfo]
  
     const infos = pools.filter( (pool: { poolId: string }) =>  { return (pool.poolId === poolId) })
     if (infos.length === 0) throw Error(`Pool ${poolId} not found on ${networkName} nework`)
@@ -37,15 +41,15 @@ export const PoolsInfo = (chainId: number, poolIds: string[]) => {
 }
 
 
-export const IndexInfo = (chainId: number, poolId: string) => {
-    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
-    const indexes = indexesInfo[networkName as keyof typeof indexesInfo]
+// export const IndexInfo = (chainId: number, poolId: string) => {
+//     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
+//     const indexes = indexesInfo[networkName as keyof typeof indexesInfo]
  
-    const infos = indexes.filter( (pool: { poolId: string }) =>  { return (pool.poolId === poolId) })
-    if (infos.length === 0) throw Error(`Index ${poolId} not found on ${networkName} nework`)
+//     const infos = indexes.filter( (pool: { poolId: string }) =>  { return (pool.poolId === poolId) })
+//     if (infos.length === 0) throw Error(`Index ${poolId} not found on ${networkName} nework`)
 
-    return infos[0]
-}
+//     return infos[0]
+// }
 
 export const IndexesInfo = (chainId: number, poolIds: string[]) => {
     const indexesInfo = poolIds.map( poolId => {
@@ -65,42 +69,40 @@ export const IndexesInfo = (chainId: number, poolIds: string[]) => {
 
 
 
-export const TokensForPool = (chainId: number, poolId: string) => {
-    const { depositToken : depositTokenSymbol, investToken : investTokenSymbol} = PoolInfo(chainId, poolId)
+export const TokensForPool = (chainId: number, poolId: string) : {depositToken: Token, investTokens: Token[], lpToken: Token} => {
+    const { depositToken : depositTokenSymbol, investTokens : investTokenSymbols } = PoolInfo(chainId, poolId)
     const tokens = Tokens(chainId, poolId)
-    //console.log("TokensForPool", tokens, ">> ", typeof tokens)
-
     const depositToken : Token = tokens[depositTokenSymbol.toLowerCase() as keyof typeof tokens] as any 
-    const investToken : Token = tokens[investTokenSymbol.toLowerCase() as keyof typeof tokens]! as any
     const lptoken : Token = tokens["pool-lp" as keyof typeof tokens]! as any
     return {
         depositToken: depositToken,
-        investToken :investToken,
-        lpToken :lptoken,
-    }
-}
-
-export const TokensForIndex = (chainId: number, indexId: string) => {
-
-    const { depositToken : depositTokenSymbol, investTokens : investTokenSymbols } = IndexInfo(chainId, indexId)
-    const tokens = Tokens(chainId, indexId)
-    const depositToken : Token =  tokens[depositTokenSymbol.toLowerCase() as keyof typeof tokens]! as any 
-    const lptoken : Token = tokens["pool-lp" as keyof typeof tokens]! as any
-    return {
-        depositToken: depositToken,
-        investTokens: investTokenSymbols.map( symbol => {
+        investTokens: investTokenSymbols.map( (symbol : any)=> {
             const investToken : Token = tokens[symbol.toLowerCase() as keyof typeof tokens]! as any
             return investToken
-        }),
+        }) as Token[],
         lpToken: lptoken,
     }
 }
 
+// export const TokensForIndex = (chainId: number, indexId: string) => {
+
+//     const { depositToken : depositTokenSymbol, investTokens : investTokenSymbols } = PoolInfo(chainId, indexId)
+//     const tokens = Tokens(chainId, indexId)
+//     const depositToken : Token =  tokens[depositTokenSymbol.toLowerCase() as keyof typeof tokens]! as any 
+//     const lptoken : Token = tokens["pool-lp" as keyof typeof tokens]! as any
+//     return {
+//         depositToken: depositToken,
+//         investTokens: investTokenSymbols.map( (symbol : any)=> {
+//             const investToken : Token = tokens[symbol.toLowerCase() as keyof typeof tokens]! as any
+//             return investToken
+//         }),
+//         lpToken: lptoken,
+//     }
+// }
+
 
 export const Tokens = (chainId: number, poolId: string) : Map<String, Token> => {
-    const isIndex = poolId.startsWith("index")
-    const { depositToken } = isIndex ? IndexInfo(chainId, poolId) : PoolInfo(chainId, poolId)
-
+    const { depositToken } = PoolInfo(chainId, poolId)
     const depositTokenDecimals = depositToken.toLowerCase() === 'dai' ? 18 :
                                  depositToken.toLowerCase() === 'usdc' ? 6 : 18
    
@@ -149,11 +151,13 @@ export const InvestTokens = (chainId: number) : Array<Token> =>  {
     let tokenSet = new Set<Token>();
     let tokenSymbols = new Set<string>();
     poolids.forEach(poolId => {
-        const { investToken } = TokensForPool(chainId, poolId)
-        if (investToken && !tokenSymbols.has(investToken["symbol"])) {
-            tokenSymbols.add(investToken["symbol"])
-            tokenSet.add(investToken)
-        }
+        const { investTokens } = TokensForPool(chainId, poolId)
+        investTokens.forEach( investToken => {
+            if (!tokenSymbols.has(investToken.symbol)) {
+                tokenSymbols.add(investToken.symbol)
+                tokenSet.add(investToken)
+            }
+        }) 
     });
 
     return Array.from(tokenSet.values())

@@ -3,8 +3,8 @@ export type PoolInfo = {
     poolId: string,
     name: string,
     description: string,
-    depositToken: string,
-    investToken: string,
+    depositTokens: string,
+    investTokens: [string],
     strategy: string,
     upkeep: string
 }

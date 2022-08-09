@@ -17,6 +17,7 @@ import { Link as RouterLink } from "react-router-dom"
 
 import { PoolIds, IndexesIds } from "../../utils/pools"
 
+import { useDashboardModel } from "./DashboadModel"
 
 interface DashboardProps {
     chainId: number,
@@ -44,86 +45,36 @@ const useStyles = makeStyles( theme => ({
 
 export const Dashboard = ({ chainId, depositToken, investTokens, account} : DashboardProps) => {
     
-    // const location = useLocation();
     const classes = useStyles()
+    const tokens = [depositToken, ...investTokens]
 
+    const { poolsInfo, indexesInfo, portfolioInfo, chartData } = useDashboardModel(chainId, tokens, depositToken, account)
 
-    //////// TODO  ///////////
-    //   combine pools and indexes stats and return aggeragated token amount & value totals 
-    const poolsBalances = useTokensInfoForPools(chainId, PoolIds(chainId), [depositToken, ...investTokens], account)
-    const indexBalances = useTokensInfoForIndexes(chainId, IndexesIds(chainId), [depositToken, ...investTokens], account)
-    
+    // console.log(">>> indexesInfo: ", indexesInfo)
 
-
-    console.log("Dashboard indexBalances", indexBalances)
-
-
-    const tokens = [depositToken, ...investTokens] 
-
-    //////// TODO  aggreagate pools and indexes balances here
-    const portfolioInfo = tokens.map( token => {
-       return {
-            symbol: token.symbol,
-            balance: fromDecimals( poolsBalances.tokenBalances[token.symbol.toUpperCase()], token.decimals, 4),
-            value: fromDecimals( poolsBalances.tokenValues[token.symbol.toUpperCase()], depositToken.decimals, 2),
+    const tokenBalancesoFormatted = Object.values(portfolioInfo.tokenBalances).map( (item ) => {
+        return {
+            symbol: item.symbol,
+            balance: fromDecimals( item.balance, item.decimals, 4),
+            value: fromDecimals( item.value, depositToken.decimals, 2),
             depositTokenSymbol: depositToken.symbol,
-            decimals: token.decimals
+            decimals: item.decimals
        }
+
     })
-
-    const chartData = portfolioInfo.map( tokens => {
-        return {
-            name: tokens.symbol,
-            value: Number(tokens.value),
-        }
-    }).filter( it => it.value > 0)
-
-
-    //  pool info for the pools the account has some tokens (e.g. LP > 0)
-    const poolsInfo = Object.values( poolsBalances.pools ).map( pool => {
-
-        const lpBalance = pool.lpBalance ?  BigNumber.from(pool.lpBalance) : undefined
-        const lpSupply = pool.lpSupply ? BigNumber.from(pool.lpSupply) : undefined
-        
-        const percPrecision = BigNumber.from(10000)
-        // the % of the value in the pool belonging to the account
-        const havePerc = lpSupply && lpBalance && lpSupply.isZero() == false
-        const accountPerc = havePerc ? percPrecision.mul(lpBalance).div(lpSupply) : undefined
-
-        // console.log("accountPerc >> ",  pool.poolId, "perc: ", Number( accountPerc?.toString() ) / 10000 , "lpSupply: ", lpSupply?.toString(), "lpBalance", lpBalance?.toString())
-
-        const tokensInfos = pool.tokens.map( (info: any) => {
-            const balance =  info.balance ? BigNumber.from(info.balance) : undefined
-            const value =  info.tokenValue ? BigNumber.from(info.tokenValue) : undefined
-
-            return {
-                balance: balance,
-                value: value,
-                accountBalance: accountPerc && balance ? balance.mul(accountPerc).div(percPrecision) : undefined,
-                accountValue: accountPerc && value ? value.mul(accountPerc).div(percPrecision) : undefined,
-                accountPerc: accountPerc && Number(accountPerc.toString() ) / 10000,
-                decimals: info.tokenDecimals,
-                symbol: info.tokenSymbol,
-            }
-        })
-
-        return {
-            poolId: pool.poolId,
-            lpBalance: lpBalance,
-            lpSupply: lpSupply,
-            tokensInfos
-        }
-
-    }).filter( pool => pool.lpBalance && pool.lpBalance.isZero() === false )
-
-
-    const poolSummaryViews = poolsInfo.map( pool => {
-        console.log("pool.tokensInfos", pool.tokensInfos)
-        return <PoolSummary key={pool.poolId} chainId={chainId} poolId={pool.poolId} tokens={pool.tokensInfos} depositToken={depositToken}/>
-    })
-
-    const poolsTotalFormatted = fromDecimals( poolsBalances.totalPortfolioValue, depositToken.decimals, 2)
  
+    const poolsSummaryViews = [...indexesInfo, ...poolsInfo].filter( pool => pool.totalValue.isZero() === false ).map ( pool => {
+        return <PoolSummary key={pool.poolId} 
+                    chainId={chainId} 
+                    poolId={pool.poolId} 
+                    tokens={pool.tokenInfoArray} 
+                    depositToken={depositToken
+                 }/>
+   
+    })
+  
+
+    const totalValueFormatted = portfolioInfo.totalValue && fromDecimals( portfolioInfo.totalValue, depositToken.decimals, 2)
     
     return (
         <div className={classes.container}>
@@ -132,22 +83,22 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
                     Portfolio Summary
             </Typography>
 
-            { account && poolsTotalFormatted && Number(poolsTotalFormatted) == 0 && 
+            { account && totalValueFormatted && Number(totalValueFormatted) == 0 && 
                 <Alert severity="info" style={{marginTop: 20, marginBottom: 20}}>
                     <AlertTitle> You currently have no assets in your portfolio </AlertTitle>
                     When you deposit into a <Link component={RouterLink} to="/pools">Pool</Link> or
-                    an <Link component={RouterLink} to="/indexes">Index</Link> a summary of your assets across all Pools will show here. 
+                    an <Link component={RouterLink} to="/indexes">Index</Link> a summary of your assets will show here. 
                 </Alert>
             }
 
             { account && account?.length > 0 && 
                 <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
-                    Your assets across all Pools
+                    Your Assets across all Pools &amp; Indexes
                 </Typography>
             }
             { !account && 
                 <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
-                   Total Assets Across All Pools 
+                   Total Assets Across All Pools  &amp; Indexes
                 </Typography>
             }
 
@@ -156,35 +107,36 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
             <Horizontal align="center">
                 <Box className={classes.portfolioInfo} >
                 {
-                    portfolioInfo && portfolioInfo.map( token => {
+                    tokenBalancesoFormatted && tokenBalancesoFormatted.map( (token : any)=> {
                         const valueFormatted = `${token.balance} (${token.value} ${depositToken.symbol})`
                         return  <TitleValueBox key={token.symbol} title={token.symbol} value={valueFormatted}  mode="small" />
                     })
                 }
-                    <TitleValueBox title="Total Invested" value={`${poolsTotalFormatted} ${depositToken.symbol}` }  />
+                    <TitleValueBox title="Total Invested" value={`${totalValueFormatted} ${depositToken.symbol}` }  />
                 </Box>
 
-                { poolsTotalFormatted && Number(poolsTotalFormatted) > 0 && <PieChartWithLabels data={chartData} title="Pie Chart"/> }
+                { totalValueFormatted && Number(totalValueFormatted) > 0 && <PieChartWithLabels data={chartData.data} title={chartData.title} /> }
 
             </Horizontal>
 
 
             </div>
 
-            {  account && account?.length > 0 && 
+            {  account && account?.length > 0 && poolsSummaryViews.length > 0 &&
                 <Box my={4} >
                     <Typography variant="h4" align="center" >Asset Allocation</Typography>
                     <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
                         Your assets allocation in the different Pools
                     </Typography>
                     <Horizontal align="center" > 
-                        { poolSummaryViews }
+                        { poolsSummaryViews }
                     </Horizontal>
                 </Box>
             }
 
         </div>
     )
+
 }
 
 

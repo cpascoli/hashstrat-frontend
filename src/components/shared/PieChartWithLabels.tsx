@@ -6,12 +6,12 @@ const COLORS = ['#0088FE', '#FF8042', '#00C49F' , '#9187A2'];
 
 const RADIAN = Math.PI / 180;
 
-export interface PieChartsData {
+export type PieChartsData = {
     name: string;
     value: number;
 }
 
-export interface ChartData {
+export type ChartData = {
     title: string;
     data: PieChartsData[];
 }
@@ -39,11 +39,11 @@ export const PieChartWithLabels = ( chartData  : ChartData ) => {
         <PieChart width={300} height={250}>
           <Pie
             data={chartData.data}
-            // cx="50%"
-            // cy="50%"
+            cx="50%"
+            cy="50%"
             labelLine={false}
             label={renderCustomizedLabel}
-            // outerRadius={80}
+            outerRadius={100}
             fill="#8884d8"
             dataKey="value"
           >

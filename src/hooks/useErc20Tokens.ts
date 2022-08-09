@@ -27,10 +27,10 @@ export const useTokenAllowance =  (chainId: number, poolId: string, symbol: stri
     const { account : ownerAddress } = useEthers()
 
     const { value, error } = useCall({
-            contract: tokenContract,
-            method: 'allowance',
-            args: [ownerAddress, spenderAddress],
-      }) ?? {}
+        contract: tokenContract,
+        method: 'allowance',
+        args: [ownerAddress, spenderAddress],
+    }) ?? {}
 
     if(error) {
       console.error("Error getting token allowance: ", error.message)
@@ -42,13 +42,13 @@ export const useTokenAllowance =  (chainId: number, poolId: string, symbol: stri
 
 
 
-export const useTokenBalance = (chainId: number, poolId: string, symbol: string, address?: string) => {
-    console.log("useTokenBalance", symbol, "address", address)
+export const useTokenBalance = (chainId: number, poolId: string, symbol: string, account?: string) => {
+    console.log("useTokenBalance", symbol, "account", account)
     const tokenContract =  ERC20Contract(chainId, poolId, symbol) 
     const { value, error } = useCall({
             contract: tokenContract,
             method: 'balanceOf',
-            args: [address],
+            args: account? [account] : []
     }) ?? {}
 
     return value?.[0].toString()

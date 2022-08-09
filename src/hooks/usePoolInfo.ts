@@ -11,18 +11,14 @@ import { BigNumber } from "ethers"
 import { FeedContractsForTokens, ERC20Contract, PoolLPContract, PoolContract } from "../utils/network"
 
 
-
 // price feed 8 digit precision  
 const feedPrecision = BigNumber.from("100000000")
 
 
 export const useTokensInfoForIndex = (chainId: number, indexId: string, tokens: Token[], account?: string) => {
 
-
-    const indexes = useTokensInfoForIndexes(chainId, [indexId], tokens, account) as any
-
+    const indexes = useTokensInfoForIndexes(chainId, [indexId], tokens, account)
     console.log("useTokensInfoForIndex >>> : ", indexes)
-
 
     return indexes[indexId]
 }
@@ -49,7 +45,7 @@ export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], to
     const poolsBalances = useTokensInfoForPools(chainId, poolIds, tokens)
 
     // get all LP token balances of all pools in the indexes (Pools LPs.balanceOf index address)
-    const lpbalancesByIndexMap = useLPBalancesForIndexes(chainId, indexIds, poolIds)
+    const lpbalancesByIndexMap = usePoolsLPBalancesForIndexes(chainId, indexIds, poolIds)
 
     // process all poolsBalances determining the allocation of the index in those pool
     const allaBalances = indexPools.map( item  => {
@@ -62,41 +58,44 @@ export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], to
             map[ token.symbol ] = { 
                 amount: BigNumber.from(0),
                 value: BigNumber.from(0),
+                decimals: token.decimals,
             }
             return map;
-        }, {} as { [x: string]: { amount: BigNumber, value: BigNumber } } );
-
+        }, {} as {[x: string]: { decimals: number, amount: BigNumber, value: BigNumber } } );
 
         // for all pools in the index
-        poolids && poolids.forEach( (pooliId : string) => {
+        poolids && poolids.forEach( (poolId : string) => {
 
-            const poolTokens = poolsBalances.pools[pooliId]
-            const poolId = poolTokens.poolId
-            const poolLPInfo = lpinfo.find( el => el.poolId === poolId)
+            const poolTokens = poolsBalances[poolId]
+            //const poolId = poolTokens.poolId
+            const poolLPInfo = lpinfo.find( el => el.poolId.toLowerCase() === poolId.toLowerCase())
             const lpBalance = poolLPInfo && poolLPInfo.lpBalance 
             const lpTotalSupply = poolLPInfo && poolLPInfo.lpTotalSupply 
-            // console.log(" poolTokens:", poolTokens, ">> ", lpBalance, lpTotalSupply)
+            // console.log("BBBBB indexId:", indexId, "poolId:", poolId, "poolLPInfo", poolLPInfo,  ">> lpBalance: ", lpBalance, "lpTotalSupply: ", lpTotalSupply)
 
-            poolTokens.tokens.map( (token : any) => {
-                const haveBalance = token.balance && lpBalance && lpTotalSupply && !lpTotalSupply.isZero()
-                const balance = haveBalance && token.balance.mul(lpBalance).div(lpTotalSupply)
+            Object.keys(poolTokens).forEach( symbol => {
+                
+                const tokenInfo = poolTokens[symbol]
+
+                const haveBalance = tokenInfo.balance && lpBalance && lpTotalSupply && !lpTotalSupply.isZero()
+                const balance = haveBalance && tokenInfo.balance.mul(lpBalance).div(lpTotalSupply)
                 if (balance) {
                     // console.log("balance  ", indexId, token.tokenSymbol, balance.toString())
-                    indexBalances[token.tokenSymbol].amount = indexBalances[token.tokenSymbol].amount.add(balance)
+                    indexBalances[symbol].amount = indexBalances[symbol].amount.add(balance)
                 }
 
-                const haveValue = token.tokenValue && lpBalance && lpTotalSupply && !lpTotalSupply.isZero()
-                const value = haveValue && token.tokenValue.mul(lpBalance).div(lpTotalSupply)
+                const haveValue = tokenInfo.value && lpBalance && lpTotalSupply && !lpTotalSupply.isZero()
+                const value = haveValue && tokenInfo.value.mul(lpBalance).div(lpTotalSupply)
                 if (value) {
                     // console.log("value  ", indexId, token.tokenSymbol, value.toString())
-                    indexBalances[token.tokenSymbol].value = indexBalances[token.tokenSymbol].value.add(value)
+                    indexBalances[symbol].value = indexBalances[symbol].value.add(value)
                 }
             })
         })
         
         return {
             indexId: indexId,
-            indexesBalances: indexBalances
+            indexesBalances: indexBalances   // { symbol => { value, balance, } } of the quota of tokens owner by the Index across its Pools
         }
 
     }).reduce( (acc, val) => {
@@ -104,18 +103,133 @@ export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], to
         return acc
     }, {} as { [x: string]: any } )
 
-    console.log("allaBalances: ", allaBalances)
 
-    return allaBalances
+    const lpBalancesByIndex = useAccountLPBalancesForIndexes(chainId, indexIds, account)
+
+    const balances = Object.keys(allaBalances).map( indexId => {
+
+        const lpBalance = lpBalancesByIndex[indexId].lpBalance
+        const lpTotalSupply = lpBalancesByIndex[indexId].lpTotalSupply
+
+        const tokensBalances = {} as {[ x : string] : any }
+
+        Object.keys(allaBalances[indexId]).forEach( symbol => {
+
+            const balance = allaBalances[indexId][symbol].amount
+            const value = allaBalances[indexId][symbol].value
+            const decimals = allaBalances[indexId][symbol].decimals
+
+            const haveBalance =  balance && lpBalance && lpTotalSupply && !lpTotalSupply.isZero()
+            const accountBalance = haveBalance ? balance.mul(lpBalance).div(lpTotalSupply) : undefined
+        
+            const haveValue = value && lpBalance && lpTotalSupply && !lpTotalSupply.isZero()
+            const accountValue = haveValue ? value.mul(lpBalance).div(lpTotalSupply) : undefined
+
+            tokensBalances[symbol] = {
+                indexId: indexId,
+                symbol: symbol,
+                decimals: decimals,
+                balance: balance,
+                value: value,
+                accountBalance: accountBalance,
+                accountValue: accountValue
+            }
+        })
+
+        console.log("tokensBalances",indexId,  tokensBalances)
+        
+        return {
+            indexId: indexId,
+            tokensBalances: tokensBalances
+        }
+
+    }).reduce( (acc, val) => {
+         acc[val.indexId] = val.tokensBalances
+        return acc
+    }, {} as { [x: string]: any } )
+
+    // console.log("lpBalancesByIndex", balances)
+
+    return balances
 }
 
 
 
-const useLPBalancesForIndexes = (chainId: number, indexIds: string[], poolIds: string[]) => {
+// Returns the Index LP balances for for each Index
+const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string[], account?: string) => {
+
+        // get the balance of all Indexes of the LP tokens of all Pools
+        const indexesInfo = IndexesInfo(chainId,  indexIds)
+
+        // Indexes addresses
+        const lpTokensRequests = indexesInfo.map( index =>  {
+            return {
+                indexId: index.poolId,
+                indexAddress: index.pool,
+            }
+        })
+
+        const calls1 = lpTokensRequests.map(req => ({
+            contract: PoolLPContract(chainId, req.indexId),
+            method: 'balanceOf',
+            args: account? [account] : []
+        })) ?? []
+      
+    
+        const results1 = useCalls(calls1) ?? []
+        results1.forEach((result, idx) => {
+            if(result && result.error) {
+                console.error(`Error encountered calling 'balanceOf' on ${calls1[idx]?.contract.address}: ${result.error.message}`)
+            }
+        })
+    
+        // LP tokens supply
+        const calls2 = lpTokensRequests.map(req => ({
+            contract: PoolLPContract(chainId, req.indexId),
+            method: 'totalSupply',
+            args: []
+        })) ?? []
+      
+
+        const results2 = useCalls(calls2) ?? []
+        results2.forEach((result, idx) => {
+            if(result && result.error) {
+                console.error(`Error encountered calling 'totalSupply' on ${calls2[idx]?.contract.address}: ${result.error.message}`)
+            }
+        })
+
+
+        const lpBalancesByIndex = lpTokensRequests.map( (req, idx) => {
+            const balance =  results1[idx]?.value[0]
+            const supply =  results2[idx]?.value[0]
+            const precision = BigNumber.from(10000)
+
+            const perc = (balance && supply && !supply.isZero()) ? precision.mul(balance).div(supply).toNumber() / 10000 : undefined
+            
+            // console.log("lpTokensRequests ",  req.indexId, balance?.toString(), supply?.toString())
+
+            return {
+                indexId: req.indexId,
+                lpBalance: balance,
+                lpTotalSupply: supply,
+                indexPerc: perc,
+            }
+        }).reduce( (acc, item) => {
+            acc[item.indexId] = item
+            return acc
+        }, {  }  as  { [ x : string] : any} )
+
+        return lpBalancesByIndex
+}
+
+
+
+// Returns the Pool LP balances that each Index has for their Pools, grouped by indexid
+const usePoolsLPBalancesForIndexes = (chainId: number, indexIds: string[], poolIds: string[]) => {
 
 
     // poolsInfo for all pools in indexIds indexes
-    const poolsInfo =  PoolsInfo(chainId, poolIds) 
+    const poolsInfo = PoolsInfo(chainId, poolIds) 
 
     // get the balance of all Indexes of the LP tokens of all Pools
     const indexesInfo = IndexesInfo(chainId,  indexIds)
@@ -136,7 +250,7 @@ const useLPBalancesForIndexes = (chainId: number, indexIds: string[], poolIds: s
     const calls1 = lpTokensRequests.map(req => ({
         contract: PoolLPContract(chainId, req.poolId),
         method: 'balanceOf',
-        args: [req.indexAddress]
+        args: req.indexAddress? [req.indexAddress] : []
     })) ?? []
   
 
@@ -158,7 +272,7 @@ const useLPBalancesForIndexes = (chainId: number, indexIds: string[], poolIds: s
     const results2 = useCalls(calls2) ?? []
     results2.forEach((result, idx) => {
         if(result && result.error) {
-            console.error(`Error encountered calling 'balanceOf' on ${calls2[idx]?.contract.address}: ${result.error.message}`)
+            console.error(`Error encountered calling 'totalSupply' on ${calls2[idx]?.contract.address}: ${result.error.message}`)
         }
     })
 
@@ -179,11 +293,8 @@ const useLPBalancesForIndexes = (chainId: number, indexIds: string[], poolIds: s
     })
 
     const lpBalanceResponseByIndex = groupBy(lpBalanceResponse, b => b.indexId)
-    const lpBalancees = Object.values(lpBalanceResponseByIndex)
-
-    console.log("lpBalanceResponseByIndex; ", lpBalanceResponseByIndex )
-    //console.log("lpBalancees; ", lpBalancees )
-
+    // const lpBalancees = Object.values(lpBalanceResponseByIndex)
+ 
     return lpBalanceResponseByIndex
 }
 
@@ -252,118 +363,50 @@ export const useTokensInfoForPools = (chainId: number, poolIds: string[], tokens
     // the the balance of all tokens in all pools
     const poolsBalancesResponse = useTokensPoolsBalances(chainId, tokens, poolsInfo)
 
+
     const poolsBalanceWithTokenValues = poolsBalancesResponse.map ( pool => {
        
+        const lpBalance : BigNumber | undefined = lpBalances[pool.poolId].lpBalance && BigNumber.from(lpBalances[pool.poolId].lpBalance) 
+        const lpSupply : BigNumber | undefined = lpBalances[pool.poolId].lpTotalSupply && BigNumber.from(lpBalances[pool.poolId].lpTotalSupply)
+
         const isDepositToken = (pool.tokenSymbol == pool.depositToken?.symbol)
         const feedPrice = isDepositToken ? 1 : tokenPriceMap[pool.tokenSymbol]
-        let tokenValue 
+
         const canHaveTokenValue = pool.balance && feedPrice
-        if (canHaveTokenValue) {
-            const price = BigNumber.from(feedPrice)  
-            tokenValue = isDepositToken ? pool.balance.mul(price) : 
-                                        adjustAmountDecimals( pool.tokenDecimals, pool.depositToken!.decimals, pool.balance.mul(price).div(feedPrecision)  )// token_value := price * balance * LP%
-            //console.log("poolBalances poolId: ", pool.poolId, pool.tokenSymbol, "balance:", balance.toString(), "tokenDecimals", pool.tokenDecimals, "price:", price.div(feedPrecision).toString(), "prev: ", prev.toString(), " add:", tokenValue.toString(), " >> tot: ", tot[pool.tokenSymbol].toString() )
-        }    
+        const value = canHaveTokenValue && isDepositToken ? pool.balance.mul(BigNumber.from(feedPrice)) :
+                                    (canHaveTokenValue) ? adjustAmountDecimals( pool.tokenDecimals, pool.depositToken!.decimals, pool.balance.mul(BigNumber.from(feedPrice)).div(feedPrecision)  ) : undefined
 
-        return { 
-            ...pool, 
-            tokenValue: tokenValue
-        }
-    })
+        const canHaveAccountBalance = pool.balance && lpBalance && lpSupply && !lpSupply.isZero()
+        const accountBalance = canHaveAccountBalance && pool.balance.mul(lpBalance).div(lpSupply)
 
+        const canHaveAccountValue = value && lpBalance && lpSupply && !lpSupply.isZero()
+        const accountValue = canHaveAccountValue && value.mul(lpBalance).div(lpSupply)
 
-    const balancesByPool = groupBy(poolsBalanceWithTokenValues, b => b.poolId)
-    const poolBalances = Object.values(balancesByPool)
-
- 
-    // aggregate the token amounts (balances) across all pools by token symbol
-    let initialBalanceValues = tokens.reduce( (map, token ) => {
-        map[ token.symbol ] = BigNumber.from(0)
-        return map;
-    }, {} as { [x: string]: BigNumber } );
-
-    const totalTokensBalances = poolBalances.reduce( (tot, pools) => {
-         pools.forEach( pool => {
-
-            const lpBalance : BigNumber | undefined = lpBalances[pool.poolId].lpBalance && BigNumber.from(lpBalances[pool.poolId].lpBalance) 
-            const lpSupply : BigNumber | undefined = lpBalances[pool.poolId].lpTotalSupply && BigNumber.from(lpBalances[pool.poolId].lpTotalSupply)
-            //console.log("pool: ", pool.poolId, "balance: ", pool.balance, "lpBalance", lpBalances[pool.poolId].lpBalance, "supply", lpBalances[pool.poolId].lpTotalSupply)
-            const canHaveBalance = pool.balance && lpSupply && !lpSupply.isZero()
-            if (canHaveBalance && lpBalance && account) {
-                // if have the account it means we need to return the account balance
-                const accountBalance = BigNumber.from(pool.balance).mul(lpBalance).div(lpSupply)
-                tot[pool.tokenSymbol] = tot[pool.tokenSymbol].add(accountBalance)
-            } else if (canHaveBalance) {
-                // othewrwise return the total balance 
-                const balance = BigNumber.from(pool.balance)
-                tot[pool.tokenSymbol] = tot[pool.tokenSymbol].add(balance)
-            } 
-         })
-         return tot
-    }, initialBalanceValues )
-
-
-    // aggregate the values (amount * price) of all tokens across all pools by token symbol
-    let initialValueValues = tokens.reduce( (map, token ) => {
-        map[ token.symbol ] = BigNumber.from("0")
-        return map;
-    }, {} as { [x: string]: BigNumber } );
-
-    
-    /// build maap of { token_symbol => dollar_value } across all pools
-  
-    const totalTokensValues = poolBalances.reduce( (tot, pools) => {
-        pools.forEach(pool => {
-
-            const lpBalance : BigNumber | undefined = lpBalances[pool.poolId].lpBalance && BigNumber.from(lpBalances[pool.poolId].lpBalance) 
-            const lpSupply : BigNumber | undefined = lpBalances[pool.poolId].lpTotalSupply && BigNumber.from(lpBalances[pool.poolId].lpTotalSupply)
-            //console.log("pool: ", pool.poolId, "balance: ", pool.balance, "lpBalance", lpBalances[pool.poolId].lpBalance, "supply", lpBalances[pool.poolId].lpTotalSupply)
-            const canHaveTokenValue = pool.tokenValue && lpSupply && !lpSupply.isZero()
-
-            if (canHaveTokenValue && lpBalance && account) {
-                // if have the account it means we need to return the token value for the account
-                const accountValue = BigNumber.from(pool.tokenValue).mul(lpBalance).div(lpSupply)
-                tot[pool.tokenSymbol] = tot[pool.tokenSymbol].add(accountValue)
-            } else if (canHaveTokenValue) {
-                 // othewrwise return the total token value 
-                tot[pool.tokenSymbol] = tot[pool.tokenSymbol].add(BigNumber.from(pool.tokenValue))
-            }         
-        })
-        return tot
-    }, initialValueValues )
-
-
-    // sum the value across all tokens (and pools)
-    let totalPortfolioValue = BigNumber.from(0)
-    Object.keys(totalTokensValues).forEach( tokenSymbol => {
-        totalPortfolioValue = totalPortfolioValue.add(totalTokensValues[tokenSymbol])
-    })
-
-
-    // array of token balance infos for each pool 
-    const balanceInfoArray = poolIds.map ( (req, idx) => {
-        const poolId = poolIds[idx]
         return {
-            poolId,
-            tokens: balancesByPool[poolId],
-            lpSupply: lpBalances[poolId].lpTotalSupply,
-            lpBalance: lpBalances[poolId].lpBalance
+            poolId: pool.poolId,
+            symbol: pool.tokenSymbol,
+            decimals: pool.tokenDecimals,
+            balance: pool.balance,
+            value: value,
+            accountBalance: accountBalance,
+            accountValue: accountValue,
         }
     })
-    // transform into a map { pool_id  => balanceInfo } 
-    let pools = balanceInfoArray.reduce( (map, pool ) => {
-        map[ pool.poolId ] = pool
-        
-        return map;
-    }, {} as { [x: string]: any } );
 
-   
-    return {
-        totalPortfolioValue: totalPortfolioValue,
-        tokenBalances: totalTokensBalances,
-        tokenValues: totalTokensValues,
-        pools: pools,
-    }
+    const balancesByPoolId = groupBy(poolsBalanceWithTokenValues, b => b.poolId)
+
+    let poolBalances = {} as {[ x: string] : any}
+
+    Object.keys(balancesByPoolId).forEach( poolId => {
+        const tokenMap = balancesByPoolId[poolId].reduce ( (acc, val) => {
+            acc[val.symbol] = val
+            return acc
+        }, {} as {[ x: string] : any} )
+        
+        poolBalances[poolId] = tokenMap
+    })
+
+    return poolBalances
 }
 
 
@@ -394,7 +437,7 @@ const useTokensPoolsBalances = (chainId : number, tokens: Token[],  poolsInfo: a
     const calls = tokenPoolsRequestsParams.map(req => ({
         contract: ERC20Contract(chainId, req.poolId, req.tokenSymbol), // new Contract(req.tokenAddress, new utils.Interface(abi)),
         method: 'balanceOf',
-        args: [req.poolAddress]
+        args: req.poolAddress? [req.poolAddress] : []
     })) ?? []
   
     const results = useCalls(calls) ?? []
@@ -436,7 +479,7 @@ const useLPBalances = (chainId : number, account: string | undefined, poolsInfo:
     const lpBalanceCalls = lptokensRequests.map(req => ({
         contract: PoolLPContract(chainId, req.poolId),
         method: 'balanceOf',
-        args: [req.account]
+        args: req.account? [req.account] : []
     })) ?? []
 
     const lpBalanceResults = useCalls(lpBalanceCalls) ?? []

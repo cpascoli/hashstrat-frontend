@@ -2,7 +2,7 @@ import { makeStyles, Box, Divider, Typography, Button, Link } from "@material-ui
 import { TitleValueBox } from "../TitleValueBox"
 import { fromDecimals, round } from "../../utils/formatter"
 
-import { IndexInfo, InvestTokens } from "../../utils/pools"
+import { PoolInfo } from "../../utils/pools"
 
 // import indexesInfo from "../../config/indexes.json"
 import { useTokenBalance, useTokenTotalSupply } from "../../hooks"
@@ -35,10 +35,8 @@ const useStyles = makeStyles( theme => ({
 
 export const IndexSummaryView = ({ chainId, account, poolId, depositToken } : IndexSummaryViewProps) => {
     const classes = useStyles()
-
-
     
-    const { name, description } = IndexInfo(chainId, poolId)
+    const { name, description } = PoolInfo(chainId, poolId)
  
     const multiPoolValue = useMultiPoolValue(chainId, poolId)
 

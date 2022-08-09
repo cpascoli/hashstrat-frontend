@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Box,Typography, makeStyles } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
 
-import { TokensForPool, TokensForIndex, PoolIds, IndexesIds, DepositToken } from "../utils/pools"
+import { TokensForPool, PoolIds, IndexesIds, DepositToken } from "../utils/pools"
 import { InvestTokens } from "../utils/pools"
 
 
@@ -129,7 +129,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                             poolIds && poolIds.map( (poolId: string) => {
                                 const tokens = TokensForPool(chainId || defaultChainId, poolId)
                                 const supportedTokens = [tokens.depositToken, tokens.lpToken]
-                                const investToken = tokens.investToken
+                                const investToken = tokens.investTokens[0]
                                 return (
                                     <Route key={`${poolId}`} path={`/pools/${poolId}`} element={
                                         <PoolContainer chainId={chainId || defaultChainId} poolId={`${poolId}`} account={account} tokens={supportedTokens} investToken={investToken} />
@@ -140,7 +140,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
 
                         {
                             indexesIds && indexesIds.map( (indexId: string) => {
-                                const tokens = TokensForIndex(chainId || defaultChainId, indexId)
+                                const tokens = TokensForPool(chainId || defaultChainId, indexId)
                                 const supportedTokens = [tokens.depositToken, tokens.lpToken]
                                 const investTokens = tokens.investTokens
                                 return (

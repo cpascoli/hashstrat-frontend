@@ -1,9 +1,14 @@
-import { Box, makeStyles } from "@material-ui/core"
+import { makeStyles, Box, Accordion, AccordionDetails, AccordionSummary, Typography } from  "@material-ui/core"
 
 import { TitleValueBox } from "../TitleValueBox"
 import { Token } from  "../../types/Token"
-import { usePortfolioValue, useGetDeposits, useGetWithdrawals } from "../../hooks/usePool"
+import { useGetDeposits, useGetWithdrawals } from "../../hooks/usePool"
 import { fromDecimals } from "../../utils/formatter"
+import { BigNumber } from "ethers"
+import { usePoolModel } from "./PoolModel"
+
+import { InvestTokens } from "../../utils/pools"
+import { ExpandMore } from "@material-ui/icons"
 
 
 const useStyle = makeStyles( theme => ({
@@ -29,25 +34,57 @@ interface MyStatsViewProps {
 
 export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStatsViewProps ) => {
 
-    const portfolioValue = usePortfolioValue(chainId, poolId, account)
 
+    const classes = useStyle()
+
+    const tokens =  [depositToken, ... InvestTokens(chainId)]
+    const { poolInfo, portfolioInfo, chartData } = usePoolModel(chainId, poolId, tokens, depositToken, account)
     const deposits = useGetDeposits(chainId, poolId, account)
     const withdrawals = useGetWithdrawals(chainId, poolId, account)
     
-    const formattedPortfolioValue =  (portfolioValue) ? fromDecimals(portfolioValue, depositToken.decimals, 2) : ""
-    const formattedDeposits =  (deposits) ? fromDecimals(deposits, depositToken.decimals, 2) : ""
-    const formattedWithdrawals =  (withdrawals) ? fromDecimals(withdrawals, depositToken.decimals, 2) : ""
-    const roiFormatted = (portfolioValue && deposits && withdrawals && parseFloat(formattedDeposits) > 0) ? String(Math.round( 10000 * (parseFloat(formattedWithdrawals) + parseFloat(formattedPortfolioValue) - parseFloat(formattedDeposits)) / parseFloat(formattedDeposits)) / 100 ) : "0"
+    
+    const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : undefined
+    const formattedDeposits = deposits ? fromDecimals(deposits, depositToken.decimals, 2) : ""
+    const formattedWithdrawals = withdrawals ? fromDecimals(withdrawals, depositToken.decimals, 2) : ""
+    const roiFormatted = (formattedPortfolioValue && formattedWithdrawals && formattedDeposits && parseFloat(formattedDeposits) > 0) ? 
+                        String(Math.round( 10000 * (parseFloat(formattedWithdrawals) + parseFloat(formattedPortfolioValue) - parseFloat(formattedDeposits)) / parseFloat(formattedDeposits)) / 100 ) : 'n/a'
 
-    const classes = useStyle()
+    
+    const assetViews = poolInfo.tokenInfoArray.map( token => {
+        const balance = token.accountBalance ?? BigNumber.from(0)
+        const value = token.accountValue ?? BigNumber.from(0)
+        const decimals = token.decimals //    tokens.find( t => t.symbol === symbol)?.decimals ?? 2
+        const accountBalanceFormatted = fromDecimals(balance, decimals, 4 ) as any
+        const accountValueFormatted = fromDecimals(value, depositToken.decimals, 2 ) as any
+        const valueFormatted = `${accountBalanceFormatted} (${accountValueFormatted} ${ depositToken.symbol }) `
+
+        return { symbol: token.symbol, valueFormatted, balance, value }
+    }).map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted} /> )
+
 
     return (
         <Box className={classes.container}>
             <Box className={classes.portfolioInfo} >
-                <TitleValueBox title="My Portfolio Value" value={formattedPortfolioValue} suffix={depositToken.symbol} />
-                <TitleValueBox title="My Deposits" value={formattedDeposits} suffix={depositToken.symbol} />
-                <TitleValueBox title="My Withdrawals" value={formattedWithdrawals} suffix={depositToken.symbol} />
-                <TitleValueBox title="ROI" value={roiFormatted} suffix="%" />
+
+                { assetViews }
+
+                <div style={{marginBottom: 20}} />
+
+                <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
+                        <Typography > My Pool Info </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails >
+                        <Box>
+                            <TitleValueBox mode="small" title="My Portfolio Value" value={formattedPortfolioValue??""} suffix={depositToken.symbol} />
+                            {/* <TitleValueBox mode="small" title="My Index share" value={lpPercFormatted} suffix="%" /> */}
+                            <TitleValueBox mode="small" title="My Deposits" value={formattedDeposits} suffix={depositToken.symbol} />
+                            <TitleValueBox mode="small" title="My Withdrawals" value={formattedWithdrawals} suffix={depositToken.symbol} />
+                            <TitleValueBox mode="small" title="ROI" value={roiFormatted??""} suffix="%" />
+                        </Box>
+                    </AccordionDetails>
+                </Accordion>
+              
             </Box>
         </Box>
     )

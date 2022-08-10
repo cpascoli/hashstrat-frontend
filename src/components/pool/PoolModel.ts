@@ -1,12 +1,12 @@
 
 
-import { useTokensInfoForIndexes } from "../../../hooks/usePoolInfo"
-import { PoolInfo } from "../../../utils/pools"
-import { Token } from "../../../types/Token"
+import { useTokensInfoForPools } from "../../hooks/usePoolInfo"
+import { PoolInfo } from "../../utils/pools"
+import { Token } from "../../types/Token"
 import { BigNumber } from "ethers"
-import { fromDecimals } from "../../../utils/formatter"
+import { fromDecimals } from "../../utils/formatter"
 
-import { PieChartsData, ChartData } from "../../shared/PieChartWithLabels"
+import { PieChartsData, ChartData } from "../shared/PieChartWithLabels"
 
 
 type TokenBalances = {[ x: string] : { symbol: string, decimals: number, value: BigNumber, balance: BigNumber }}
@@ -33,13 +33,13 @@ type PortfolioInfo = {
 export type IndexModel = {
     portfolioInfo: PortfolioInfo;
     chartData: ChartData
-    indexInfo: PoolData,
+    poolInfo: PoolData,
 }
 
 
-export const useIndexModel = (chainId: number, indexId: string, tokens: Token[], depositToken: Token, account?: string) : IndexModel => {
+export const usePoolModel = (chainId: number, poolId: string, tokens: Token[], depositToken: Token, account?: string) : IndexModel => {
 
-    const indexesBalances = useTokensInfoForIndexes(chainId, [indexId], tokens, account)
+    const poolsBalances = useTokensInfoForPools(chainId, [poolId], tokens, account)
 
 
     // Sum up balance and value across all pools 
@@ -49,9 +49,8 @@ export const useIndexModel = (chainId: number, indexId: string, tokens: Token[],
         return acc
     }, {} as TokenBalances )
 
-    // const allPools = [...Object.values(indexesBalances)].filter( el => el !== undefined)
-
-    const tokenBalances : TokenBalances = Object.values(indexesBalances).reduce( (totals, pool ) : TokenBalances => {
+    
+    const tokenBalances : TokenBalances = Object.values(poolsBalances).reduce( (totals, pool ) : TokenBalances => {
 
         Object.keys(pool).forEach( symbol => {
             const tokenInfo = pool[symbol] 
@@ -73,8 +72,8 @@ export const useIndexModel = (chainId: number, indexId: string, tokens: Token[],
     }, BigNumber.from(0))
 
 
-    //// Indexes Info ////
-    const indexInfo = poolInfoFromBalances(chainId, indexesBalances)
+    //// Pools Info ////
+    const poolInfo = poolInfoFromBalances(chainId, poolsBalances)
 
     //// Chart Data  ////
 
@@ -88,8 +87,8 @@ export const useIndexModel = (chainId: number, indexId: string, tokens: Token[],
 
     return  {
         portfolioInfo: { tokenBalances: tokenBalances, totalValue: totalValue },
-        chartData: { title: "Asset Allocation", data: chartValues, includePercent: true },
-        indexInfo
+        chartData: { title: "Token Value Chart", data: chartValues },
+        poolInfo
     }
 
 }

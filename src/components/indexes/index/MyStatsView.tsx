@@ -2,13 +2,12 @@ import { makeStyles, Box, Accordion, AccordionDetails, AccordionSummary, Typogra
 
 import { TitleValueBox } from "../../TitleValueBox"
 import { Token } from  "../../../types/Token"
-import { useMultiPoolValue, useGetDeposits, useGetWithdrawals } from "../../../hooks/useIndex"
+import { useGetDeposits, useGetWithdrawals } from "../../../hooks/useIndex"
 import { useIndexModel } from "./IndexModel"
 
-import { fromDecimals, round } from "../../../utils/formatter"
+import { fromDecimals } from "../../../utils/formatter"
 import { BigNumber } from "ethers"
 import { InvestTokens } from "../../../utils/pools"
-import { useTokensInfoForIndexes }  from "../../../hooks/usePoolInfo"
 import { ExpandMore } from "@material-ui/icons"
 
 
@@ -35,44 +34,15 @@ interface MyStatsViewProps {
 
 export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStatsViewProps ) => {
 
-  
-    const multiPoolValue = useMultiPoolValue(chainId, poolId)
+    const classes = useStyle()
 
     const tokens =  [depositToken, ... InvestTokens(chainId)]
     const { indexInfo, portfolioInfo, chartData } = useIndexModel(chainId, poolId, tokens, depositToken, account)
-    
-    console.log("MyStatsView", indexInfo)  //indexInfo:  {poolId: 'index02', tokenInfoArray: Array(2), totalValue: BigNumber}
-    
-   
-
-
-    // const indexBalances = useTokensInfoForIndexes(chainId, [poolId], tokens, account)
-
-    // const lpBalanceNumber = lpBalance && BigNumber.from(lpTotalSupply)
-    // const lpTotalSupplyNumber = lpTotalSupply && BigNumber.from(lpTotalSupply)
-    // const haveBalance = lpBalanceNumber && lpTotalSupplyNumber && !lpTotalSupplyNumber.isZero()
-
-    const assetViews = indexInfo.tokenInfoArray.map( token => {
-
-        // console.log("MyStatsView", poolId,  symbol, " values", indexBalances[poolId][symbol])
-
-        const balance = token.accountBalance ?? BigNumber.from(0)
-        const value = token.accountValue ?? BigNumber.from(0)
-       
-        const decimals = token.decimals //    tokens.find( t => t.symbol === symbol)?.decimals ?? 2
-        const accountBalanceFormatted = fromDecimals(balance, decimals, 4 ) as any
-        const accountValueFormatted = fromDecimals(value, depositToken.decimals, 2 ) as any
-
-        const valueFormatted = `${accountBalanceFormatted} (${accountValueFormatted} ${ depositToken.symbol }) `
-
-        return { symbol: token.symbol, valueFormatted, balance, value }
-
-    }).map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted} /> )
-
-  
-
     const deposits = useGetDeposits(chainId, poolId, account)
     const withdrawals = useGetWithdrawals(chainId, poolId, account)
+    
+
+    console.log("MyStatsView", indexInfo)  //indexInfo:  {poolId: 'index02', tokenInfoArray: Array(2), totalValue: BigNumber}
     
     const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : undefined
     const formattedDeposits = deposits ? fromDecimals(deposits, depositToken.decimals, 2) : ""
@@ -80,7 +50,18 @@ export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStat
     const roiFormatted = (formattedPortfolioValue && formattedWithdrawals && formattedDeposits && parseFloat(formattedDeposits) > 0) ? 
                         String(Math.round( 10000 * (parseFloat(formattedWithdrawals) + parseFloat(formattedPortfolioValue) - parseFloat(formattedDeposits)) / parseFloat(formattedDeposits)) / 100 ) : 'n/a'
 
-    const classes = useStyle()
+    
+    const assetViews = indexInfo.tokenInfoArray.map( token => {
+        const balance = token.accountBalance ?? BigNumber.from(0)
+        const value = token.accountValue ?? BigNumber.from(0)
+        const decimals = token.decimals //    tokens.find( t => t.symbol === symbol)?.decimals ?? 2
+        const accountBalanceFormatted = fromDecimals(balance, decimals, 4 ) as any
+        const accountValueFormatted = fromDecimals(value, depositToken.decimals, 2 ) as any
+        const valueFormatted = `${accountBalanceFormatted} (${accountValueFormatted} ${ depositToken.symbol }) `
+
+        return { symbol: token.symbol, valueFormatted, balance, value }
+    }).map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted} /> )
+
 
     return (
         <Box className={classes.container}>

@@ -91,7 +91,6 @@ export interface HomeProps {
 export const Home = ( { chainId } : HomeProps ) => {
 
     const classes = useStyle()
-  
 
     return (
         <div >

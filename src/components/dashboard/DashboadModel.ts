@@ -101,8 +101,8 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
 
     return  {
         portfolioInfo: { tokenBalances: tokenBalances, totalValue: totalValue },
-        chartValueByAsset: { title: "Asset Value Chart", data: valueByAsset, width: 250, height: 250, includePercent: true},
-        chartValueByPool: { title: "Pool Value Chart", data: valueByPool, width: 250, height: 250, includePercent: false},
+        chartValueByAsset: { title: "Asset Allocation", data: valueByAsset, width: 250, height: 250, includePercent: true},
+        chartValueByPool: { title: "Pool Allocation", data: valueByPool, width: 250, height: 250, includePercent: false},
         poolsInfo,
         indexesInfo,
     }

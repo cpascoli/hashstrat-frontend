@@ -1,8 +1,8 @@
-import { Box, makeStyles, Typography } from "@material-ui/core"
+import { Box, makeStyles } from "@material-ui/core"
 import { TitleValueBox } from "../TitleValueBox"
 import { Token } from "../../types/Token"
 import { fromDecimals, round} from "../../utils/formatter"
-import { NetworkExplorerHost, PoolAddress } from "../../utils/network"
+import { PoolAddress } from "../../utils/network"
 import { BigNumber } from 'ethers'
 
 
@@ -71,6 +71,7 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
     const rebalancingText = (rebalancingUpperBandPrice && rebalancingLowerBandPrice) ? `${investToken.symbol} ≤ ${rebalancingLowerBandPrice} or ${investToken.symbol} ≥ ${rebalancingUpperBandPrice} ` : ''
 
     const formattedPriceTimestant = new Date(feedLatestTimestamp * 1000).toLocaleTimeString()
+
     const formattedPrice = latestFeedPrice ? fromDecimals( BigNumber.from(latestFeedPrice), parseInt(feedDecimals), 2) : ''
     const feedPriceText = `${formattedPrice} ${depositToken.symbol} at ${formattedPriceTimestant}`
 

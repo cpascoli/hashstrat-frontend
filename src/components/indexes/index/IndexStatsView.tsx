@@ -1,12 +1,10 @@
-import { Box, Typography, makeStyles } from "@material-ui/core"
+import { makeStyles, Box, Typography } from  "@material-ui/core"
 import { TitleValueBox } from "../../TitleValueBox"
-import { Token } from "../../../types/Token"
+import { Token } from  "../../../types/Token"
+import { useIndexModel } from "./IndexModel"
 import { fromDecimals } from "../../../utils/formatter"
-
+import { BigNumber } from "ethers"
 import { PoolInfo, InvestTokens } from "../../../utils/pools"
-import { useTotalDeposited, useTotalWithdrawn, useMultiPoolValue } from "../../../hooks/useIndex"
-import { useTokensInfoForIndexes }  from "../../../hooks/usePoolInfo"
-
 import { PieChartWithLabels } from "../../shared/PieChartWithLabels"
 import { Horizontal } from "../../Layout"
 
@@ -20,6 +18,10 @@ const useStyle = makeStyles( theme => ({
         maxWidth: 640,
         margin: "auto",
         padding: theme.spacing(1)
+    },
+    chart: {
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(4)
     }
 }))
 
@@ -36,78 +38,46 @@ interface IndexStatsViewProps {
 
 export const IndexStatsView = ( { chainId, poolId, depositToken, account } : IndexStatsViewProps ) => {
 
+    const classes = useStyle()
+
     const { name, description, investTokens } = PoolInfo(chainId, poolId)
  
     const tokens =  [depositToken, ... InvestTokens(chainId)]
-    const indexBalances = useTokensInfoForIndexes(chainId, [poolId], tokens)
-
-    const multiPoolValue = useMultiPoolValue(chainId, poolId)
-    const totalDeposited = useTotalDeposited(chainId, poolId)
-    const totalWithdrawn = useTotalWithdrawn(chainId, poolId)
-
-    const formattedMultiPoolValue =  (multiPoolValue) ? fromDecimals(multiPoolValue, depositToken.decimals, 2) : ""
-    const formattedDeposited =  (totalDeposited) ? fromDecimals(totalDeposited, depositToken.decimals, 2) : ""
-    const formatteWithdrawn =  (totalWithdrawn) ? fromDecimals(totalWithdrawn, depositToken.decimals, 2) : ""
- 
-    const classes = useStyle()
-
+    const { indexInfo, portfolioInfo, chartData } = useIndexModel(chainId, poolId, tokens, depositToken, account)
   
-    const chartData = Object.keys(indexBalances[poolId]).map( symbol => {
-        const value = indexBalances[poolId][symbol].value
-        const accountValueFormatted = fromDecimals(value, depositToken.decimals, 2 ) as any
-
-        return {
-            name: symbol,
-            value: Number(accountValueFormatted),
-        }
-    }).filter( it => it.value > 0)
-
+    console.log("IndexStatsView", indexInfo)  //indexInfo:  {poolId: 'index02', tokenInfoArray: Array(2), totalValue: BigNumber}
     
-    const assetViews = Object.keys(indexBalances[poolId]).map( symbol => {
-        const balance = indexBalances[poolId][symbol].balance
-        const value = indexBalances[poolId][symbol].value
+    const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : undefined
 
-        const decimals = tokens.find( t => t.symbol === symbol)?.decimals ?? 2
-        const accountBalanceFormatted =  fromDecimals(balance, decimals, 4 ) as any
+    const assetViews = indexInfo.tokenInfoArray.map( token => {
+        const balance = token.accountBalance ?? BigNumber.from(0)
+        const value = token.accountValue ?? BigNumber.from(0)
+        const decimals = token.decimals //    tokens.find( t => t.symbol === symbol)?.decimals ?? 2
+        const accountBalanceFormatted = fromDecimals(balance, decimals, 4 ) as any
         const accountValueFormatted = fromDecimals(value, depositToken.decimals, 2 ) as any
-
         const valueFormatted = `${accountBalanceFormatted} (${accountValueFormatted} ${ depositToken.symbol }) `
 
-        return { symbol, valueFormatted, balance, value }
-
-    }).filter(it => it.valueFormatted && [...investTokens, depositToken.symbol].includes(it.symbol) )
-        .map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted}  /> )
+        return { symbol: token.symbol, valueFormatted, balance, value }
+    }).map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted} /> )
 
 
 
 
     return (
         <Box className={classes.container}>
+            <Typography variant="h6" align="center"> {name}</Typography> 
+            <Typography variant="body2" align="center"> {description}</Typography> 
+
             <Box className={classes.portfolioInfo} >
-
-                 <Typography color="textSecondary" align="center" variant="h5">  {name} </Typography>
-                 <Typography color="textSecondary" align="center" variant="body2" style={{marginBottom: 30}}> {description} </Typography>
-
-                { formattedMultiPoolValue && 
-                   <Horizontal align="center" valign="center"> 
-                        { chartData && chartData.length > 0 && 
-                            <PieChartWithLabels data={chartData} title="Assets Chart" />  
-                        }
-                        <Box>
-                             { assetViews }
-                             <TitleValueBox title="Total Value" value={formattedMultiPoolValue} suffix={depositToken.symbol} />
-                            <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
-                            <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>
-                        </Box>
-                    </Horizontal>
-                 }
-
-
-                <div style={{marginBottom: 50}} />
-
+                { assetViews }
+                <TitleValueBox title="Total Asset Value" value={formattedPortfolioValue??""} suffix={depositToken.symbol} />
             </Box>
-
-
+            <Box className={classes.chart}>
+                <Horizontal align="center">
+                    <PieChartWithLabels { ...chartData } /> 
+                </Horizontal>
+            </Box>
         </Box>
+       
     )
 }

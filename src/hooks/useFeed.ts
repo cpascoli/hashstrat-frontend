@@ -24,8 +24,12 @@ export const useFeedDecimals = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
+    if (!value) {
+        console.warn("useFeedDecimals - feed decimals is: ",  value, " feed contract: ", contract.address)
+    }
+
     useDebugValue(value?.[0].toString())
-    return value?.[0].toString()
+    return value?.[0].toString() ?? 8
 }
 
 export const useFeedLatestTimestamp = (chainId: number, poolId: string) => {

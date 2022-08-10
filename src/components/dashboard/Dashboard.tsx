@@ -1,23 +1,17 @@
 
 
-import { makeStyles, Box, Typography, Link } from "@material-ui/core"
-import { Alert, AlertTitle } from "@material-ui/lab"
-
-import { useTokensInfoForPools, useTokensInfoForIndexes } from "../../hooks/usePoolInfo"
-
+import { makeStyles, Box, Typography } from "@material-ui/core"
 import { Token } from "../../types/Token"
-import { fromDecimals, round} from "../../utils/formatter"
-import { BigNumber } from "ethers"
+import { fromDecimals } from "../../utils/formatter"
 import { PoolSummary } from "./PoolSummary"
 import { Horizontal } from "../Layout"
 
 import { TitleValueBox } from "../TitleValueBox"
 import { PieChartWithLabels } from "../shared/PieChartWithLabels"
-import { Link as RouterLink } from "react-router-dom"
 
-import { PoolIds, IndexesIds } from "../../utils/pools"
 
 import { useDashboardModel } from "./DashboadModel"
+
 
 interface DashboardProps {
     chainId: number,
@@ -38,7 +32,13 @@ const useStyles = makeStyles( theme => ({
     portfolioInfo: {
         maxWidth: 640,
         margin: "auto",
-        padding: theme.spacing(1)
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+    },
+    portfolioCharts: {
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(2),
+        // border: "1px solid black"
     }
 }))
 
@@ -51,8 +51,6 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
     console.log("Dashboard - account", account)
 
     const { poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool } = useDashboardModel(chainId, tokens, depositToken, account)
-
-    // console.log(">>> indexesInfo: ", indexesInfo)
 
     const tokenBalancesoFormatted = Object.values(portfolioInfo.tokenBalances).map( (item ) => {
         return {
@@ -81,8 +79,6 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
     return (
         <div className={classes.container}>
          
-
-
             {/* { account  && totalValueFormatted && Number(totalValueFormatted) == 0 && 
                 <Alert severity="info" style={{marginTop: 20, marginBottom: 20}}>
                     <AlertTitle> You currently have no assets in your portfolio </AlertTitle>
@@ -120,10 +116,14 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
                     <TitleValueBox title="Total Invested" value={`${totalValueFormatted} ${depositToken.symbol}` }  />
                 </Box>
 
-                <Horizontal align="center">
-                    { totalValueFormatted  &&  <PieChartWithLabels { ...chartValueByAsset } /> }
-                    { totalValueFormatted  &&  <PieChartWithLabels  { ...chartValueByPool } /> }
-                </Horizontal>
+                { totalValueFormatted  &&  
+                    <Box className={classes.portfolioCharts}>
+                        <Horizontal align="center" >
+                            <PieChartWithLabels { ...chartValueByAsset } /> 
+                            <PieChartWithLabels  { ...chartValueByPool } />
+                        </Horizontal>
+                </Box>
+                }
 
 
             </div>

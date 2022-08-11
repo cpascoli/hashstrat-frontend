@@ -43,7 +43,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
               expirationPeriod: 1000,
               checkInterval: 100,
             },
-            refresh: "everyBlock", // "never"| "everyBlock"
+            refresh: "everyBlock", //"everyBlock", // "never"| "everyBlock"
         }}>
           
           <CssBaseline />

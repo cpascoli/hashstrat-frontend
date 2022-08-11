@@ -1,7 +1,7 @@
 
 import { useEthers, useContractFunction, useCall, useCalls } from "@usedapp/core"
 import { ERC20Contract, PoolAddress } from "../utils/network"
-
+import { constants } from "ethers"
 
 
 // Approve spending of 'symbol' by the Pool contract
@@ -48,7 +48,7 @@ export const useTokenBalance = (chainId: number, poolId: string, symbol: string,
     const { value, error } = useCall({
             contract: tokenContract,
             method: 'balanceOf',
-            args: account? [account] : []
+            args: account? [account] : [constants.AddressZero]
     }) ?? {}
 
     return value?.[0].toString()

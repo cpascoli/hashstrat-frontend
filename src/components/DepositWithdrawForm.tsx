@@ -68,6 +68,8 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
 
     // Token Allowance 
     const allowance = useTokenAllowance(chainId, poolId, symbol) // in token decimals
+    console.log("DepositWithdrawForm - allowance: ", allowance ? allowance.toString() : "undefined" )
+
     const { approveErc20, approveErc20State } = useTokenApprove(chainId, poolId, symbol)
 
     const classes = useStyle()
@@ -109,7 +111,13 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     }
 
 
-    const allowanceOk = formattedAllowance && amount && (parseFloat(formattedAllowance) >= amount)
+  
+    const allowanceOk = formattedAllowance !== undefined && 
+                        amount !== undefined && 
+                        (parseFloat(formattedAllowance) >= Number(amount) )
+
+    console.log("formattedAllowance:", formattedAllowance, "amount", amount, ">> allowanceOk: ", allowanceOk)
+
 
     // Deposit Tokens
     const { deposit, depositState } = useDeposit(chainId, poolId)
@@ -201,7 +209,11 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
         }
     }, [notifications, chainId, approveLink, depositLink, withdrawLink])
 
-
+    
+    const showApproveButton = !allowanceOk  &&  !isDepositMining
+    const showDepositButton = (allowanceOk || isDepositMining) && !isApproveMining
+                               
+        
     return (
         <>
         <div className={classes.container}>
@@ -242,7 +254,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
 
             { formType === 'deposit' &&
                 <Box mb={2} >
-                    { (isApproveMining || (!allowanceOk && !isDepositMining)) &&
+                    { showApproveButton &&
                     <Button variant="contained" color="primary" fullWidth disabled={amount === ''}
                         onClick={() => approveButtonPressed()} >
                         Approve {symbol} 
@@ -250,8 +262,8 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
                     </Button>
                     }
 
-                    { ( !(isApproveMining || (!allowanceOk && !isDepositMining))  && 
-                         (allowanceOk || isDepositMining)) && 
+
+                    { showDepositButton && 
                     <Button variant="contained" color="primary" fullWidth  
                         onClick={() => submitForm()} >
                         { submitButtonTitle }

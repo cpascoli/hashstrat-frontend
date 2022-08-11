@@ -41,8 +41,6 @@ export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStat
     const deposits = useGetDeposits(chainId, poolId, account)
     const withdrawals = useGetWithdrawals(chainId, poolId, account)
     
-
-    console.log("MyStatsView", indexInfo)  //indexInfo:  {poolId: 'index02', tokenInfoArray: Array(2), totalValue: BigNumber}
     
     const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : undefined
     const formattedDeposits = deposits ? fromDecimals(deposits, depositToken.decimals, 2) : ""

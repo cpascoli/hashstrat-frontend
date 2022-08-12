@@ -59,8 +59,14 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
         return acc
     }, {} as TokenBalances )
 
-    const allPools = [...Object.values(indexesBalances), ...Object.values(poolsBalances)]
+    // const allPools = [...Object.values(indexesBalances), ...Object.values(poolsBalances)]
 
+    // If no account is provided, only return balances/values for Pools (not Indexes) 
+    // because Indexes will hold their values in Pools
+    const allPools = account? [...Object.values(indexesBalances), ...Object.values(poolsBalances)] :
+                              [...Object.values(poolsBalances)]
+
+    // Map of aggreagate balance and values, by token, in eveery pool
     const tokenBalances : TokenBalances = allPools.reduce( (totals, pool ) : TokenBalances => {
 
         Object.keys(pool).forEach( symbol => {

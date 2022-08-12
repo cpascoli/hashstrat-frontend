@@ -63,8 +63,8 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
     const classes = useStyle()
 
     const swaps = useSwapInfoArray(chainId, poolId)
-    const label1 = `${depositToken.symbol} Value (USD)`
-    const label2 = `${investToken.symbol} Value (USD)`
+    const label1 = `${depositToken.symbol} Value %`
+    const label2 = `${investToken.symbol} Value %`
   
     const chartData = swaps?.map( (data: any) => {
         const date = data.timestamp * 1000
@@ -74,8 +74,8 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
 
         let record : any = {}
         record['time'] = date
-        record[label1] = round(asset1)
-        record[label2] = round(asset2 * price)
+        record[label1] = round( 100 * asset1 / (asset1 + asset2 * price ))          // stable asset % 
+        record[label2] = round( 100 * asset2 * price / (asset1 + asset2 * price ))  // risk asset % 
         return record
     })
 

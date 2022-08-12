@@ -84,7 +84,6 @@ export const MeanRevStrategyInfoView = ( { chainId, poolId, depositToken, invest
         <Box className={classes.portfolioInfo} >
             <TitleValueBox title="Name" value={name} mode="small" />
             <TitleValueBox title="Description" value={description} mode="small" />
-            <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small"  />
             <TitleValueBox title={`Trend (${movingAveragePeriod}D MA)`} value={movingAverageText} mode="small"  />
             <TitleValueBox title="Deviation From Trend" value={`${round(deltaPricePerc * 100)}`} mode="small"  suffix="%" />
             <TitleValueBox title="Upper Target Price %" value={`${targetPricePercUp}`} mode="small"  suffix="%" />
@@ -92,8 +91,9 @@ export const MeanRevStrategyInfoView = ( { chainId, poolId, depositToken, invest
             <TitleValueBox title="Trade Size" value={`${tokensToSwapPerc}`} mode="small"  suffix="%" />
             <TitleValueBox title="Min allocation" value={`${minAllocationPerc}`} mode="small"  suffix="%" />
             
-            <TitleValueBox title="Go Long Target" value={`${buyTargetText}`} mode="small"  />
+            <TitleValueBox title="Accumulation Target" value={`${buyTargetText}`} mode="small"  />
             <TitleValueBox title="De-risk Target" value={`${sellTargetText}`} mode="small"  />
+            <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small"  />
 
         </Box>
     )

@@ -1,8 +1,9 @@
 import { useState } from "react";
 
 import { Box, Divider, makeStyles, Typography, Link } from "@material-ui/core"
-import { PoolSummaryView } from "./PoolSummaryView"
+import { Link as RouterLink } from "react-router-dom"
 
+import { PoolSummaryView } from "./PoolSummaryView"
 import { Horizontal } from "../Layout"
 
 import networksConfig from "../../config/networks.json"
@@ -47,9 +48,13 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
       
             <Divider variant="middle"  style={{marginTop: 20, marginBottom: 0}}/>
             <div className={classes.container}> 
-                <Typography >
-                   Pools are crypto-funds where you deposit {depositToken.symbol} tokens and let the pool's strategy invest into a risk asset (BTC or ETH).
-                </Typography>
+                <Typography>
+                   HashStrat Pools are automated crypto-funds running on the blockchain. <br/>
+                   Each Pool holds 2 assets, one stable asset ({depositToken.symbol}) and one risk asset (BTC or ETH) and 
+                   it's configured with a <Link component={RouterLink} to="/strategies" >Strategy</Link> to trade between them.
+                   <br/>
+                   You can deposit {depositToken.symbol} tokens into any pool with the goal to see your capital grow over time.
+                </Typography>   
             </div>
 
             <Horizontal align="center"> 

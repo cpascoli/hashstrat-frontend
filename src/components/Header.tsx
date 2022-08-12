@@ -5,10 +5,14 @@ import { useEthers } from "@usedapp/core";
 import { Button, Link, Menu, MenuProps, MenuItem, Divider, Typography, makeStyles } from  "@material-ui/core"
 import { styled } from "@material-ui/core/styles"
 import { NetworkName } from "../utils/network"
-import { KeyboardArrowDown } from "@material-ui/icons"
+
 import { Link as RouterLink } from "react-router-dom"
 import { Horizontal } from './Layout';
-import home from "./img/home.png"
+import home from "./img/home.jpg"
+import { ConnectButton } from "../main/ConnectButton"
+
+
+import { Menu as MenuIcon, KeyboardArrowDown, WbSunny, Brightness3 } from "@material-ui/icons"
 
 
 const StyledMenu = styled((props: MenuProps) => (
@@ -81,11 +85,14 @@ export interface ConnectedInfo {
 
 interface HeaderProps {
     toggleDark: boolean,
-    setToggleDark: (arg0: boolean) => void
+    setToggleDark: (arg0: boolean) => void,
+
+    setAccount: React.Dispatch<React.SetStateAction<string | undefined>>,
+    setChainId: React.Dispatch<React.SetStateAction<number | undefined>>,
 }
 
 
-export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
+export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : HeaderProps ) => {
 
     const classes = useStyles()
 
@@ -126,6 +133,7 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
       window.location.reload()
     }
 
+
     const shortAccount = account ? shortenAddress(account) : ''
     
     return (
@@ -154,7 +162,8 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
                         onClick={handleClick}
                         endIcon={<KeyboardArrowDown />}
                       >
-                        {isConnected ? shortAccount : "Menu"}
+                        {isConnected ? shortAccount : 
+                               <MenuIcon /> }
                       </Button>
 
                       <StyledMenu
@@ -183,6 +192,9 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
                         </nav>
 
                         <MenuItem onClick={handleClose}>
+                            <Typography variant='body1'> Version 0.2 (fbb4dba) </Typography>
+                        </MenuItem>
+                        <MenuItem onClick={handleClose}>
                            <Horizontal valign='center'>
                               <Typography>
                                  { toggleDark ? "Light Mode" : "Dark Mode" }
@@ -200,10 +212,18 @@ export const Header = ( { toggleDark, setToggleDark } : HeaderProps ) => {
                           <div>
                               <Divider />
                               <MenuItem onClick={handleClose}>
-                                  <Typography variant='body2'> Connected to {networkName.toUpperCase()} </Typography>
+                                  <Typography variant='body1'> Connected to {networkName.toUpperCase()} </Typography>
                               </MenuItem>
                               <MenuItem onClick={handleClose} >
-                                  <Button color="secondary" variant="contained" onClick={disconnectPressed}>Disconnect</Button>
+                                  <Button color="primary" variant="contained" onClick={disconnectPressed}>Disconnect</Button>
+                              </MenuItem>
+                          </div>
+                        }
+                        {!isConnected && 
+                          <div>
+                              <Divider />
+                              <MenuItem onClick={handleClose} >
+                                  <ConnectButton setAccount={setAccount} setChainId={setChainId} />
                               </MenuItem>
                           </div>
                         }

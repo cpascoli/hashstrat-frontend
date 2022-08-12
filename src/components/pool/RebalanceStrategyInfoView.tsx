@@ -1,4 +1,4 @@
-import { Box, makeStyles } from "@material-ui/core"
+import { Box, makeStyles, Typography } from "@material-ui/core"
 import { TitleValueBox } from "../TitleValueBox"
 import { Token } from "../../types/Token"
 import { fromDecimals, round} from "../../utils/formatter"
@@ -79,7 +79,6 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
 
     return (
         <Box className={classes.container}>
-
             <Box className={classes.portfolioInfo} >
                 <TitleValueBox title="Name" value={name} mode="small" />
                 <TitleValueBox title="Description" value={description} mode="small" />

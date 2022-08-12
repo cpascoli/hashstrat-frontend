@@ -1,4 +1,6 @@
 import { Box, Divider, makeStyles, Typography, Link } from "@material-ui/core"
+import { Link as RouterLink } from "react-router-dom"
+
 import { IndexSummaryView } from "./IndexSummaryView"
 import { Horizontal } from "../Layout"
 import networksConfig from "../../config/networks.json"
@@ -40,7 +42,8 @@ export const IndexesView = ({ chainId, account, depositToken } : IndexesViewProp
             <Divider variant="middle"  style={{marginTop: 20, marginBottom: 0}}/>
             <div className={classes.container}> 
                 <Typography >
-                    HashStrat Indexes allow to invest on a weighted basket of <Link href={`/pools`} style={{ textDecoration: 'none' }} >HashSttap Pools </Link> and their assocaited strategies. <br/>
+                    HashStrat Indexes represent a weighted basket of <Link component={RouterLink} to="/pools" style={{ textDecoration: 'none' }} >HashSttap Pools </Link> and 
+                    their assocaited <Link component={RouterLink} to="/strategies" >Strategies</Link>. <br/>
                     Indexes allow to easily invest into a combination of strategies and assets for improved risk/return profiles.
                 </Typography>
             </div>

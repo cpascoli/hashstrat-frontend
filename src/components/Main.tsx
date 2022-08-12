@@ -64,13 +64,6 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
         } else {
             setConnected(false)
         }
-
-        // if (!chainId) {
-        //     setDemoChainId(137)
-        // } else {
-        //     setDemoChainId(chainId)
-        // }
-        
     }, [chainId, account])
 
 
@@ -104,7 +97,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
             }
 
             <BrowserRouter>
-                <Header toggleDark={toggleDark} setToggleDark={setToggleDark} />
+                <Header toggleDark={toggleDark} setToggleDark={setToggleDark} setAccount={setAccount} setChainId={setChainId} />
                 <main>
                     <Routes>
                         <Route path="/"  element={

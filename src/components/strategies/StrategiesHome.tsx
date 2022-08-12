@@ -62,7 +62,7 @@ export const StrategiesHome = () => {
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
                     <div>
                         <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/RebalancingStrategyV1.sol" target="_blank"> 
-                            <strong> RebalancingStrategyV1  </strong>
+                            <strong> Rebalancing Strategy (60/40)  </strong>
                         </Link> 
                         <Typography> A rebalancing strategy over a 2 tokens portfolio</Typography>
                     </div>
@@ -109,9 +109,9 @@ export const StrategiesHome = () => {
 
                      <div>
                         <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/MeanReversionV1.sol" target="_blank"> 
-                            <strong> MeanReversionV1  </strong>
+                            <strong> Mean Reversion (350D) </strong>
                         </Link> 
-                        <Typography>A dollar-cost average strategy according to the asset's long term trend</Typography>
+                        <Typography>A strategy for dollar-cost averaging in and out a risk asset when its price diverges substantially from its long term trend</Typography>
                     </div>
 
                 </AccordionSummary>
@@ -155,7 +155,7 @@ export const StrategiesHome = () => {
 
                      <div>
                         <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/TrendFollowV1.sol" target="_blank"> 
-                            <strong> TrendFollowV1  </strong>
+                            <strong> Trend Follow (50D) </strong>
                         </Link> 
                         <Typography>A trend-following strategy trading in the direction of the underlying trend</Typography>
                     </div>

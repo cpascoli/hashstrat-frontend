@@ -6,8 +6,6 @@ import {
   CartesianGrid,
   Legend,
   ResponsiveContainer,
-  Scatter,
-  ScatterChart,
   Tooltip,
   XAxis,
   YAxis,

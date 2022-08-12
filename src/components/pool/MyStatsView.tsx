@@ -53,9 +53,9 @@ export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStat
     const assetViews = poolInfo.tokenInfoArray.map( token => {
         const balance = token.accountBalance ?? BigNumber.from(0)
         const value = token.accountValue ?? BigNumber.from(0)
-        const decimals = token.decimals //    tokens.find( t => t.symbol === symbol)?.decimals ?? 2
-        const accountBalanceFormatted = fromDecimals(balance, decimals, 4 ) as any
-        const accountValueFormatted = fromDecimals(value, depositToken.decimals, 2 ) as any
+        const decimals = token.decimals
+        const accountBalanceFormatted = balance && fromDecimals(balance, decimals, 4 )
+        const accountValueFormatted = value && fromDecimals(value, depositToken.decimals, 2 )
         const valueFormatted = `${accountBalanceFormatted} (${accountValueFormatted} ${ depositToken.symbol }) `
 
         return { symbol: token.symbol, valueFormatted, balance, value }

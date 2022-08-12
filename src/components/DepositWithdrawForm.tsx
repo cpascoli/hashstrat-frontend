@@ -68,7 +68,6 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
 
     // Token Allowance 
     const allowance = useTokenAllowance(chainId, poolId, symbol) // in token decimals
-    console.log("DepositWithdrawForm - allowance: ", allowance ? allowance.toString() : "undefined" )
 
     const { approveErc20, approveErc20State } = useTokenApprove(chainId, poolId, symbol)
 
@@ -115,8 +114,6 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     const allowanceOk = formattedAllowance !== undefined && 
                         amount !== undefined && 
                         (parseFloat(formattedAllowance) >= Number(amount) )
-
-    console.log("formattedAllowance:", formattedAllowance, "amount", amount, ">> allowanceOk: ", allowanceOk)
 
 
     // Deposit Tokens
@@ -210,10 +207,11 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     }, [notifications, chainId, approveLink, depositLink, withdrawLink])
 
     
-    const showApproveButton = !allowanceOk  &&  !isDepositMining
-    const showDepositButton = (allowanceOk || isDepositMining) && !isApproveMining
-                               
-        
+    const showApproveButton =  (isApproveMining || (!allowanceOk && !isDepositMining)) // !allowanceOk  &&  !isDepositMining
+    const showDepositButton =  ( !(isApproveMining || (!allowanceOk && !isDepositMining)) && (allowanceOk || isDepositMining)) // (allowanceOk || isDepositMining) && !isApproveMining
+    // const showApproveButton =  allowanceOk  &&  !isDepositMining
+    // const showDepositButton =  (allowanceOk || isDepositMining) && !isApproveMining
+
     return (
         <>
         <div className={classes.container}>

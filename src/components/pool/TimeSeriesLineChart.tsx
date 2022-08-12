@@ -1,5 +1,3 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import {
@@ -45,8 +43,8 @@ export const TimeSeriesLineChart = ( chartData  : ChartData ) => (
         type = 'number'
       />
 
-      <YAxis name = "Asset 1" type="number" scale="auto" yAxisId="left-axis" />
-      <YAxis name = "Asset 2" type="number" scale="auto" yAxisId="right-axis" orientation="right"   />
+      {/* <YAxis name = "Asset 1" type="number" domain={[0, 100]} yAxisId="left-axis" /> */}
+      <YAxis name = "Asset % Chg" type="number" domain={[-100, 100]} yAxisId="right-axis" orientation="right" />
 
       <Legend verticalAlign="top" height={30}/>
       <Tooltip />
@@ -54,7 +52,7 @@ export const TimeSeriesLineChart = ( chartData  : ChartData ) => (
       <Line
         type="linear"
         dataKey={chartData.label1}
-        yAxisId="left-axis"
+        yAxisId="right-axis"
         stroke="#8884d8"
         fill="#8884d8"
       />

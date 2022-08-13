@@ -1,20 +1,24 @@
 import { useState } from "react"
 import { useEthers, useTokenBalance } from "@usedapp/core"
+import { useStakedTokenBalance } from "../../hooks/useFarm"
+
 
 import { Box, Grid, Button, Typography, Link, makeStyles } from  "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
 
-import { TitleValueBox } from './TitleValueBox'
-import { DepositWithdrawForm } from './DepositWithdrawForm'
+import { TitleValueBox } from '../TitleValueBox'
 
-import { Modal } from "./Modal"
-import { Token } from "../types/Token"
-import { fromDecimals } from "../utils/formatter"
-import { SnackInfo } from "./SnackInfo"
+import { Modal } from "../Modal"
+import { Token } from "../../types/Token"
+import { fromDecimals } from "../../utils/formatter"
+import { SnackInfo } from "../SnackInfo"
+
+import { StakeForm } from "./StakeForm"
 
 
-interface DepositWithdrawViewProps {
-  formType?: string,
+
+interface StakingViewProps {
+  formType :  "stake" | "unstake";
   chainId: number,
   poolId: string,
   token: Token;
@@ -39,25 +43,36 @@ const useStyle = makeStyles( theme => ({
 
 
 
-export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleSuccess, handleError } : DepositWithdrawViewProps ) => {
+export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, handleError } : StakingViewProps ) => {
 
   const classes = useStyle()
   const [showUpdateStakeModal, setShowUpdateStakeModal] = useState(false);
-  const [formTypeValue, setFormTypeValue] = useState(formType);
 
-  const { symbol, image, address } = token
+  const { symbol, address } = token
   const { account } = useEthers()
   const tokenBalance = useTokenBalance(address, account)
   const formattedTokenBalance = tokenBalance && fromDecimals(tokenBalance, token.decimals, 2) || "0.0"
 
-  const showModalPressed = (buttonType: string) => {
+  console.log("StakingView tokenStakedBalance", formattedTokenBalance)
+
+  const tokenStakedBalance = useStakedTokenBalance(chainId, poolId, account)
+
+  console.log("StakingView tokenStakedBalance: ", tokenStakedBalance)
+
+
+  const formattedTokenStakedBalance = tokenStakedBalance && fromDecimals(tokenStakedBalance, token.decimals, 2) || "0.0"
+
+
+  console.log("StakingView tokenStakedBalance", tokenStakedBalance, formattedTokenStakedBalance)
+
+
+
+  const showModalPressed = () => {
     setShowUpdateStakeModal(true)
-    setFormTypeValue(buttonType)
   }
 
   const hideModalPreseed = () => {
     setShowUpdateStakeModal(false)
-    setFormTypeValue(undefined)
   }
 
   const handleAllowanceUpdated = () => {
@@ -67,47 +82,38 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
   return (
       <Box className={classes.container}>
 
-          {formType === 'deposit' &&  chainId === 137  && formattedTokenBalance === "0" &&
+            { formType === 'stake' && formattedTokenBalance === "0" &&
                 <Alert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
-                    <AlertTitle>You have no {symbol} to deposit</AlertTitle>
-                    You can get {token.symbol} tokens directly on Polygon using <Link href="https://quickswap.exchange/#/swap" target="_blank"> QuickSwap</Link>,
-                    or transfer {token.symbol} from Ethereum to Polygon via the <Link href="https://wallet.polygon.technology/bridge" target="_blank">Polygon Bridge</Link>
+                    <AlertTitle>No {symbol} tokens to stake </AlertTitle>
+                    Deposit funds into a Pool to get {symbol} tokens that you can stake here to earn HashStrat DAO tokens (HST)
                 </Alert>
             }
 
 
           <div className={classes.balanceView}>
-            <TitleValueBox title={`Available to ${formType}`} value={formattedTokenBalance} suffix={symbol} border={true} />
+            <TitleValueBox title={`Available to ${formType === 'stake' ? 'Stake' : 'Unstake'}`} 
+                    value={ formType === 'stake' ? formattedTokenBalance : formattedTokenStakedBalance } suffix={symbol} border={true} />
           </div>
           <Box sx={{ flexGrow: 1, pt: 2 }}>
               <Grid container>
-                { formType === 'deposit' && 
+            
                   <Grid item xs={12}>
                       <Box >
-                          <Button name="deposit" variant="contained" color="primary" onClick={(e) => showModalPressed("deposit")}>
-                            Deposit
-                          </Button>
+                        <Button name="stake" variant="contained" color="primary" onClick={(e) => showModalPressed()}>
+                            { formType === 'stake' ?  "Stake" : "Unstake" }
+                        </Button> 
                       </Box>
                   </Grid>
-                }
-                { formType === 'withdraw' &&
-                  <Grid item xs={12}>
-                      <Box>
-                          <Button name="withdraw" variant="contained" color="primary" onClick={(e) => showModalPressed("withdraw")}>
-                            Withdraw
-                          </Button>
-                      </Box>
-                  </Grid>
-                }
               </Grid>
           </Box>
           
 
           {showUpdateStakeModal && (
             <Modal onClose={(e) => hideModalPreseed()}>
-              <DepositWithdrawForm
-                formType={formTypeValue}
-                balance={formattedTokenBalance}
+
+              <StakeForm
+                formType={formType}
+                balance={ formType === 'stake' ? formattedTokenBalance : formattedTokenStakedBalance }
                 chainId={chainId}
                 poolId={poolId}
                 token={token}

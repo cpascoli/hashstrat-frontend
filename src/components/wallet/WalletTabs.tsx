@@ -4,7 +4,9 @@ import { styled } from "@material-ui/core/styles"
 import { TabContext, TabList, TabPanel, Alert, AlertTitle, Color as Severity } from "@material-ui/lab"
 
 import { Token } from  "../../types/Token"
-import { DepositWithdrawView } from "../DepositWithdrawView"
+import { DepositWithdrawView } from "./DepositWithdrawView"
+import { StakingView } from "./StakingView"
+
 import { SnackInfo } from "../SnackInfo"
 
 
@@ -74,25 +76,20 @@ export const WalletTabs = ( { chainId, poolId, account, tokens } : TabPanelProps
         setShowSnack(true)
     }
 
+    const lpToken = tokens.find(el => el.symbol === 'POOL-LP')
+
     return (
         
         <Box className={classes.container}>
             <Box>
                 <TabContext value={selectedTokenIndex.toString()}>
                     <TabList onChange={handleChange} className={classes.tabList}>
-                        {
-                            tokens.map((token, index ) => {
-                                return (
-                                    <Tab label={token.symbol} value={index.toString()} key={index}>
-
-                                    </Tab>
-                                )
-                            }) 
-                        }
+                        <Tab label="Deposit" value="0" key={0} ></Tab>
+                        <Tab label="Withdraw" value="1" key={1} ></Tab>
+                        <Tab label="Stake" value="2" key={2}></Tab>
+                        <Tab label="Unstake" value="3" key={3}></Tab>
                     </TabList>
-
                     {
-                       
                         tokens.map((token, index ) => {
                             return (
                                 <TabPanel className={classes.tab} value={index.toString()} key={index}>
@@ -108,6 +105,26 @@ export const WalletTabs = ( { chainId, poolId, account, tokens } : TabPanelProps
                             )
                         })
                     }
+                    <TabPanel className={classes.tab} value="2" key="2">
+                        <StakingView 
+                            chainId={chainId}
+                            poolId={poolId}
+                            formType="stake"
+                            token={lpToken!}
+                            handleSuccess={handleSuccess}
+                            handleError={handleError}
+                        />
+                    </TabPanel>
+                    <TabPanel className={classes.tab} value="3" key="3">
+                        <StakingView 
+                            chainId={chainId}
+                            poolId={poolId}
+                            formType="unstake"
+                            token={lpToken!}
+                            handleSuccess={handleSuccess}
+                            handleError={handleError}
+                        />
+                    </TabPanel>
                 </TabContext>
             </Box>
 

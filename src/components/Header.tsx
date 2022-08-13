@@ -192,7 +192,7 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
                         </nav>
 
                         <MenuItem onClick={handleClose}>
-                            <Typography variant='body1'> Version 0.2 (bab9cba) </Typography>
+                            <Typography variant='body1'> Version 0.2 (cd83) </Typography>
                         </MenuItem>
                         <MenuItem onClick={handleClose}>
                            <Horizontal valign='center'>

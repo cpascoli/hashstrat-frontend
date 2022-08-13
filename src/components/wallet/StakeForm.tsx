@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react"
 import { useNotifications } from "@usedapp/core"
+
+import { useTokenApprove, useTokenAllowance } from "../../hooks"
+import { useDepositAndStartStake, useEndStakeAndWithdraw } from "../../hooks/useFarm"
+
 import { Box, Grid, Button, Input, CircularProgress, Divider, Typography, Link, makeStyles } from "@material-ui/core"
-import { useTokenApprove, useTokenAllowance, useDeposit, useWithdraw } from "../hooks"
-import { Token } from "../types/Token"
-import { toDecimals, fromDecimals } from "../utils/formatter"
-import { NetworkExplorerHost, NetworkExplorerName } from "../utils/network"
-import { SnackInfo } from "./SnackInfo"
-import { Horizontal } from "./Layout"
 import { Alert, AlertTitle } from "@material-ui/lab"
 
+import { SnackInfo } from "../SnackInfo"
+import { Horizontal } from "../Layout"
+import { Token } from "../../types/Token"
+import { toDecimals, fromDecimals } from "../../utils/formatter"
+import { NetworkExplorerHost, NetworkExplorerName, FarmAddress } from "../../utils/network"
 
-export interface DepositWithdrawFormProps {
-    formType? : string;
+
+
+export interface StakeFormProps {
+    formType? :  "stake" | "unstake";
     chainId: number,
     poolId: string,
     token : Token;
@@ -62,14 +67,14 @@ const useStyle = makeStyles( theme => ({
     }
 }))
 
-export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance, handleSuccess, handleError, onClose } : DepositWithdrawFormProps) => {
+export const StakeForm = ({ formType, chainId, poolId, token, balance, handleSuccess, handleError, onClose } : StakeFormProps) => {
 
     const { symbol, image } = token
 
-    // Token Allowance 
-    const allowance = useTokenAllowance(chainId, poolId, symbol) // in token decimals
+    // PoolLP Token Allowance 
+    const allowance = useTokenAllowance(chainId, poolId, symbol, FarmAddress(chainId)) // in token decimals
 
-    const { approveErc20, approveErc20State } = useTokenApprove(chainId, poolId, symbol)
+    const { approveErc20, approveErc20State } = useTokenApprove(chainId, poolId, symbol, FarmAddress(chainId))
 
     const classes = useStyle()
     const { notifications } = useNotifications()
@@ -102,9 +107,9 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     const submitForm = () => {
         setUserMessage(undefined)
 
-        if (formType === 'deposit') {
+        if (formType === 'stake') {
             submitDeposit()
-        } else if (formType === 'withdraw') {
+        } else if (formType === 'unstake') {
             submitWithdrawal()
         }
     }
@@ -116,27 +121,27 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
                         (parseFloat(formattedAllowance) >= Number(amount) )
 
 
-    // Deposit Tokens
-    const { deposit, depositState } = useDeposit(chainId, poolId)
+    // Deposit and Stake LP Tokens
+    const { deposit, depositState } = useDepositAndStartStake(chainId)
     const isDepositMining = depositState.status === "Mining"
 
     const submitDeposit = () => {
         const amountDecimals = toDecimals(amount.toString(), token.decimals)
-        console.log("submitDeposit - amount: ", amount, "amountDecimals", amountDecimals)
-        return deposit(amountDecimals)
+        console.log("submit DepositAndStartStake - lptoken: ", token.address, ", amount: ", amount, "amountDecimals", amountDecimals)
+        return deposit(token.address, amountDecimals)
     }
 
-    // Withdraw Tokens
-    const { withdraw, withdrawState } = useWithdraw(chainId, poolId)
+    // End Stake and Withdraw Tokens
+    const { withdraw, withdrawState } = useEndStakeAndWithdraw(chainId)
     const isWithdrawMining = withdrawState.status === "Mining"
     const submitWithdrawal = () => {
         const amountDecimals = toDecimals(amount.toString(), token.decimals)
-        console.log("submitWithdrawal - amount: ", amount, "amountDecimals", amountDecimals)
-        return withdraw(amountDecimals)
+        console.log("submit EndStakeAndWithdraw - lptoken: ", token.address, ", amount: ", amount, "amountDecimals", amountDecimals)
+        return withdraw(token.address, amountDecimals)
     }
 
-    const submitButtonTitle = (formType === 'deposit') ? "Deposit" : 
-                               (formType === 'withdraw') ? "Withdraw" : "n/a"
+    const submitButtonTitle = (formType === 'stake') ? "Stake" : 
+                               (formType === 'unstake') ? "Unstake" : "n/a"
 
     const explorerHost = NetworkExplorerHost(chainId)
     const approveLink =  (approveErc20State.status === 'Success' && approveErc20State.receipt)? `https://${explorerHost}/tx/${approveErc20State.receipt.transactionHash}` : ""
@@ -159,7 +164,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             setUserMessage({
                 type: "info",
                 title: "Token transfer approved",
-                message: "Now you can deposit the tokens",
+                message: "Now you can Stake the tokens",
             })
             handleSuccess(info)
         }
@@ -170,14 +175,14 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             const info : SnackInfo = {
                 type: "info",
                 title: "Success",
-                message: "Deposit completed",
+                message: "Staking of LP tokens completed",
                 linkUrl: depositLink,
                 linkText: `View on ${NetworkExplorerName(chainId)}`,
                 snackDuration: 10000
             }
             setUserMessage({
                 type: "info",
-                title: "Deposit completed",
+                title: "Staking completed",
                 message: "Now you can close the window",
             })
             handleSuccess(info)
@@ -191,14 +196,14 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             const info : SnackInfo = {
                 type: "info",
                 title: "Success",
-                message: "Withdrawal completed",
+                message: "Unstaking of LP tokens completed",
                 linkUrl: withdrawLink,
                 linkText: `View on ${NetworkExplorerName(chainId)}`,
                 snackDuration: 10000
             }
             setUserMessage({
                 type: "info",
-                title: "Withdrawals completed",
+                title: "Unstaking completed",
                 message: "Now you can close the window",
             })
             handleSuccess(info)
@@ -211,6 +216,9 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     const showDepositButton =  ( !(isApproveMining || (!allowanceOk && !isDepositMining)) && (allowanceOk || isDepositMining)) // (allowanceOk || isDepositMining) && !isApproveMining
     // const showApproveButton =  allowanceOk  &&  !isDepositMining
     // const showDepositButton =  (allowanceOk || isDepositMining) && !isApproveMining
+
+    console.log("allowanceOk", allowanceOk, "formattedAllowance: ", formattedAllowance, "amount", amount, "isApproveMining", isApproveMining, " ==> showApproveButton", showApproveButton)
+
 
     return (
         <>
@@ -226,9 +234,12 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             }
                 
             <div className={classes.section1}>
-                <h1 className={classes.title}> {formType === 'deposit'? `Deposit ${symbol}` : 'Withdraw Liquidity' } </h1>
+                <h1 className={classes.title}> { formType === 'stake' ? `Stake ${symbol}` : `Unstake ${symbol}` } </h1>
                 <Typography color="textSecondary"> 
-                   First approve and then transfer the tokens.
+                    { formType === 'stake' ? 
+                        "First approve the token transfer and then Stake the tokens" : 
+                         "Unstake LP tokens to withdraw your funds in the Pool" 
+                    }
                 </Typography>
             </div>
             
@@ -245,17 +256,17 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
                         <Input className={classes.amount} inputProps={{min: 0, style: { textAlign: 'right' }}}  
                             value={amount} placeholder="0.0" autoFocus onChange={handleInputChange} /> 
                         <img className={classes.tokenImg} src={image} alt="token image" />
-                        <Typography color="textSecondary" variant="body1" >{symbol}</Typography>
+                        <Typography color="textSecondary" variant="body1" style={{minWidth:70}} >{symbol}</Typography>
                     </div> 
                 </Grid>
             </Box>
 
-            { formType === 'deposit' &&
+            { formType === 'stake' &&
                 <Box mb={2} >
                     { showApproveButton &&
                     <Button variant="contained" color="primary" fullWidth disabled={amount === ''}
                         onClick={() => approveButtonPressed()} >
-                        Approve {symbol} 
+                        Approve transfer
                         { isApproveMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
                     </Button>
                     }
@@ -269,9 +280,9 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
                     </Button>
                     }
 
-                    { userMessage && userMessage.title === 'Deposit completed' &&
+                    { userMessage && userMessage.title === 'Staking completed' &&
                         <Box mt={2} >
-                            <Button variant="contained" color="primary" fullWidth onClick={onClose} >
+                            <Button variant="contained" color="secondary" fullWidth onClick={onClose} >
                                 Close
                             </Button>
                         </Box>
@@ -279,16 +290,16 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
                 </Box>
   
             }  
-            { formType === 'withdraw' &&
+            { formType === 'unstake' &&
                 <Box mb={2} >
                     <Button variant="contained" color="primary" fullWidth disabled={amount === ''}
                         onClick={() => submitForm()}>
                         { submitButtonTitle }
                         { isWithdrawMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
                     </Button>
-                    { userMessage && userMessage.title === 'Withdrawals completed' &&
+                    { userMessage && userMessage.title === 'Unstaking completed' &&
                         <Box mt={2} >
-                            <Button variant="contained" color="primary" fullWidth onClick={onClose} >
+                            <Button variant="contained" color="secondary" fullWidth onClick={onClose} >
                                 Close
                             </Button>
                         </Box>

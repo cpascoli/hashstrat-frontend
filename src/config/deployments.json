@@ -40,6 +40,9 @@
         "dai": "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa",
         "weth": "0xd0A1E359811322d97991E03f863a0C30C2cF029C",
         "wbtc": "0xe0C9275E44Ea80eF17579d33c55136b7DA269aEb",
+        "hst": "0x36de93a7d635F957A5E8533058786e3c96B3C9e1",
+        "hst_farm": "0x8fd327a3907E8E5FC9E070134015393C373582ba",
+        "governance": "0x5F667187d3B6dA12e31286776cA51D0614e1b977",
         "indexes": {
             "index01": {
                 "pool": "0xc7Ac011529AFCe67AEBD7941523A773F341Eab1b",
@@ -107,6 +110,9 @@
         "dai": "",
         "weth": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
         "wbtc": "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
+        "hst": "0x2223Ad393d666Eb26422d1f7b33A6947BFc2eaCa",
+        "hst_farm": "0x130e249DA0B90378eB07845217d6bB832E16f038",
+        "governance": "0xD9CF1D8c68f1986D20CCffe2268dd4Cb7F518f4B",
         "indexes": {
             "index01": {
                 "pool": "0x371B94a526A0aA76A2fa30b6Dcaf871c4449edCA",

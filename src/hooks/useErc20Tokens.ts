@@ -5,9 +5,9 @@ import { constants } from "ethers"
 
 
 // Approve spending of 'symbol' by the Pool contract
-export const useTokenApprove = (chainId: number, poolId: string, symbol: string) => {
+export const useTokenApprove = (chainId: number, poolId: string, symbol: string, spenderAddress: string) => {
     const tokenContract =  ERC20Contract(chainId, poolId, symbol) 
-    const spenderAddress = PoolAddress(chainId, poolId)
+    // const spenderAddress = spender ?? PoolAddress(chainId, poolId)
 
     const { send: approveErc20Send, state: approveErc20State } = useContractFunction(tokenContract, "approve", { 
         transactionName: "Approve Token Transfer"
@@ -21,9 +21,9 @@ export const useTokenApprove = (chainId: number, poolId: string, symbol: string)
 }
 
 
-export const useTokenAllowance =  (chainId: number, poolId: string, symbol: string) => {
+export const useTokenAllowance =  (chainId: number, poolId: string, symbol: string, spenderAddress: string) => {
     const tokenContract = ERC20Contract(chainId, poolId, symbol)
-    const spenderAddress = PoolAddress(chainId, poolId)
+    // const spenderAddress = PoolAddress(chainId, poolId)
     const { account : ownerAddress } = useEthers()
 
     const { value, error } = useCall({

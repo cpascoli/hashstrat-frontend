@@ -21,17 +21,15 @@ interface DashboardProps {
 
 const useStyles = makeStyles( theme => ({
     container: {
-        padding: theme.spacing(2),
+        paddingTop: 2,
     },
     tabList: { 
         padding: 0,
         margin: "auto",
-        maxWidth: 640,
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     },
     tab: { 
           padding: 0,
-          maxWidth: 640,
           margin: "auto",
           paddingTop: 20,
           backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],

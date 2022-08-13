@@ -78,7 +78,7 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
         <div className={classes.container}>
          
             <Box>
-                <Typography variant="h4" align="center" >HashStrat Summary</Typography>
+                <Typography variant="h4" align="center" >Asset Summary</Typography>
                 <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
                     Total assets across all Pools &amp; Indexes
                 </Typography>

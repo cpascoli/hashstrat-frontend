@@ -92,13 +92,13 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                 </Box>
             }
 
-            { account && totalValueFormatted && Number(totalValueFormatted) == 0 && 
+            {/* { account && totalValueFormatted && Number(totalValueFormatted) == 0 && 
                 <Alert severity="info" style={{marginTop: 20, marginBottom: 20}}>
                     <AlertTitle> You currently have no assets in your portfolio </AlertTitle>
                     When you deposit into a <Link component={RouterLink} to="/pools">Pool</Link> or
                     an <Link component={RouterLink} to="/indexes">Index</Link> a summary of your assets will show here. 
                 </Alert>
-            }
+            } */}
 
 
             {  account &&

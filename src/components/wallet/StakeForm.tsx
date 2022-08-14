@@ -6,6 +6,7 @@ import { useDepositAndStartStake, useEndStakeAndWithdraw } from "../../hooks/use
 
 import { Box, Grid, Button, Input, CircularProgress, Divider, Typography, Link, makeStyles } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
+import { StyledAlert } from "../shared/StyledAlert"
 
 import { SnackInfo } from "../SnackInfo"
 import { Horizontal } from "../Layout"
@@ -226,10 +227,10 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, handleSuc
 
             { userMessage &&
                 <div className={classes.info}>
-                     <Alert severity={userMessage?.type}>
+                     <StyledAlert severity={userMessage?.type}>
                         <AlertTitle> {userMessage?.title} </AlertTitle>
                         {userMessage?.message}
-                    </Alert>
+                    </StyledAlert>
                 </div>
             }
                 

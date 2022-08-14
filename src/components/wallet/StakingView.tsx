@@ -2,9 +2,9 @@ import { useState } from "react"
 import { useEthers, useTokenBalance } from "@usedapp/core"
 import { useStakedTokenBalance } from "../../hooks/useFarm"
 
-
-import { Box, Grid, Button, Typography, Link, makeStyles } from  "@material-ui/core"
+import { Box, Grid, Button, makeStyles, styled} from  "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
+import { StyledAlert } from "../shared/StyledAlert"
 
 import { TitleValueBox } from '../TitleValueBox'
 
@@ -14,7 +14,6 @@ import { fromDecimals } from "../../utils/formatter"
 import { SnackInfo } from "../SnackInfo"
 
 import { StakeForm } from "./StakeForm"
-
 
 
 interface StakingViewProps {
@@ -53,19 +52,8 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
   const tokenBalance = useTokenBalance(address, account)
   const formattedTokenBalance = tokenBalance && fromDecimals(tokenBalance, token.decimals, 2) || "0.0"
 
-  console.log("StakingView tokenStakedBalance", formattedTokenBalance)
-
   const tokenStakedBalance = useStakedTokenBalance(chainId, poolId, account)
-
-  console.log("StakingView tokenStakedBalance: ", tokenStakedBalance)
-
-
   const formattedTokenStakedBalance = tokenStakedBalance && fromDecimals(tokenStakedBalance, token.decimals, 2) || "0.0"
-
-
-  console.log("StakingView tokenStakedBalance", tokenStakedBalance, formattedTokenStakedBalance)
-
-
 
   const showModalPressed = () => {
     setShowUpdateStakeModal(true)
@@ -79,14 +67,15 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
     console.log("handleAllowanceUpdated")
   }
   
+
   return (
       <Box className={classes.container}>
 
             { formType === 'stake' && formattedTokenBalance === "0" &&
-                <Alert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
-                    <AlertTitle>No {symbol} tokens to stake </AlertTitle>
+                <StyledAlert severity="info" color="info" style={{textAlign: "center", marginBottom: 20 }} > 
+                    <AlertTitle>No {symbol} tokens to stake</AlertTitle>
                     Deposit funds into a Pool to get {symbol} tokens that you can stake here to earn HashStrat DAO tokens (HST)
-                </Alert>
+                </StyledAlert>
             }
 
 

@@ -8,6 +8,7 @@ import { NetworkExplorerHost, NetworkExplorerName, PoolAddress} from "../../util
 import { SnackInfo } from "../SnackInfo"
 import { Horizontal } from "../Layout"
 import { Alert, AlertTitle } from "@material-ui/lab"
+import { StyledAlert } from "../shared/StyledAlert"
 
 
 export interface DepositWithdrawFormProps {
@@ -218,10 +219,10 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
 
             { userMessage &&
                 <div className={classes.info}>
-                     <Alert severity={userMessage?.type}>
+                     <StyledAlert severity={userMessage?.type}>
                         <AlertTitle> {userMessage?.title} </AlertTitle>
                         {userMessage?.message}
-                    </Alert>
+                    </StyledAlert>
                 </div>
             }
                 

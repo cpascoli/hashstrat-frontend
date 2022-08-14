@@ -7,6 +7,8 @@ import { ExpandMore } from "@material-ui/icons"
 import { Alert, AlertTitle } from "@material-ui/lab"
 import { Link as RouterLink } from "react-router-dom"
 
+import { StyledAlert } from "../shared/StyledAlert"
+
 const useStyles = makeStyles( theme => ({
     container: {
         padding: theme.spacing(2),

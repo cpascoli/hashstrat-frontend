@@ -2,6 +2,8 @@ import React, { useState } from "react"
 import { Box, Tab, Paper, Snackbar, Link, makeStyles } from "@material-ui/core"
 import { styled } from "@material-ui/core/styles"
 import { TabContext, TabList, TabPanel, Alert, AlertTitle, Color as Severity } from "@material-ui/lab"
+import { StyledAlert } from "../shared/StyledAlert"
+
 
 import { Token } from  "../../types/Token"
 import { DepositWithdrawView } from "./DepositWithdrawView"
@@ -135,12 +137,12 @@ export const WalletTabs = ( { chainId, poolId, account, tokens } : TabPanelProps
                     autoHideDuration={snackContent?.snackDuration ?? 10000}
                     onClose={handleCloseSnack}
             >
-                    <Alert onClose={handleCloseSnack} severity={snackContent?.type}>
+                    <StyledAlert onClose={handleCloseSnack} severity={snackContent?.type}>
                         <AlertTitle> {snackContent?.title} </AlertTitle>
                         {snackContent?.message}
                         <br/>
                         <Link href={snackContent?.linkUrl} target="_blank"> {snackContent?.linkText} </Link>
-                    </Alert>
+                    </StyledAlert>
             </Snackbar>
         </Box>
     )

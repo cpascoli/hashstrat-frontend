@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Box,Typography, makeStyles } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
+import { StyledAlert } from "./shared/StyledAlert"
 
 import { TokensForPool, PoolIds, IndexesIds, DepositToken } from "../utils/pools"
 import { InvestTokens } from "../utils/pools"
-
 
 import { Home } from "./Home"
 import { Header } from '../components/Header';
@@ -76,14 +76,14 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
         <Box className={classes.container} >
            
            {(!chainId && account) &&
-                <Alert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
+                <StyledAlert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
                     <AlertTitle>Wrong Network</AlertTitle>
                     Connect to the <strong>Polygon</strong> or <strong>Kovan</strong> networks to use the dapp
-                </Alert>
+                </StyledAlert>
             }
 
             { !account &&
-                <Alert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
+                <StyledAlert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
                     <Horizontal align="center">
                         <div>
                              <AlertTitle>No account connected</AlertTitle>
@@ -93,7 +93,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                             <ConnectButton setAccount={setAccount} setChainId={setChainId} />
                         </div>
                     </Horizontal>
-                </Alert>
+                </StyledAlert>
             }
 
             <BrowserRouter>

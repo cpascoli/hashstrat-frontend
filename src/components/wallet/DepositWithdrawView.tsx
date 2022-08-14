@@ -3,6 +3,7 @@ import { useEthers, useTokenBalance } from "@usedapp/core"
 
 import { Box, Grid, Button, Typography, Link, makeStyles } from  "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
+import { StyledAlert } from "../shared/StyledAlert"
 
 import { TitleValueBox } from '../TitleValueBox'
 import { DepositWithdrawForm } from './DepositWithdrawForm'
@@ -68,18 +69,18 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
       <Box className={classes.container}>
 
            {  formType === 'deposit' &&  chainId === 137  && formattedTokenBalance === "0" &&
-              <Alert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
+              <StyledAlert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
                   <AlertTitle>No {symbol} to deposit</AlertTitle>
                   You can get {token.symbol} tokens directly on Polygon using <Link href="https://quickswap.exchange/#/swap" target="_blank"> QuickSwap</Link>,
                   or transfer {token.symbol} from Ethereum to Polygon via the <Link href="https://wallet.polygon.technology/bridge" target="_blank">Polygon Bridge</Link>
-              </Alert>
+              </StyledAlert>
           }
 
           {  formType === 'withdraw' &&  chainId === 137  && formattedTokenBalance === "0" &&
-              <Alert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
+              <StyledAlert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
                   <AlertTitle>No {symbol} to withdraw</AlertTitle>
                   If you staked some {symbol} tokens, you need to un-stake them before you can withdraw funds from the pool.
-              </Alert>
+              </StyledAlert>
           }
 
           <div className={classes.balanceView}>

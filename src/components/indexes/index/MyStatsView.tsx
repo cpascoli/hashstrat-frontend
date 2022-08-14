@@ -62,7 +62,7 @@ export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStat
 
 
     return (
-        <Box className={classes.container}>
+        <Box className={classes.container}  >
             <Box className={classes.portfolioInfo} >
 
                 { assetViews }

@@ -1,4 +1,8 @@
 import { Box, Typography, makeStyles } from "@material-ui/core"
+import { BigNumber } from "ethers"
+
+import { usePoolModel } from "./PoolModel"
+
 import { TitleValueBox } from "../TitleValueBox"
 import { Token } from "../../types/Token"
 import { fromDecimals, round } from "../../utils/formatter"
@@ -7,6 +11,9 @@ import { useSwapInfoArray } from "../../hooks"
 import { TimeSeriesAreaChart } from "./TimeSeriesAreaChart"
 
 import { PoolInfo } from "../../utils/pools"
+
+import { PieChartWithLabels } from "../shared/PieChartWithLabels"
+import { Horizontal } from "../Layout"
 
 import { useTotalPortfolioValue, useTotalDeposited, useTotalWithdrawn, 
          useTokenBalance, useInvestedTokenValue } from "../../hooks"
@@ -18,9 +25,14 @@ const useStyle = makeStyles( theme => ({
         padding: 0,
     },
     portfolioInfo: {
-        maxWidth: 640,
+        paddingTop: 20,
+        minWidth: 340,
         margin: "auto",
         padding: theme.spacing(1)
+    },
+    chart: {
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(4)
     }
 }))
 
@@ -36,37 +48,24 @@ interface PoolStatsViewProps {
 
 export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : PoolStatsViewProps ) => {
 
-    const { name, upkeep } = PoolInfo(chainId, poolId)
+    const classes = useStyle()
 
-    const poolAddress = PoolAddress(chainId, poolId)
-    const totalPortfolioValue = useTotalPortfolioValue(chainId, poolId)
+    const { name, description, upkeep } = PoolInfo(chainId, poolId)
+    const tokens =  [depositToken, investToken]
+    const { poolInfo, portfolioInfo, chartData : assetAllocationChartData } = usePoolModel(chainId, poolId, tokens, depositToken)
+
     const totalDeposited = useTotalDeposited(chainId, poolId)
     const totalWithdrawn = useTotalWithdrawn(chainId, poolId)
-    const depositTokenBalance = useTokenBalance(chainId, poolId, depositToken.symbol, poolAddress)
-    const investTokenBalance = useTokenBalance(chainId, poolId, investToken.symbol, poolAddress)
-    const investedTokenValue = useInvestedTokenValue(chainId, poolId)
 
-    const formattedPortfolioValue =  (totalPortfolioValue) ? fromDecimals(totalPortfolioValue, depositToken.decimals, 2) : ""
-    const formattedDeposited =  (totalDeposited) ? fromDecimals(totalDeposited, depositToken.decimals, 2) : ""
-    const formatteWithdrawn =  (totalWithdrawn) ? fromDecimals(totalWithdrawn, depositToken.decimals, 2) : ""
-    const formattedDepositTokenBalance = (depositTokenBalance) ? fromDecimals(depositTokenBalance, depositToken.decimals, 2) : ""
-    const formattedIinvestTokenBalance = (investTokenBalance) ? fromDecimals(investTokenBalance, investToken.decimals, 8) : ""
-    const formattedInvestedTokenValue = (investedTokenValue) ? fromDecimals(investedTokenValue, depositToken.decimals, 2) : ""
-    const investTokenValue = (formattedInvestedTokenValue)? parseFloat(formattedInvestedTokenValue) : undefined
-    const totalPortfoliovalue = (formattedPortfolioValue)? parseFloat(formattedPortfolioValue) : undefined
-    const investTokenWeight = (!investTokenValue || !totalPortfoliovalue) ? 0 : (totalPortfoliovalue > 0) ? Math.round(10000 * investTokenValue / totalPortfoliovalue) / 100 : undefined
-    const depositTokenWeight = (investTokenWeight !== undefined) ? Math.round( 100 * (100 - investTokenWeight)) / 100 : undefined
-  
-    const asset1Formatted = (formattedIinvestTokenBalance) ? `${formattedIinvestTokenBalance} ${investToken.symbol}  (${investTokenWeight}%)` : `n/a ${investToken.symbol}`
-    const asset2Formatted = (formattedDepositTokenBalance) ? `${formattedDepositTokenBalance} ${depositToken.symbol} (${depositTokenWeight}%)` : `n/a  ${depositToken.symbol}`
-
-    const classes = useStyle()
+    const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : undefined
+    const formattedDeposited = (totalDeposited) ? fromDecimals(totalDeposited, depositToken.decimals, 2) : ""
+    const formatteWithdrawn = (totalWithdrawn) ? fromDecimals(totalWithdrawn, depositToken.decimals, 2) : ""
 
     const swaps = useSwapInfoArray(chainId, poolId)
     const label1 = `${depositToken.symbol} Value %`
     const label2 = `${investToken.symbol} Value %`
   
-    const chartData = swaps?.map( (data: any) => {
+    const assetValuePercChartData = swaps?.map( (data: any) => {
         const date = data.timestamp * 1000
         const price = parseFloat(fromDecimals(data.feedPrice, 8, 2))
         const asset1 = parseFloat(fromDecimals(data.depositTokenBalance, depositToken.decimals, 2))
@@ -80,30 +79,47 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
     })
 
 
+    const assetViews = poolInfo.tokenInfoArray.map( token => {
+        const balance = token.balance ?? BigNumber.from(0)
+        const value = token.value ?? BigNumber.from(0)
+        const decimals = token.decimals //    tokens.find( t => t.symbol === symbol)?.decimals ?? 2
+        const accountBalanceFormatted = fromDecimals(balance, decimals, 4 ) as any
+        const accountValueFormatted = fromDecimals(value, depositToken.decimals, 2 ) as any
+        const valueFormatted = `${accountBalanceFormatted} (${accountValueFormatted} ${ depositToken.symbol }) `
+
+        return { symbol: token.symbol, valueFormatted, balance, value }
+    }).map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted} /> )
+
+    console.log("poolInfo", poolInfo, assetViews)
 
     return (
         <Box className={classes.container}>
-            <Box className={classes.portfolioInfo} >
-                <TitleValueBox title="Name" value={name} />
-            
-                <TitleValueBox title="Total Value" value={formattedPortfolioValue} suffix={depositToken.symbol} />
-                <TitleValueBox title="Risk Asset" value={asset1Formatted} />
-                <TitleValueBox title="Stable Asset" value={asset2Formatted} />
-
-                <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
-                <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>
-                <TitleValueBox title="Chainlink Keeper" value={upkeep} />
-
+            <Box mb={2}>
+                <Typography variant="h6" align="center"> {name}</Typography> 
+                <Typography variant="body2" align="center"> {description}</Typography> 
             </Box>
 
+            <Horizontal align="center" >
+                <PieChartWithLabels { ...assetAllocationChartData } /> 
+                <Box className={classes.portfolioInfo} >
+                    { assetViews }
+                    <TitleValueBox title="Total Asset Value" value={formattedPortfolioValue??""} suffix={depositToken.symbol} />
+    
+                    <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
+                    <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>
+                    <TitleValueBox title="Chainlink Keeper" value={upkeep} />
+                </Box>
+            </Horizontal>
+           
+
             <Typography align="center" style={{textTransform: "uppercase", marginTop: 20}}>
-                Assets held in the pool
+                Asset value %
             </Typography>
 
-            <TimeSeriesAreaChart title="Assets held in the pool" 
+            <TimeSeriesAreaChart title="Asset Value %" 
                 label1={label1} 
                 label2={label2} 
-                data={chartData}  
+                data={assetValuePercChartData}  
             /> 
         </Box>
     )

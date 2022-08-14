@@ -9,13 +9,14 @@ import { TimeSeriesLineChart } from "./TimeSeriesLineChart"
 const useStyle = makeStyles( theme => ({
     container: {
         margin: 0,
-        padding: 0,
+        padding: 10,
+        maxWidth: 800
     },
-    portfolioInfo: {
-        maxWidth: 640,
-        margin: "auto",
-        padding: theme.spacing(1)
+    chart: {
+        maxWidth: 700,
+        margin: "auto"
     }
+
 }))
 
 
@@ -25,7 +26,6 @@ interface PoolStatsViewProps {
     depositToken: Token,
     investToken: Token
 }
-
 
 
 export const TradesView = ( { chainId, poolId, depositToken, investToken } : PoolStatsViewProps ) => {
@@ -125,27 +125,30 @@ export const TradesView = ( { chainId, poolId, depositToken, investToken } : Poo
   
 
     return (
-        <Box className={classes.container} px={3}>
+        <Box className={classes.container}>
 
             <Typography align="center">Assets Traded (Cumulative % Chg)</Typography>
-
-            <TimeSeriesLineChart title="Assets Traded (Cumulative % Chg)" 
-                label1={label1} 
-                label2={label2} 
-                data={chartData}  
-            /> 
+            <Box className={classes.chart} >
+                <TimeSeriesLineChart title="Assets Traded (Cumulative % Chg)" 
+                    label1={label1} 
+                    label2={label2} 
+                    data={chartData}  
+                /> 
+            </Box>
 
             <br/>
 
             { rows && 
-                <div style={{ height: rows.length * 56 + 110, width: '100%', marginTop: 20 }}>
-                    <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        pageSize={10}
-                        rowsPerPageOptions={[10]}
-                />
-                </div>
+                <Box> 
+                    <div style={{ height: rows.length * 56 + 110, width: '100%', marginTop: 20 }}>
+                        <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            pageSize={10}
+                            rowsPerPageOptions={[10]}
+                    />
+                    </div>
+                </Box> 
             }
 
         </Box>

@@ -13,9 +13,10 @@ const useStyle = makeStyles( theme => ({
     container: {
         margin: 0,
         padding: 0,
+        paddingBottom: 30
     },
     portfolioInfo: {
-        maxWidth: 640,
+        // maxWidth: 640,
         margin: "auto",
         padding: theme.spacing(1)
     },
@@ -43,7 +44,7 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
     const { name, description, investTokens } = PoolInfo(chainId, poolId)
  
     const tokens =  [depositToken, ... InvestTokens(chainId)]
-    const { indexInfo, portfolioInfo, chartData } = useIndexModel(chainId, poolId, tokens, depositToken, account)
+    const { indexInfo, portfolioInfo, chartData } = useIndexModel(chainId, poolId, tokens, depositToken)
   
     console.log("IndexStatsView", indexInfo)  //indexInfo:  {poolId: 'index02', tokenInfoArray: Array(2), totalValue: BigNumber}
     
@@ -62,21 +63,36 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
 
 
 
-
     return (
         <Box className={classes.container}>
-            <Typography variant="h6" align="center"> {name}</Typography> 
-            <Typography variant="body2" align="center"> {description}</Typography> 
 
-            <Box className={classes.portfolioInfo} >
-                { assetViews }
-                <TitleValueBox title="Total Asset Value" value={formattedPortfolioValue??""} suffix={depositToken.symbol} />
+            <Box mb={2}>
+                <Typography variant="h6" align="center"> {name}</Typography> 
+                <Typography variant="body2" align="center"> {description}</Typography> 
             </Box>
-            <Box className={classes.chart}>
+
+            <Horizontal align="center" >
+                <PieChartWithLabels { ...chartData } /> 
+                <Box className={classes.portfolioInfo} >
+                    { assetViews }
+                    <TitleValueBox title="Total Asset Value" value={formattedPortfolioValue??""} suffix={depositToken.symbol} />
+    
+                    {/* <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
+                    <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>
+         */}
+                </Box>
+            </Horizontal>
+
+{/* 
+            <Typography variant="h6" align="center"> {name}</Typography> 
+            <Typography variant="body2" align="center"> {description}</Typography>  */}
+
+
+            {/* <Box className={classes.chart}>
                 <Horizontal align="center">
                     <PieChartWithLabels { ...chartData } /> 
                 </Horizontal>
-            </Box>
+            </Box> */}
         </Box>
        
     )

@@ -6,6 +6,7 @@ import { Token } from "../../../types/Token"
 import { MyStatsView } from "./MyStatsView"
 import { IndexStatsView } from "./IndexStatsView"
 import { WalletTabs } from "../../wallet/WalletTabs"
+import { red } from "@material-ui/core/colors"
 
 
 interface IndexTabsProps {
@@ -24,12 +25,12 @@ const useStyle = makeStyles( theme => ({
     tabList: { 
         padding: 0,
         margin: "auto",
-        maxWidth: 640,
+        maxWidth: 960,
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     },
     tab: { 
           padding: 0,
-          maxWidth: 640,
+          maxWidth: 960,
           margin: "auto",
           paddingTop: 20,
           backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -56,8 +57,8 @@ export const IndexTabs = ( { chainId, poolId, account, tokens, investTokens } : 
                 <TabList onChange={handleChange} className={classes.tabList}>
                     {<Tab label="My Assets" value="0" key={0} /> }
                     <Tab label="Index" value="1" key={1}  />
-
                 </TabList>
+
                 <TabPanel className={classes.tab} value="0" key={0}>
                     { account &&
                         <Box>
@@ -69,8 +70,8 @@ export const IndexTabs = ( { chainId, poolId, account, tokens, investTokens } : 
                             <Typography align="center"> Connect an acount to view your assets</Typography>
                         </Box>
                     }
-
                 </TabPanel>
+
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <IndexStatsView chainId={chainId} poolId={poolId} depositToken={depositToken} account={account} />
                 </TabPanel>

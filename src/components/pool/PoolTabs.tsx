@@ -24,17 +24,19 @@ interface PoolTabsProps {
 const useStyle = makeStyles( theme => ({
     container: {
         marginTop: 22,
-        padding: 0,
+        paddingBottom: 0,
+        maxWidth: 800,
+        margin: "auto"
     },
     tabList: { 
         padding: 0,
         margin: "auto",
-        maxWidth: 640,
+        maxWidth: 960,
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     },
     tab: { 
           padding: 0,
-          maxWidth: 640,
+          maxWidth: 800,
           margin: "auto",
           paddingTop: 20,
           backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -62,6 +64,7 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
 
     return (
         <Box className={classes.container}>
+
             <TabContext value={selectedTokenIndex.toString()}>
                 <TabList onChange={handleChange} className={classes.tabList}>
                     {<Tab label="My Assets" value="0" key={0} /> }

@@ -1,8 +1,8 @@
 
 
 
-import { Button, Typography, makeStyles,  Divider, Link as LinkMUI } from  "@material-ui/core"
-import { Link } from "react-router-dom"
+import { Button, Typography, makeStyles,  Divider, Link } from  "@material-ui/core"
+import { Link as LinkRouter} from "react-router-dom"
 
 import { InfoBox } from "./InfoBox"
 
@@ -11,6 +11,7 @@ import brainLignt from "./img/brain-light.png"
 import key from "./img/key.svg"
 import automated from "./img/automated.svg"
 import lock from "./img/lock.svg"
+import dao from "./img/dao.svg"
 
 const useStyle = makeStyles( theme => ({
 
@@ -33,7 +34,7 @@ const useStyle = makeStyles( theme => ({
 
     bottomSecion: {
         display: "grid",
-        gridTemplateColumns: "1fr 1fr 1fr",
+        gridTemplateColumns: "1fr 1fr",
         gap: theme.spacing(0),
         // border: "1px solid black "
 
@@ -104,7 +105,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                             Choose your decentralised, investment strategies executed on-chain <br/>
                         </p>
                     </div>
-                    <Link to="/home" style={{ textDecoration: 'none' }} > 
+                    <Link component={LinkRouter} to="/home" style={{ textDecoration: 'none' }} > 
                         <Button variant="contained" color="secondary" style={{ width: 280, height: 40 }} >Launch App</Button>
                     </Link>
                  </div>
@@ -120,7 +121,8 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <Typography variant="h5">What is HashStrat?</Typography>
                 <br/>
                 <Typography variant="body2">
-                    HashStrat allows to allocate capital to transparent, permissionless investment strategies executed on-chain. 
+                    HashStrat is a <Link href="https://en.wikipedia.org/wiki/Decentralized_finance" target="_target">DeFi</Link> protocol that
+                    allows to allocate capital to transparent, permissionless investment strategies executed on-chain. 
                 <br/>
                     Different strategies offer different levels of risk, and it's possible to tweak your risk/reward further by allocating to an index over multiple strategies.  
                 </Typography>
@@ -135,18 +137,26 @@ export const Home = ( { chainId } : HomeProps ) => {
                     </Typography>
                 </InfoBox>
 
+                <InfoBox title="Open DAO" image={dao}>
+                    <Typography variant="body2">
+                        Users participate in protocol governance and revenue sharing through
+                        the The HashStrat DAO token. <br/>
+                        <Link component={LinkRouter} to="/dao">HST</Link> has fixed supply and fair distribution.
+                        It can only be earned by using of the protocol.
+                    </Typography>
+                </InfoBox>
+
                 <InfoBox title="Automated" image={automated}>
                     <Typography variant="body2">
-                        HashStrat uses <LinkMUI href="https://docs.chain.link/docs/chainlink-keepers/introduction/" target="_blank">Chainlink Keepers</LinkMUI> to automate
+                        HashStrat uses <Link href="https://docs.chain.link/docs/chainlink-keepers/introduction/" target="_blank">Chainlink Keepers</Link> to automate
                         the execution of on-chain strategies. <br/>
-                        This means you can trust a decentralised networks of independent nodes to keep running your 
-                        strategies.
+                        This means you can trust a decentralised networks of independent nodes to keep running the strategies.
                     </Typography>
                 </InfoBox>
 
                 <InfoBox title="Secure" image={lock}>
                     <Typography variant="body2">
-                        All code is open source and all smart contracts verified on-chain. <br/>
+                        All code is open source and smart contracts verified on-chain. <br/>
                         This means their behaviour is predictable and transparent. <br/>
                         Users interact directly with the blockchain through their digital wallets and no personal information is ever shared or leaked.
                     </Typography>

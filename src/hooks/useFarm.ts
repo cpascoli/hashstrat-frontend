@@ -41,13 +41,27 @@ export const useClaimableRewards = (chainId: number, account?: string) => {
     const farmContract = FarmContract(chainId)
     const { value, error } = useCall({
         contract: farmContract,
-        method: 'claimableRewards',
+        method: 'claimableReward',
         args: account ? [account] : [constants.AddressZero],
     }) ?? {}
 
     useDebugValue(value?.[0].toString())
     return value?.[0].toString()
 }
+
+export const useGetRewardPeriods = (chainId: number, account?: string) => {
+
+    const farmContract = FarmContract(chainId)
+    const { value, error } = useCall({
+        contract: farmContract,
+        method: 'getRewardPeriods',
+        args: [],
+    }) ?? {}
+
+    useDebugValue(value?.[0])
+    return value?.[0]
+}
+
 
 
 
@@ -89,7 +103,7 @@ export const useClaimReward = (chainId: number) => {
     const farmContract = FarmContract(chainId)
 
     const { send: claimRewardSend, state: claimRewardState } = useContractFunction(farmContract, "claimReward", { 
-        transactionName: "Claim Reward"
+        transactionName: "Claim Rewards"
     })
 
     const claimReward = () => {

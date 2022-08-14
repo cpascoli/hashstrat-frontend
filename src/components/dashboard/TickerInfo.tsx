@@ -1,0 +1,35 @@
+
+import { makeStyles, Box, Typography, Divider } from "@material-ui/core"
+import { Horizontal } from "../Layout"
+
+interface TickerInfoProps {
+    symbol: string,
+    value: string
+}
+
+const useStyles = makeStyles( theme => ({
+    container: {
+        padding: theme.spacing(1),
+        border: "1px solid #aaa",
+        margin: 0,
+        alignItems: "center",
+        borderRadius: 0,
+        width: 160,
+    }
+}))
+
+
+export const TickerInfo = ({ symbol, value,  } : TickerInfoProps) => {
+    const classes = useStyles()
+    
+    return (
+        <div className={classes.container}>
+            <Horizontal valign="center" >
+                <Typography> {symbol} </Typography>
+                <Typography variant="body2"> {value} </Typography>
+            </Horizontal>
+        </div>
+    )
+}
+
+

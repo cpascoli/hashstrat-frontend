@@ -5,7 +5,6 @@ import { useLocation } from "react-router-dom"
 import { PoolTabs } from "./PoolTabs"
 import { Token } from "../../types/Token"
 
-import networksConfig from "../../config/networks.json"
 import { PoolInfo } from "../../utils/pools"
 import { Contracts } from "../shared/Contracts"
 

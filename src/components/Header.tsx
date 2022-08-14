@@ -25,7 +25,7 @@ const StyledMenu = styled((props: MenuProps) => (
       {...props}
     />
   ))(({ theme }) => ({
-      '& .MuiPaper-root': {
+      // '& .MuiPaper-root': {
         borderRadius: 8,
         marginTop: theme.spacing(1),
         minWidth: 200,
@@ -35,7 +35,7 @@ const StyledMenu = styled((props: MenuProps) => (
         '& .MuiMenu-list': {
           padding: '4px 0',
         },
-      },
+      // },
 }));
 
 const useStyles = makeStyles( theme => ({
@@ -148,6 +148,7 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
               <Link component={RouterLink} to="/pools">Pools</Link>
               <Link component={RouterLink} to="/strategies">Strategies</Link>
               <Link component={RouterLink} to="/faq">FAQ</Link>
+              <Link component={RouterLink} to="/dao">DAO</Link>
           </nav>
         
           <div className={classes.rightItmesContainer}>
@@ -187,7 +188,9 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
                             <MenuItem onClick={handleClose}>
                                 <Link component={RouterLink} to="/faq">FAQ</Link>
                             </MenuItem>
-
+                            <MenuItem onClick={handleClose}>
+                                <Link component={RouterLink} to="/dao">DAO</Link>
+                            </MenuItem>
                             <Divider />
                         </nav>
 

@@ -24,6 +24,8 @@ import { Horizontal } from "./Layout";
 import { FaqHome } from "./faq/FaqHome";
 import { StrategiesHome } from "./strategies/StrategiesHome";
 import { Dashboard } from './dashboard/Dashboard'
+import { DaoHome } from './dao/DaoHome'
+
 
 
 interface MainProps {
@@ -118,6 +120,10 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                         <Route path="/faq" element={
                              <FaqHome  />
                         } />
+                        <Route path="/dao" element={
+                             <DaoHome chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} />
+                        } />
+
                         {
                             poolIds && poolIds.map( (poolId: string) => {
                                 const tokens = TokensForPool(chainId || defaultChainId, poolId)

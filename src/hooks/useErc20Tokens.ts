@@ -6,7 +6,7 @@ import { constants } from "ethers"
 
 // Approve spending of 'symbol' by the Pool contract
 export const useTokenApprove = (chainId: number, poolId: string, symbol: string, spenderAddress: string) => {
-    const tokenContract =  ERC20Contract(chainId, poolId, symbol) 
+    const tokenContract = ERC20Contract(chainId, symbol, poolId) 
     // const spenderAddress = spender ?? PoolAddress(chainId, poolId)
 
     const { send: approveErc20Send, state: approveErc20State } = useContractFunction(tokenContract, "approve", { 
@@ -22,8 +22,7 @@ export const useTokenApprove = (chainId: number, poolId: string, symbol: string,
 
 
 export const useTokenAllowance =  (chainId: number, poolId: string, symbol: string, spenderAddress: string) => {
-    const tokenContract = ERC20Contract(chainId, poolId, symbol)
-    // const spenderAddress = PoolAddress(chainId, poolId)
+    const tokenContract = ERC20Contract(chainId, symbol, poolId)
     const { account : ownerAddress } = useEthers()
 
     const { value, error } = useCall({
@@ -43,8 +42,7 @@ export const useTokenAllowance =  (chainId: number, poolId: string, symbol: stri
 
 
 export const useTokenBalance = (chainId: number, poolId: string, symbol: string, account?: string) => {
-    console.log("useTokenBalance", symbol, "account", account)
-    const tokenContract =  ERC20Contract(chainId, poolId, symbol) 
+    const tokenContract =  ERC20Contract(chainId, symbol, poolId) 
     const { value, error } = useCall({
             contract: tokenContract,
             method: 'balanceOf',
@@ -55,7 +53,7 @@ export const useTokenBalance = (chainId: number, poolId: string, symbol: string,
 }
 
 export const useTokenTotalSupply = (chainId: number, poolId: string, symbol: string) => {
-    const tokenContract =  ERC20Contract(chainId, poolId, symbol) 
+    const tokenContract =  ERC20Contract(chainId, symbol, poolId) 
 
     const { value, error } = useCall({
             contract: tokenContract,

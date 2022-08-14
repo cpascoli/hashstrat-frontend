@@ -2,7 +2,7 @@ import poolsInfo from "../config/pools.json"
 import indexesInfo from "../config/indexes.json"
 import networksConfig from "../config/networks.json"
 
-import { PoolAddress, PoolLPTokenAddress, UsdcTokenAddress, DaiTokenAddress, WethTokenAddress, WbtcTokenAddress , HSTTokenAddress} from "./network"
+import { PoolAddress, PoolLPTokenAddress, UsdcTokenAddress, DaiTokenAddress, WethTokenAddress, WbtcTokenAddress , HstTokenAddress} from "./network"
 
 import weth from "../components/img/weth.png"
 import wbtc from "../components/img/wbtc.png"
@@ -112,7 +112,7 @@ export const Tokens = (chainId: number, poolId: string) : Map<String, Token> => 
         "wbtc": { address: WbtcTokenAddress(chainId), symbol: "WBTC", decimals: 8, image: wbtc},
         "weth": { address: WethTokenAddress(chainId), symbol: "WETH", decimals: 18, image: weth },
         "pool-lp": { address: PoolLPTokenAddress(chainId, poolId), symbol: "POOL-LP", decimals: depositTokenDecimals, image: poollp },
-        "hst" : { address: HSTTokenAddress(chainId), symbol: "HST", decimals: 18, image: poollp },
+        "hst" : { address: HstTokenAddress(chainId), symbol: "HST", decimals: 18, image: poollp },
     } as any
 }
 

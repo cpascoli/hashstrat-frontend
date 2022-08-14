@@ -12,9 +12,10 @@ const useStyles = makeStyles( theme => ({
         padding: theme.spacing(2),
         border: "1px solid #aaa",
         margin: 10,
-    
+        alignItems: "center",
         borderRadius: 12,
-        [theme.breakpoints.down('sm')]: {
+        
+        [theme.breakpoints.down('lg')]: {
             display: "grid",
             gap: theme.spacing(1),
             gridTemplateColumns: "1fr 2fr",
@@ -41,16 +42,16 @@ export const InfoBox = ({ children, title, image,  } : InfoBoxProps) => {
     return (
         <div className={classes.container}>
             { image &&
-                    <div style={{textAlign: "center"}}>
-                        <img src={image} className={classes.image} ></img> 
-                    </div>
+                <div style={{textAlign: "center", alignItems: "center" }}>
+                    <img src={image} className={classes.image} ></img> 
+                </div>
             }
-            <div>
+            <Box px={2} >
                 <Box py={1}>
                     <Typography variant="h5" align="center"> {title} </Typography>
                 </Box>
                 {children} 
-            </div>
+            </Box>
         </div>
     )
 }

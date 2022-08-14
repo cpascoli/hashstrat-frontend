@@ -48,13 +48,6 @@ export const IndexSummaryView = ({ chainId, account, poolId, depositToken } : In
 
     const multiPoolValueFormatted =  (multiPoolValue !== undefined) ? fromDecimals(multiPoolValue, depositToken.decimals, 2) : ""
 
-    //const investTokens = InvestTokens(chainId)
-    // console.log("IndexSummaryView - chainId", chainId, "poolId", poolId, "lpPerc", lpPerc, "multiPoolValue", multiPoolValue, "multiPoolValueFormatted", multiPoolValueFormatted)
-    // const indexIds = [poolId] // IndexesIds(chainId) // ["index02"] 
-    // const indexBalances = useTokensInfoForIndexes(chainId, indexIds, [depositToken, ...investTokens], account)
-    // console.log("IndexSummaryView indexBalances", indexBalances)
-
-
 
     return (
         <div className={classes.container} >

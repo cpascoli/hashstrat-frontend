@@ -84,11 +84,11 @@ export const WethTokenAddress = (chainId: number) => {
     return networkMappings[networkName as keyof typeof networkMappings]["weth"]
 }
 
-export const HSTTokenAddress = (chainId: number) => {
+export const HstTokenAddress = (chainId: number) => {
     if (!chainId) return constants.AddressZero
    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
 
-   return networkMappings[networkName as keyof typeof networkMappings]["dai"]
+   return networkMappings[networkName as keyof typeof networkMappings]["hst"]
 }
 
 
@@ -188,9 +188,17 @@ export const WbtcContract = (chainId: number) => {
     return new Contract(WbtcTokenAddress(chainId), new utils.Interface(abi))
 }
 
-export const ERC20Contract = (chainId: number, poolId: string, symbol: string) => {
+export const HstContract = (chainId: number) => {
+    const abi = abis[ "erc20" as keyof typeof abis ] as any
+    return new Contract(HstTokenAddress(chainId), new utils.Interface(abi))
+}
+
+export const ERC20Contract = (chainId: number, symbol: string, poolId?: string) => {
 
     switch (symbol.toLowerCase()) {
+        case "hst" : {
+            return HstContract(chainId)
+        }
         case "usdc" : {
             return UsdcContract(chainId)
         }
@@ -204,7 +212,7 @@ export const ERC20Contract = (chainId: number, poolId: string, symbol: string) =
             return WbtcContract(chainId)
         }
         case "pool-lp": {
-            return PoolLPContract(chainId, poolId)
+            return PoolLPContract(chainId, poolId!)
         }
     } 
 

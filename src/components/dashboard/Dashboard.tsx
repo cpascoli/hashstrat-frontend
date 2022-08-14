@@ -9,6 +9,7 @@ import { Token } from "../../types/Token"
 
 import { FundAssetsSummary } from "./FundAssetsSummary"
 import { MyPortfolioAssetsSummary } from "./MyPortfolioAssetsSummary"
+import { Tickers } from "./Tickers"
 
 
 interface DashboardProps {
@@ -24,15 +25,17 @@ const useStyles = makeStyles( theme => ({
         paddingTop: 2,
     },
     tabList: { 
+        maxWidth: 800,
         padding: 0,
         margin: "auto",
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     },
     tab: { 
-          padding: 0,
-          margin: "auto",
-          paddingTop: 20,
-          backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+        maxWidth: 800,
+        padding: 0,
+        margin: "auto",
+        paddingTop: 20,
+        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     }
 }))
 
@@ -56,7 +59,9 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
  
 
     return (
-        <div className={classes.container}>
+        <div className={classes.container} >
+
+        <Tickers chainId={chainId} depositToken={depositToken} account={account} />
 
         <TabContext value={selectedTokenIndex.toString()}>
                 <TabList onChange={handleChange} className={classes.tabList}>

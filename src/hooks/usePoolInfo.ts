@@ -464,7 +464,7 @@ const useTokensPoolsBalances = (chainId : number, tokens: Token[],  poolsInfo: a
 
     // ERC20 calls
     const calls = tokenPoolsRequestsParams.map(req => ({
-        contract: ERC20Contract(chainId, req.poolId, req.tokenSymbol), // new Contract(req.tokenAddress, new utils.Interface(abi)),
+        contract: ERC20Contract(chainId, req.tokenSymbol, req.poolId), // new Contract(req.tokenAddress, new utils.Interface(abi)),
         method: 'balanceOf',
         args: req.poolAddress? [req.poolAddress] : [constants.AddressZero]
     })) ?? []

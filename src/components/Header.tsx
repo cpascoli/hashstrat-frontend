@@ -8,9 +8,8 @@ import { NetworkName } from "../utils/network"
 
 import { Link as RouterLink } from "react-router-dom"
 import { Horizontal } from './Layout';
-import home from "./img/home.jpg"
+import home from "./img/home.svg"
 import { ConnectButton } from "../main/ConnectButton"
-
 
 import { Menu as MenuIcon, KeyboardArrowDown, WbSunny, Brightness3 } from "@material-ui/icons"
 
@@ -139,7 +138,7 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
     return (
         <header className={classes.container}>
 
-          <Link component={RouterLink} to="/" style={{ textDecoration: 'none'}} > 
+          <Link component={RouterLink} to="/" > 
             <Button> <img src={home} style={{width: 55, height: 55}} /> </Button>
           </Link>
 

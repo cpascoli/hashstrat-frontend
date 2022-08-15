@@ -1,17 +1,16 @@
 
 
 import { makeStyles, Box, Typography } from "@material-ui/core"
+import { utils } from "ethers"
+
 import { Token } from "../../types/Token"
-import { fromDecimals } from "../../utils/formatter"
 import { PoolSummary } from "./PoolSummary"
 import { Horizontal } from "../Layout"
-
 import { TitleValueBox } from "../TitleValueBox"
 import { PieChartWithLabels } from "../shared/PieChartWithLabels"
-
-
 import { useDashboardModel } from "./DashboadModel"
 
+import { fromDecimals } from "../../utils/formatter"
 
 interface FundAssetsSummaryProps {
     chainId: number,
@@ -88,11 +87,11 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
                 <Box className={classes.portfolioInfo} >
                 {
                     tokenBalancesoFormatted && tokenBalancesoFormatted.map( (token : any)=> {
-                        const valueFormatted = `${token.balance} (${token.value} ${depositToken.symbol})`
+                        const valueFormatted = `${utils.commify( token.balance )} (${ utils.commify( token.value )} ${depositToken.symbol})`
                         return  <TitleValueBox key={token.symbol} title={token.symbol} value={valueFormatted}  mode="small" />
                     })
                 }
-                    <TitleValueBox title="Total Value Locked (TVL)" value={`${totalValueFormatted} ${depositToken.symbol}` }  />
+                    <TitleValueBox title="Total Value Locked (TVL)" value={`${ utils.commify( totalValueFormatted )} ${depositToken.symbol}` }  />
                 </Box>
 
                 { totalValueFormatted  &&  

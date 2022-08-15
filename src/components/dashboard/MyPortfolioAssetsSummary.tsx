@@ -106,7 +106,7 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                     <Box>
                         <Typography variant="h4" align="center" >Portfolio Summary </Typography>
                         <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
-                            Your Assets across all Pools &amp; Indexes
+                            Your assets across all Pools &amp; Indexes
                         </Typography>
                     </Box>
                     <div className={classes.portfolioSummary} > 

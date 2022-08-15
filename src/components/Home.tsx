@@ -140,7 +140,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <InfoBox title="DAO Governance" image={dao}>
                     <Typography variant="body2">
                         Users participate in protocol governance and revenue sharing through
-                        the The HashStrat DAO token. <br/>
+                        the HashStrat DAO token. <br/>
                         <Link component={LinkRouter} to="/dao">HST</Link> has fixed supply and fair distribution.
                         It can only be earned by using of the protocol.
                     </Typography>

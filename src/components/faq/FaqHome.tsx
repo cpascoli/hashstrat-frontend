@@ -103,19 +103,16 @@ export const FaqHome = () => {
                     <Typography style={{fontSize: 20, fontWeight: 400}} > What do you need to use HashStrat? </Typography>
                 </AccordionSummary>
                 <AccordionDetails >
-                    <Typography variant="body2" >
-                        <Box>
-
-                            HashStrat is a web3 application running on the Polygon Network. <br/>
-                            To intereact with the HashStrat smart contracts you need:
-                            <ul>
-                                <li>A web3 enabled browser.  <br/>
-                                    Good options are <Link href="https://metamask.io" target="_blank">MetaMask</Link>  or  <Link href="https://www.coinbase.com/wallet" target="_blank">Coinbase wallet</Link>  
-                                </li>
-                                <li>A little amount of <Link href="https://coinmarketcap.com/currencies/polygon/" target="_blank">MATIC (Polygon)</Link> tokens to pay for transaction fees on the Polygon Network.</li>
-                            </ul>
-                         </Box>
-                    </Typography>
+                    <Box>
+                        HashStrat is a web3 application running on the Polygon Network. <br/>
+                        To intereact with the HashStrat smart contracts you need:
+                        <ul>
+                            <li>A web3 enabled browser.  <br/>
+                                Good options are <Link href="https://metamask.io" target="_blank">MetaMask</Link>  or  <Link href="https://www.coinbase.com/wallet" target="_blank">Coinbase wallet</Link>  
+                            </li>
+                            <li>A little amount of <Link href="https://coinmarketcap.com/currencies/polygon/" target="_blank">MATIC (Polygon)</Link> tokens to pay for transaction fees on the Polygon Network.</li>
+                        </ul>
+                        </Box>
                 </AccordionDetails>
             </Accordion>
 

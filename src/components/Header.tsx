@@ -148,6 +148,7 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
               <Link component={RouterLink} to="/strategies">Strategies</Link>
               <Link component={RouterLink} to="/faq">FAQ</Link>
               <Link component={RouterLink} to="/dao">DAO</Link>
+              <Link href="https://medium.com/@hashstrat" target="_blank">Medium Blog</Link>
           </nav>
         
           <div className={classes.rightItmesContainer}>
@@ -190,6 +191,10 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
                             <MenuItem onClick={handleClose}>
                                 <Link component={RouterLink} to="/dao">DAO</Link>
                             </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <Link href="https://medium.com/@hashstrat" target="_blank">Medium Blog</Link>
+                            </MenuItem>
+                          
                             <Divider />
                         </nav>
 

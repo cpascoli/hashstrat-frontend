@@ -1,15 +1,11 @@
 import { makeStyles, Box, Divider, Typography, Button, Link } from "@material-ui/core"
+import { utils } from "ethers"
+
 import { TitleValueBox } from "../TitleValueBox"
 import { fromDecimals, round } from "../../utils/formatter"
-
 import { PoolInfo } from "../../utils/pools"
-
-// import indexesInfo from "../../config/indexes.json"
 import { useTokenBalance, useTokenTotalSupply } from "../../hooks"
-
 import { useMultiPoolValue } from "../../hooks/useIndex"
-import { useTokensInfoForIndexes }  from "../../hooks/usePoolInfo"
-
 import { Token } from "../../types/Token"
 
 
@@ -59,7 +55,7 @@ export const IndexSummaryView = ({ chainId, account, poolId, depositToken } : In
 
                             <Divider variant="fullWidth"  style={{marginTop: 20, marginBottom: 20}} />
 
-                            <TitleValueBox title="Total Value" value={multiPoolValueFormatted} suffix={depositToken.symbol} mode="small" />
+                            <TitleValueBox title="Total Value" value={ utils.commify(multiPoolValueFormatted) } suffix={depositToken.symbol} mode="small" />
                             <TitleValueBox title="My Share" value={lpPercFormatted} suffix="%" mode="small" />
                         </Box>
                     </Button>

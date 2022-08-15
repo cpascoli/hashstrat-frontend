@@ -1,5 +1,7 @@
 
 import { makeStyles, Link, Box, Divider, Typography, Button, Breadcrumbs } from "@material-ui/core"
+import { utils } from "ethers"
+
 import { PoolInfo } from "../../utils/pools"
 import { Link as RouterLink } from "react-router-dom"
 import { Token } from "../../types/Token"
@@ -71,7 +73,7 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken } : PoolSumm
                         <Divider variant="fullWidth" style={{marginTop: 20, marginBottom: 20}} />
 
                         { tokenViews }
-                        <TitleValueBox title="Total Value" value={totalAccountValueFormatted} suffix={depositToken.symbol} />
+                        <TitleValueBox title="Total Value" value={ utils.commify(totalAccountValueFormatted) } suffix={depositToken.symbol} />
 
                     </Box>
                 </Button>

@@ -31,7 +31,7 @@ const useStyle = makeStyles( theme => ({
     tabList: { 
         padding: 0,
         margin: "auto",
-        maxWidth: 960,
+        maxWidth: 800,
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     },
     tab: { 

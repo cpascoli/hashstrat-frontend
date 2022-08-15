@@ -1,6 +1,7 @@
 import { makeStyles, Box, Divider, Typography, Button, Link } from "@material-ui/core"
-import { Link as RouterLink } from "react-router-dom"
+import { utils } from "ethers"
 
+import { Link as RouterLink } from "react-router-dom"
 import { TitleValueBox } from "../TitleValueBox"
 import { fromDecimals, round } from "../../utils/formatter"
 import { PoolInfo } from "../../utils/pools"
@@ -55,7 +56,7 @@ export const PoolSummaryView = ({ chainId, account, poolId, depositToken } : Poo
 
                             <Divider variant="fullWidth"  style={{marginTop: 20, marginBottom: 20}} />
 
-                            <TitleValueBox title="Total Value" value={formattedPortfolioValue} suffix={depositToken.symbol} mode="small" />
+                            <TitleValueBox title="Total Value" value={ utils.commify(formattedPortfolioValue) } suffix={depositToken.symbol} mode="small" />
                             <TitleValueBox title="My Share" value={lpPercFormatted} suffix="%" mode="small" />
 
                         </Box>

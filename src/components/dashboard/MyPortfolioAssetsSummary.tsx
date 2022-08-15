@@ -1,10 +1,7 @@
 
 
 import { makeStyles, Box, Typography, Link } from "@material-ui/core"
-import { Alert, AlertTitle } from "@material-ui/lab"
-
-import { Link as RouterLink } from "react-router-dom"
-
+import { utils } from "ethers"
 
 import { Token } from "../../types/Token"
 import { fromDecimals } from "../../utils/formatter"
@@ -113,11 +110,11 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                         <Box className={classes.portfolioInfo} >
                         {
                             tokenBalancesoFormatted && tokenBalancesoFormatted.map( (token : any)=> {
-                                const valueFormatted = `${token.balance} (${token.value} ${depositToken.symbol})`
+                                const valueFormatted = `${ utils.commify(token.balance) } (${token.value} ${depositToken.symbol})`
                                 return  <TitleValueBox key={token.symbol} title={token.symbol} value={valueFormatted}  mode="small" />
                             })
                         }
-                            <TitleValueBox title="Total Invested" value={`${totalValueFormatted} ${depositToken.symbol}` }  />
+                            <TitleValueBox title="Total Invested" value={`${ utils.commify(totalValueFormatted) } ${depositToken.symbol}` }  />
                         </Box>
 
                         { totalValueFormatted  &&  

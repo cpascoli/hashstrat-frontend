@@ -64,12 +64,13 @@ export const Tickers = ({ chainId, account, depositToken } : DaoHomeProps ) => {
 
     return (
     
-        <Box my={1} px={0}>
+        <Box my={1} px={1}>
             <div className={classes.root}>
                     <div className={classes.gridList}>
-                        <Horizontal align="center">
-                            <TickerInfo symbol="HST" value={formattedHstBalance} />
+                        <Typography variant="body2" style={{paddingBottom:5}}>In your wallet</Typography>
+                        <Horizontal>
                             <TickerInfo symbol={depositToken.symbol} value={formattedDpositTokenBalance} />
+                            <TickerInfo symbol="HST" value={formattedHstBalance} />
                             <TickerInfo symbol={investTokens[0].symbol} value={formattedToken0Balance} />
                             <TickerInfo symbol={investTokens[1].symbol}  value={formattedToken1Balance} />
                         </Horizontal>

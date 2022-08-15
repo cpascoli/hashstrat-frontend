@@ -92,7 +92,7 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
                         return  <TitleValueBox key={token.symbol} title={token.symbol} value={valueFormatted}  mode="small" />
                     })
                 }
-                    <TitleValueBox title="Total Invested" value={`${totalValueFormatted} ${depositToken.symbol}` }  />
+                    <TitleValueBox title="Total Value Locked (TVL)" value={`${totalValueFormatted} ${depositToken.symbol}` }  />
                 </Box>
 
                 { totalValueFormatted  &&  

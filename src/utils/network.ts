@@ -55,6 +55,14 @@ export const FarmAddress = (chainId: number) => {
     return deployments[networkName]["hst_farm"]
 }   
 
+export const GovernanceAddress = (chainId: number) => {
+    if (!chainId) return constants.AddressZero
+   const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
+
+   return networkMappings[networkName as keyof typeof networkMappings]["governance"]
+}
+
+
 export const UsdcTokenAddress = (chainId: number) => {
     if (!chainId) return constants.AddressZero
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
@@ -90,8 +98,6 @@ export const HstTokenAddress = (chainId: number) => {
 
    return networkMappings[networkName as keyof typeof networkMappings]["hst"]
 }
-
-
 
 export const NetworkExplorerHost = (chainId: number) => {
     if (!chainId) return ""
@@ -144,6 +150,11 @@ export const FeedContract = (chainId: number, poolId: string) => {
 export const FarmContract = (chainId: number) => {
     const abi = abis[ "hst_farm" as keyof typeof abis ] as any
     return new Contract(FarmAddress(chainId) , new utils.Interface(abi))
+}
+
+export const GovernanceContract = (chainId: number) => {
+    const abi = abis[ "governance" as keyof typeof abis ] as any
+    return new Contract(GovernanceAddress(chainId) , new utils.Interface(abi))
 }
 
 

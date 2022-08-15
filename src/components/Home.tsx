@@ -1,7 +1,7 @@
 
 
 
-import { Button, Typography, makeStyles,  Divider, Link } from  "@material-ui/core"
+import { Button, Typography, makeStyles,  Divider, Link, Box } from  "@material-ui/core"
 import { Link as LinkRouter} from "react-router-dom"
 
 import { InfoBox } from "./InfoBox"
@@ -94,7 +94,7 @@ export const Home = ( { chainId } : HomeProps ) => {
     const classes = useStyle()
 
     return (
-        <div >
+        <Box py={3}>
              <section className={classes.topSection}>
                 <div className={classes.titleSection}> 
                     <div>
@@ -113,7 +113,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <img className={classes.imageLarge} />
              </section>
 
-             <Divider style={{marginTop: 20, marginBottom: 20}} />
+             <Divider style={{marginTop: 40, marginBottom: 40}} />
 
             <section className={classes.midSection}>
 
@@ -122,9 +122,9 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <br/>
                 <Typography variant="body2">
                     HashStrat is a <Link href="https://en.wikipedia.org/wiki/Decentralized_finance" target="_target">DeFi</Link> protocol that
-                    allows to allocate capital to transparent, permissionless investment strategies executed on-chain. 
+                    allows to allocate capital to transparent, autonomous investment strategies executed on-chain. 
                 <br/>
-                    Different strategies offer different levels of risk, and it's possible to tweak your risk/reward further by allocating to an index over multiple strategies.  
+                    Different strategies offer different risk profiles, and it's possible to improve your risk/reward further by allocating to indexes over multiple strategies.  
                 </Typography>
             </section>
 
@@ -137,7 +137,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                     </Typography>
                 </InfoBox>
 
-                <InfoBox title="Open DAO" image={dao}>
+                <InfoBox title="DAO Governance" image={dao}>
                     <Typography variant="body2">
                         Users participate in protocol governance and revenue sharing through
                         the The HashStrat DAO token. <br/>
@@ -165,6 +165,6 @@ export const Home = ( { chainId } : HomeProps ) => {
 
             </section>
 
-        </div>
+        </Box>
     )
 }

@@ -9,12 +9,12 @@ interface TickerInfoProps {
 
 const useStyles = makeStyles( theme => ({
     container: {
-        padding: theme.spacing(1),
+        padding: 6,
         border: "1px solid #aaa",
         margin: 0,
         alignItems: "center",
         borderRadius: 0,
-        width: 160,
+        width: 140,
     }
 }))
 
@@ -25,7 +25,7 @@ export const TickerInfo = ({ symbol, value,  } : TickerInfoProps) => {
     return (
         <div className={classes.container}>
             <Horizontal valign="center" >
-                <Typography> {symbol} </Typography>
+                <Typography variant="body2"> {symbol} </Typography>
                 <Typography variant="body2"> {value} </Typography>
             </Horizontal>
         </div>

@@ -3,7 +3,7 @@
 
 import { makeStyles, Link, Typography } from  "@material-ui/core"
 import { NetworkExplorerHost, PoolAddress, PoolLPTokenAddress, 
-     StrategyAddress, FeedAddress, HstTokenAddress, FarmAddress } from "../../utils/network"
+     StrategyAddress, FeedAddress, HstTokenAddress, FarmAddress, GovernanceAddress } from "../../utils/network"
 import { Horizontal } from "../Layout"
 
 const useStyle = makeStyles( theme => ({
@@ -29,6 +29,7 @@ export const Contracts = ( { chainId, poolId } : ContractsProps ) => {
     const explorerHost = NetworkExplorerHost(chainId) ?? "polygonscan.com"
     const hstAddress = HstTokenAddress(chainId)
     const farmAddress = FarmAddress(chainId)
+    const governanceAddress = GovernanceAddress(chainId)
 
     const poolAddress = poolId && PoolAddress(chainId, poolId)
     const lpTokenAddress = poolId && PoolLPTokenAddress(chainId, poolId)
@@ -36,7 +37,7 @@ export const Contracts = ( { chainId, poolId } : ContractsProps ) => {
     const strategyAddress = poolId && !isIndex && StrategyAddress(chainId, poolId)
     const feedAddress = poolId && !isIndex && FeedAddress(chainId, poolId)
 
-
+    
 
     return (
 
@@ -44,8 +45,9 @@ export const Contracts = ( { chainId, poolId } : ContractsProps ) => {
             <Horizontal>
                 <Typography variant="body2">Contracts:</Typography>
 
-                <Link href={`https://${explorerHost}/address/${hstAddress}` } target="_blank">HST</Link>
-                <Link href={`https://${explorerHost}/address/${farmAddress}` } target="_blank">DAO Farm</Link>
+                <Link href={`https://${explorerHost}/address/${hstAddress}` } target="_blank">HST Token</Link>
+                <Link href={`https://${explorerHost}/address/${farmAddress}` } target="_blank">HST Farm</Link>
+                <Link href={`https://${explorerHost}/address/${governanceAddress}` } target="_blank">Governance</Link>
 
                 { poolAddress && <Link href={`https://${explorerHost}/address/${poolAddress}` } target="_blank">Pool</Link> }
                 { lpTokenAddress && <Link href={`https://${explorerHost}/address/${lpTokenAddress}` } target="_blank">LP Token</Link> }

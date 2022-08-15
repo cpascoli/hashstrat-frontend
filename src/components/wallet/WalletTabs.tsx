@@ -61,7 +61,6 @@ export const WalletTabs = ( { chainId, poolId, account, tokens } : TabPanelProps
         setShowSnack(false)
     }
 
-
     const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
         setSelectedTokenIndex(parseInt(newValue))
     }

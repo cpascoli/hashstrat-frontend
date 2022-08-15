@@ -8,7 +8,6 @@ import { groupBy } from "../utils/formatter"
 import { BigNumber, constants } from "ethers"
 import { FarmContract  } from "../utils/network"
 
-// import { useFeedLatestPrice, useGetDeposits, useGetWithdrawals } from "../hooks/usePool"
 import { FeedContractsForTokens, ERC20Contract, PoolLPContract, PoolContract } from "../utils/network"
 
 

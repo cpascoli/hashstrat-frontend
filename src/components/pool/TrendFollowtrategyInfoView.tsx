@@ -86,8 +86,8 @@ export const TrendFollowtrategyInfoView = ( { chainId, poolId, depositToken, inv
             <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small"  />
             <TitleValueBox title={`Trend (${movingAveragePeriod}D MA)`} value={movingAverageText} mode="small"  />
             <TitleValueBox title="Deviation From Trend" value={`${round(deltaPricePerc * 100)}`} mode="small"  suffix="%" />
-            <TitleValueBox title="Go Long Target" value={`${buyTargetText}`} mode="small"  />
-            <TitleValueBox title="De-risk Target" value={`${sellTargetText}`} mode="small" />
+            <TitleValueBox title="Buy Trigger" value={`${buyTargetText}`} mode="small"  />
+            <TitleValueBox title="Sell Trigger" value={`${sellTargetText}`} mode="small" />
             <TitleValueBox title="Trade Size" value={`${tokensToSwapPerc}`} mode="small"  suffix="%" />
         </Box>
     )

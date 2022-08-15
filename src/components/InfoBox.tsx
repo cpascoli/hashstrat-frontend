@@ -18,7 +18,7 @@ const useStyles = makeStyles( theme => ({
         [theme.breakpoints.down('lg')]: {
             display: "grid",
             gap: theme.spacing(1),
-            gridTemplateColumns: "1fr 2fr",
+            gridTemplateColumns: "1fr 3fr",
         },
 
         [theme.breakpoints.down('xs')]: {
@@ -27,11 +27,10 @@ const useStyles = makeStyles( theme => ({
         },
     },
     image: {
-        maxWidth: 140,
+        maxWidth: 120,
         margin: "auto",
         [theme.breakpoints.down('xs')]: {
             margin: "auto",
-            maxWidth: 150,
         },
     }
 }))

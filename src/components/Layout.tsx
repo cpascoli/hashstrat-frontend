@@ -5,6 +5,7 @@ interface ChildrenProps {
     children: React.ReactNode,
     align?: "center" | "left"
     valign?: "center" | "top"
+    spacing? : "between"
 }
 
 const useStyles = makeStyles( theme => ({
@@ -34,6 +35,16 @@ const useStyles = makeStyles( theme => ({
         alignItems: "center",
         gap: theme.spacing(2)
       },
+
+      horizontalVerticallyCenteredSpaceBetween: {
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: "row",
+        flexFlow: "row wrap",
+        alignItems: "center",
+        gap: theme.spacing(2),
+        width: "100%"
+      },
 }))
 
 export const Page = ({ children } : ChildrenProps) => {
@@ -48,11 +59,12 @@ export const Page = ({ children } : ChildrenProps) => {
 }
 
 
-export const Horizontal = ({ children, align = "left" , valign} : ChildrenProps) => {
+export const Horizontal = ({ children, align = "left" , valign, spacing } : ChildrenProps) => {
     const classes = useStyles()
     return (
-        <div className={  valign === 'center' ? classes.horizontalVerticallyCentered :
-                          align === "center" ? classes.horizontalCenter : classes.horizontalLeft 
+        <div className={    spacing == 'between' ? classes.horizontalVerticallyCenteredSpaceBetween : 
+                            valign === 'center' ? classes.horizontalVerticallyCentered :
+                            align === "center" ? classes.horizontalCenter : classes.horizontalLeft 
                         } >
             {children}
         </div>

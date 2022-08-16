@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react"
 import { useNotifications } from "@usedapp/core"
+import { BigNumber } from "ethers"
+
+
 import { Box, Grid, Button, Input, CircularProgress, Divider, Typography, Link, makeStyles } from "@material-ui/core"
-import { useTokenApprove, useTokenAllowance, useDeposit, useWithdraw } from "../../hooks"
+import { useTokenApprove, useTokenAllowance, useTokenBalance } from "../../hooks/useErc20Tokens"
+import { useLpTokensValue, useDeposit, useWithdraw, useFeesForWithdraw } from "../../hooks/usePool"
+
+
 import { Token } from "../../types/Token"
 import { toDecimals, fromDecimals } from "../../utils/formatter"
 import { NetworkExplorerHost, NetworkExplorerName, PoolAddress} from "../../utils/network"
@@ -9,6 +15,7 @@ import { SnackInfo } from "../SnackInfo"
 import { Horizontal } from "../Layout"
 import { Alert, AlertTitle } from "@material-ui/lab"
 import { StyledAlert } from "../shared/StyledAlert"
+import { DepositToken } from "../../utils/pools"
 
 
 export interface DepositWithdrawFormProps {
@@ -17,7 +24,8 @@ export interface DepositWithdrawFormProps {
     poolId: string,
     token : Token;
     balance: string;
-    
+    account: string;
+
     handleSuccess: (result: SnackInfo) => void,
     handleError: (error: SnackInfo) => void,
     allowanceUpdated: () => void;
@@ -44,57 +52,100 @@ const useStyle = makeStyles( theme => ({
         marginRight: 20,
         marginLeft: 0,
     },
-    amountWithLabel: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        marginTop: 20, 
-        marginBottom: 50,
-        marginLeft: 10,
-    },
+
     amount: {
         fontSize: 28,
         fontWeight: 200,
         textAlign: "right",
-        marginRight: 20,
+        marginRight: 0,
     },
     info:{
         margin: "auto"
     }
 }))
 
-export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance, handleSuccess, handleError, onClose } : DepositWithdrawFormProps) => {
 
+
+// returns true if the 2 values are closer than 0.01 % difference
+const isVeryCloseValues = (value1: string, value2: string) : boolean => {
+    const a = BigNumber.from(value1) 
+    const b = BigNumber.from(value2)
+    if (a.eq(BigNumber.from(0)) && b.eq(BigNumber.from(0))) return true
+
+    const diff = a.gte(b) ? a.sub(b) : b.sub(a)
+    const max = a.gte(b) ? a : b
+    const percDiff = diff.mul(BigNumber.from(1000)).div(max)
+
+    return percDiff.toNumber()  < 1
+}
+
+
+
+export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance, handleSuccess, handleError, onClose, account} : DepositWithdrawFormProps) => {
+
+    const classes = useStyle()
     const { symbol, image } = token
 
-    // Token Allowance 
+    // Token stats 
     const allowance = useTokenAllowance(chainId, poolId, symbol, PoolAddress(chainId, poolId)) // in token decimals
+    const tokenBalance = useTokenBalance(chainId, poolId, "pool-lp", account);
+
+    // form state management
+    const [amount, setAmount] = useState<number | string>("")
+    const [isValidAmount, setIsValidAmount] = useState<boolean>(false) 
+    const [amountDecimals, setAmountDecimals] = useState<string>("")
+    const [userMessage, setUserMessage] = useState<SnackInfo>()
+
+    console.log("DepositWithdrawForm - amountDecimals: ", amountDecimals)
+
+    // withdraw only data
+    const lpTokensValue = useLpTokensValue(chainId, poolId, amountDecimals)
+    const feesForWithdraw = useFeesForWithdraw(chainId, poolId, amountDecimals, account)
 
     const { approveErc20, approveErc20State } = useTokenApprove(chainId, poolId, symbol, PoolAddress(chainId, poolId))
 
-    const classes = useStyle()
+   
     const { notifications } = useNotifications()
 
-    // const initialAmount = parseFloat(balance)
-    const [amount, setAmount] = useState<number | string>("")
+
+    // formatted values
+    const depositToken = DepositToken(chainId)
     const formattedAllowance = allowance && fromDecimals(allowance, token.decimals, 4)
+    const formattedLTokensValue = lpTokensValue ? fromDecimals( BigNumber.from(lpTokensValue), depositToken!.decimals, 2) : ""
+    const formattedFeesToWithdraw = feesForWithdraw ? fromDecimals( BigNumber.from(feesForWithdraw), depositToken!.decimals, 2) : ""
 
-    const [userMessage, setUserMessage] = useState<SnackInfo>()
+    console.log("DepositWithdrawForm - lpTokensValue: ", lpTokensValue, " >> formattedLTokensValue: ", formattedLTokensValue)
 
+
+    // Handlers
 
     const balancePressed = () => {
         setAmount(balance)
+        updateAmount(balance)
     }
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newAmount = event.target.value === "" ? "" : event.target.value.trim()
-        setAmount(newAmount)
+        updateAmount(newAmount)
     }
+
+    // validates the deposit/withdrawal amount and its decimal amount
+    const updateAmount = (newAmount: string) => {
+        setAmount(newAmount)
+        const amounDec = Number(newAmount)
+        const validAmount = newAmount !== '' && !isNaN(amounDec) 
+
+        const amountDecimals = toDecimals( validAmount ? amounDec.toString() : "0", token.decimals)
+        setAmountDecimals(amountDecimals)
+        setIsValidAmount( validAmount )
+    }
+
+
 
     // Approve Tokens
     const isApproveMining = approveErc20State.status === "Mining"
     const approveButtonPressed = () => {
-        const amountDecimals = toDecimals(amount.toString(), token.decimals)
+        // const amountDecimals = toDecimals(amount.toString(), token.decimals)
         console.log("approveButtonPressed - amount: ", amount, "amountDecimals", amountDecimals)
         return approveErc20(amountDecimals)
     }
@@ -122,7 +173,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     const isDepositMining = depositState.status === "Mining"
 
     const submitDeposit = () => {
-        const amountDecimals = toDecimals(amount.toString(), token.decimals)
+        // const amountDecimals = toDecimals(amount.toString(), token.decimals)
         console.log("submitDeposit - amount: ", amount, "amountDecimals", amountDecimals)
         return deposit(amountDecimals)
     }
@@ -130,11 +181,25 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     // Withdraw Tokens
     const { withdraw, withdrawState } = useWithdraw(chainId, poolId)
     const isWithdrawMining = withdrawState.status === "Mining"
+    
     const submitWithdrawal = () => {
-        const amountDecimals = toDecimals(amount.toString(), token.decimals)
-        console.log("submitWithdrawal - amount: ", amount, "amountDecimals", amountDecimals)
-        return withdraw(amountDecimals)
+        // if user is with withdrawing an amount very close to his LP balance withdraw all to avoid leaving dust in wallet
+        // const amountDecimals = toDecimals(amount.toString(), token.decimals)
+        const currentBalance = tokenBalance ? tokenBalance.toString() : balance
+
+      
+        if ( isVeryCloseValues(amountDecimals ,  currentBalance) ) {
+            console.log("submitWithdrawal - should withdraw all!  currentBalance => ", currentBalance)
+        }
+        
+        const withdrawAmount = isVeryCloseValues( amountDecimals ,  currentBalance ) ? currentBalance : amountDecimals
+
+        console.log("submitWithdrawal - withdrawAmount: ", withdrawAmount ,  " amountDecimals: ", amountDecimals)
+
+
+        return withdraw(withdrawAmount)
     }
+
 
     const submitButtonTitle = (formType === 'deposit') ? "Deposit" : 
                                (formType === 'withdraw') ? "Withdraw" : "n/a"
@@ -182,7 +247,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
                 message: "Now you can close the window",
             })
             handleSuccess(info)
-            setAmount("")
+            updateAmount("")
         }
 
         if (notifications.filter((notification) =>
@@ -203,7 +268,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
                 message: "Now you can close the window",
             })
             handleSuccess(info)
-            setAmount("")
+            updateAmount("")
         }
     }, [notifications, chainId, approveLink, depositLink, withdrawLink])
 
@@ -235,26 +300,45 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             
             <Divider />
 
-            <Box  alignItems="center" mt={3}>
-                <Grid container justifyContent="flex-end">
-                    <Link href="#" color="inherit" variant="body2" onClick={() => balancePressed()} >
+            <Box   mt={3} mb={2}>
+
+                <Grid container justifyContent="flex-start"> 
+                    <Link href="#" color="inherit" variant="body2" onClick={() => balancePressed()}  style={{textDecoration: "underline"}}>
                         Balance: {balance}
                     </Link>
                 </Grid>
-                <Grid container justifyContent="center">
-                    <div className={classes.amountWithLabel}>
+
+                <Grid container justifyContent="space-between">
+                    {/* first row */}
+                    <Grid item xs={9} >
                         <Input className={classes.amount} inputProps={{min: 0, style: { textAlign: 'right' }}}  
                             value={amount} placeholder="0.0" autoFocus onChange={handleInputChange} /> 
-                        <img className={classes.tokenImg} src={image} alt="token image" />
-                        <Typography color="textSecondary" variant="body1" style={{minWidth:70}}>{symbol}</Typography>
-                    </div> 
+                    </Grid> 
+                    <Grid item xs={3} >
+                        <Box style={{paddingTop: 12, paddingLeft: 5}}>
+                            <Typography color="textSecondary" variant="body1" style={{minWidth:70}}>{symbol}</Typography>
+                        </Box>
+                    </Grid> 
+                    {/* second row */}
+                    <Grid item xs={9} >
+                        { formType === 'withdraw' && 
+                            <Box py={2}>
+                                <Horizontal spacing="between">
+                                    <Typography variant="body2">{`${isValidAmount && formattedFeesToWithdraw ? 'fees: ≈ $'+formattedFeesToWithdraw : ' ' }` } </Typography>
+                                    <Typography variant="body2">{`${isValidAmount && formattedLTokensValue ? '≈ $'+formattedLTokensValue : ' ' }` } </Typography>
+                                </Horizontal>
+                            </Box>
+                        }
+                    </Grid> 
+                    <Grid item xs={2} > </Grid> 
                 </Grid>
+    
             </Box>
 
             { formType === 'deposit' &&
                 <Box mb={2} >
                     { showApproveButton &&
-                    <Button variant="contained" color="primary" fullWidth disabled={amount === ''}
+                    <Button variant="contained" color="primary" fullWidth disabled={ !isValidAmount }
                         onClick={() => approveButtonPressed()} >
                         Approve {symbol} 
                         { isApproveMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
@@ -263,7 +347,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
 
 
                     { showDepositButton && 
-                    <Button variant="contained" color="primary" fullWidth  
+                    <Button variant="contained" color="primary" fullWidth disabled={ !isValidAmount }
                         onClick={() => submitForm()} >
                         { submitButtonTitle }
                         { isDepositMining && <Horizontal >  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
@@ -282,7 +366,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             }  
             { formType === 'withdraw' &&
                 <Box mb={2} >
-                    <Button variant="contained" color="primary" fullWidth disabled={amount === ''}
+                    <Button variant="contained" color="primary" fullWidth disabled={ !isValidAmount }
                         onClick={() => submitForm()}>
                         { submitButtonTitle }
                         { isWithdrawMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  

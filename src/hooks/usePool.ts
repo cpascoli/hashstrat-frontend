@@ -1,7 +1,11 @@
 
+import { constants } from "ethers"
 import { useContractFunction, useCall } from "@usedapp/core"
 import { PoolContract } from "../utils/network"
 import { useDebugValue } from "react"
+
+
+//// User Actions ////
 
 export const useDeposit = (chainId: number, poolId: string) => {
     const poolContract = PoolContract(chainId, poolId)
@@ -31,6 +35,9 @@ export const useWithdraw = (chainId: number, poolId: string) => {
 }
 
 
+//// View Functions  ////
+
+
 export const usePortfolioValue = (chainId: number, poolId: string, account: string) => {
     const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
@@ -43,7 +50,22 @@ export const usePortfolioValue = (chainId: number, poolId: string, account: stri
     return value?.[0].toString()
 }
 
-// Account Stats
+export const useLpTokensValue = (chainId: number, poolId: string, amount: string) => {
+
+
+    const poolContract = PoolContract(chainId, poolId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'lpTokensValue',
+            args: amount !== '' ? [amount] : [],
+    }) ?? {}
+
+    useDebugValue(value?.[0].toString())
+    return value?.[0].toString()
+}
+
+
+
 export const useGetDeposits = (chainId: number, poolId: string, account: string) => {
     const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
@@ -69,9 +91,6 @@ export const useGetWithdrawals = (chainId: number, poolId: string, account: stri
     return value?.[0].toString()
 }
 
-
-
-// Pool Stats
 
 export const useTotalPortfolioValue = (chainId: number, poolId: string) => {
     const poolContract = PoolContract(chainId, poolId)
@@ -167,4 +186,16 @@ export const useSwapInfoArray = (chainId: number, poolId: string) => {
     return info
 }
 
+
+export const useFeesForWithdraw = (chainId: number, poolId: string, lpTokensAmount: string, account?: string) => {
+    const poolContract = PoolContract(chainId, poolId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'feesForWithdraw',
+            args: account ? [lpTokensAmount, account] : [lpTokensAmount, constants.AddressZero],
+    }) ?? {}
+
+    useDebugValue(value?.[0].toString())
+    return value?.[0].toString()
+}
 

@@ -385,9 +385,7 @@ export const useTokensInfoForPools = (chainId: number, poolIds: string[], tokens
         return map;
     }, {} as { [x: string]: any } );
 
-    console.log("AAA lpBalanceResponses - poolIds:", poolIds, "account",  account, "lpBalanceResponses", lpBalanceResponses)  // lpBalance: "3306" / "1770955616"
-
-
+   
     // the the balance of all tokens in all pools
     const poolsBalancesResponse = useTokensPoolsBalances(chainId, tokens, poolsInfo)
 
@@ -554,9 +552,7 @@ const useAccountLPBalancesForPools = (chainId : number, account: string | undefi
         const balanceNotStaked = lpBalanceResults.at(idx)?.value 
         const balanceStaked = stakedLpBalanceResults.at(idx)?.value 
         const supply = lpTotalSupplyResults.at(idx)?.value 
-
         const totalBalance = (balanceNotStaked && balanceStaked) ? balanceNotStaked[0].add(balanceStaked[0]) : undefined
-        console.log("AAAA lpBalanceResults: ", lpBalanceResults.at(idx) , "balanceNotStaked", balanceNotStaked?.toString(), "balanceStaked", balanceStaked?.toString(), "totalBalance", totalBalance?.toString(), "supply: ", supply?.toString())
 
         return {
             poolId: req.poolId,

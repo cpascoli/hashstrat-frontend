@@ -45,7 +45,7 @@ const useStyle = makeStyles( theme => ({
 export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, handleError } : StakingViewProps ) => {
 
   const classes = useStyle()
-  const [showUpdateStakeModal, setShowUpdateStakeModal] = useState(false);
+  const [showStakeUnstakeModal, setShowStakeUnstakeModal] = useState(false);
 
   const { symbol, address } = token
   const { account } = useEthers()
@@ -56,11 +56,11 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
   const formattedTokenStakedBalance = tokenStakedBalance && fromDecimals(tokenStakedBalance, token.decimals, 2) || "0.0"
 
   const showModalPressed = () => {
-    setShowUpdateStakeModal(true)
+    setShowStakeUnstakeModal(true)
   }
 
   const hideModalPreseed = () => {
-    setShowUpdateStakeModal(false)
+    setShowStakeUnstakeModal(false)
   }
 
   const handleAllowanceUpdated = () => {
@@ -97,7 +97,7 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
           </Box>
           
 
-          {showUpdateStakeModal && (
+          {showStakeUnstakeModal && (
             <Modal onClose={(e) => hideModalPreseed()}>
 
               <StakeForm

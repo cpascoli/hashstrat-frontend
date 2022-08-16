@@ -43,7 +43,7 @@ const useStyle = makeStyles( theme => ({
 export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleSuccess, handleError } : DepositWithdrawViewProps ) => {
 
   const classes = useStyle()
-  const [showUpdateStakeModal, setShowUpdateStakeModal] = useState(false);
+  const [showUDepositWithdrawModal, setShowUDepositWithdrawModal] = useState(false);
   const [formTypeValue, setFormTypeValue] = useState(formType);
 
   const { symbol, image, address } = token
@@ -52,12 +52,12 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
   const formattedTokenBalance = tokenBalance && fromDecimals(tokenBalance, token.decimals, 2) || "0.0"
 
   const showModalPressed = (buttonType: 'deposit' | 'withdraw') => {
-    setShowUpdateStakeModal(true)
+    setShowUDepositWithdrawModal(true)
     setFormTypeValue(buttonType)
   }
 
   const hideModalPreseed = () => {
-    setShowUpdateStakeModal(false)
+    setShowUDepositWithdrawModal(false)
     setFormTypeValue('deposit')
   }
 
@@ -110,7 +110,7 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
           </Box>
           
 
-          {showUpdateStakeModal && (
+          { showUDepositWithdrawModal && account && (
             <Modal onClose={(e) => hideModalPreseed()}>
               <DepositWithdrawForm
                 formType={formTypeValue}
@@ -118,6 +118,7 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
                 chainId={chainId}
                 poolId={poolId}
                 token={token}
+                account={account}
                 handleSuccess={handleSuccess}
                 handleError={handleError}
                 allowanceUpdated={handleAllowanceUpdated}

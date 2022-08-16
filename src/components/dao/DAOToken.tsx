@@ -42,7 +42,8 @@ const useStyles = makeStyles( theme => ({
         minHeight: 300
     },
     info:{
-        margin: "auto"
+        margin: "auto",
+        marginBottom: 30,
     },
     claimAction: {
         display: "flex",
@@ -195,7 +196,7 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
                                 <TitleValueBox title="Circulating %" value={`${circulatingPerc}`} suffix="%"  mode="small"/>
                             </CardContent>
                             <CardActions   >
-                                <Button variant="contained" color="primary" fullWidth onClick={handleAddTokenButtonPressed} style={{ margin: 20, height: 40 }} > 
+                                <Button variant="contained" color="secondary" fullWidth onClick={handleAddTokenButtonPressed} style={{ margin: 20, height: 40 }} > 
                                     Add HST to MetaMask
                                 </Button>
                             </CardActions>

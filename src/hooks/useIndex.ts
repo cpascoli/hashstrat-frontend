@@ -132,10 +132,10 @@ export const usePoolInfoArray = (chainId: number, poolId: string) => {
 
     const info = value?.[0].map( (data: any, idx: number) => {
         return {
-            name:  value?.['name'],
-            poolAddress:  value?.['poolAddress'],
-            lpTokenAddress:  value?.['lpTokenAddress'],
-            weight:  value?.['weight']
+            name:  data?.['name'],
+            poolAddress:  data?.['poolAddress'],
+            lpTokenAddress:  data?.['lpTokenAddress'],
+            weight:  data?.['weight']
           }
     })
     return info

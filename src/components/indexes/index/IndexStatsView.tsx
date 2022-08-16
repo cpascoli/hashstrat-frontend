@@ -1,8 +1,8 @@
 import { makeStyles, Box, Typography } from  "@material-ui/core"
 import { TitleValueBox } from "../../TitleValueBox"
 import { Token } from  "../../../types/Token"
-import { useIndexModel } from "./IndexModel"
-import { fromDecimals } from "../../../utils/formatter"
+import { useIndexModel, PoolSummary } from "./IndexModel"
+import { fromDecimals, round } from "../../../utils/formatter"
 import { BigNumber } from "ethers"
 import { PoolInfo, InvestTokens } from "../../../utils/pools"
 import { PieChartWithLabels } from "../../shared/PieChartWithLabels"
@@ -44,9 +44,9 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
     const { name, description, investTokens } = PoolInfo(chainId, poolId)
  
     const tokens =  [depositToken, ... InvestTokens(chainId)]
-    const { indexInfo, portfolioInfo, chartData } = useIndexModel(chainId, poolId, tokens, depositToken)
+    const { indexInfo, poolsInfo, portfolioInfo, chartValueByAsset, chartValueByPool } = useIndexModel(chainId, poolId, tokens, depositToken)
   
-    console.log("IndexStatsView", indexInfo)  //indexInfo:  {poolId: 'index02', tokenInfoArray: Array(2), totalValue: BigNumber}
+    console.log("IndexStatsView", poolsInfo)  //indexInfo:  {poolId: 'index02', tokenInfoArray: Array(2), totalValue: BigNumber}
     
     const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : undefined
 
@@ -62,6 +62,15 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
     }).map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted} /> )
 
 
+    const totalWeights = poolsInfo?.reduce( (acc, val ) => {
+        return acc + val.weight
+    }, 0)
+    const poolsInIndex = poolsInfo?.map( ( pool : PoolSummary) => {
+        const perc = round( 100 * pool.weight / totalWeights )
+        return <TitleValueBox mode="small" key={pool.poolId} title={pool.name} value={perc.toString()}  suffix="%" />
+    })
+
+    
 
     return (
         <Box className={classes.container}>
@@ -72,7 +81,9 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
             </Box>
 
             <Horizontal align="center" >
-                <PieChartWithLabels { ...chartData } /> 
+                <PieChartWithLabels { ...chartValueByAsset } /> 
+                <PieChartWithLabels { ...chartValueByPool } /> 
+
                 <Box className={classes.portfolioInfo} >
                     { assetViews }
                     <TitleValueBox title="Total Asset Value" value={formattedPortfolioValue??""} suffix={depositToken.symbol} />
@@ -81,7 +92,15 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
                     <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>
          */}
                 </Box>
+
+                <Box className={classes.portfolioInfo} >
+                    { poolsInIndex }
+
+                </Box>
             </Horizontal>
+
+
+            
 
 {/* 
             <Typography variant="h6" align="center"> {name}</Typography> 
@@ -93,6 +112,7 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
                     <PieChartWithLabels { ...chartData } /> 
                 </Horizontal>
             </Box> */}
+
         </Box>
        
     )

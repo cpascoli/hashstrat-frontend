@@ -96,15 +96,12 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     const [amountDecimals, setAmountDecimals] = useState<string>("")
     const [userMessage, setUserMessage] = useState<SnackInfo>()
 
-    console.log("DepositWithdrawForm - amountDecimals: ", amountDecimals)
-
-    // withdraw only data
-    const lpTokensValue = useLpTokensValue(chainId, poolId, amountDecimals)
+    // withdraw only data (fees are only available for pools)
+    const lpTokensValue =  useLpTokensValue(chainId, poolId, amountDecimals)
     const feesForWithdraw = useFeesForWithdraw(chainId, poolId, amountDecimals, account)
 
+    
     const { approveErc20, approveErc20State } = useTokenApprove(chainId, poolId, symbol, PoolAddress(chainId, poolId))
-
-   
     const { notifications } = useNotifications()
 
 
@@ -113,8 +110,6 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     const formattedAllowance = allowance && fromDecimals(allowance, token.decimals, 4)
     const formattedLTokensValue = lpTokensValue ? fromDecimals( BigNumber.from(lpTokensValue), depositToken!.decimals, 2) : ""
     const formattedFeesToWithdraw = feesForWithdraw ? fromDecimals( BigNumber.from(feesForWithdraw), depositToken!.decimals, 2) : ""
-
-    console.log("DepositWithdrawForm - lpTokensValue: ", lpTokensValue, " >> formattedLTokensValue: ", formattedLTokensValue)
 
 
     // Handlers

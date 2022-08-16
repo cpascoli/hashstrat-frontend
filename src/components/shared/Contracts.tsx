@@ -43,11 +43,12 @@ export const Contracts = ( { chainId, poolId } : ContractsProps ) => {
     
 
     return (
-        <Box mt={1} px={1}>
+        <Box my={2} px={2}>
             <div className={classes.root}>
                     <div className={classes.gridList}>
-                    <Typography variant="body2" style={{paddingBottom:5}}>Contracts</Typography>
+                   
                     <Horizontal>
+                        <Typography variant="body2">Contracts</Typography>
 
                         {/* { !poolId &&  <Link href={`https://${explorerHost}/address/${depositToken?.address}#code` } target="_blank">{depositToken?.symbol}</Link> }
                         { !poolId &&  <Link href={`https://${explorerHost}/address/${investToken?.address}#code` } target="_blank">{investToken?.symbol}</Link> } */}

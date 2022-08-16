@@ -90,6 +90,7 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
                     <PoolStatsView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                 </TabPanel>
                 <TabPanel className={classes.tab} value="2" key={2}>
+                    <Box pb={4}>
                     {
                        isRebalanceStrategy && <RebalanceStrategyInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                     }
@@ -99,6 +100,7 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
                     {
                         isTrendFollowStrategy && <TrendFollowtrategyInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />
                     }
+                    </Box>
                 </TabPanel>
                 <TabPanel className={classes.tab} value="3" key={3}>
                     <TradesView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />

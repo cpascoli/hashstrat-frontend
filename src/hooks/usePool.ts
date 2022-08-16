@@ -1,7 +1,8 @@
 
-import { constants } from "ethers"
+import { constants, BigNumber } from "ethers"
+
 import { useContractFunction, useCall } from "@usedapp/core"
-import { PoolContract } from "../utils/network"
+import { PoolContract, PoolLPContract } from "../utils/network"
 import { useDebugValue } from "react"
 
 
@@ -50,20 +51,56 @@ export const usePortfolioValue = (chainId: number, poolId: string, account: stri
     return value?.[0].toString()
 }
 
+
+
+//TODO 
+// When the MultiPool contract will support lpTokensValue(), we will use that for both Pools & Indexes
+// For now we need to calculate LP value on the client using pool/index value and from LP supply
 export const useLpTokensValue = (chainId: number, poolId: string, amount: string) => {
 
-
     const poolContract = PoolContract(chainId, poolId)
-    const { value, error } = useCall({
-            contract: poolContract,
-            method: 'lpTokensValue',
-            args: amount !== '' ? [amount] : [],
+    const poolLPPontract = PoolLPContract(chainId, poolId)
+
+    const { value : portfolioValue, error : error0 } = useCall({
+        contract: poolContract,
+        method: 'totalPortfolioValue',
+        args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
-    return value?.[0].toString()
+    const { value : multiPoolValue, error : error1 } = useCall({
+        contract: poolContract,
+        method: 'multiPoolValue',
+        args: [],
+    }) ?? {}
+
+    const totValue0 = portfolioValue?.[0]
+    const totValue1 = multiPoolValue?.[0]
+    const totValue = totValue0 ?  totValue0: totValue1
+
+    const { value : totalSupply, error : error2 } = useCall({
+            contract: poolLPPontract,
+            method: 'totalSupply',
+            args: [],
+    }) ?? {}
+
+    const totSupply = totalSupply?.[0]
+
+    const lpValue = ( amount !== '' && totValue && totSupply) ?  totValue.mul(BigNumber.from(amount)).div(totSupply) : undefined
+
+    return lpValue?.toString()
 }
 
+// export const useLpTokensValue = (chainId: number, poolId: string, amount: string) => {
+//     const poolContract = PoolContract(chainId, poolId)
+//     const { value, error } = useCall({
+//             contract: poolContract,
+//             method: 'lpTokensValue',
+//             args: amount !== '' ? [amount] : [],
+//     }) ?? {}
+
+//     useDebugValue(value?.[0].toString())
+//     return value?.[0].toString()
+// }
 
 
 export const useGetDeposits = (chainId: number, poolId: string, account: string) => {
@@ -185,6 +222,7 @@ export const useSwapInfoArray = (chainId: number, poolId: string) => {
     })
     return info
 }
+
 
 
 export const useFeesForWithdraw = (chainId: number, poolId: string, lpTokensAmount: string, account?: string) => {

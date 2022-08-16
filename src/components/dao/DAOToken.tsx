@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react"
+import { BigNumber, utils , ethers } from "ethers"
+import { useEthers, useNotifications } from "@usedapp/core";
 
 import { Box, Accordion, AccordionDetails, AccordionSummary, makeStyles, 
         Typography, Link, Button, CircularProgress, Card, CardContent, CardActions
      } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
-
 import { ExpandMore, Info } from "@material-ui/icons"
-
-import { useNotifications } from "@usedapp/core"
-import { BigNumber, utils } from "ethers"
 
 
 import { useGetRewardPeriods, useStakedLP, useClaimableRewards, useClaimReward  } from "../../hooks/useFarm"
@@ -22,6 +20,9 @@ import { Token } from "../../types/Token"
 import { SnackInfo } from "../SnackInfo"
 import { NetworkExplorerHost, NetworkExplorerName, HstTokenAddress } from "../../utils/network"
 import { StyledAlert } from "../shared/StyledAlert"
+
+import { HstToken } from "../../utils/Tokens"
+
 
 
 interface DAOTokenProps {
@@ -76,8 +77,30 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
         return claimReward()
     }
 
-    const hstAddress = HstTokenAddress(chainId)
+    const hstToken = HstToken(chainId)
+    const ethereum = new ethers.providers.Web3Provider(window.ethereum);
 
+    const handleAddTokenButtonPressed = () => {
+
+            window.ethereum && window.ethereum.request({
+                 method: 'wallet_watchAsset', 
+                 params: {
+                    type: 'ERC20',
+                    options: {
+                      address: hstToken.address,
+                      symbol: hstToken.symbol,
+                      decimals: hstToken.decimals,
+                      image: 'https://hashstrat.com/logo.svg'
+                    }
+                  }
+            })
+            .then(() => console.log('Success, Token added!'))
+            .catch((error: Error) => console.log(`Error: ${error.message}`))
+
+    }
+
+
+    
     const explorerHost = NetworkExplorerHost(chainId)
     const claimedLink =  (claimRewardState.status === 'Success' && 
                 claimRewardState.receipt && 
@@ -171,6 +194,11 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
                                 <TitleValueBox title="Circulating Supply" value={formattedTotalRewardPaid}  mode="small" />
                                 <TitleValueBox title="Circulating %" value={`${circulatingPerc}`} suffix="%"  mode="small"/>
                             </CardContent>
+                            <CardActions   >
+                                <Button variant="contained" color="primary" fullWidth onClick={handleAddTokenButtonPressed} style={{ margin: 20, height: 40 }} > 
+                                    Add HST to MetaMask
+                                </Button>
+                            </CardActions>
                         </Card>
                     </Box>
 
@@ -183,8 +211,8 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
                                 <TitleValueBox title="HST already collected" value={formattedHstBalance} mode="small" />
                                 <TitleValueBox title="HST to collect" value={formattedClaimableRewards} mode="small" />
                             </CardContent>
-                            <CardActions disableSpacing className={classes.claimAction} >
-                                <Button variant="contained" color="primary" fullWidth onClick={handleClaimButtonPressed} style={{ width: 220, height: 40 }} > 
+                            <CardActions   >
+                                <Button variant="contained" color="primary" fullWidth onClick={handleClaimButtonPressed} style={{ margin: 20, height: 40 }} > 
                                     Collect HST Tokens
                                     { isDepositMining && <Horizontal >  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
                                 </Button>

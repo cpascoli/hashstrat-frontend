@@ -42,13 +42,8 @@ export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], to
     // get assets for all pools in these Indexes
     const poolsBalances = useTokensInfoForPools(chainId, poolIds, tokens)
 
-    console.log("AAA useTokensInfoForIndexes --- poolIds: ", poolIds, "poolsBalances: ", poolsBalances)
-
     // get all LP token balances of all pools in the indexes -> PoolLPs.balanceOf(index_address)
     const lpbalancesByIndexMap = usePoolsLPBalancesForIndexes(chainId, indexIds, poolIds)
-
-    console.log("AAA useTokensInfoForIndexes --- lpbalancesByIndexMap: ", lpbalancesByIndexMap, "indexPools", indexPools)
-
 
     // process all poolsBalances determining the allocation of the index in those pool
     const allBalances = indexPools.map( item  => {
@@ -153,7 +148,6 @@ export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], to
         return acc
     }, {} as { [x: string]: any } )
 
-    console.log("AAA useTokensInfoForIndexes --- balances: ", balances)
 
     return balances
 }

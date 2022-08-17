@@ -1,3 +1,5 @@
+import { Kovan, Polygon } from '@usedapp/core';
+
 import poolsInfo from "../config/pools.json"
 import indexesInfo from "../config/indexes.json"
 import networksConfig from "../config/networks.json"
@@ -82,8 +84,8 @@ export const TokensForPool = (chainId: number, poolId: string) : {depositToken: 
 
 
 export const DepositToken = (chainId: number) : (Token | undefined) => {
-    return  (chainId === 42) ?  { image: dai, address: DaiTokenAddress(chainId), symbol: "DAI", decimals: 18 } : 
-            (chainId === 137) ? { image: usdc, address: UsdcTokenAddress(chainId), symbol: "USDC", decimals: 6 } : undefined
+    return chainId === Kovan.chainId ?  { image: dai, address: DaiTokenAddress(chainId), symbol: "DAI", decimals: 18 } : 
+           chainId === Polygon.chainId ? { image: usdc, address: UsdcTokenAddress(chainId), symbol: "USDC", decimals: 6 } : undefined
 
 }
 

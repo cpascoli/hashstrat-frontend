@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useEthers, Kovan, Polygon } from "@usedapp/core";
+
 import { useBlockNumber, shortenAddress } from "@usedapp/core"
 import Switch from "@material-ui/core/Switch";
-import { useEthers } from "@usedapp/core";
 import { Button, Link, Menu, MenuProps, MenuItem, Divider, Typography, makeStyles } from  "@material-ui/core"
 import { styled } from "@material-ui/core/styles"
 import { NetworkName } from "../utils/network"
@@ -94,10 +95,9 @@ interface HeaderProps {
 export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : HeaderProps ) => {
 
     const classes = useStyles()
-
     const [networkName, setNetworkName] = useState<string>("")
 
-    const blockNumber = useBlockNumber()
+    //const blockNumber = useBlockNumber()
 
 
     const handleModeChange = () => {
@@ -105,11 +105,16 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
       setToggleDark(!toggleDark);
     };
 
+    // watch the network name to show the user the real network connected
     const { account, deactivate, chainId }  = useEthers()
 
     useEffect(() => {
       if (chainId) {
-        setNetworkName( NetworkName(chainId) )
+        const network = NetworkName(chainId) ?? "Unknown"
+        setNetworkName( network )
+
+        const supportedChain = chainId === Polygon.chainId || chainId === Kovan.chainId
+        setChainId(supportedChain ? chainId : undefined)
       }
     }, [chainId, account])
 

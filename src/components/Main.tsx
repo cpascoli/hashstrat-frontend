@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-
+import { Polygon, useEthers } from '@usedapp/core';
 import { Box,Typography, makeStyles } from "@material-ui/core"
+
 import { Alert, AlertTitle } from "@material-ui/lab"
 
 import { StyledAlert } from "./shared/StyledAlert"
@@ -51,16 +51,29 @@ const useStyle = makeStyles( theme => ({
 
 export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  { 
   
-    const [connected, setConnected] = useState(false);
-    const [chainId, setChainId] = useState<number | undefined>(137); // default to Polygon Network
-    const [account, setAccount] = useState<string | undefined>();
-
-    const classes = useStyle()
-
     // the chain to show to the user. 
     // use default chain (Polygon) if no account is connected from a supported chain.
     //const [demoChainId, setDemoChainId] = useState<number>(137);
-    const defaultChainId = 137
+    const defaultChainId = Polygon.chainId
+
+    const classes = useStyle()
+
+    // const { chainId  : initialChainId }  = useEthers()
+
+    // chainId can be undefined when the user is connected to a non supported network 
+    // when no account is connected it defaults to Polygon
+    const [chainId, setChainId] = useState<number | undefined>(defaultChainId); 
+    const [connected, setConnected] = useState(false);
+  
+    const [account, setAccount] = useState<string | undefined>();
+
+    console.log("Main - chainId: ", chainId)
+    
+    const poolIds = PoolIds(chainId || defaultChainId)
+    const indexesIds = IndexesIds(chainId || defaultChainId)
+    const depositToken = DepositToken(chainId || defaultChainId) 
+    const investTokens = InvestTokens(chainId || defaultChainId)
+    
 
     useEffect(() => {
         if (account) {
@@ -71,24 +84,19 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
     }, [chainId, account])
 
 
-    const poolIds = PoolIds(chainId || defaultChainId)
-    const indexesIds = IndexesIds(chainId || defaultChainId)
-    const depositToken = DepositToken(chainId || defaultChainId) 
-    const investTokens = InvestTokens(chainId || defaultChainId)
-    
-    
-
     return (
         <Box className={classes.container} >
            
            {(!chainId && account) &&
-                <StyledAlert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
+               
+                <Alert severity="warning" style={{  marginBottom: 10 }} > 
                     <AlertTitle>Wrong Network</AlertTitle>
                     Connect to the <strong>Polygon</strong> or <strong>Kovan</strong> networks to use the dapp
-                </StyledAlert>
+                </Alert>
+               
             }
 
-            { !account &&
+            { !account && chainId &&
                 <StyledAlert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
                     <Horizontal align="center">
                         <div>

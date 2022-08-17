@@ -138,6 +138,8 @@ const poolsInfoFromBalances = (chainId : number, poolsBalances: { [ x: string ] 
 }
 
 
+
+//TODO move to a file shared with IndexStatsView
 const valueByPoolChartData = (chainId: number, 
         poolsBalances:  { [ x: string ] : any }, 
         indexesBalances:  { [ x: string ] : any }, 

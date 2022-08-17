@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
 import { Box,Typography, makeStyles } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
-import { StyledAlert } from "./shared/StyledAlert"
 
+import { StyledAlert } from "./shared/StyledAlert"
 import { TokensForPool, PoolIds, IndexesIds, DepositToken } from "../utils/pools"
 import { InvestTokens } from "../utils/pools"
-
 import { Home } from "./Home"
 import { Header } from '../components/Header';
 import { PoolContainer } from "./pool/PoolContainer";
@@ -26,6 +27,7 @@ import { StrategiesHome } from "./strategies/StrategiesHome";
 import { Dashboard } from './dashboard/Dashboard'
 import { DaoHome } from './dao/DaoHome'
 
+import { MainWithTitle } from "./MainWithTitle"
 
 
 interface MainProps {
@@ -74,6 +76,8 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
     const depositToken = DepositToken(chainId || defaultChainId) 
     const investTokens = InvestTokens(chainId || defaultChainId)
     
+    
+
     return (
         <Box className={classes.container} >
            
@@ -99,8 +103,9 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
             }
 
             <BrowserRouter>
+
                 <Header toggleDark={toggleDark} setToggleDark={setToggleDark} setAccount={setAccount} setChainId={setChainId} />
-                <main>
+                <MainWithTitle>
                     <Routes>
                         <Route path="/"  element={
                             <Home chainId={chainId || defaultChainId} /> 
@@ -150,7 +155,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                              })
                          }
                     </Routes>
-            </main>
+            </MainWithTitle>
             </BrowserRouter>
 
             <footer className={classes.footer}>

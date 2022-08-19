@@ -1,3 +1,4 @@
+import { utils } from "ethers"
 import { makeStyles, Box, Typography } from  "@material-ui/core"
 import { TitleValueBox } from "../../TitleValueBox"
 import { Token } from  "../../../types/Token"
@@ -51,23 +52,25 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
     const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : undefined
 
     const assetViews = indexInfo.tokenInfoArray.map( token => {
-        const balance = token.accountBalance ?? BigNumber.from(0)
-        const value = token.accountValue ?? BigNumber.from(0)
+        const balance = token.balance ?? BigNumber.from(0)
+        const value = token.value ?? BigNumber.from(0)
         const decimals = token.decimals //    tokens.find( t => t.symbol === symbol)?.decimals ?? 2
         const accountBalanceFormatted = fromDecimals(balance, decimals, 4 ) as any
         const accountValueFormatted = fromDecimals(value, depositToken.decimals, 2 ) as any
-        const valueFormatted = `${accountBalanceFormatted} (${accountValueFormatted} ${ depositToken.symbol }) `
+        const valueFormatted = `${ utils.commify(accountBalanceFormatted)} (${ utils.commify(accountValueFormatted) } ${ depositToken.symbol }) `
 
         return { symbol: token.symbol, valueFormatted, balance, value }
-    }).map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted} /> )
+    }).map( it => <TitleValueBox mode="small" key={it.symbol} title={it.symbol} value={it.valueFormatted} /> )
 
 
     const totalWeights = poolsInfo?.reduce( (acc, val ) => {
         return acc + val.weight
     }, 0)
     const poolsInIndex = poolsInfo?.map( ( pool : PoolSummary) => {
-        const perc = round( 100 * pool.weight / totalWeights )
-        return <TitleValueBox mode="small" key={pool.poolId} title={pool.name} value={perc.toString()}  suffix="%" />
+        const valueFormatted = pool.value && fromDecimals(pool.value, depositToken.decimals, 2)
+        return <TitleValueBox mode="small" key={pool.poolId} 
+                        title={`${pool.name} (${pool.weight}/${totalWeights})`}
+                        value={`${valueFormatted} ${depositToken.symbol}`}  />
     })
 
     
@@ -86,7 +89,7 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
 
                 <Box className={classes.portfolioInfo} >
                     { assetViews }
-                    <TitleValueBox title="Total Asset Value" value={formattedPortfolioValue??""} suffix={depositToken.symbol} />
+                    <TitleValueBox mode="small" title="Total Value Locked (TVL)" value={formattedPortfolioValue??""} suffix={depositToken.symbol} />
     
                     {/* <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
                     <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>

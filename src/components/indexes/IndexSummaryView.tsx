@@ -5,6 +5,8 @@ import { TitleValueBox } from "../TitleValueBox"
 import { fromDecimals, round } from "../../utils/formatter"
 import { PoolInfo } from "../../utils/pools"
 import { useTokenBalance, useTokenTotalSupply } from "../../hooks"
+import { useAccountLPBalancesForIndexes } from "../../hooks/usePoolInfo"
+
 import { useMultiPoolValue } from "../../hooks/useIndex"
 import { Token } from "../../types/Token"
 
@@ -33,14 +35,12 @@ export const IndexSummaryView = ({ chainId, account, poolId, depositToken } : In
     const classes = useStyles()
     
     const { name, description } = PoolInfo(chainId, poolId)
- 
+  
     const multiPoolValue = useMultiPoolValue(chainId, poolId)
 
-    const balance = useTokenBalance(chainId, poolId, "pool-lp", account)
-    const totalSupply = useTokenTotalSupply(chainId, poolId, "pool-lp")
-
-    const lpPerc =  (balance && totalSupply > 0) ? balance * 10000 / totalSupply : 0
-    const lpPercFormatted = `${round( lpPerc / 100)}`
+    const lpBalanceForIndexes = useAccountLPBalancesForIndexes(chainId, [poolId], account)
+    const { indexId, indexPerc, lpBalance, lpTotalSupply } = lpBalanceForIndexes[poolId]
+    const lpPercFormatted = `${round(indexPerc * 100)}`
 
     const multiPoolValueFormatted =  (multiPoolValue !== undefined) ? fromDecimals(multiPoolValue, depositToken.decimals, 2) : ""
 

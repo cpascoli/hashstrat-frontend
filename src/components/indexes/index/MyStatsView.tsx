@@ -49,7 +49,7 @@ export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStat
                         String(Math.round( 10000 * (parseFloat(formattedWithdrawals) + parseFloat(formattedPortfolioValue) - parseFloat(formattedDeposits)) / parseFloat(formattedDeposits)) / 100 ) : 'n/a'
 
     
-    const assetViews = indexInfo.tokenInfoArray.map( token => {
+    const assetViews = indexInfo?.tokenInfoArray?.map( token => {
         const balance = token.accountBalance ?? BigNumber.from(0)
         const value = token.accountValue ?? BigNumber.from(0)
         const decimals = token.decimals //    tokens.find( t => t.symbol === symbol)?.decimals ?? 2

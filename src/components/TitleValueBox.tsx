@@ -90,7 +90,6 @@ export const TitleValueBox = ({ title, value, suffix="", border=false, mode="reg
         },
         label: {
             fontWeight: 100,
-            maxWidth: "50%",
             fontSize: mode === "regular" ? "1.1rem" : "0.9rem",
             marginRight: 10,
         },

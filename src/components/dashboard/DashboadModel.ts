@@ -49,13 +49,15 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
     const poolsBalances = useTokensInfoForPools(chainId, PoolIds(chainId), tokens, account)
     const indexesBalances = useTokensInfoForIndexes(chainId, IndexesIds(chainId), tokens, account)
 
-
-    //// Portfolio Info  =>  Balance and Value Total across all pools & indexes
-
     // Sum up balance and value across all pools 
     // if an account is connected use his balance and value, otherwise show the totals
     let initValues = tokens.reduce( (acc, val) => {
-        acc[val.symbol] = { symbol: val.symbol, decimals: val.decimals, value: BigNumber.from(0), balance: BigNumber.from(0) }
+        acc[val.symbol] = { 
+            symbol: val.symbol, 
+            decimals: val.decimals, 
+            value: BigNumber.from(0), 
+            balance: BigNumber.from(0) 
+        }
         return acc
     }, {} as TokenBalances )
 
@@ -70,7 +72,13 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
     const tokenBalances : TokenBalances = allPools.reduce( (totals, pool ) : TokenBalances => {
 
         Object.keys(pool).forEach( symbol => {
+
+       
+
             const tokenInfo = pool[symbol] 
+
+            console.log("DDDD", pool, "symbol", symbol, "tokenInfo", tokenInfo)
+
             if (tokenInfo.value) {
                 totals[symbol].value = (account && tokenInfo.accountValue) ? totals[symbol].value.add(tokenInfo.accountValue) : 
                                        tokenInfo.value ? totals[symbol].value.add(tokenInfo.value) : totals[symbol].value
@@ -90,9 +98,8 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
 
 
     //// Indexes & Pools Info ////
-    const poolsInfo = poolsInfoFromBalances(chainId, poolsBalances)
-    const indexesInfo = poolsInfoFromBalances(chainId, indexesBalances)
-
+    const poolsInfo : PoolData[] = poolsInfoFromBalances(chainId, poolsBalances)
+    const indexesInfo : PoolData[] = poolsInfoFromBalances(chainId, indexesBalances)
 
     //// Chart1: Asset value % Chart Data  ////
     const valueByAsset : PieChartsData[] = Object.values(tokenBalances).map( (item ) => {
@@ -103,7 +110,7 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
     }).filter( it => it.value > 0)
 
     //// Chart 2: Value by Pools/Indexes////
-    const valueByPool : PieChartsData[] = valueByPoolChartData(chainId, poolsBalances, indexesBalances, depositToken, account)
+    const valueByPool: PieChartsData[] = valueByPoolChartData(chainId, depositToken, poolsBalances, indexesBalances)
 
     return  {
         portfolioInfo: { tokenBalances: tokenBalances, totalValue: totalValue },
@@ -120,12 +127,18 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
 
 const poolsInfoFromBalances = (chainId : number, poolsBalances: { [ x: string ] : any } ) : PoolData[] => {
 
+    console.log(">>>>>> poolsBalances: ", poolsBalances)
+    // pool01: {USDC: {…}, WBTC: {…}, WETH: {…}}
+    // index01: {indexId: 'index01', tokensBalances: {…}, poolBalances: {…}}
+
+
     return Object.keys(poolsBalances).map( (poolId : string) : PoolData => {
 
         const { depositToken : depositTokenSymbol, investTokens : investTokenSymbols } = PoolInfo(chainId, poolId)
         const poolTokenSymbols = [depositTokenSymbol, ...investTokenSymbols] as string[]
 
-        const tokenInfoArray = Object.values(poolsBalances[poolId]) as TokenInfo[]
+        // tokensBalances
+        const tokenInfoArray =  Object.values(poolsBalances[poolId]) as TokenInfo[]
         const tokensArrayFiltered = tokenInfoArray.filter( it => poolTokenSymbols.includes(it.symbol) )
 
         const totalValue : BigNumber = tokensArrayFiltered.reduce( (acc, val)  => {
@@ -140,50 +153,54 @@ const poolsInfoFromBalances = (chainId : number, poolsBalances: { [ x: string ] 
 
 
 //TODO move to a file shared with IndexStatsView
-const valueByPoolChartData = (chainId: number, 
-        poolsBalances:  { [ x: string ] : any }, 
-        indexesBalances:  { [ x: string ] : any }, 
-        depositToken: Token, 
-        account? : string) : PieChartsData[] => {
 
-    const chart2Values = [...Object.keys(indexesBalances), ...Object.keys(poolsBalances)].reduce( (acc, poolId) => {
-        acc[poolId] = {
-            name: poolId,
-            value: BigNumber.from(0)
+const valueByPoolChartData = (
+        chainId: number, 
+        depositToken : Token, 
+        poolsBalances : { [x: string]: any } ,
+        indexesBalances : { [x: string]: any },   //indexesBalances[indexId].poolBalances
+        account? : string
+        
+    ): PieChartsData[] => {
+ 
+   
+
+
+    const tokenBalancesByPool = Object.keys(poolsBalances).map ( poolId => {
+        return { 
+            poolId, 
+            tokensBalance: poolsBalances[poolId]
         }
-        return acc
-   
-    }, {} as {[ x : string ] : { name: string, value: BigNumber } })
-
-    const aa = [...Object.values(poolsBalances)].forEach( pool => {
-        Object.values(pool).reduce( ( acc : any, val : any) => {
-            acc[val.poolId].value = (account && val.accountValue) ? acc[val.poolId].value.add(val.accountValue) : 
-                                                      (val.value) ? acc[val.poolId].value.add(val.value) : acc[val.poolId].value
-            return acc
-
-        }, chart2Values )
-        return chart2Values
     })
-   
-    const bb = [...Object.values(indexesBalances)].forEach( pool => {
-        return Object.values(pool).reduce( ( acc : any, val : any) => {
-             acc[val.indexId].value = (account && val.accountValue) ? acc[val.indexId].value.add(val.accountValue) : 
-                                                        (val.value) ? acc[val.indexId].value.add(val.value) : acc[val.indexId].value
-            
-            return acc
- 
-         }, chart2Values )
-    })
- 
 
-    const valueByPool = Object.values(chart2Values).map( it => {
-        const { name } = PoolInfo(chainId, it.name)
+    // indexesBalances[indexId].poolBalances
+    const tokenBalancesForIndexes = Object.keys(indexesBalances).map ( indexId => {
+        return { 
+            indexId, 
+            tokensBalance: indexesBalances[indexId].tokensBalances
+        }
+    })
+    
+
+    // if don't have account don't return indexes because their value in already accounted in the pools
+    const allPools = account ? [...tokenBalancesForIndexes, ...tokenBalancesByPool] : [...tokenBalancesByPool]
+
+    // account for the share of each pool owned by the index
+    const valueByPool = Object.values(allPools).map( (it : any) => {
+        const { name } = PoolInfo(chainId, it.poolId)
+
+        const value = Object.keys(it.tokensBalance).reduce( (acc : BigNumber, symbol : string) => {
+            const value = it.tokensBalance[symbol].value
+            acc = value ? acc.add(value) : acc
+            return acc
+        }, BigNumber.from(0))
+
 
         return {
             name: name,
-            value: Number( fromDecimals(it.value, depositToken.decimals, 2) )
+            value: Number(fromDecimals(value, depositToken.decimals, 2))
         }
-     }).filter( it => it.value > 0)
+    }).filter(it => it.value > 0)
 
-     return valueByPool
+    return valueByPool
 }

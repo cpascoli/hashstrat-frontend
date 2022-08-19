@@ -90,7 +90,6 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
         return { symbol: token.symbol, valueFormatted, balance, value }
     }).map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted} /> )
 
-    console.log("poolInfo", poolInfo, assetViews)
 
     return (
         <Box className={classes.container}>

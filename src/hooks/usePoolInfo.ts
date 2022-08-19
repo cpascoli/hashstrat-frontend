@@ -11,18 +11,86 @@ import { FarmContract  } from "../utils/network"
 import { FeedContractsForTokens, ERC20Contract, PoolLPContract, PoolContract } from "../utils/network"
 
 
+
+export type TokenBalanceInfoForIndexMap = { [ x : string ] : TokeBalanceInfoForIndex }
+export type TokenBalanceInfoMap = { [ symbol : string ] : TokenBalanceInfo }
+export type PoolValueInfoMap = { [ symbol : string ] : PoolValueInfo }
+export type TokenBalanceMapforIndexMap = { [ indexid : string ] : TokenBalanceInfoMap }
+export type PoolValueMapForIndexMap = { [ indexid : string ] : PoolValueInfoMap }
+
+export type PoolValueInfo = {
+    indexId: string,
+    poolId: string,
+    value: BigNumber,
+    accountValue: BigNumber | undefined
+}
+
+export type TokenBalanceInfo = {
+    indexId: string,
+    symbol: string,
+    balance: BigNumber,
+    value: BigNumber,
+    decimals: number,
+    accountBalance: BigNumber | undefined,
+    accountValue: BigNumber | undefined,
+}
+
+type TokeBalanceInfoForIndex = {
+    indexId: string;
+    tokensBalances : TokenBalanceInfoMap;
+    poolBalances :PoolValueInfoMap;
+}
+
+
 // price feed 8 digit precision  
 const feedPrecision = BigNumber.from("100000000")
 
 
-export const useTokensInfoForIndex = (chainId: number, indexId: string, tokens: Token[], account?: string) => {
 
-    const indexes = useTokensInfoForIndexes(chainId, [indexId], tokens, account)
-    return indexes[indexId]
+export const usePoolsInfoForIndexes = (chainId: number, indexIds: string[], tokens: Token[], account?: string) : PoolValueMapForIndexMap => {
+
+   const tokenBalanceInfoForIndexMap = useTokensInfoAndPoolsInfoForIndexes(chainId, indexIds, tokens, account)
+
+   const response = Object.keys(tokenBalanceInfoForIndexMap).map( indexId => {
+        const tokenBalanceIno = tokenBalanceInfoForIndexMap[indexId]
+        return {
+            indexId,
+            poolBalances : tokenBalanceIno.poolBalances
+        }
+   }).reduce( (acc, val) => {
+        acc[val.indexId] = val.poolBalances
+        return acc
+   },  {} as { [x : string] : PoolValueInfoMap } )
+
+   //console.log("usePoolsInfoForIndexes", response)
+
+   return response
 }
 
 
-export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], tokens: Token[], account?: string) => {
+
+export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], tokens: Token[], account?: string) : TokenBalanceMapforIndexMap => {
+
+   const tokenBalanceInfoForIndexMap = useTokensInfoAndPoolsInfoForIndexes(chainId, indexIds, tokens, account)
+
+   const response = Object.keys(tokenBalanceInfoForIndexMap).map( indexId => {
+        const tokenBalanceIno = tokenBalanceInfoForIndexMap[indexId]
+        return {
+            indexId,
+            tokensBalances : tokenBalanceIno.tokensBalances
+        }
+   }).reduce( (acc, val) => {
+        acc[val.indexId] = val.tokensBalances
+        return acc
+   },  {} as { [x : string] : TokenBalanceInfoMap } )
+
+   console.log("useTokensInfoForIndexes", response)
+
+   return response
+}
+
+
+export const useTokensInfoAndPoolsInfoForIndexes = (chainId: number,  indexIds: string[], tokens: Token[], account?: string) : TokenBalanceInfoForIndexMap => {
 
     // array of indexes with their assocaited pools info array [indexId, pools[{name, poolAddress, lpTokenAddress, weight}]]
     const indexPools = useIndexPools(chainId, indexIds) 
@@ -42,17 +110,33 @@ export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], to
     // get assets for all pools in these Indexes
     const poolsBalances = useTokensInfoForPools(chainId, poolIds, tokens)
 
+    // console.log("useTokensInfoForPools: ", poolIds, tokens, ">> ", poolsBalances)
+
+    // console.log("useTokensInfoForPools 1: USD: ", poolsBalances?.pool01?.USDC?.value?.toString(), " BTC",  poolsBalances?.pool01?.WBTC?.value?.toString() )
+    // console.log("useTokensInfoForPools 3: USD: ", poolsBalances?.pool03?.USDC?.value?.toString(), " BTC",  poolsBalances?.pool03?.WBTC?.value?.toString() )
+    // console.log("useTokensInfoForPools 5: USD: ", poolsBalances?.pool05?.USDC?.value?.toString(), " BTC",  poolsBalances?.pool05?.WBTC?.value?.toString() )
+
     // get all LP token balances of all pools in the indexes -> PoolLPs.balanceOf(index_address)
     const lpbalancesByIndexMap = usePoolsLPBalancesForIndexes(chainId, indexIds, poolIds)
 
+    // console.log("lpbalancesByIndexMap: ", lpbalancesByIndexMap )
+    // console.log("lpbalancesByIndexMap 1: lp: ", lpbalancesByIndexMap?.index01 && lpbalancesByIndexMap?.index01[0]['lpBalance']?.toString(),  lpbalancesByIndexMap?.index01 && lpbalancesByIndexMap?.index01[0]['lpTotalSupply']?.toString() )
+    // console.log("lpbalancesByIndexMap 3: lp: ", lpbalancesByIndexMap?.index01 && lpbalancesByIndexMap?.index01[1]['lpBalance']?.toString(),  lpbalancesByIndexMap?.index01 && lpbalancesByIndexMap?.index01[1]['lpTotalSupply']?.toString() )
+    // console.log("lpbalancesByIndexMap 5: lp: ", lpbalancesByIndexMap?.index01 && lpbalancesByIndexMap?.index01[2]['lpBalance']?.toString(),  lpbalancesByIndexMap?.index01 && lpbalancesByIndexMap?.index01[2]['lpTotalSupply']?.toString() )
+
+
     // process all poolsBalances determining the allocation of the index in those pool
-    const allBalances = indexPools.map( item  => {
+    // allBalances is a map, for evey index, of the token values/amount aggregated across all pools in the index
+    //  allBalances :=  { indexId: { symbol: { amount, value, decimals } } }
+
+    const allBalancesByToken = indexPools.map( item  => {
 
         const indexId = item.indexId as string
         const poolids = item.pools && item.pools.map( (i: { name: string }) => i.name.toLowerCase() )
         const lpinfo = lpbalancesByIndexMap[indexId]
 
-        let indexBalances = tokens.reduce( (map, token ) => {
+        // aggretation the index value by token
+        let indexBalancesByToken = tokens.reduce( (map, token ) => {
             map[ token.symbol ] = { 
                 amount: BigNumber.from(0),
                 value: BigNumber.from(0),
@@ -61,7 +145,9 @@ export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], to
             return map;
         }, {} as {[x: string]: { decimals: number, amount: BigNumber, value: BigNumber } } );
 
-        // for all pools in the index
+
+        // for each pool in the index and for each token apply the Index LP %  to the token amount/values
+        // and populate ndexBalancesByToken
         poolids && poolids.forEach( (poolId : string) => {
 
             const poolTokens = poolsBalances[poolId]
@@ -78,46 +164,99 @@ export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], to
                 const haveBalance = tokenInfo.balance && lpBalance && lpTotalSupply && !lpTotalSupply.isZero()
                 const balance = haveBalance && tokenInfo.balance.mul(lpBalance).div(lpTotalSupply)
                 if (balance) {
-                    // console.log("balance  ", indexId, token.tokenSymbol, balance.toString())
-                    indexBalances[symbol].amount = indexBalances[symbol].amount.add(balance)
+                    indexBalancesByToken[symbol].amount = indexBalancesByToken[symbol].amount.add(balance)
                 }
 
                 const haveValue = tokenInfo.value && lpBalance && lpTotalSupply && !lpTotalSupply.isZero()
                 const value = haveValue && tokenInfo.value.mul(lpBalance).div(lpTotalSupply)
                 if (value) {
-                    // console.log("value  ", indexId, token.tokenSymbol, value.toString())
-                    indexBalances[symbol].value = indexBalances[symbol].value.add(value)
+                    indexBalancesByToken[symbol].value = indexBalancesByToken[symbol].value.add(value)
                 }
             })
         })
-
         
         return {
             indexId: indexId,
-            indexesBalances: indexBalances   // { symbol => { value, balance, } } of the quota of tokens owner by the Index across its Pools
+            indexBalancesByToken   // { symbol => { value, balance, } } of the quota of tokens owner by the Index across its Pools
+            // indexBalancesByToken: indexBalancesByToken,   // { symbol => { value, balance, } } of the quota of tokens owner by the Index across its Pools
+            // indexBalancesByPool: indexBalancesByPool      // { poolId => { value}} }
         }
 
     }).reduce( (acc, val) => {
-        acc[val.indexId] = val.indexesBalances
+        acc[val.indexId] = val.indexBalancesByToken
         return acc
     }, {} as { [x: string]: any } )
 
 
+    //////
 
+    // for each pool in the index and for each token apply the Index LP %  to the token amount/values
+    // and populate indexBalancesByPool
+    const indexBalancesByPool = indexPools.map( item  => {
+
+        const indexId = item.indexId as string
+        const poolids = item.pools && item.pools.map( (i: { name: string }) => i.name.toLowerCase() )
+        const lpinfo = lpbalancesByIndexMap[indexId]
+
+        // aggregate the index value by pool
+        let indexBalancesByPool = poolids?.reduce( (map : { [x: string]:  { value: BigNumber } }, poolId : string) => {
+            map[ poolId ] = { value: BigNumber.from(0) }
+            return map 
+        }, {} as { [x: string]: { value:  BigNumber } } );
+
+
+        // for each pool in the index and for each token apply the Index LP %  to the token amount/values
+        // and populate the 2 aggregates: indexBalancesByToken, indexBalancesByPool
+
+        poolids && poolids.forEach( (poolId : string) => {
+
+            const poolTokens = poolsBalances[poolId]
+            //const poolId = poolTokens.poolId
+            const poolLPInfo = lpinfo.find( el => el.poolId.toLowerCase() === poolId.toLowerCase())
+            const lpBalance = poolLPInfo && poolLPInfo.lpBalance 
+            const lpTotalSupply = poolLPInfo && poolLPInfo.lpTotalSupply 
+            // console.log("BBBBB indexId:", indexId, "poolId:", poolId, "poolLPInfo", poolLPInfo,  ">> lpBalance: ", lpBalance, "lpTotalSupply: ", lpTotalSupply)
+
+            Object.keys(poolTokens).forEach( symbol => {
+                
+                const tokenInfo = poolTokens[symbol]
+                const haveValue = tokenInfo.value && lpBalance && lpTotalSupply && !lpTotalSupply.isZero()
+                const value = haveValue && tokenInfo.value.mul(lpBalance).div(lpTotalSupply)
+                if (value) {
+                    indexBalancesByPool[poolId].value = indexBalancesByPool[poolId].value.add(value)
+                }
+            })
+        })
+        
+        return {
+            indexId: indexId,
+            indexBalancesByPool   // { symbol => { value, balance, } } of the quota of tokens owner by the Index across its Pools
+        }
+
+    }).reduce( (acc, val) => {
+        acc[val.indexId] = val.indexBalancesByPool
+        return acc
+    }, {} as { [x: string]: any } )
+
+
+    // // get the user LP tokens included those staked
     const lpBalancesByIndex = useAccountLPBalancesForIndexes(chainId, indexIds, account)
 
-    const balances = Object.keys(allBalances).map( indexId => {
+    // [x: string]: { indexId : string, tokensBalances : any, poolBalances : any }
+    const balances = Object.keys(allBalancesByToken)?.map( indexId => {
 
-        const lpBalance = lpBalancesByIndex[indexId].lpBalance
-        const lpTotalSupply = lpBalancesByIndex[indexId].lpTotalSupply
+        const lpBalance : BigNumber = lpBalancesByIndex[indexId].lpBalance
+        const lpTotalSupply : BigNumber = lpBalancesByIndex[indexId].lpTotalSupply 
 
-        const tokensBalances = {} as {[ x : string] : any }
+        // populate { symbol: balanceInfo } map
+        const tokensBalances = {} as {[ x : string] : TokenBalanceInfo }
 
-        Object.keys(allBalances[indexId]).forEach( symbol => {
+        
+        Object.keys(allBalancesByToken[indexId]).forEach( symbol => {
 
-            const balance = allBalances[indexId][symbol].amount
-            const value = allBalances[indexId][symbol].value
-            const decimals = allBalances[indexId][symbol].decimals
+            const balance : BigNumber = allBalancesByToken[indexId][symbol].amount
+            const value = allBalancesByToken[indexId][symbol]?.value  as BigNumber
+            const decimals = allBalancesByToken[indexId][symbol]?.decimals as number
 
             const haveBalance =  balance && lpBalance && lpTotalSupply && !lpTotalSupply.isZero()
             const accountBalance = haveBalance ? balance.mul(lpBalance).div(lpTotalSupply) : undefined
@@ -136,27 +275,50 @@ export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], to
             }
         })
 
-        // console.log("tokensBalances",indexId,  tokensBalances)
-        
+        // populate { poolId: balanceInfo } map
+        const poolBalances = {} as {[ x : string ] : PoolValueInfo }
+
+        indexBalancesByPool[indexId] && Object.keys(indexBalancesByPool[indexId])?.forEach( poolId => {
+            const value : BigNumber = indexBalancesByPool[indexId][poolId]?.value
+            const haveValue = value && lpBalance && lpTotalSupply && !lpTotalSupply.isZero()
+            const accountValue : BigNumber | undefined = haveValue ? value.mul(lpBalance).div(lpTotalSupply) : undefined
+
+            poolBalances[poolId] = {
+                indexId: indexId,
+                poolId: poolId,
+                value,
+                accountValue
+            }
+        })
+
+        console.log("poolBalances", indexId,  poolBalances)
+
+
         return {
             indexId: indexId,
-            tokensBalances: tokensBalances
+            tokensBalances: tokensBalances,
+            poolBalances: poolBalances
         }
 
     }).reduce( (acc, val) => {
-         acc[val.indexId] = val.tokensBalances
+        acc[val.indexId] = val
         return acc
-    }, {} as { [x: string]: any } )
+    }, {} as { [x: string]: TokeBalanceInfoForIndex } )
 
+    // {
+    //    indexId: { 
+    //      tokensBalances: { symbol: { amount, value, decimals }}, 
+    //      poolBalances: { poolId: { value } } 
+    //    }
+    // }
 
     return balances
 }
 
 
-
 // Returns the  LP balances of the account for each Index
 // includes staked balances
-const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string[], account?: string) => {
+export const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string[], account?: string) => {
 
         // get the balance of all Indexes of the LP tokens of all Pools
         const indexesInfo = IndexesInfo(chainId,  indexIds)
@@ -219,11 +381,11 @@ const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string[], acc
 
         const lpBalancesByIndex = lpTokensRequests.map( (req, idx) => {
 
-            const unstakedBalance = unstakedLpBalanceResults[idx]?.value[0]
-            const stakedBalance = stakedLpBalanceResults[idx]?.value[0]
+            const unstakedBalance = unstakedLpBalanceResults[idx]?.value && unstakedLpBalanceResults[idx]?.value[0]
+            const stakedBalance = stakedLpBalanceResults[idx]?.value && stakedLpBalanceResults[idx]?.value[0]
 
             const balance = (unstakedBalance &&  stakedBalance) ? unstakedBalance.add(stakedBalance) : undefined
-            const supply = totalSupplyResults[idx]?.value[0]
+            const supply = totalSupplyResults[idx]?.value && totalSupplyResults[idx]?.value[0]
             const precision = BigNumber.from(10000)
 
             const perc = (balance && supply && !supply.isZero()) ? precision.mul(balance).div(supply).toNumber() / 10000 : undefined
@@ -245,9 +407,16 @@ const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string[], acc
 }
 
 
+type IndexLPInfo = {
+    lpBalance: BigNumber | undefined;
+    lpTotalSupply: BigNumber | undefined;
+    indexId: string;
+    poolId: string;
+    indexPerc: BigNumber | undefined;
+}
 
 // Returns the Pool LP balances that each Index has for their Pools, grouped by indexid
-const usePoolsLPBalancesForIndexes = (chainId: number, indexIds: string[], poolIds: string[]) => {
+const usePoolsLPBalancesForIndexes = (chainId: number, indexIds: string[], poolIds: string[]) : { [x: string ] : IndexLPInfo[] } =>  {
 
 
     // poolsInfo for all pools in indexIds indexes
@@ -311,7 +480,7 @@ const usePoolsLPBalancesForIndexes = (chainId: number, indexIds: string[], poolI
             indexId: req.indexId,
             poolId: req.poolId,
             indexPerc: perc,
-        }
+        } as IndexLPInfo
     })
 
     const lpBalanceResponseByIndex = groupBy(lpBalanceResponse, b => b.indexId)
@@ -325,7 +494,7 @@ const useIndexPools = (chainId: number, poodIds: string[]) => {
 
     const calls = poodIds.map(poodId => ({
         contract: PoolContract(chainId, poodId),
-        method: 'getPoolsInfo',  //getPoolsInfo  // getUsers
+        method: 'getPoolsInfo',
         args: [] 
     })) ?? []
 
@@ -333,7 +502,7 @@ const useIndexPools = (chainId: number, poodIds: string[]) => {
 
     results.forEach((result, idx) => {
         if(result && result.error) {
-            console.error(`Error encountered calling 'balanceOf' on ${calls[idx]?.contract.address}: ${result.error.message}`)
+            console.error(`Error encountered calling 'getPoolsInfo' on ${calls[idx]?.contract.address}: ${result.error.message}`)
         }
     })
 
@@ -455,7 +624,7 @@ const useTokensPoolsBalances = (chainId : number, tokens: Token[],  poolsInfo: a
 
     // ERC20 calls
     const calls = tokenPoolsRequestsParams.map(req => ({
-        contract: ERC20Contract(chainId, req.tokenSymbol, req.poolId), // new Contract(req.tokenAddress, new utils.Interface(abi)),
+        contract: ERC20Contract(chainId, req.tokenSymbol, req.poolId),
         method: 'balanceOf',
         args: req.poolAddress? [req.poolAddress] : [constants.AddressZero]
     })) ?? []
@@ -502,7 +671,7 @@ const useAccountLPBalancesForPools = (chainId : number, account: string | undefi
     const lpBalanceCalls = lptokensRequests.map(req => ({
         contract: PoolLPContract(chainId, req.poolId),
         method: 'balanceOf',
-        args:  req.account? [req.account] : [constants.AddressZero]  // ["0x4F888d90c31c97efA63f0Db088578BB6F9D1970C'"] f
+        args:  req.account? [req.account] : [constants.AddressZero]
     })) ?? []
 
     const lpBalanceResults = useCalls(lpBalanceCalls) ?? []
@@ -567,6 +736,7 @@ const useTokenPrices = (chainId : number, tokens: Token[] )  => {
 
     const pricefeedCalls = tokenSymbols.map( symbol => {
         const contract = feedContracts[symbol]
+
         return {
             contract:  contract,  // FeedContract(chainId, info.poolId),
             method: 'latestAnswer',
@@ -583,7 +753,7 @@ const useTokenPrices = (chainId : number, tokens: Token[] )  => {
 
     let tokenPriceMap = {} as { [x: string]: string }
     tokenSymbols.forEach((symbol, idx) => {
-        tokenPriceMap[symbol.toUpperCase()] = pricefeedResults.at(idx)?.value.toString()
+        tokenPriceMap[symbol.toUpperCase()] = pricefeedResults.at(idx)?.value?.toString()
     })
 
     return tokenPriceMap

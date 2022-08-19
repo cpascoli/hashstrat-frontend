@@ -49,9 +49,7 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
     
     const classes = useStyles()
     const tokens = [depositToken, ...investTokens]
-
-    console.log("Dashboard - account", account)
-
+ 
     const { poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool } = useDashboardModel(chainId, tokens, depositToken, account)
 
     const tokenBalancesoFormatted = Object.values(portfolioInfo.tokenBalances).map( (item ) => {

@@ -47,6 +47,7 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
   const classes = useStyle()
   const [showStakeUnstakeModal, setShowStakeUnstakeModal] = useState(false);
 
+
   const { symbol, address } = token
   const { account } = useEthers()
   const tokenBalance = useTokenBalance(address, account)
@@ -97,7 +98,7 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
           </Box>
           
 
-          {showStakeUnstakeModal && (
+          {showStakeUnstakeModal && account && (
             <Modal onClose={(e) => hideModalPreseed()}>
 
               <StakeForm
@@ -106,6 +107,7 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
                 chainId={chainId}
                 poolId={poolId}
                 token={token}
+                account={account}
                 handleSuccess={handleSuccess}
                 handleError={handleError}
                 allowanceUpdated={handleAllowanceUpdated}

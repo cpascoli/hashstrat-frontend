@@ -73,7 +73,7 @@ export const useDepositAndStartStake = (chainId: number) => {
     const farmContract = FarmContract(chainId)
 
     const { send: depositSend, state: depositState } = useContractFunction(farmContract, "depositAndStartStake", { 
-        transactionName: "Deposit Tokens"
+        transactionName: "Deposit and Stake Tokens"
     })
 
     const deposit = (lptokeAddress: string, amount: string | number) => {
@@ -88,7 +88,7 @@ export const useEndStakeAndWithdraw = (chainId: number) => {
     const farmContract = FarmContract(chainId)
 
     const { send: withdrawSend, state: withdrawState } = useContractFunction(farmContract, "endStakeAndWithdraw", { 
-        transactionName: "Withdraw Tokens"
+        transactionName: "Unstake and Withdraw Tokens"
     })
 
     const withdraw = (lptokeAddress: string, amount: string | number) => {

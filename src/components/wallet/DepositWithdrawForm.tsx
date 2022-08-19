@@ -66,19 +66,6 @@ const useStyle = makeStyles( theme => ({
 
 
 
-// returns true if the 2 values are closer than 0.01 % difference
-const isVeryCloseValues = (value1: string, value2: string) : boolean => {
-    const a = BigNumber.from(value1) 
-    const b = BigNumber.from(value2)
-    if (a.eq(BigNumber.from(0)) && b.eq(BigNumber.from(0))) return true
-
-    const diff = a.gte(b) ? a.sub(b) : b.sub(a)
-    const max = a.gte(b) ? a : b
-    const percDiff = diff.mul(BigNumber.from(1000)).div(max)
-
-    return percDiff.toNumber()  < 1
-}
-
 
 
 export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance, handleSuccess, handleError, onClose, account} : DepositWithdrawFormProps) => {
@@ -112,10 +99,9 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     const formattedFeesToWithdraw = feesForWithdraw ? fromDecimals( BigNumber.from(feesForWithdraw), depositToken!.decimals, 2) : ""
 
 
-    // Handlers
+    // Form Handlers
 
     const balancePressed = () => {
-        setAmount(balance)
         updateAmount(balance)
     }
 
@@ -132,7 +118,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
 
         const amountDecimals = toDecimals( validAmount ? amounDec.toString() : "0", token.decimals)
         setAmountDecimals(amountDecimals)
-        setIsValidAmount( validAmount )
+        setIsValidAmount(validAmount)
     }
 
 
@@ -140,7 +126,6 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     // Approve Tokens
     const isApproveMining = approveErc20State.status === "Mining"
     const approveButtonPressed = () => {
-        // const amountDecimals = toDecimals(amount.toString(), token.decimals)
         console.log("approveButtonPressed - amount: ", amount, "amountDecimals", amountDecimals)
         return approveErc20(amountDecimals)
     }
@@ -159,7 +144,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
 
   
     const allowanceOk = formattedAllowance !== undefined && 
-                        amount !== undefined && 
+                        amount !== undefined && amount !== '' && 
                         (parseFloat(formattedAllowance) >= Number(amount) )
 
 
@@ -178,20 +163,12 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     const isWithdrawMining = withdrawState.status === "Mining"
     
     const submitWithdrawal = () => {
-        // if user is with withdrawing an amount very close to his LP balance withdraw all to avoid leaving dust in wallet
-        // const amountDecimals = toDecimals(amount.toString(), token.decimals)
         const currentBalance = tokenBalance ? tokenBalance.toString() : balance
-
-      
         if ( isVeryCloseValues(amountDecimals ,  currentBalance) ) {
             console.log("submitWithdrawal - should withdraw all!  currentBalance => ", currentBalance)
         }
         
         const withdrawAmount = isVeryCloseValues( amountDecimals ,  currentBalance ) ? currentBalance : amountDecimals
-
-        console.log("submitWithdrawal - withdrawAmount: ", withdrawAmount ,  " amountDecimals: ", amountDecimals)
-
-
         return withdraw(withdrawAmount)
     }
 
@@ -295,10 +272,10 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             
             <Divider />
 
-            <Box   mt={3} mb={2}>
+            <Box mt={3} mb={2}>
 
                 <Grid container justifyContent="flex-start"> 
-                    <Link href="#" color="inherit" variant="body2" onClick={() => balancePressed()}  style={{textDecoration: "underline"}}>
+                    <Link href="#" color="inherit" variant="body2" onClick={() => balancePressed()} style={{textDecoration: "underline"}} >
                         Balance: {balance}
                     </Link>
                 </Grid>
@@ -389,4 +366,19 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
 
         </>
     )
+}
+
+
+
+// returns true if the 2 values are closer than 0.01 % difference
+const isVeryCloseValues = (value1: string, value2: string) : boolean => {
+    const a = BigNumber.from(value1) 
+    const b = BigNumber.from(value2)
+    if (a.eq(BigNumber.from(0)) && b.eq(BigNumber.from(0))) return true
+
+    const diff = a.gte(b) ? a.sub(b) : b.sub(a)
+    const max = a.gte(b) ? a : b
+    const percDiff = diff.mul(BigNumber.from(1000)).div(max)
+
+    return percDiff.toNumber()  < 1
 }

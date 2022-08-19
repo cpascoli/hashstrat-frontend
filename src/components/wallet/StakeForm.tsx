@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react"
 import { useNotifications } from "@usedapp/core"
+import { BigNumber } from "ethers"
 
-import { useTokenApprove, useTokenAllowance } from "../../hooks"
+import { useTokenApprove, useTokenAllowance, useTokenBalance } from "../../hooks"
 import { useDepositAndStartStake, useEndStakeAndWithdraw } from "../../hooks/useFarm"
+
 
 import { Box, Grid, Button, Input, CircularProgress, Divider, Typography, Link, makeStyles } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
@@ -20,8 +22,9 @@ export interface StakeFormProps {
     formType? :  "stake" | "unstake";
     chainId: number,
     poolId: string,
-    token : Token;
-    balance: string;
+    token : Token,
+    balance: string,
+    account: string;
     
     handleSuccess: (result: SnackInfo) => void,
     handleError: (error: SnackInfo) => void,
@@ -68,7 +71,8 @@ const useStyle = makeStyles( theme => ({
     }
 }))
 
-export const StakeForm = ({ formType, chainId, poolId, token, balance, handleSuccess, handleError, onClose } : StakeFormProps) => {
+
+export const StakeForm = ({ formType, chainId, poolId, token, balance, account, handleSuccess, handleError, onClose } : StakeFormProps) => {
 
     const { symbol, image } = token
 
@@ -80,21 +84,42 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, handleSuc
     const classes = useStyle()
     const { notifications } = useNotifications()
 
-    // const initialAmount = parseFloat(balance)
-    const [amount, setAmount] = useState<number | string>("")
-    const formattedAllowance = allowance && fromDecimals(allowance, token.decimals, 4)
+    // Token stats
+    const tokenBalance = useTokenBalance(chainId, poolId, "pool-lp", account);
 
+
+    // Form state management
+    const [amount, setAmount] = useState<number | string>("")
+    const [isValidAmount, setIsValidAmount] = useState<boolean>(false) 
+    const [amountDecimals, setAmountDecimals] = useState<string>("")
     const [userMessage, setUserMessage] = useState<SnackInfo>()
 
+    // formatted values
+    const formattedAllowance = allowance && fromDecimals(allowance, token.decimals, 4)
+   
+
+    // Form Handlers
 
     const balancePressed = () => {
-        setAmount(balance)
+        updateAmount(balance)
     }
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newAmount = event.target.value === "" ? "" : event.target.value.trim()
-        setAmount(newAmount)
+        updateAmount(newAmount)
     }
+
+    // validates the deposit/withdrawal amount and its decimal amount
+    const updateAmount = (newAmount: string) => {
+        setAmount(newAmount)
+        const amounDec = Number(newAmount)
+        const validAmount = newAmount !== '' && !isNaN(amounDec) 
+
+        const amountDecimals = toDecimals( validAmount ? amounDec.toString() : "0", token.decimals)
+        setAmountDecimals(amountDecimals)
+        setIsValidAmount(validAmount)
+    }
+
 
     // Approve Tokens
     const isApproveMining = approveErc20State.status === "Mining"
@@ -118,7 +143,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, handleSuc
 
   
     const allowanceOk = formattedAllowance !== undefined && 
-                        amount !== undefined && 
+                        isValidAmount && 
                         (parseFloat(formattedAllowance) >= Number(amount) )
 
 
@@ -135,10 +160,15 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, handleSuc
     // End Stake and Withdraw Tokens
     const { withdraw, withdrawState } = useEndStakeAndWithdraw(chainId)
     const isWithdrawMining = withdrawState.status === "Mining"
+    
     const submitWithdrawal = () => {
-        const amountDecimals = toDecimals(amount.toString(), token.decimals)
-        console.log("submit EndStakeAndWithdraw - lptoken: ", token.address, ", amount: ", amount, "amountDecimals", amountDecimals)
-        return withdraw(token.address, amountDecimals)
+
+        const currentBalance = tokenBalance ? tokenBalance.toString() : balance
+        if ( isVeryCloseValues(amountDecimals ,  currentBalance) ) {
+            console.log("submitWithdrawal - should withdraw all!  currentBalance => ", currentBalance)
+        }
+        const withdrawAmount = isVeryCloseValues( amountDecimals ,  currentBalance ) ? currentBalance : amountDecimals
+        return withdraw(token.address, withdrawAmount)
     }
 
     const submitButtonTitle = (formType === 'stake') ? "Stake" : 
@@ -171,7 +201,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, handleSuc
         }
         if (notifications.filter((notification) =>
                 notification.type === "transactionSucceed" &&
-                notification.transactionName === "Deposit Tokens"
+                notification.transactionName === "Deposit and Stake Tokens"
         ).length > 0) {
             const info : SnackInfo = {
                 type: "info",
@@ -187,12 +217,12 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, handleSuc
                 message: "Now you can close the window",
             })
             handleSuccess(info)
-            setAmount("")
+            updateAmount("")
         }
 
         if (notifications.filter((notification) =>
             notification.type === "transactionSucceed" &&
-            notification.transactionName === "Withdraw Tokens"
+            notification.transactionName === "Unstake and Withdraw Tokens"
         ).length > 0) {
             const info : SnackInfo = {
                 type: "info",
@@ -208,7 +238,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, handleSuc
                 message: "Now you can close the window",
             })
             handleSuccess(info)
-            setAmount("")
+            updateAmount("")
         }
     }, [notifications, chainId, approveLink, depositLink, withdrawLink])
 
@@ -218,7 +248,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, handleSuc
     // const showApproveButton =  allowanceOk  &&  !isDepositMining
     // const showDepositButton =  (allowanceOk || isDepositMining) && !isApproveMining
 
-    console.log("allowanceOk", allowanceOk, "formattedAllowance: ", formattedAllowance, "amount", amount, "isApproveMining", isApproveMining, " ==> showApproveButton", showApproveButton)
+    console.log("allowanceOk", allowanceOk, "formattedAllowance: ", formattedAllowance, "amount", amount, "isValidAmount", isValidAmount, "isApproveMining", isApproveMining, " ==> showApproveButton", showApproveButton)
 
 
     return (
@@ -246,26 +276,33 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, handleSuc
             
             <Divider />
 
-            <Box  alignItems="center" mt={3}>
-                <Grid container justifyContent="flex-end">
-                    <Link href="#" color="inherit" variant="body2" onClick={() => balancePressed()} >
+            <Box mt={3} mb={4}>
+                <Grid container justifyContent="flex-start"> 
+                    <Link href="#" color="inherit" variant="body2" onClick={() => balancePressed()} style={{textDecoration: "underline"}} >
                         Balance: {balance}
                     </Link>
                 </Grid>
-                <Grid container justifyContent="center">
-                    <div className={classes.amountWithLabel}>
+
+                <Grid container justifyContent="space-between">
+                    {/* first row */}
+                    <Grid item xs={9} >
                         <Input className={classes.amount} inputProps={{min: 0, style: { textAlign: 'right' }}}  
                             value={amount} placeholder="0.0" autoFocus onChange={handleInputChange} /> 
-                        <img className={classes.tokenImg} src={image} alt="token image" />
-                        <Typography color="textSecondary" variant="body1" style={{minWidth:70}} >{symbol}</Typography>
-                    </div> 
+                    </Grid> 
+                    <Grid item xs={3} >
+                        <Box style={{paddingTop: 12, paddingLeft: 5}}>
+                            <Typography color="textSecondary" variant="body1" style={{minWidth:70}}>{symbol}</Typography>
+                        </Box>
+                    </Grid> 
+                    <Grid item xs={2} > </Grid> 
                 </Grid>
+
             </Box>
 
             { formType === 'stake' &&
                 <Box mb={2} >
                     { showApproveButton &&
-                    <Button variant="contained" color="primary" fullWidth disabled={amount === ''}
+                    <Button variant="contained" color="primary" fullWidth disabled={ !isValidAmount }
                         onClick={() => approveButtonPressed()} >
                         Approve transfer
                         { isApproveMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
@@ -293,7 +330,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, handleSuc
             }  
             { formType === 'unstake' &&
                 <Box mb={2} >
-                    <Button variant="contained" color="primary" fullWidth disabled={amount === ''}
+                    <Button variant="contained" color="primary" fullWidth disabled={ !isValidAmount }
                         onClick={() => submitForm()}>
                         { submitButtonTitle }
                         { isWithdrawMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
@@ -321,4 +358,18 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, handleSuc
 
         </>
     )
+}
+
+
+// returns true if the 2 values are closer than 0.01 % difference
+const isVeryCloseValues = (value1: string, value2: string) : boolean => {
+    const a = BigNumber.from(value1) 
+    const b = BigNumber.from(value2)
+    if (a.eq(BigNumber.from(0)) && b.eq(BigNumber.from(0))) return true
+
+    const diff = a.gte(b) ? a.sub(b) : b.sub(a)
+    const max = a.gte(b) ? a : b
+    const percDiff = diff.mul(BigNumber.from(1000)).div(max)
+
+    return percDiff.toNumber()  < 1
 }

@@ -209,7 +209,7 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
                             <CardContent>
                                 <Typography variant="h5" style={{ marginBottom: 10 }}>Your HST Token Farm</Typography>
                                 <TitleValueBox title="LP tokens farming" value={formattedTokenStakedBalance} mode="small"/>
-                                <TitleValueBox title="HST already collected" value={formattedHstBalance} mode="small" />
+                                <TitleValueBox title="HST received" value={formattedHstBalance} mode="small" />
                                 <TitleValueBox title="HST to collect" value={formattedClaimableRewards} mode="small" />
                             </CardContent>
                             <CardActions   >

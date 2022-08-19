@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from "react"
-
-import { BigNumber, utils } from "ethers"
+import { utils } from "ethers"
 
 import { useCollectableFees, useFeesBalance, useTotalFeesCollected } from "../../hooks/useGovernance"
 import { fromDecimals, round } from "../../utils/formatter"
-import { TitleValueBox } from "../TitleValueBox"
 
 import { Token } from "../../types/Token"
 import { Box, makeStyles, Typography, Card, CardContent, CardActions } from "@material-ui/core"

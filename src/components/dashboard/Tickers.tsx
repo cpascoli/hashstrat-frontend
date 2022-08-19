@@ -1,11 +1,12 @@
 
 import { Box, makeStyles, Typography, Link, ImageList, ImageListItem } from "@material-ui/core"
+import { utils } from "ethers"
 
 import { InvestTokens } from "../../utils/pools"
 
-import { useStakedLP, useClaimableRewards, useClaimReward  } from "../../hooks/useFarm"
+import { useStakedLP, useClaimableRewards  } from "../../hooks/useFarm"
 import { useTokenBalance } from "../../hooks"
-import { fromDecimals, round } from "../../utils/formatter"
+import { fromDecimals } from "../../utils/formatter"
 
 import { Horizontal } from "../Layout"
 import { Token } from "../../types/Token"
@@ -47,20 +48,11 @@ export const Tickers = ({ chainId, account, depositToken } : DaoHomeProps ) => {
     const investTokenBalance0 = useTokenBalance(chainId, "", investTokens[0].symbol, account)
     const investTokenBalance1 = useTokenBalance(chainId, "", investTokens[1].symbol, account)
 
-
-    const hstAddress = HstTokenAddress(chainId)
-    const explorerHost = NetworkExplorerHost(chainId)
-
-    const formattedTokenStakedBalance = tokenStakedBalance? fromDecimals(tokenStakedBalance, depositToken.decimals, 2) : ""
-   
-    const formattedClaimableRewards = claimableRewards? fromDecimals(claimableRewards, 18, 2) : ""
-    
     const formattedHstBalance = hstBalance? fromDecimals(hstBalance, 18, 2) : ""
     const formattedDpositTokenBalance = depositTokenBalance? fromDecimals(depositTokenBalance, depositToken.decimals, 2) : ""
 
     const formattedToken0Balance = investTokenBalance0 ? fromDecimals(investTokenBalance0, investTokens[0].decimals, 2) : ""
     const formattedToken1Balance = investTokenBalance1 ? fromDecimals(investTokenBalance1, investTokens[1].decimals, 2) : ""
-
 
     return (
     
@@ -69,10 +61,10 @@ export const Tickers = ({ chainId, account, depositToken } : DaoHomeProps ) => {
                     <div className={classes.gridList}>
                         <Typography variant="body2" style={{paddingBottom:5}}>In your wallet</Typography>
                         <Horizontal>
-                            <TickerInfo symbol={depositToken.symbol} value={formattedDpositTokenBalance} />
-                            <TickerInfo symbol="HST" value={formattedHstBalance} />
-                            <TickerInfo symbol={investTokens[0].symbol} value={formattedToken0Balance} />
-                            <TickerInfo symbol={investTokens[1].symbol}  value={formattedToken1Balance} />
+                            <TickerInfo symbol={depositToken.symbol} value={ utils.commify(formattedDpositTokenBalance) } />
+                            <TickerInfo symbol="HST" value={ utils.commify(formattedHstBalance) } />
+                            <TickerInfo symbol={investTokens[0].symbol} value={ utils.commify( formattedToken0Balance )} />
+                            <TickerInfo symbol={investTokens[1].symbol} value={ utils.commify( formattedToken1Balance )}  />
                         </Horizontal>
                    </div>
             </div>

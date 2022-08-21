@@ -160,25 +160,27 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
 
             <Box className={classes.tokenInfo}>
                 <Accordion >
-                    <AccordionSummary expandIcon={<ExpandMore />}  >
+                    <AccordionSummary expandIcon={<ExpandMore />} >
                         <Typography > The HashStrat DAO Token (HST) </Typography> &nbsp;&nbsp;&nbsp; <Info color="primary" />
                     </AccordionSummary>
-                    <AccordionDetails >
-                                <ul>
-                                    <li>
-                                        HST has a fair distribution and can only be acquired by using of the HashStrat protocol.
-                                    </li>
-                                    <li>
-                                        Users who deposited funds in any of the HashStrat Pools &amp; Indexes, can stake their POOL-LP tokens and farm HST tokens. <br/>
-                                    </li>
-                                    <li>
-                                        HST has a fixed supply of 1 million and gets distributed with a fixed schedule over a 10 years period.<br/>
-                                    </li>
-                                    <li>
-                                        The rate of distributon of HST tokens decreases exponentially, halving every year, to incentivise early adopters and supporters of the protocol.
-                                    </li>
-                                </ul>
-                         
+                    <AccordionDetails style={{paddingLeft: 0, margin: 0}}>
+                        <ul>
+                            <li style={{marginBottom: 10}}>
+                               <Typography> HST is a non mintable ERC20 token with a fixed supply of 1 million and no premine.</Typography>
+                            </li>
+                            <li style={{marginBottom: 10}}>
+                            <Typography>HST has a fair distribution and can only be acquired by using of the HashStrat protocol.</Typography>
+                            </li>
+                            <li style={{marginBottom: 10}}>
+                            <Typography>Users who deposit funds in any Pools &amp; Indexes, can stake their LP tokens and farm HST.</Typography>
+                            </li>
+                            <li style={{marginBottom: 10}}>
+                            <Typography> HST gets distributed with a fixed schedule over a 10 years period.</Typography>
+                            </li>
+                            <li style={{marginBottom: 10}}>
+                                <Typography>The rate of distributon of HST tokens decreases exponentially, halving every year, to incentivise early adopters and supporters of the protocol.</Typography>
+                            </li>
+                        </ul>
                     </AccordionDetails>
                 </Accordion>
             </Box>
@@ -191,8 +193,8 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
                         <Card>
                             <CardContent>
                                 <Typography variant="h5" style={{ marginBottom: 10 }} >HST Token Stats</Typography>
-                                <TitleValueBox title="Total Supply" value={utils.commify( formattedHstSupply )} mode="small" />
-                                <TitleValueBox title="Circulating Supply" value={formattedTotalRewardPaid}  mode="small" />
+                                <TitleValueBox title="Total Supply" value={ utils.commify(formattedHstSupply )} mode="small" />
+                                <TitleValueBox title="Circulating Supply" value={ utils.commify(formattedTotalRewardPaid) }  mode="small" />
                                 <TitleValueBox title="Circulating %" value={`${circulatingPerc}`} suffix="%"  mode="small"/>
                             </CardContent>
                             <CardActions   >
@@ -208,9 +210,9 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
                         <Card variant="outlined">
                             <CardContent>
                                 <Typography variant="h5" style={{ marginBottom: 10 }}>Your HST Token Farm</Typography>
-                                <TitleValueBox title="LP tokens farming" value={formattedTokenStakedBalance} mode="small"/>
-                                <TitleValueBox title="HST received" value={formattedHstBalance} mode="small" />
-                                <TitleValueBox title="HST to collect" value={formattedClaimableRewards} mode="small" />
+                                <TitleValueBox title="LP tokens farming" value={ utils.commify(formattedTokenStakedBalance) } mode="small"/>
+                                <TitleValueBox title="HST collected" value={ utils.commify(formattedHstBalance) } mode="small" />
+                                <TitleValueBox title="HST available to collect" value={ utils.commify(formattedClaimableRewards) } mode="small" />
                             </CardContent>
                             <CardActions   >
                                 <Button variant="contained" color="primary" fullWidth onClick={handleClaimButtonPressed} style={{ margin: 20, height: 40 }} > 

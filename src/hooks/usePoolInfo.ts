@@ -84,7 +84,6 @@ export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], to
         return acc
    },  {} as { [x : string] : TokenBalanceInfoMap } )
 
-   console.log("useTokensInfoForIndexes", response)
 
    return response
 }
@@ -110,20 +109,8 @@ export const useTokensInfoAndPoolsInfoForIndexes = (chainId: number,  indexIds: 
     // get assets for all pools in these Indexes
     const poolsBalances = useTokensInfoForPools(chainId, poolIds, tokens)
 
-    // console.log("useTokensInfoForPools: ", poolIds, tokens, ">> ", poolsBalances)
-
-    // console.log("useTokensInfoForPools 1: USD: ", poolsBalances?.pool01?.USDC?.value?.toString(), " BTC",  poolsBalances?.pool01?.WBTC?.value?.toString() )
-    // console.log("useTokensInfoForPools 3: USD: ", poolsBalances?.pool03?.USDC?.value?.toString(), " BTC",  poolsBalances?.pool03?.WBTC?.value?.toString() )
-    // console.log("useTokensInfoForPools 5: USD: ", poolsBalances?.pool05?.USDC?.value?.toString(), " BTC",  poolsBalances?.pool05?.WBTC?.value?.toString() )
-
     // get all LP token balances of all pools in the indexes -> PoolLPs.balanceOf(index_address)
     const lpbalancesByIndexMap = usePoolsLPBalancesForIndexes(chainId, indexIds, poolIds)
-
-    // console.log("lpbalancesByIndexMap: ", lpbalancesByIndexMap )
-    // console.log("lpbalancesByIndexMap 1: lp: ", lpbalancesByIndexMap?.index01 && lpbalancesByIndexMap?.index01[0]['lpBalance']?.toString(),  lpbalancesByIndexMap?.index01 && lpbalancesByIndexMap?.index01[0]['lpTotalSupply']?.toString() )
-    // console.log("lpbalancesByIndexMap 3: lp: ", lpbalancesByIndexMap?.index01 && lpbalancesByIndexMap?.index01[1]['lpBalance']?.toString(),  lpbalancesByIndexMap?.index01 && lpbalancesByIndexMap?.index01[1]['lpTotalSupply']?.toString() )
-    // console.log("lpbalancesByIndexMap 5: lp: ", lpbalancesByIndexMap?.index01 && lpbalancesByIndexMap?.index01[2]['lpBalance']?.toString(),  lpbalancesByIndexMap?.index01 && lpbalancesByIndexMap?.index01[2]['lpTotalSupply']?.toString() )
-
 
     // process all poolsBalances determining the allocation of the index in those pool
     // allBalances is a map, for evey index, of the token values/amount aggregated across all pools in the index
@@ -178,8 +165,6 @@ export const useTokensInfoAndPoolsInfoForIndexes = (chainId: number,  indexIds: 
         return {
             indexId: indexId,
             indexBalancesByToken   // { symbol => { value, balance, } } of the quota of tokens owner by the Index across its Pools
-            // indexBalancesByToken: indexBalancesByToken,   // { symbol => { value, balance, } } of the quota of tokens owner by the Index across its Pools
-            // indexBalancesByPool: indexBalancesByPool      // { poolId => { value}} }
         }
 
     }).reduce( (acc, val) => {
@@ -187,8 +172,6 @@ export const useTokensInfoAndPoolsInfoForIndexes = (chainId: number,  indexIds: 
         return acc
     }, {} as { [x: string]: any } )
 
-
-    //////
 
     // for each pool in the index and for each token apply the Index LP %  to the token amount/values
     // and populate indexBalancesByPool
@@ -245,12 +228,11 @@ export const useTokensInfoAndPoolsInfoForIndexes = (chainId: number,  indexIds: 
     // [x: string]: { indexId : string, tokensBalances : any, poolBalances : any }
     const balances = Object.keys(allBalancesByToken)?.map( indexId => {
 
-        const lpBalance : BigNumber = lpBalancesByIndex[indexId].lpBalance
-        const lpTotalSupply : BigNumber = lpBalancesByIndex[indexId].lpTotalSupply 
+        const lpBalance = lpBalancesByIndex[indexId].lpBalance
+        const lpTotalSupply = lpBalancesByIndex[indexId].lpTotalSupply 
 
         // populate { symbol: balanceInfo } map
         const tokensBalances = {} as {[ x : string] : TokenBalanceInfo }
-
         
         Object.keys(allBalancesByToken[indexId]).forEach( symbol => {
 
@@ -293,7 +275,6 @@ export const useTokensInfoAndPoolsInfoForIndexes = (chainId: number,  indexIds: 
 
         console.log("poolBalances", indexId,  poolBalances)
 
-
         return {
             indexId: indexId,
             tokensBalances: tokensBalances,
@@ -305,20 +286,37 @@ export const useTokensInfoAndPoolsInfoForIndexes = (chainId: number,  indexIds: 
         return acc
     }, {} as { [x: string]: TokeBalanceInfoForIndex } )
 
-    // {
-    //    indexId: { 
-    //      tokensBalances: { symbol: { amount, value, decimals }}, 
-    //      poolBalances: { poolId: { value } } 
-    //    }
-    // }
 
     return balances
 }
 
 
-// Returns the  LP balances of the account for each Index
-// includes staked balances
-export const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string[], account?: string) => {
+export type LPBalanceInfo = {
+    poolId: string,
+    lpBalance: BigNumber | undefined,
+    lpTotalSupply: BigNumber | undefined,
+    perc: number | undefined
+}
+
+
+
+export const useAccountLPBalanceForPool = (chainId: number, poolId: string, account?: string) : LPBalanceInfo => {
+
+    const poolsInfo = PoolsInfo(chainId, [poolId]) 
+
+    const baances = useAccountLPBalancesForPools(chainId, account, poolsInfo)
+    return baances[0]
+}
+ 
+
+
+export const useAccountLPBalanceForIndex = (chainId: number, indexId: string, account?: string) : LPBalanceInfo => {
+    const baances = useAccountLPBalancesForIndexes(chainId, [indexId], account)
+    return baances[indexId]
+}
+
+
+export const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string[], account?: string) : { [ indexId: string] : LPBalanceInfo } => {
 
         // get the balance of all Indexes of the LP tokens of all Pools
         const indexesInfo = IndexesInfo(chainId,  indexIds)
@@ -393,18 +391,19 @@ export const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string
             // console.log("lpTokensRequests ",  req.indexId, balance?.toString(), supply?.toString())
 
             return {
-                indexId: req.indexId,
+                poolId: req.indexId,
                 lpBalance: balance,
                 lpTotalSupply: supply,
-                indexPerc: perc,
+                perc: perc,
             }
         }).reduce( (acc, item) => {
-            acc[item.indexId] = item
+            acc[item.poolId] = item
             return acc
-        }, {  }  as  { [ x : string] : any} )
+        }, {  }  as  { [ x : string] : LPBalanceInfo } )
 
         return lpBalancesByIndex
 }
+
 
 
 type IndexLPInfo = {
@@ -533,7 +532,7 @@ const useIndexPools = (chainId: number, poodIds: string[]) => {
 // if the account is provided, the token balance info returned will account for staked LP tokens as well
 // if the account is not provided ...
 
-export const useTokensInfoForPools = (chainId: number, poolIds: string[], tokens: Token[], account?: string) => {
+export const useTokensInfoForPools = (chainId: number, poolIds: string[], tokens: Token[], account?: string) : TokenBalanceMapforIndexMap => {
  
     // get the pool addresses for all indexes or all regular pools in the chain
     const poolsInfo = PoolsInfo(chainId, poolIds) 
@@ -546,7 +545,7 @@ export const useTokensInfoForPools = (chainId: number, poolIds: string[], tokens
     const lpBalances = lpBalanceResponses.reduce( (map, balance ) => {
         map[ balance.poolId ] = balance
         return map;
-    }, {} as { [x: string]: any } );
+    }, {} as { [x: string]: LPBalanceInfo } );
 
    
     // the the balance of all tokens in all pools
@@ -555,8 +554,8 @@ export const useTokensInfoForPools = (chainId: number, poolIds: string[], tokens
 
     const poolsBalanceWithTokenValues = poolsBalancesResponse.map ( pool => {
        
-        const lpBalance : BigNumber | undefined = lpBalances[pool.poolId].lpBalance && BigNumber.from(lpBalances[pool.poolId].lpBalance) 
-        const lpSupply : BigNumber | undefined = lpBalances[pool.poolId].lpTotalSupply && BigNumber.from(lpBalances[pool.poolId].lpTotalSupply)
+        const lpBalance = lpBalances[pool.poolId].lpBalance 
+        const lpSupply = lpBalances[pool.poolId].lpTotalSupply
 
         const isDepositToken = (pool.tokenSymbol == pool.depositToken?.symbol)
         const feedPrice = isDepositToken ? 1 : tokenPriceMap[pool.tokenSymbol]
@@ -584,7 +583,7 @@ export const useTokensInfoForPools = (chainId: number, poolIds: string[], tokens
 
     const balancesByPoolId = groupBy(poolsBalanceWithTokenValues, b => b.poolId)
 
-    let poolBalances = {} as {[ x: string] : any}
+    let poolBalances = {} as TokenBalanceMapforIndexMap
 
     Object.keys(balancesByPoolId).forEach( poolId => {
         const tokenMap = balancesByPoolId[poolId].reduce ( (acc, val) => {
@@ -652,10 +651,11 @@ const useTokensPoolsBalances = (chainId : number, tokens: Token[],  poolsInfo: a
 
 
 
-// Retunrs the LP balance and total supply for the LP tokens of every pool in the poolsInfo array
+// Retunrs the LP balance and total supply for the LP tokens of every pool and index in the poolsInfo array
 // Returned LP balances include staked and non staked balances 
-// If account is not provied returns only the LP total supply 
-const useAccountLPBalancesForPools = (chainId : number, account: string | undefined, poolsInfo: any[] ) => {
+// If an account is not provided return only the LP total supply
+// It should return both PoolLP and IndexLP balance info for the account provided 
+const useAccountLPBalancesForPools = (chainId : number, account: string | undefined, poolsInfo: any[] ) : LPBalanceInfo[] => {
 
     // Get the  LP balances of the account for every Pool
     const lptokensRequests = poolsInfo.map( pool => {
@@ -675,11 +675,14 @@ const useAccountLPBalancesForPools = (chainId : number, account: string | undefi
     })) ?? []
 
     const lpBalanceResults = useCalls(lpBalanceCalls) ?? []
-    // lpBalanceResults.forEach((result, idx) => {
-    //     if(result && result.error) {
-    //         console.error(`Error encountered calling 'balanceOf' on ${lpBalanceCalls[idx]?.contract.address}: ${result.error.message}`, "request:", lptokensRequests[idx] , "call: ", lpBalanceCalls[idx])
-    //     }
-    // })
+    lpBalanceResults.forEach((result, idx) => {
+        if(result && result.error) {
+            console.error(`Error encountered calling 'balanceOf' on ${lpBalanceCalls[idx]?.contract.address}: ${result.error.message}`, "request:", lptokensRequests[idx] , "call: ", lpBalanceCalls[idx])
+        }
+
+        console.log("AAAA lpBalanceResults: account: ", account, lpBalanceCalls[idx], lpBalanceResults.at(idx)?.value )
+
+    })
 
     // get the LP staked balances
     const stakedLpBalanceCalls = lptokensRequests.map(req => ({
@@ -712,15 +715,23 @@ const useAccountLPBalancesForPools = (chainId : number, account: string | undefi
     
     const lpBalanceResponses = lptokensRequests.map( (req, idx) => {
 
-        const balanceNotStaked = lpBalanceResults.at(idx)?.value 
-        const balanceStaked = stakedLpBalanceResults.at(idx)?.value 
-        const supply = lpTotalSupplyResults.at(idx)?.value 
-        const totalBalance = (balanceNotStaked && balanceStaked) ? balanceNotStaked[0].add(balanceStaked[0]) : undefined
+        const balanceNotStaked = lpBalanceResults.at(idx)?.value
+        const balanceStaked = stakedLpBalanceResults.at(idx)?.value
+        const supply = ( lpTotalSupplyResults.at(idx)?.value && lpTotalSupplyResults.at(idx)?.value[0] ) as BigNumber | undefined
+        const totalBalance = ( balanceNotStaked && balanceStaked && balanceNotStaked[0].add(balanceStaked[0]) )  as BigNumber | undefined
+
+        const precision = BigNumber.from(10000)
+        const perc = (totalBalance && supply && !supply.isZero()) ? precision.mul(totalBalance).div(supply).toNumber() / 10000 : undefined
+
+        console.log("AAAA supply: ", supply?.toString(), "perc", perc?.toString(),
+            "balanceStaked: ", balanceStaked?.toString(), 
+            "balanceNotStaked: ", balanceNotStaked?.toString())
 
         return {
             poolId: req.poolId,
-            lpBalance: totalBalance?.toString(), // lpBalanceResults.at(idx)?.value.toString(),
-            lpTotalSupply: supply ? supply.toString() : undefined
+            lpBalance: totalBalance, // lpBalanceResults.at(idx)?.value.toString(),
+            lpTotalSupply: supply,
+            perc: perc,
         }
     })
 

@@ -1,12 +1,13 @@
 import { Box, Divider, makeStyles, Typography, Link } from "@material-ui/core"
 import { Link as RouterLink } from "react-router-dom"
-
-import { IndexSummaryView } from "./IndexSummaryView"
+import { useIndexesInfo } from "../dashboard/DashboadModel"
+import { InvestTokens } from "../../utils/pools"
+import { IndexesIds } from "../../utils/pools";
 import { Horizontal } from "../Layout"
-import networksConfig from "../../config/networks.json"
-import { PoolInfo } from "../../types/PoolInfo"
-import indexesInfo from "../../config/indexes.json"
 import { Token } from "../../types/Token"
+
+import { PoolSummary } from "../shared/PoolSummary"
+
 
 interface IndexesViewProps {
     chainId: number,
@@ -24,17 +25,17 @@ const useStyles = makeStyles( theme => ({
 export const IndexesView = ({ chainId, account, depositToken } : IndexesViewProps) => {
 
     const classes = useStyles()
-    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
-    const indexes : Array<PoolInfo> = indexesInfo[networkName as keyof typeof indexesInfo] as any
+    const investTokens = InvestTokens(chainId)
+    const tokens = [depositToken, ...investTokens]
+    const indexes = useIndexesInfo(chainId, IndexesIds(chainId), tokens, account)
 
     const indexexView = indexes.map( index => {
         return (
             <div key={index.poolId}>
-                <IndexSummaryView chainId={chainId} poolId={index.poolId} account={account} depositToken={depositToken} />
+                <PoolSummary chainId={chainId} poolId={index.poolId} account={account} depositToken={depositToken} tokens={index.tokenInfoArray} />
             </div>
         )
     })
-
 
     return (
         <Box mt={2}>

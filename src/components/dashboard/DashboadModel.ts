@@ -1,24 +1,17 @@
 
 
-import { useTokensInfoForPools, useTokensInfoForIndexes } from "../../hooks/usePoolInfo"
+import { useTokensInfoForPools, useTokensInfoForIndexes, TokenBalanceMapforIndexMap } from "../../hooks/usePoolInfo"
 import { PoolIds, PoolInfo, IndexesIds } from "../../utils/pools"
 import { Token } from "../../types/Token"
 import { BigNumber } from "ethers"
 import { fromDecimals } from "../../utils/formatter"
 
 import { PieChartsData, ChartData } from "../shared/PieChartWithLabels"
-
+import { TokenInfo } from "../../types/TokenInfo"
 
 type TokenBalances = {[ x: string] : { symbol: string, decimals: number, value: BigNumber, balance: BigNumber }}
 
-type TokenInfo = {
-    value: BigNumber,
-    balance: BigNumber,
-    accountValue: BigNumber,
-    accountBalance: BigNumber
-    decimals: number,
-    symbol: string,
-}
+
 type PoolData =  { 
     poolId: string, 
     tokenInfoArray: TokenInfo[], 
@@ -42,12 +35,32 @@ export type DashboadModel = {
 }
 
 
+export const usePoolsInfo = (chainId: number, poolIds: string[], tokens: Token[], account?: string) : PoolData[] => {
+
+    const poolsBalances = useTokensInfoForPools(chainId, poolIds, tokens, account)
+    const poolsInfo : PoolData[] = poolsInfoFromBalances(chainId, poolsBalances)
+    return poolsInfo;
+}
+
+export const useIndexesInfo = (chainId: number, indexIds: string[], tokens: Token[], account?: string) : PoolData[] => {
+
+    const indexesBalances = useTokensInfoForIndexes(chainId, indexIds, tokens, account)
+    const indexInfo : PoolData[] = poolsInfoFromBalances(chainId, indexesBalances)
+    return indexInfo;
+}
+
+
 
 export const useDashboardModel = (chainId: number, tokens: Token[], depositToken: Token, account?: string) : DashboadModel => {
 
     //   combine pools and indexes stats and return aggeragated token amount & value totals 
     const poolsBalances = useTokensInfoForPools(chainId, PoolIds(chainId), tokens, account)
     const indexesBalances = useTokensInfoForIndexes(chainId, IndexesIds(chainId), tokens, account)
+
+
+    //   combine pools and indexes stats and return aggeragated token amount & value totals 
+    // const poolsBalances = useTokensInfoForPools(chainId, PoolIds(chainId), tokens, account)
+    // const indexesBalances = useTokensInfoForIndexes(chainId, IndexesIds(chainId), tokens, account)
 
     // Sum up balance and value across all pools 
     // if an account is connected use his balance and value, otherwise show the totals
@@ -72,13 +85,7 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
     const tokenBalances : TokenBalances = allPools.reduce( (totals, pool ) : TokenBalances => {
 
         Object.keys(pool).forEach( symbol => {
-
-       
-
             const tokenInfo = pool[symbol] 
-
-            console.log("DDDD", pool, "symbol", symbol, "tokenInfo", tokenInfo)
-
             if (tokenInfo.value) {
                 totals[symbol].value = (account && tokenInfo.accountValue) ? totals[symbol].value.add(tokenInfo.accountValue) : 
                                        tokenInfo.value ? totals[symbol].value.add(tokenInfo.value) : totals[symbol].value
@@ -125,12 +132,7 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
 
 
 
-const poolsInfoFromBalances = (chainId : number, poolsBalances: { [ x: string ] : any } ) : PoolData[] => {
-
-    console.log(">>>>>> poolsBalances: ", poolsBalances)
-    // pool01: {USDC: {…}, WBTC: {…}, WETH: {…}}
-    // index01: {indexId: 'index01', tokensBalances: {…}, poolBalances: {…}}
-
+const poolsInfoFromBalances = (chainId : number, poolsBalances: TokenBalanceMapforIndexMap ) : PoolData[] => {
 
     return Object.keys(poolsBalances).map( (poolId : string) : PoolData => {
 

@@ -8,17 +8,11 @@ import { fromDecimals } from "../../utils/formatter"
 
 import { PieChartsData, ChartData } from "../shared/PieChartWithLabels"
 
+import { TokenInfo } from "../../types/TokenInfo"
 
 type TokenBalances = {[ x: string] : { symbol: string, decimals: number, value: BigNumber, balance: BigNumber }}
 
-type TokenInfo = {
-    value: BigNumber,
-    balance: BigNumber,
-    accountValue: BigNumber,
-    accountBalance: BigNumber
-    decimals: number,
-    symbol: string,
-}
+
 type PoolData =  { 
     poolId: string, 
     tokenInfoArray: TokenInfo[], 

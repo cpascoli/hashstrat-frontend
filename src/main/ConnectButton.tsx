@@ -39,8 +39,6 @@ export const ConnectButton = ({ setAccount, setChainId }: ConnectButtonProps) =>
 
 	useEffect(() => {
 		const supportedChain = chainId === Polygon.chainId || chainId === Kovan.chainId
-		console.log("ConnectButton - chainId: ", chainId, "supported: ", supportedChain)
-
 		setAccount(account)
 		setChainId(supportedChain ? chainId : undefined)
 	}, [account, chainId] )

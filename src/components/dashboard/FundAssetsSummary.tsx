@@ -4,7 +4,7 @@ import { makeStyles, Box, Typography } from "@material-ui/core"
 import { utils } from "ethers"
 
 import { Token } from "../../types/Token"
-import { PoolSummary } from "./PoolSummary"
+import { PoolSummary } from "../shared/PoolSummary"
 import { Horizontal } from "../Layout"
 import { TitleValueBox } from "../TitleValueBox"
 import { PieChartWithLabels } from "../shared/PieChartWithLabels"
@@ -79,19 +79,21 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
             <Box>
                 <Typography variant="h4" align="center" >Asset Summary</Typography>
                 <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
-                    Total assets across all Pools &amp; Indexes
+                    Assets across all Pools &amp; Indexes
                 </Typography>
             </Box>
 
             <div className={classes.portfolioSummary} > 
                 <Box className={classes.portfolioInfo} >
-                {
-                    tokenBalancesoFormatted && tokenBalancesoFormatted.map( (token : any)=> {
-                        const valueFormatted = `${utils.commify( token.balance )} (${ utils.commify( token.value )} ${depositToken.symbol})`
-                        return  <TitleValueBox key={token.symbol} title={token.symbol} value={valueFormatted}  mode="small" />
-                    })
-                }
-                    <TitleValueBox title="Total Value Locked (TVL)" value={`${ utils.commify( totalValueFormatted )} ${depositToken.symbol}` }  />
+                    {
+                        tokenBalancesoFormatted && tokenBalancesoFormatted.map( (token : any)=> {
+                            const valueFormatted = `${utils.commify( token.balance )} ($ ${ utils.commify( token.value )})`
+                            return  <TitleValueBox key={token.symbol} title={token.symbol} value={valueFormatted}  mode="small" />
+                        })
+                    }
+
+                <TitleValueBox title="TVL" value={`$ ${ utils.commify( totalValueFormatted )}` }  />    
+
                 </Box>
 
                 { totalValueFormatted  &&  

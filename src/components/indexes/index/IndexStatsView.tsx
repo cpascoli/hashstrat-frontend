@@ -49,7 +49,7 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
   
     console.log("IndexStatsView", poolsInfo)  //indexInfo:  {poolId: 'index02', tokenInfoArray: Array(2), totalValue: BigNumber}
     
-    const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : undefined
+    const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : ""
 
     const assetViews = indexInfo.tokenInfoArray.map( token => {
         const balance = token.balance ?? BigNumber.from(0)
@@ -57,7 +57,7 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
         const decimals = token.decimals //    tokens.find( t => t.symbol === symbol)?.decimals ?? 2
         const accountBalanceFormatted = fromDecimals(balance, decimals, 4 ) as any
         const accountValueFormatted = fromDecimals(value, depositToken.decimals, 2 ) as any
-        const valueFormatted = `${ utils.commify(accountBalanceFormatted)} (${ utils.commify(accountValueFormatted) } ${ depositToken.symbol }) `
+        const valueFormatted = `${ utils.commify(accountBalanceFormatted)} ($ ${utils.commify(accountValueFormatted)}) `
 
         return { symbol: token.symbol, valueFormatted, balance, value }
     }).map( it => <TitleValueBox mode="small" key={it.symbol} title={it.symbol} value={it.valueFormatted} /> )
@@ -67,10 +67,10 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
         return acc + val.weight
     }, 0)
     const poolsInIndex = poolsInfo?.map( ( pool : PoolSummary) => {
-        const valueFormatted = pool.value && fromDecimals(pool.value, depositToken.decimals, 2)
+        const valueFormatted = pool.value ? fromDecimals(pool.value, depositToken.decimals, 2) : ''
         return <TitleValueBox mode="small" key={pool.poolId} 
                         title={`${pool.name} (${pool.weight}/${totalWeights})`}
-                        value={`${valueFormatted} ${depositToken.symbol}`}  />
+                        value={`$ ${ utils.commify(valueFormatted) }`}  />
     })
 
     
@@ -89,7 +89,7 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
 
                 <Box className={classes.portfolioInfo} >
                     { assetViews }
-                    <TitleValueBox mode="small" title="Total Value Locked (TVL)" value={formattedPortfolioValue??""} suffix={depositToken.symbol} />
+                    <TitleValueBox mode="small" title="TVL" value={ `$ ${utils.commify(formattedPortfolioValue)}`} />
     
                     {/* <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
                     <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>

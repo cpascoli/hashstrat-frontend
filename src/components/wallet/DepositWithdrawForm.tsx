@@ -310,7 +310,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
             { formType === 'deposit' &&
                 <Box mb={2} >
                     { showApproveButton &&
-                    <Button variant="contained" color="primary" fullWidth disabled={ !isValidAmount }
+                    <Button variant="contained" color="secondary" fullWidth disabled={ !isValidAmount }
                         onClick={() => approveButtonPressed()} >
                         Approve {symbol} 
                         { isApproveMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  

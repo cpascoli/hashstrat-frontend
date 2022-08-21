@@ -95,8 +95,17 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
     const [userMessage, setUserMessage] = useState<SnackInfo>()
 
     // formatted values
-    const formattedAllowance = allowance && fromDecimals(allowance, token.decimals, 4)
-   
+    // let formattedAllowance  //= allowance && fromDecimals(allowance, token.decimals, 4)
+    const [formattedAllowance, setFormattedAllowance] = useState('');
+
+
+    useEffect(() => {
+        console.log("useEffect - allowance: ", allowance?.toString())
+        if (allowance) {
+            setFormattedAllowance( fromDecimals(allowance, token.decimals, 4) )
+        }
+     }, [allowance])
+
 
     // Form Handlers
 
@@ -141,11 +150,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
     }
 
 
-  
-    const allowanceOk = formattedAllowance !== undefined && 
-                        isValidAmount && 
-                        (parseFloat(formattedAllowance) >= Number(amount) )
-
+    const allowanceOk = formattedAllowance && isValidAmount && (parseFloat(formattedAllowance) >= Number(amount) )
 
     // Deposit and Stake LP Tokens
     const { deposit, depositState } = useDepositAndStartStake(chainId)
@@ -302,7 +307,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
             { formType === 'stake' &&
                 <Box mb={2} >
                     { showApproveButton &&
-                    <Button variant="contained" color="primary" fullWidth disabled={ !isValidAmount }
+                    <Button variant="contained" color="secondary" fullWidth disabled={ !isValidAmount }
                         onClick={() => approveButtonPressed()} >
                         Approve transfer
                         { isApproveMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  

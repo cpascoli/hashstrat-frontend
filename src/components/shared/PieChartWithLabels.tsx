@@ -34,8 +34,6 @@ export const PieChartWithLabels = ( chartData  : ChartData ) => {
   const classes = useStyle()
   const theme = useTheme()
 
-  console.log("PieChartWithLabels", theme.palette.type )
-
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index } : any ) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);

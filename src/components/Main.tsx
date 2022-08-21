@@ -64,17 +64,13 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
     // when no account is connected it defaults to Polygon
     const [chainId, setChainId] = useState<number | undefined>(defaultChainId); 
     const [connected, setConnected] = useState(false);
-  
     const [account, setAccount] = useState<string | undefined>();
 
-    console.log("Main - chainId: ", chainId)
-    
     const poolIds = PoolIds(chainId || defaultChainId)
     const indexesIds = IndexesIds(chainId || defaultChainId)
     const depositToken = DepositToken(chainId || defaultChainId) 
     const investTokens = InvestTokens(chainId || defaultChainId)
     
-
     useEffect(() => {
         if (account) {
             setConnected(true)

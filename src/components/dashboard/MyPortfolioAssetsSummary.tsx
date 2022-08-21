@@ -1,11 +1,9 @@
-
-
 import { makeStyles, Box, Typography, Link } from "@material-ui/core"
 import { utils } from "ethers"
 
 import { Token } from "../../types/Token"
 import { fromDecimals } from "../../utils/formatter"
-import { PoolSummary } from "./PoolSummary"
+import { PoolSummary } from "../shared/PoolSummary"
 import { Horizontal } from "../Layout"
 
 import { TitleValueBox } from "../TitleValueBox"
@@ -68,8 +66,9 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                     chainId={chainId} 
                     poolId={pool.poolId} 
                     tokens={pool.tokenInfoArray} 
-                    depositToken={depositToken
-                 }/>
+                    depositToken={depositToken}
+                    account={account}
+                 />
    
     })
   
@@ -108,11 +107,11 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                         <Box className={classes.portfolioInfo} >
                         {
                             tokenBalancesoFormatted && tokenBalancesoFormatted.map( (token : any)=> {
-                                const valueFormatted = `${ utils.commify(token.balance) } (${token.value} ${depositToken.symbol})`
+                                const valueFormatted = `${ utils.commify(token.balance) } ($ ${token.value})`
                                 return  <TitleValueBox key={token.symbol} title={token.symbol} value={valueFormatted}  mode="small" />
                             })
                         }
-                            <TitleValueBox title="Total Invested" value={`${ utils.commify(totalValueFormatted) } ${depositToken.symbol}` }  />
+                            <TitleValueBox title="Total Value" value={`$ ${ utils.commify(totalValueFormatted) }` }  />
                         </Box>
 
                         { totalValueFormatted  &&  

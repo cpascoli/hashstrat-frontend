@@ -99,7 +99,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <div className={classes.titleSection}> 
                     <div>
                         <p className={classes.title}>
-                            HashStrat: Self-sovereign crypto-funds on the blockchain
+                            Self-sovereign crypto fund for long term investment
                         </p>
                         <p className={classes.subtitle}>
                             Choose your decentralised, investment strategies executed on-chain <br/>
@@ -131,7 +131,7 @@ export const Home = ( { chainId } : HomeProps ) => {
             <section className={classes.bottomSecion}>
                 <InfoBox title="Self-sovereign" image={key}>
                     <Typography variant="body2">
-                        HashStrat crypto-funds are immutable smart contracts executed on the blockchain.  <br/>
+                        HashStrat crypto-funds are immutable smart contracts executed on the blockchain.
                         Nobody can stop them or change their behaviour.  <br/>
                         Users stay in control of their funds at all times.
                     </Typography>
@@ -146,17 +146,17 @@ export const Home = ( { chainId } : HomeProps ) => {
                     </Typography>
                 </InfoBox>
 
-                <InfoBox title="Automated" image={automated}>
+                <InfoBox title="Autonomous" image={automated}>
                     <Typography variant="body2">
                         HashStrat uses <Link href="https://docs.chain.link/docs/chainlink-keepers/introduction/" target="_blank">Chainlink Keepers</Link> to automate
-                        the execution of on-chain strategies. <br/>
-                        This means you can trust a decentralised networks of independent nodes to keep running the strategies.
+                        the execution of on-chain strategies.
+                        This means you can trust the blockchain, a decentralised networks of independent nodes, to keep running the fund.
                     </Typography>
                 </InfoBox>
 
                 <InfoBox title="Secure" image={lock}>
                     <Typography variant="body2">
-                        All code is open source and smart contracts verified on-chain. <br/>
+                        All code is open source and smart contracts verified on-chain.
                         This means their behaviour is predictable and transparent. <br/>
                         Users interact directly with the blockchain through their digital wallets and no personal information is ever shared or leaked.
                     </Typography>

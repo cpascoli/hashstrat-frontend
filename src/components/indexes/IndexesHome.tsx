@@ -22,8 +22,6 @@ export const IndexesHome = ({ chainId, account, depositToken } : IndexesHomeProp
     const classes = useStyles()
     const location = useLocation();
 
-    console.log("IndexesHome pathname: ", location.pathname, "chainId: ", chainId);
-
     return (
         <div className={classes.container}>
             

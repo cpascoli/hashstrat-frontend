@@ -43,9 +43,6 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
     const totalFeesFormatted = totalFees ? fromDecimals(totalFees, depositToken.decimals, 2) : ""
 
 
-    console.log("DAORevenues - collectableFees", collectableFeesFormatted,  "feesBalance", feesBalanceFormatted, "totalFees >> ", totalFeesFormatted)
-
-
     return (
         <Box className={classes.container}>
             <Box p={0}>

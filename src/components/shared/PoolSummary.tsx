@@ -75,10 +75,9 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken, account } :
 
 
     return (
-        <div className={classes.container} >
-            
+      
             <Link component={RouterLink} to={link} style={{ textDecoration: 'none' }} > 
-                <Button variant="outlined" color="primary" >
+                <Button variant="outlined" color="primary" className={classes.container} >
                     <Box className={classes.pool}>
 
                         <Typography variant="h5" align="center"> {name} </Typography>
@@ -94,9 +93,7 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken, account } :
                     </Box>
                 </Button>
             </Link>
-   
-
-        </div>
+      
     )
 }
 

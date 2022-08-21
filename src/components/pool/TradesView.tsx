@@ -41,7 +41,6 @@ export const TradesView = ( { chainId, poolId, depositToken, investToken } : Poo
     let depositTonensPerc = 0
     let investTokensPerc = 0
     const chartData = swaps?.map( (data: any) => {
-        console.log("data>>>", data)
         const date = data.timestamp * 1000
         const price = parseFloat(fromDecimals(data.feedPrice, 8, 2))
 

@@ -22,7 +22,8 @@ interface DashboardProps {
 
 const useStyles = makeStyles( theme => ({
     container: {
-        paddingTop: 2,
+        paddingTop: 0,
+        marginBottom: 10,
     },
     tickers: {
         maxWidth: 800,
@@ -39,6 +40,7 @@ const useStyles = makeStyles( theme => ({
         padding: 0,
         margin: "auto",
         paddingTop: 20,
+        paddingBottom: 20,
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     }
 }))
@@ -48,19 +50,12 @@ const useStyles = makeStyles( theme => ({
 export const Dashboard = ({ chainId, depositToken, investTokens, account} : DashboardProps) => {
     
     const classes = useStyles()
-    // const tokens = [depositToken, ...investTokens]
-
-    console.log("Dashboard - account", account)
-
-
     const [selectedTokenIndex, setSelectedTokenIndex] = useState<number>(0)
    
-
     const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
         setSelectedTokenIndex(parseInt(newValue))
     }
 
- 
 
     return (
         <div className={classes.container} >

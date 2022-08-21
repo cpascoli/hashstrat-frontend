@@ -237,3 +237,17 @@ export const useFeesForWithdraw = (chainId: number, poolId: string, lpTokensAmou
     return value?.[0].toString()
 }
 
+
+export const useUsersArray = (chainId: number, poolId: string) => {
+    const poolContract = PoolContract(chainId, poolId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'usersArray',
+            args: [0],
+    }) ?? {}
+
+    return value
+}
+
+
+

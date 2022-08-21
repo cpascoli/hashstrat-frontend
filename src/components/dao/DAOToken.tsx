@@ -100,7 +100,6 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
 
     }
 
-
     
     const explorerHost = NetworkExplorerHost(chainId)
     const claimedLink =  (claimRewardState.status === 'Success' && 

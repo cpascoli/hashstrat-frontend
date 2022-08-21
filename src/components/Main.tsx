@@ -28,6 +28,7 @@ import { Dashboard } from './dashboard/Dashboard'
 import { DaoHome } from './dao/DaoHome'
 
 import { MainWithTitle } from "./MainWithTitle"
+import { UsersHome } from "./users//UsersHome"
 
 
 interface MainProps {
@@ -131,6 +132,10 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                         } />
                         <Route path="/dao" element={
                              <DaoHome chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} />
+                        } />
+
+                        <Route path="/users" element={
+                             <UsersHome chainId={chainId || defaultChainId}  />
                         } />
 
                         {

@@ -160,7 +160,7 @@ const valueByPoolChartData = (
         chainId: number, 
         depositToken : Token, 
         poolsBalances : { [x: string]: any } ,
-        indexesBalances : { [x: string]: any },   //indexesBalances[indexId].poolBalances
+        indexesBalances : { [x: string]: any },
         account? : string
         
     ): PieChartsData[] => {
@@ -175,7 +175,6 @@ const valueByPoolChartData = (
         }
     })
 
-    // indexesBalances[indexId].poolBalances
     const tokenBalancesForIndexes = Object.keys(indexesBalances).map ( indexId => {
         return { 
             indexId, 

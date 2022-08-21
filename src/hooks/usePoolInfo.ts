@@ -62,8 +62,6 @@ export const usePoolsInfoForIndexes = (chainId: number, indexIds: string[], toke
         return acc
    },  {} as { [x : string] : PoolValueInfoMap } )
 
-   //console.log("usePoolsInfoForIndexes", response)
-
    return response
 }
 
@@ -138,11 +136,9 @@ export const useTokensInfoAndPoolsInfoForIndexes = (chainId: number,  indexIds: 
         poolids && poolids.forEach( (poolId : string) => {
 
             const poolTokens = poolsBalances[poolId]
-            //const poolId = poolTokens.poolId
             const poolLPInfo = lpinfo.find( el => el.poolId.toLowerCase() === poolId.toLowerCase())
             const lpBalance = poolLPInfo && poolLPInfo.lpBalance 
             const lpTotalSupply = poolLPInfo && poolLPInfo.lpTotalSupply 
-            // console.log("BBBBB indexId:", indexId, "poolId:", poolId, "poolLPInfo", poolLPInfo,  ">> lpBalance: ", lpBalance, "lpTotalSupply: ", lpTotalSupply)
 
             Object.keys(poolTokens).forEach( symbol => {
                 
@@ -194,11 +190,9 @@ export const useTokensInfoAndPoolsInfoForIndexes = (chainId: number,  indexIds: 
         poolids && poolids.forEach( (poolId : string) => {
 
             const poolTokens = poolsBalances[poolId]
-            //const poolId = poolTokens.poolId
             const poolLPInfo = lpinfo.find( el => el.poolId.toLowerCase() === poolId.toLowerCase())
             const lpBalance = poolLPInfo && poolLPInfo.lpBalance 
             const lpTotalSupply = poolLPInfo && poolLPInfo.lpTotalSupply 
-            // console.log("BBBBB indexId:", indexId, "poolId:", poolId, "poolLPInfo", poolLPInfo,  ">> lpBalance: ", lpBalance, "lpTotalSupply: ", lpTotalSupply)
 
             Object.keys(poolTokens).forEach( symbol => {
                 
@@ -273,8 +267,6 @@ export const useTokensInfoAndPoolsInfoForIndexes = (chainId: number,  indexIds: 
             }
         })
 
-        console.log("poolBalances", indexId,  poolBalances)
-
         return {
             indexId: indexId,
             tokensBalances: tokensBalances,
@@ -301,13 +293,11 @@ export type LPBalanceInfo = {
 
 
 export const useAccountLPBalanceForPool = (chainId: number, poolId: string, account?: string) : LPBalanceInfo => {
-
     const poolsInfo = PoolsInfo(chainId, [poolId]) 
-
     const baances = useAccountLPBalancesForPools(chainId, account, poolsInfo)
     return baances[0]
 }
- 
+
 
 
 export const useAccountLPBalanceForIndex = (chainId: number, indexId: string, account?: string) : LPBalanceInfo => {
@@ -388,8 +378,6 @@ export const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string
 
             const perc = (balance && supply && !supply.isZero()) ? precision.mul(balance).div(supply).toNumber() / 10000 : undefined
             
-            // console.log("lpTokensRequests ",  req.indexId, balance?.toString(), supply?.toString())
-
             return {
                 poolId: req.indexId,
                 lpBalance: balance,
@@ -599,6 +587,90 @@ export const useTokensInfoForPools = (chainId: number, poolIds: string[], tokens
 
 
 
+export const useUsersForPools = (chainId: number, poolIds: string[], account?: string) => {
+    const poolsInfo = PoolsInfo(chainId, poolIds) 
+
+ 
+    // Get the  LP balances of the account for every Pool
+    //FIXME add a getUsers function to the Pool contract
+    const poolUsersRequest = poolsInfo.flatMap( pool => {
+        return [0, 1, 2].map( reqIndex => {
+            return { 
+                poolId: pool.poolId, 
+                poolAddress: pool.pool,
+                reqIndex: reqIndex
+            }
+        })
+    })
+
+    const usersReqCalls = poolUsersRequest.map(req => ({
+        contract: PoolContract(chainId, req.poolId),
+        method: 'usersArray',
+        args: [req.reqIndex]
+    })) ?? []
+
+    const usersReqResults = useCalls(usersReqCalls) ?? []
+    usersReqResults.forEach((result, idx) => {
+        if(result && result.error) {
+            console.error(`Error encountered calling 'usersArray' on ${usersReqCalls[idx]?.contract.address}: ${result.error.message}`)
+        }
+    })
+
+
+    const indexeAddresses = IndexesInfo(chainId, IndexesIds(chainId)).map ( el => el.pool )
+    let addresses = new Set<string>()
+
+    poolUsersRequest.map( (req, idx)  => {
+        const res = usersReqResults.at(idx)?.value
+        return res
+    }).forEach( res => {
+        if (res && res[0] && !indexeAddresses.includes(res[0])) {
+            addresses.add( res[0] )
+        }
+    })
+
+    return addresses
+}
+
+
+
+export const useUsersForIndexes = (chainId: number, indexIds: string[], account?: string) => {
+    const indexesInfo = IndexesInfo(chainId, indexIds) 
+
+    // Get the  LP balances of the account for every Index
+    const usersRequest = indexesInfo.map( index => {
+        return { 
+            poolId: index.poolId, 
+            poolAddress: index.pool,
+        }
+    })
+
+    const usersReqCalls = usersRequest.map(req => ({
+        contract: PoolContract(chainId, req.poolId),
+        method: 'getUsers',
+        args: []
+    })) ?? []
+
+    const usersResults = useCalls(usersReqCalls) ?? []
+    usersResults.forEach((result, idx) => {
+        if(result && result.error) {
+            console.error(`Error encountered calling 'getUsers' on ${usersReqCalls[idx]?.contract.address}: ${result.error.message}`)
+        }
+    })
+
+    let addresses = new Set<string>()
+
+    usersRequest.map( (req, idx)  => {
+        const res = usersResults.at(idx)?.value
+        return { req, res } 
+    }).forEach( el => {
+        if (el.res && el.res[0]) {
+            el.res[0].forEach(addresses.add, addresses)
+        }
+    })
+
+    return addresses
+}
 
 
 // Returns an array containing balance infos for all Tokens[] in every Pool 
@@ -679,9 +751,6 @@ const useAccountLPBalancesForPools = (chainId : number, account: string | undefi
         if(result && result.error) {
             console.error(`Error encountered calling 'balanceOf' on ${lpBalanceCalls[idx]?.contract.address}: ${result.error.message}`, "request:", lptokensRequests[idx] , "call: ", lpBalanceCalls[idx])
         }
-
-        console.log("AAAA lpBalanceResults: account: ", account, lpBalanceCalls[idx], lpBalanceResults.at(idx)?.value )
-
     })
 
     // get the LP staked balances
@@ -722,10 +791,6 @@ const useAccountLPBalancesForPools = (chainId : number, account: string | undefi
 
         const precision = BigNumber.from(10000)
         const perc = (totalBalance && supply && !supply.isZero()) ? precision.mul(totalBalance).div(supply).toNumber() / 10000 : undefined
-
-        console.log("AAAA supply: ", supply?.toString(), "perc", perc?.toString(),
-            "balanceStaked: ", balanceStaked?.toString(), 
-            "balanceNotStaked: ", balanceNotStaked?.toString())
 
         return {
             poolId: req.poolId,

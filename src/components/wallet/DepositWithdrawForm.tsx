@@ -153,7 +153,6 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     const isDepositMining = depositState.status === "Mining"
 
     const submitDeposit = () => {
-        // const amountDecimals = toDecimals(amount.toString(), token.decimals)
         console.log("submitDeposit - amount: ", amount, "amountDecimals", amountDecimals)
         return deposit(amountDecimals)
     }
@@ -165,7 +164,7 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
     const submitWithdrawal = () => {
         const currentBalance = tokenBalance ? tokenBalance.toString() : balance
         if ( isVeryCloseValues(amountDecimals ,  currentBalance) ) {
-            console.log("submitWithdrawal - should withdraw all!  currentBalance => ", currentBalance)
+            console.log("submitWithdrawal - should withdraw all => ", currentBalance)
         }
         
         const withdrawAmount = isVeryCloseValues( amountDecimals ,  currentBalance ) ? currentBalance : amountDecimals

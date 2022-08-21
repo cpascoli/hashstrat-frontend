@@ -47,8 +47,6 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
     const tokens =  [depositToken, ... InvestTokens(chainId)]
     const { indexInfo, poolsInfo, portfolioInfo, chartValueByAsset, chartValueByPool } = useIndexModel(chainId, poolId, tokens, depositToken)
   
-    console.log("IndexStatsView", poolsInfo)  //indexInfo:  {poolId: 'index02', tokenInfoArray: Array(2), totalValue: BigNumber}
-    
     const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : ""
 
     const assetViews = indexInfo.tokenInfoArray.map( token => {

@@ -100,7 +100,6 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
 
 
     useEffect(() => {
-        console.log("useEffect - allowance: ", allowance?.toString())
         if (allowance) {
             setFormattedAllowance( fromDecimals(allowance, token.decimals, 4) )
         }
@@ -158,7 +157,6 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
 
     const submitDeposit = () => {
         const amountDecimals = toDecimals(amount.toString(), token.decimals)
-        console.log("submit DepositAndStartStake - lptoken: ", token.address, ", amount: ", amount, "amountDecimals", amountDecimals)
         return deposit(token.address, amountDecimals)
     }
 
@@ -250,9 +248,6 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
     
     const showApproveButton =  (isApproveMining || (!allowanceOk && !isDepositMining)) // !allowanceOk  &&  !isDepositMining
     const showDepositButton =  ( !(isApproveMining || (!allowanceOk && !isDepositMining)) && (allowanceOk || isDepositMining)) // (allowanceOk || isDepositMining) && !isApproveMining
-    // const showApproveButton =  allowanceOk  &&  !isDepositMining
-    // const showDepositButton =  (allowanceOk || isDepositMining) && !isApproveMining
-
     console.log("allowanceOk", allowanceOk, "formattedAllowance: ", formattedAllowance, "amount", amount, "isValidAmount", isValidAmount, "isApproveMining", isApproveMining, " ==> showApproveButton", showApproveButton)
 
 

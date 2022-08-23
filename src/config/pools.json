@@ -59,7 +59,7 @@
     "polygon": [
         {
             "poolId": "pool01",
-            "name": "BTC-USDC REB01",
+            "name": "REB (BTC)",
             "description": "A self-balancing Pool targeting 60% BTC and 40% USDC allocation",
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
@@ -68,7 +68,7 @@
         },
         {
             "poolId": "pool02",
-            "name": "ETH-USDC REB01",
+            "name": "REB (ETH)",
             "description": "A self-balancing Pool targeting 60% ETH and 40% USDC allocation",
             "depositToken": "USDC",
             "investTokens": ["WETH"],
@@ -77,7 +77,7 @@
         },
         {
             "poolId": "pool03",
-            "name": "BTC-USDC MEANREV01",
+            "name": "MEANREV (BTC)",
             "description": "Pool dollar-cost averaging in/out BTC using a 350D mean reversion strategy",
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
@@ -86,7 +86,7 @@
         },
         {
             "poolId": "pool04",
-            "name": "ETH-USDC MEANREV01",
+            "name": "MEANREV (ETH)",
             "description": "Pool dollar-cost averaging in/out ETH using a 350D mean reversion strategy",
             "depositToken": "USDC",
             "investTokens": ["WETH"],
@@ -95,7 +95,7 @@
         },
         {
             "poolId": "pool05",
-            "name": "BTC-USDC TRDFLW01",
+            "name": "TRDFLW (BTC)",
             "description": "Pool allocating to BTC with a trend following strategy",
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
@@ -104,7 +104,7 @@
         },
         {
             "poolId": "pool06",
-            "name": "ETH-USDC TRDFLW01",
+            "name": "TRDFLW (ETH)",
             "description": "Pool allocating to ETH with a trend following strategy",
             "depositToken": "USDC",
             "investTokens": ["WETH"],

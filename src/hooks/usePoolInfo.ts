@@ -89,7 +89,7 @@ export const useTokensInfoForIndexes = (chainId: number,  indexIds: string[], to
 
 export const useTokensInfoAndPoolsInfoForIndexes = (chainId: number,  indexIds: string[], tokens: Token[], account?: string) : TokenBalanceInfoForIndexMap => {
 
-    // array of indexes with their assocaited pools info array [indexId, pools[{name, poolAddress, lpTokenAddress, weight}]]
+    // array of indexes with their associated pools info array [indexId, pools[{name, poolAddress, lpTokenAddress, weight}]]
     const indexPools = useIndexPools(chainId, indexIds) 
 
     // array of poolIds for all indexes in indexPools array

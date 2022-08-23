@@ -44,7 +44,7 @@ export const IndexesView = ({ chainId, account, depositToken } : IndexesViewProp
             <div className={classes.container}> 
                 <Typography >
                     HashStrat Indexes represent a weighted basket of <Link component={RouterLink} to="/pools" style={{ textDecoration: 'none' }} >HashSttap Pools </Link> and 
-                    their assocaited <Link component={RouterLink} to="/strategies" >Strategies</Link>. <br/>
+                    their associated <Link component={RouterLink} to="/strategies" >Strategies</Link>. <br/>
                     Indexes allow to easily invest into a combination of strategies and assets for improved risk/return profiles.
                 </Typography>
             </div>

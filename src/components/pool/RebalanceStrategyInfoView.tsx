@@ -20,6 +20,10 @@ import {
     useStrategyRebalancingThreshold,
 } from "../../hooks/useRebalancingStrategy"
 
+import { 
+    useInvestedTokenValue,
+    useTotalPortfolioValue,
+} from "../../hooks/usePool"
 
 const useStyle = makeStyles( theme => ({
     container: {
@@ -58,7 +62,9 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
     const depositTokenBalance = useTokenBalance(chainId, poolId, depositToken.symbol, poolAddress)
     const investTokenBalance = useTokenBalance(chainId, poolId, investToken.symbol, poolAddress)
 
-    const investPercText =  targetInvestPerc && `${targetInvestPerc} %  / ${(100 - targetInvestPerc )}%`
+
+
+    const targetAllocationPerc =  targetInvestPerc && `${targetInvestPerc}% / ${(100 - targetInvestPerc )}%`
     const targetPercUp =  (parseInt(targetInvestPerc) + parseInt(rebalancingThreshold) ) / 100
     const targetPercDown =  (parseInt(targetInvestPerc) - parseInt(rebalancingThreshold) ) / 100
 
@@ -68,12 +74,22 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
 
     const rebalancingUpperBandPrice = (depositTokens && investTokens) ? round( targetPercUp  * depositTokens / (investTokens - targetPercUp  * investTokens)) : undefined
     const rebalancingLowerBandPrice = (depositTokens && investTokens) ? round( targetPercDown  * depositTokens / (investTokens - targetPercDown  * investTokens)) : undefined
-    const rebalancingText = (rebalancingUpperBandPrice && rebalancingLowerBandPrice) ? `${investToken.symbol} ≤ ${rebalancingLowerBandPrice} or ${investToken.symbol} ≥ ${rebalancingUpperBandPrice} ` : ''
+    const rebalancingText = (rebalancingUpperBandPrice && rebalancingLowerBandPrice) ? `${investToken.symbol} ≤ ${rebalancingLowerBandPrice} ; ${investToken.symbol} ≥ ${rebalancingUpperBandPrice} ` : ''
 
     const formattedPriceTimestant = new Date(feedLatestTimestamp * 1000).toLocaleTimeString()
 
     const formattedPrice = latestFeedPrice ? fromDecimals( BigNumber.from(latestFeedPrice), parseInt(feedDecimals), 2) : ''
     const feedPriceText = `${formattedPrice} ${depositToken.symbol} at ${formattedPriceTimestant}`
+
+    const investedTokenValue = useInvestedTokenValue(chainId, poolId)
+    const totalPortfolioValue = useTotalPortfolioValue(chainId, poolId)
+
+    const investedTokenValueFloat = investedTokenValue ? parseFloat(fromDecimals( BigNumber.from(investedTokenValue), depositToken.decimals, 2)) : undefined
+    const totalPortfolioValueFloat = totalPortfolioValue ? parseFloat(fromDecimals( BigNumber.from(totalPortfolioValue), depositToken.decimals, 2)) : undefined
+
+    const riskAssetdWeight = investedTokenValueFloat && totalPortfolioValueFloat && round( 100 * investedTokenValueFloat / totalPortfolioValueFloat, 1)
+    const stableAssetWeight = riskAssetdWeight && ( 100 - riskAssetdWeight)
+    const currentAllocationPerc = `${riskAssetdWeight}% / ${stableAssetWeight}%`
 
     const classes = useStyle()
 
@@ -82,10 +98,11 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
             <Box className={classes.portfolioInfo} >
                 <TitleValueBox title="Name" value={name} mode="small" />
                 <TitleValueBox title="Description" value={description} mode="small" />
-                <TitleValueBox title="Target Allocation" value={investPercText} mode="small"  />
-                <TitleValueBox title="Rebalancing Band" value={`± ${rebalancingThreshold}%`} mode="small"  />
+                <TitleValueBox title="Current Allocation" value={currentAllocationPerc} mode="small" />
+                <TitleValueBox title="Target Allocation" value={targetAllocationPerc} mode="small" />
+                <TitleValueBox title="Rebalancing Band" value={`± ${rebalancingThreshold}%`} mode="small" />
                 <TitleValueBox title="Rebalancing Targets" value={rebalancingText} mode="small"  />
-                <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small"  />
+                <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small" />
             </Box>
 
         </Box>

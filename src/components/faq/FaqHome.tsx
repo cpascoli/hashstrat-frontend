@@ -200,7 +200,7 @@ export const FaqHome = () => {
                             <li>
                               Network risks: <br/>
                               The HashStrat protocol runs on a blockchain, 
-                              the <Link href="https://polygon.technology/" target="_blank">Polygon Network</Link>, that could suffer from malfunctions and eploits.
+                              the <Link href="https://polygon.technology/" target="_blank">Polygon Network</Link>, that could suffer from malfunctions and exploits. <br/>
                               Issues at the base layer of a blockchian are very rare but can't be totally discounted. 
                             </li>
 

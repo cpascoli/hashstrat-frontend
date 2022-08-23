@@ -93,7 +93,6 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken, account } :
                     </Box>
                 </Button>
             </Link>
-      
     )
 }
 

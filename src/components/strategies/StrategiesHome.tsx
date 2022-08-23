@@ -61,10 +61,17 @@ export const StrategiesHome = () => {
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
                     <div>
-                        <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/RebalancingStrategyV1.sol" target="_blank"> 
-                            <strong> Rebalancing Strategy (60/40)  </strong>
-                        </Link> 
-                        <Typography> A rebalancing strategy over a 2 tokens portfolio</Typography>
+
+                        <Typography variant="body1">
+                            <strong> Rebalancing Strategy </strong>
+                        </Typography>
+                        <Typography>A rebalancing strategy over a 2 asset portfolio</Typography>
+                        
+                        <div>
+                            <Link href="https://medium.com/@hashstrat/hashstrat-rebalancing-strategy-f0bb6cf3152f" target="_blank"> Medium article </Link> &nbsp;&nbsp;&nbsp;&nbsp;
+                            <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/RebalancingStrategyV1.sol">GitHub</Link>
+                        </div>
+        
                     </div>
                 </AccordionSummary>
                 <AccordionDetails >
@@ -108,10 +115,16 @@ export const StrategiesHome = () => {
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
 
                      <div>
-                        <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/MeanReversionV1.sol" target="_blank"> 
-                            <strong> Mean Reversion (350D) </strong>
-                        </Link> 
+                        <Typography variant="body1">
+                            <strong> Mean Reversion</strong>
+                        </Typography>
                         <Typography>A strategy for dollar-cost averaging in and out a risk asset when its price diverges substantially from its long term trend</Typography>
+                        
+                        <div>
+                            <Link href="https://medium.com/@hashstrat/hashstrat-mean-reversion-strategy-b1a576b05d5f" target="_blank"> Medium article </Link> &nbsp;&nbsp;&nbsp;&nbsp;
+                            <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/MeanReversionV1.sol">GitHub</Link>
+                        </div>
+
                     </div>
 
                 </AccordionSummary>
@@ -145,6 +158,7 @@ export const StrategiesHome = () => {
                         <div>   
                             <img src={strategy2} className={classes.chart} alt="MeanReversionV1 strategy stats"/>
                         </div>
+
                     </div>
                 </AccordionDetails>
             </Accordion>
@@ -152,14 +166,17 @@ export const StrategiesHome = () => {
     <li>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
-
-                     <div>
-                        <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/TrendFollowV1.sol" target="_blank"> 
-                            <strong> Trend Follow (50D) </strong>
-                        </Link> 
+                    <div>
+                        <Typography variant="body1">
+                            <strong> Trend Follow  </strong>
+                        </Typography>
                         <Typography>A trend-following strategy trading in the direction of the underlying trend</Typography>
-                    </div>
+                        
+                        <div>
+                            <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/TrendFollowV1.sol">GitHub</Link>
+                        </div>
 
+                    </div>
                 </AccordionSummary>
                 <AccordionDetails >
                     <div>

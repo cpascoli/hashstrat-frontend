@@ -121,16 +121,16 @@ export const TradesView = ( { chainId, poolId, depositToken, investToken } : Poo
         const tradeSideFactor = data.side === 'BUY' ? 1.0 : -1.0
         const amount1 = data.side === 'BUY' ? data.bought : data.sold
         const amount2 = data.side === 'BUY' ? data.sold : data.bought
-        const riskAssetAmountTraded = parseFloat(fromDecimals(amount1, investToken.decimals, 8))
+        const riskAssetAmountTraded = parseFloat(fromDecimals(amount1, investToken.decimals, 6))
         const stableAssetAmountTraded =  parseFloat(fromDecimals(amount2, depositToken.decimals, 2))
 
         // perc risk asset traded
-        const riskAssetBalance = parseFloat(fromDecimals(data.investTokenBalance, investToken.decimals, 8))
-        const riskAssetTradedPerc = round(riskAssetAmountTraded / ( riskAssetBalance + riskAssetAmountTraded))
+        const riskAssetBalance = parseFloat(fromDecimals(data.investTokenBalance, investToken.decimals, 6))
+        const riskAssetTradedPerc = round(100 * riskAssetAmountTraded  / ( riskAssetBalance + (data.side === 'BUY' ? 0 : riskAssetAmountTraded) ))
 
         // perc stable asset traded
         const stableAssetBalance = parseFloat(fromDecimals(data.depositTokenBalance, depositToken.decimals, 2))
-        const stableAssetTradedPerc =  round(stableAssetAmountTraded / ( stableAssetBalance + stableAssetAmountTraded))
+        const stableAssetTradedPerc = round(100 * stableAssetAmountTraded / (stableAssetBalance + (data.side === 'BUY' ? stableAssetAmountTraded : 0) ))
 
         return {
             id: index,

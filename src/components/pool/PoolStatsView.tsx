@@ -15,8 +15,7 @@ import { PoolInfo } from "../../utils/pools"
 import { PieChartWithLabels } from "../shared/PieChartWithLabels"
 import { Horizontal } from "../Layout"
 
-import { useTotalPortfolioValue, useTotalDeposited, useTotalWithdrawn, 
-         useTokenBalance, useInvestedTokenValue } from "../../hooks"
+import { useTotalDeposited, useTotalWithdrawn } from "../../hooks"
 
 
 const useStyle = makeStyles( theme => ({

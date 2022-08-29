@@ -63,13 +63,13 @@ export const useLpTokensValue = (chainId: number, poolId: string, amount: string
 
     const { value : portfolioValue, error : error0 } = useCall({
         contract: poolContract,
-        method: 'totalPortfolioValue',
+        method: poolId.endsWith("v3") ? 'totalValue' : 'totalPortfolioValue',
         args: [],
     }) ?? {}
 
     const { value : multiPoolValue, error : error1 } = useCall({
         contract: poolContract,
-        method: 'multiPoolValue',
+        method: 'multiPoolValue',  //TODO remove
         args: [],
     }) ?? {}
 
@@ -133,7 +133,7 @@ export const useTotalPortfolioValue = (chainId: number, poolId: string) => {
     const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
-            method: 'totalPortfolioValue',
+            method: poolId.endsWith("v3") ? 'totalValue' : 'totalPortfolioValue',
             args: [],
     }) ?? {}
     useDebugValue(value?.[0].toString())
@@ -170,13 +170,27 @@ export const useInvestedTokenValue = (chainId: number, poolId: string) => {
     const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
-            method: 'investedTokenValue',
+            method: poolId.endsWith("v3") ? 'riskAssetValue' : 'investedTokenValue',
             args: [],
     }) ?? {}
 
     useDebugValue(value?.[0].toString())
     return value?.[0].toString()
 }
+
+export const useDepositTokenValue = (chainId: number, poolId: string) => {
+    const poolContract = PoolContract(chainId, poolId)
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: poolId.endsWith("v3") ? 'stableAssetValue' : 'depositTokenValue',
+            args: [],
+    }) ?? {}
+
+    useDebugValue(value?.[0].toString())
+    return value?.[0].toString()
+}
+
+
 
 
 export const useSwapInfo = (chainId: number, index: number, poolId: string) => {
@@ -226,11 +240,12 @@ export const useSwapInfoArray = (chainId: number, poolId: string) => {
 
 
 export const useFeesForWithdraw = (chainId: number, poolId: string, lpTokensAmount: string, account?: string) => {
+    const amount = lpTokensAmount.trim() === '' ? BigNumber.from(0) : BigNumber.from(lpTokensAmount)
     const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
             method: 'feesForWithdraw',
-            args: account ? [lpTokensAmount, account] : [lpTokensAmount, constants.AddressZero],
+            args: account ? [amount, account] : [amount, constants.AddressZero],
     }) ?? {}
 
     useDebugValue(value?.[0].toString())
@@ -238,11 +253,11 @@ export const useFeesForWithdraw = (chainId: number, poolId: string, lpTokensAmou
 }
 
 
-export const useUsersArray = (chainId: number, poolId: string) => {
+export const useGetUsers = (chainId: number, poolId: string) => {
     const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
-            method: 'usersArray',
+            method: 'getUsers',
             args: [0],
     }) ?? {}
 

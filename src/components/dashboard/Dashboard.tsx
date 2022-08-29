@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 
-import { makeStyles, Tab, Typography, } from "@material-ui/core"
+import { makeStyles, Tab } from "@material-ui/core"
 import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 
 import { Token } from "../../types/Token"
@@ -74,7 +74,6 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account} : Dash
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <FundAssetsSummary chainId={chainId}  depositToken={depositToken} investTokens={investTokens} />
                 </TabPanel>
-
             </TabContext>
         </div>
     )

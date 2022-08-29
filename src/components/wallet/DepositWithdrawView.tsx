@@ -1,17 +1,18 @@
 import { useState } from "react"
 import { useEthers, useTokenBalance } from "@usedapp/core"
-
 import { Box, Grid, Button, Typography, Link, makeStyles } from  "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
-import { StyledAlert } from "../shared/StyledAlert"
 
+import { useStakedTokenBalance } from "../../hooks/useFarm"
+
+import { StyledAlert } from "../shared/StyledAlert"
 import { TitleValueBox } from '../TitleValueBox'
 import { DepositWithdrawForm } from './DepositWithdrawForm'
-
+import { SnackInfo } from "../SnackInfo"
 import { Modal } from "../Modal"
 import { Token } from "../../types/Token"
 import { fromDecimals } from "../../utils/formatter"
-import { SnackInfo } from "../SnackInfo"
+
 
 
 interface DepositWithdrawViewProps {
@@ -49,7 +50,13 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
   const { symbol, image, address } = token
   const { account } = useEthers()
   const tokenBalance = useTokenBalance(address, account)
-  const formattedTokenBalance = tokenBalance && fromDecimals(tokenBalance, token.decimals, 2) || "0.0"
+  const formattedTokenBalance = tokenBalance ? fromDecimals(tokenBalance, token.decimals, 2) : ''
+
+
+  const tokenStakedBalance = useStakedTokenBalance(chainId, poolId, account)
+  const formattedTokenStakedBalance = tokenStakedBalance && fromDecimals(tokenStakedBalance, token.decimals, 2)
+
+
 
   const showModalPressed = (buttonType: 'deposit' | 'withdraw') => {
     setShowUDepositWithdrawModal(true)
@@ -68,7 +75,7 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
   return (
       <Box className={classes.container}>
 
-           {  formType === 'deposit' &&  chainId === 137  && formattedTokenBalance === "0" &&
+           {  formType === 'deposit' &&  chainId === 137  && formattedTokenBalance && formattedTokenBalance === "0" &&
               <StyledAlert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
                   <AlertTitle>No {symbol} to deposit</AlertTitle>
                   You can get {token.symbol} tokens directly on Polygon using <Link href="https://quickswap.exchange/#/swap" target="_blank"> QuickSwap</Link>,
@@ -76,12 +83,20 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
               </StyledAlert>
           }
 
-          {  formType === 'withdraw' &&  chainId === 137  && formattedTokenBalance === "0" &&
+          {  formType === 'withdraw' &&  chainId === 137 && formattedTokenStakedBalance && Number(formattedTokenStakedBalance) > 0 &&
               <StyledAlert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
-                  <AlertTitle>No {symbol} to withdraw</AlertTitle>
-                  If you staked some {symbol} tokens, you need to un-stake them before you can withdraw funds from the pool.
+                  <AlertTitle>You have {formattedTokenStakedBalance} staked {symbol} tokens</AlertTitle>
+                  If have to unstake your {symbol} tokens before you can withdraw those funds.
               </StyledAlert>
           }
+
+          {  formType === 'deposit' && !poolId.endsWith("v3") &&
+              <StyledAlert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
+                  <AlertTitle>Deposits Disabled</AlertTitle>
+                  Can't deposit into a disabled { poolId.startsWith("index") ? "Index" : "Pool" }. Withdraw your funds and transfer them into the upgraded v3 { poolId.startsWith("index") ? "Index" : "Pool" }
+              </StyledAlert>
+          }
+
 
           <div className={classes.balanceView}>
             <TitleValueBox title={`Available to ${formType}`} value={formattedTokenBalance} suffix={symbol} border={true} />
@@ -91,7 +106,7 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
                 { formType === 'deposit' && 
                   <Grid item xs={12}>
                       <Box >
-                          <Button name="deposit" variant="contained" color="primary" onClick={(e) => showModalPressed("deposit")}>
+                          <Button disabled={ poolId.endsWith("v3") === false } name="deposit" variant="contained" color="primary" onClick={(e) => showModalPressed("deposit")}>
                             Deposit
                           </Button>
                       </Box>

@@ -1,5 +1,8 @@
+import React, { useState } from "react"
+
 import { Link as RouterLink } from "react-router-dom"
-import { Box, Divider, makeStyles, Typography, Link } from "@material-ui/core"
+import { Box, Divider, makeStyles, Typography, Link, Tab } from "@material-ui/core"
+import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 
 import { usePoolsInfo } from "../dashboard/DashboadModel"
 import { InvestTokens } from "../../utils/pools"
@@ -18,19 +21,49 @@ interface PoolsViewProps {
 const useStyles = makeStyles( theme => ({
     container: {
         padding: theme.spacing(2),
+    },
+    tabList: { 
+        maxWidth: 800,
+        padding: 0,
+        margin: "auto",
+        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    },
+    tab: { 
+        maxWidth: 800,
+        padding: 0,
+        margin: "auto",
+        paddingTop: 20,
+        paddingBottom: 20,
+        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     }
+
 }))
 
 
 export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) => {
 
     const classes = useStyles()
+    const [selectedTokenIndex, setSelectedTokenIndex] = useState<number>(0)
+
 
     const investTokens = InvestTokens(chainId)
     const tokens = [depositToken, ...investTokens]
     const poolsInfo = usePoolsInfo(chainId, PoolIds(chainId), tokens, account)
 
-    const poolsView = poolsInfo.map( pool => {
+   
+    const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
+        setSelectedTokenIndex(parseInt(newValue))
+    }
+
+    const activePoolsViews = poolsInfo.filter( pool => pool.poolId.endsWith("v3") ).map( pool => {
+        return (
+            <div key={pool.poolId}>
+                <PoolSummary chainId={chainId} poolId={pool.poolId} account={account} depositToken={depositToken} tokens={pool.tokenInfoArray} />
+            </div>
+        )
+    })
+
+    const disabledPoolsViews = poolsInfo.filter( pool => !pool.poolId.endsWith("v3") ).map( pool => {
         return (
             <div key={pool.poolId}>
                 <PoolSummary chainId={chainId} poolId={pool.poolId} account={account} depositToken={depositToken} tokens={pool.tokenInfoArray} />
@@ -53,9 +86,23 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
                 </Typography>   
             </div>
 
-            <Horizontal align="center"> 
-                  { poolsView }
-            </Horizontal>
+            <TabContext value={selectedTokenIndex.toString()}>
+                <TabList onChange={handleChange} className={classes.tabList}>
+                      <Tab label="Active Pools" value="0" key={0} />
+                      <Tab label="Disabled Pools" value="1" key={1}  />
+                </TabList>
+                <TabPanel className={classes.tab} value="0" key={0}>
+                    <Horizontal align="center"> 
+                        { activePoolsViews }
+                    </Horizontal>
+                </TabPanel>
+                <TabPanel className={classes.tab} value="1" key={1}>
+                    <Horizontal align="center"> 
+                        { disabledPoolsViews }
+                    </Horizontal>
+                </TabPanel>
+            </TabContext>
+  
         </Box>
     )
 }

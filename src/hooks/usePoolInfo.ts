@@ -530,12 +530,13 @@ export const useTokensInfoForPools = (chainId: number, poolIds: string[], tokens
 
     // get LP tokens balances and totalSupplies of the account for every pool in poolsInfo
     const lpBalanceResponses = useAccountLPBalancesForPools(chainId, account, poolsInfo)
+
     const lpBalances = lpBalanceResponses.reduce( (map, balance ) => {
         map[ balance.poolId ] = balance
         return map;
     }, {} as { [x: string]: LPBalanceInfo } );
 
-   
+
     // the the balance of all tokens in all pools
     const poolsBalancesResponse = useTokensPoolsBalances(chainId, tokens, poolsInfo)
 
@@ -605,7 +606,7 @@ export const useUsersForPools = (chainId: number, poolIds: string[], account?: s
 
     const usersReqCalls = poolUsersRequest.map(req => ({
         contract: PoolContract(chainId, req.poolId),
-        method: 'usersArray',
+        method: req.poolId.endsWith('v3') ? 'users' : 'usersArray',
         args: [req.reqIndex]
     })) ?? []
 
@@ -746,6 +747,8 @@ const useAccountLPBalancesForPools = (chainId : number, account: string | undefi
         args:  req.account? [req.account] : [constants.AddressZero]
     })) ?? []
 
+    // console.log("useAccountLPBalancesForPools poolsInfo: ", poolsInfo, "lptokensRequests", lptokensRequests)
+
     const lpBalanceResults = useCalls(lpBalanceCalls) ?? []
     lpBalanceResults.forEach((result, idx) => {
         if(result && result.error) {
@@ -761,11 +764,11 @@ const useAccountLPBalancesForPools = (chainId : number, account: string | undefi
     })) ?? []
 
     const stakedLpBalanceResults = useCalls(stakedLpBalanceCalls) ?? []
-    // stakedLpBalanceResults.forEach((result, idx) => {
-    //     if(result && result.error) {
-    //     console.error(`Error encountered calling 'getStakedBalance' on ${stakedLpBalanceCalls[idx]?.contract.address}: ${result.error.message}`)
-    //     }
-    // })
+    stakedLpBalanceResults.forEach((result, idx) => {
+        if(result && result.error) {
+        console.error(`Error encountered calling 'getStakedBalance' on ${stakedLpBalanceCalls[idx]?.contract.address}: ${result.error.message}`)
+        }
+    })
 
 
     // get the LP total supplies
@@ -776,11 +779,11 @@ const useAccountLPBalancesForPools = (chainId : number, account: string | undefi
     })) ?? []
 
     const lpTotalSupplyResults = useCalls(lpTotalSupplyCalls) ?? []
-    // lpTotalSupplyResults.forEach((result, idx) => {
-    //     if(result && result.error) {
-    //         console.error(`Error encountered calling 'totalSupply' on ${lpTotalSupplyCalls[idx]?.contract.address}: ${result.error.message}`)
-    //     }
-    // })
+    lpTotalSupplyResults.forEach((result, idx) => {
+        if(result && result.error) {
+            console.error(`Error encountered calling 'totalSupply' on ${lpTotalSupplyCalls[idx]?.contract.address}: ${result.error.message}`)
+        }
+    })
     
     const lpBalanceResponses = lptokensRequests.map( (req, idx) => {
 
@@ -794,7 +797,7 @@ const useAccountLPBalancesForPools = (chainId : number, account: string | undefi
 
         return {
             poolId: req.poolId,
-            lpBalance: totalBalance, // lpBalanceResults.at(idx)?.value.toString(),
+            lpBalance: totalBalance,
             lpTotalSupply: supply,
             perc: perc,
         }

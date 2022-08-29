@@ -42,16 +42,6 @@ export const PoolsInfo = (chainId: number, poolIds: string[]) => {
 }
 
 
-// export const IndexInfo = (chainId: number, poolId: string) => {
-//     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
-//     const indexes = indexesInfo[networkName as keyof typeof indexesInfo]
- 
-//     const infos = indexes.filter( (pool: { poolId: string }) =>  { return (pool.poolId === poolId) })
-//     if (infos.length === 0) throw Error(`Index ${poolId} not found on ${networkName} nework`)
-
-//     return infos[0]
-// }
-
 export const IndexesInfo = (chainId: number, poolIds: string[]) => {
     const indexesInfo = poolIds.map( poolId => {
         return {

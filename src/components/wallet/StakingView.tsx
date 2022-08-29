@@ -75,7 +75,7 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
             { formType === 'stake' && formattedTokenBalance === "0" &&
                 <StyledAlert severity="info" color="info" style={{textAlign: "center", marginBottom: 20 }} > 
                     <AlertTitle>No {symbol} tokens to stake</AlertTitle>
-                    Deposit funds into a Pool to get {symbol} tokens that you can stake here to earn HashStrat DAO tokens (HST)
+                    Deposit funds into any Pool or Index to get {symbol} tokens that you can stake to earn HashStrat DAO tokens (HST)
                 </StyledAlert>
             }
 

@@ -7,25 +7,29 @@ import explorerMappings from "../config/explorers.json"
 import { PoolInfo } from "./pools"
 
 export const PoolAddress = (chainId: number, poolId: string) => {
-
+   
     if (!chainId) return constants.AddressZero
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
     const isIndex = poolId.startsWith("index")
+
     const deployments = networkMappings as any
-    return isIndex ? deployments[networkName]["indexes"][poolId]["pool"] :
+    const address = isIndex ? deployments[networkName]["indexes"][poolId]["pool"] :
                      deployments[networkName][poolId]["pool"]
+
+    return address
 }
 
 
 export const PoolLPTokenAddress = (chainId: number, poolId: string) => {
-    const isIndex = poolId.startsWith("index")
 
     if (!chainId) return constants.AddressZero
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
+    const isIndex = poolId.startsWith("index")
 
     const deployments = networkMappings as any
-    return isIndex ? deployments[networkName]["indexes"][poolId]["pool_lp"] :
+    const address = isIndex ? deployments[networkName]["indexes"][poolId]["pool_lp"] :
                      deployments[networkName][poolId]["pool_lp"]
+    return address
 }
 
 
@@ -125,8 +129,13 @@ export const NetworkName = (chainId: number) => {
 
 export const PoolContract = (chainId: number, poolId: string) => {
     const isIndex = poolId.startsWith("index")
-    const abi = isIndex ? abis[ "multipool" as keyof typeof abis ] as any :
-                          abis[ "pool" as keyof typeof abis ] as any
+    const isV3 = poolId.endsWith("v3") 
+
+    const abi = (isIndex && isV3) ?  abis[ "indexV3" as keyof typeof abis ] as any :
+                isIndex ?            abis[ "index" as keyof typeof abis ] as any :
+                isV3 ?               abis[ "poolV3" as keyof typeof abis ] as any :
+                abis[ "pool" as keyof typeof abis ] as any
+
     return new Contract( PoolAddress(chainId, poolId), new utils.Interface(abi))
 }
 

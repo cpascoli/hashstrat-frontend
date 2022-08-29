@@ -1,12 +1,12 @@
 import { makeStyles, Box, Accordion, AccordionDetails, AccordionSummary, Typography } from  "@material-ui/core"
 
+import { usePoolModel } from "./PoolModel"
+
 import { TitleValueBox } from "../TitleValueBox"
 import { Token } from  "../../types/Token"
 import { useGetDeposits, useGetWithdrawals } from "../../hooks/usePool"
 import { fromDecimals } from "../../utils/formatter"
 import { BigNumber } from "ethers"
-import { usePoolModel } from "./PoolModel"
-
 import { InvestTokens } from "../../utils/pools"
 import { ExpandMore } from "@material-ui/icons"
 
@@ -54,8 +54,8 @@ export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStat
         const balance = token.accountBalance ?? BigNumber.from(0)
         const value = token.accountValue ?? BigNumber.from(0)
         const decimals = token.decimals
-        const accountBalanceFormatted = balance && fromDecimals(balance, decimals, 4 )
-        const accountValueFormatted = value && fromDecimals(value, depositToken.decimals, 2 )
+        const accountBalanceFormatted = balance ? fromDecimals(balance, decimals, 4 ) : '0'
+        const accountValueFormatted = value ? fromDecimals(value, depositToken.decimals, 2 ) : '0'
         const valueFormatted = `${accountBalanceFormatted} (${accountValueFormatted} ${ depositToken.symbol }) `
 
         return { symbol: token.symbol, valueFormatted, balance, value }

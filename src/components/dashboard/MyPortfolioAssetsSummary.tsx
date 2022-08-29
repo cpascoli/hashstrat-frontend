@@ -8,6 +8,9 @@ import { Horizontal } from "../Layout"
 
 import { TitleValueBox } from "../TitleValueBox"
 import { PieChartWithLabels } from "../shared/PieChartWithLabels"
+import { StyledAlert } from "../shared/StyledAlert"
+import { Alert, AlertTitle } from "@material-ui/lab"
+import { Link as RouterLink } from "react-router-dom"
 
 
 import { useDashboardModel } from "./DashboadModel"
@@ -86,13 +89,13 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                 </Box>
             }
 
-            {/* { account && totalValueFormatted && Number(totalValueFormatted) == 0 && 
-                <Alert severity="info" style={{marginTop: 20, marginBottom: 20}}>
-                    <AlertTitle> You currently have no assets in your portfolio </AlertTitle>
-                    When you deposit into a <Link component={RouterLink} to="/pools">Pool</Link> or
-                    an <Link component={RouterLink} to="/indexes">Index</Link> a summary of your assets will show here. 
-                </Alert>
-            } */}
+            { account && totalValueFormatted && Number(totalValueFormatted) == 0 && 
+                <StyledAlert severity="info" style={{marginTop: 20, marginBottom: 20}}>
+                    <AlertTitle>You have no assets in your portfolio </AlertTitle>
+                    Deposit funds into a <Link component={RouterLink} to="/pools">Pool</Link> or
+                    an <Link component={RouterLink} to="/indexes">Index</Link> and a summary of your assets will appear here. 
+                </StyledAlert>
+            }
 
 
             {  account &&
@@ -114,24 +117,27 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                             <TitleValueBox title="Total Value" value={`$ ${ utils.commify(totalValueFormatted) }` }  />
                         </Box>
 
-                        { totalValueFormatted  &&  
+                        { totalValueFormatted  && Number(totalValueFormatted) > 0 &&
                             <Box className={classes.portfolioCharts}>
                                 <Horizontal align="center" >
                                     <PieChartWithLabels { ...chartValueByAsset } /> 
                                     <PieChartWithLabels  { ...chartValueByPool } />
                                 </Horizontal>
-                        </Box>
+                            </Box>
                         }
                     </div>
-                    <Box my={4} >
-                        <Typography variant="h4" align="center" >Asset Allocation</Typography>
-                        <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
-                            Your assets allocation in the different Pools
-                        </Typography>
-                        <Horizontal align="center" > 
-                            { poolsSummaryViews }
-                        </Horizontal>
-                    </Box>
+
+                    { poolsSummaryViews && poolsSummaryViews.length > 0 &&
+                        <Box my={4} >
+                            <Typography variant="h4" align="center" >Asset Allocation</Typography>
+                            <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
+                                Your assets allocation in the different Pools
+                            </Typography>
+                            <Horizontal align="center" > 
+                                { poolsSummaryViews }
+                            </Horizontal>
+                        </Box>
+                    }
                 </div>
             }
 

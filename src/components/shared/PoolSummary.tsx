@@ -65,7 +65,7 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken, account } :
     const tokenViews = tokens && tokens.map( token => {
         const accountBalanceFormatted = token.accountBalance && fromDecimals(token.accountBalance ?? BigNumber.from(0), token.decimals, 4 )
         const accountValueFormatted = token.accountValue && fromDecimals(token.accountValue ?? BigNumber.from(0), depositToken.decimals, 2 )
-        const valueFormatted = accountBalanceFormatted && accountValueFormatted ?  `${accountBalanceFormatted} ($ ${accountValueFormatted})` : ''
+        const valueFormatted = accountBalanceFormatted && accountValueFormatted ?  `${accountBalanceFormatted} ($ ${accountValueFormatted})` : '0'
 
         return <TitleValueBox key={token.symbol} title={token.symbol} value={valueFormatted} mode="small" />
     })

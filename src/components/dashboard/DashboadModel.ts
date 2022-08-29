@@ -57,7 +57,6 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
     const poolsBalances = useTokensInfoForPools(chainId, PoolIds(chainId), tokens, account)
     const indexesBalances = useTokensInfoForIndexes(chainId, IndexesIds(chainId), tokens, account)
 
-
     //   combine pools and indexes stats and return aggeragated token amount & value totals 
     // const poolsBalances = useTokensInfoForPools(chainId, PoolIds(chainId), tokens, account)
     // const indexesBalances = useTokensInfoForIndexes(chainId, IndexesIds(chainId), tokens, account)
@@ -117,7 +116,7 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
     }).filter( it => it.value > 0)
 
     //// Chart 2: Value by Pools/Indexes////
-    const valueByPool: PieChartsData[] = valueByPoolChartData(chainId, depositToken, poolsBalances, indexesBalances)
+    const valueByPool: PieChartsData[] = valueByPoolChartData(chainId, depositToken, poolsBalances, indexesBalances, account)
 
     return  {
         portfolioInfo: { tokenBalances: tokenBalances, totalValue: totalValue },
@@ -165,9 +164,6 @@ const valueByPoolChartData = (
         
     ): PieChartsData[] => {
  
-   
-
-
     const tokenBalancesByPool = Object.keys(poolsBalances).map ( poolId => {
         return { 
             poolId, 
@@ -177,8 +173,8 @@ const valueByPoolChartData = (
 
     const tokenBalancesForIndexes = Object.keys(indexesBalances).map ( indexId => {
         return { 
-            indexId, 
-            tokensBalance: indexesBalances[indexId].tokensBalances
+            poolId: indexId, 
+            tokensBalance: indexesBalances[indexId]
         }
     })
     
@@ -188,13 +184,14 @@ const valueByPoolChartData = (
 
     // account for the share of each pool owned by the index
     const valueByPool = Object.values(allPools).map( (it : any) => {
+
         const { name } = PoolInfo(chainId, it.poolId)
 
-        const value = Object.keys(it.tokensBalance).reduce( (acc : BigNumber, symbol : string) => {
-            const value = it.tokensBalance[symbol].value
+        const value = it.tokensBalance ? Object.keys(it.tokensBalance).reduce( (acc : BigNumber, symbol : string) => {
+            const value =  account ?  it.tokensBalance[symbol].accountValue : it.tokensBalance[symbol].value
             acc = value ? acc.add(value) : acc
             return acc
-        }, BigNumber.from(0))
+        }, BigNumber.from(0)) : BigNumber.from(0)
 
 
         return {

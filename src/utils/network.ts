@@ -131,12 +131,12 @@ export const PoolContract = (chainId: number, poolId: string) => {
     const isIndex = poolId.startsWith("index")
     const isV3 = poolId.endsWith("v3") 
 
-    const abi = (isIndex && isV3) ?  abis[ "indexV3" as keyof typeof abis ] as any :
-                isIndex ?            abis[ "index" as keyof typeof abis ] as any :
-                isV3 ?               abis[ "poolV3" as keyof typeof abis ] as any :
-                abis[ "pool" as keyof typeof abis ] as any
+    const abi = (isIndex && isV3) ? abis[ "indexV3" as keyof typeof abis ] as any :
+                isIndex ?           abis[ "index" as keyof typeof abis ] as any :
+                isV3 ?              abis[ "poolV3" as keyof typeof abis ] as any :
+                                    abis[ "pool" as keyof typeof abis ] as any
 
-    return new Contract( PoolAddress(chainId, poolId), new utils.Interface(abi))
+    return new Contract(PoolAddress(chainId, poolId), new utils.Interface(abi))
 }
 
 export const PoolLPContract = (chainId: number, poolId: string) => {

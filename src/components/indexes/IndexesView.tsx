@@ -1,4 +1,7 @@
-import { Box, Divider, makeStyles, Typography, Link } from "@material-ui/core"
+import React, { useState } from "react"
+import { Box, Divider, makeStyles, Typography, Link, Tab } from "@material-ui/core"
+import { TabContext, TabList, TabPanel } from "@material-ui/lab"
+
 import { Link as RouterLink } from "react-router-dom"
 import { useIndexesInfo } from "../dashboard/DashboadModel"
 import { InvestTokens } from "../../utils/pools"
@@ -18,6 +21,20 @@ interface IndexesViewProps {
 const useStyles = makeStyles( theme => ({
     container: {
         padding: theme.spacing(2),
+    },
+    tabList: { 
+        maxWidth: 800,
+        padding: 0,
+        margin: "auto",
+        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    },
+    tab: { 
+        maxWidth: 800,
+        padding: 0,
+        margin: "auto",
+        paddingTop: 20,
+        paddingBottom: 20,
+        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     }
 }))
 
@@ -25,11 +42,26 @@ const useStyles = makeStyles( theme => ({
 export const IndexesView = ({ chainId, account, depositToken } : IndexesViewProps) => {
 
     const classes = useStyles()
+    const [selectedTokenIndex, setSelectedTokenIndex] = useState<number>(0)
+    
     const investTokens = InvestTokens(chainId)
     const tokens = [depositToken, ...investTokens]
     const indexes = useIndexesInfo(chainId, IndexesIds(chainId), tokens, account)
 
-    const indexexView = indexes.map( index => {
+   
+    const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
+        setSelectedTokenIndex(parseInt(newValue))
+    }
+
+    const activeIndexViews = indexes.filter( index => index.poolId.endsWith("v3") ).map( index => {
+        return (
+            <div key={index.poolId}>
+                <PoolSummary chainId={chainId} poolId={index.poolId} account={account} depositToken={depositToken} tokens={index.tokenInfoArray} />
+            </div>
+        )
+    })
+
+    const disabledIndexViews = indexes.filter( index => !index.poolId.endsWith("v3") ).map( index => {
         return (
             <div key={index.poolId}>
                 <PoolSummary chainId={chainId} poolId={index.poolId} account={account} depositToken={depositToken} tokens={index.tokenInfoArray} />
@@ -49,9 +81,26 @@ export const IndexesView = ({ chainId, account, depositToken } : IndexesViewProp
                 </Typography>
             </div>
 
-            <Horizontal align="center"> 
-                  { indexexView }
-            </Horizontal>
+            <TabContext value={selectedTokenIndex.toString()}>
+                <TabList onChange={handleChange} className={classes.tabList}>
+                      <Tab label="Active Indexes" value="0" key={0} />
+                      <Tab label="Disabled Indexes" value="1" key={1}  />
+                </TabList>
+                <TabPanel className={classes.tab} value="0" key={0}>
+                    <Horizontal align="center"> 
+                        { activeIndexViews }
+                    </Horizontal>
+                </TabPanel>
+                <TabPanel className={classes.tab} value="1" key={1}>
+                    <Box px={2} pb={2} >
+                        <Typography> Withdraw funds from disabled Indexes and transfer them to active Indexes</Typography>
+                    </Box>
+                   
+                    <Horizontal align="center"> 
+                        { disabledIndexViews }
+                    </Horizontal>
+                </TabPanel>
+            </TabContext>
         </Box>
     )
 }

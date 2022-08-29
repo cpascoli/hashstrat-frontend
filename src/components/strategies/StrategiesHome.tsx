@@ -173,9 +173,9 @@ export const StrategiesHome = () => {
                         <Typography>A trend-following strategy trading in the direction of the underlying trend</Typography>
                         
                         <div>
+                            <Link href="https://medium.com/@hashstrat/trend-following-strategy-7dce9756eaa" target="_blank">Medium article</Link> &nbsp;&nbsp;&nbsp;&nbsp;
                             <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/TrendFollowV1.sol">GitHub</Link>
                         </div>
-
                     </div>
                 </AccordionSummary>
                 <AccordionDetails >

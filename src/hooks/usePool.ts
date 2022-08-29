@@ -54,7 +54,7 @@ export const usePortfolioValue = (chainId: number, poolId: string, account: stri
 
 
 //TODO 
-// When the MultiPool contract will support lpTokensValue(), we will use that for both Pools & Indexes
+// When the MultiPool contract will support lpTokensValue(), we should use that for both Pools & Indexes
 // For now we need to calculate LP value on the client using pool/index value and from LP supply
 export const useLpTokensValue = (chainId: number, poolId: string, amount: string) => {
 
@@ -69,7 +69,7 @@ export const useLpTokensValue = (chainId: number, poolId: string, amount: string
 
     const { value : multiPoolValue, error : error1 } = useCall({
         contract: poolContract,
-        method: 'multiPoolValue',  //TODO remove
+        method:  poolId.endsWith("v3") ? 'totalValue' : 'multiPoolValue',
         args: [],
     }) ?? {}
 
@@ -85,7 +85,7 @@ export const useLpTokensValue = (chainId: number, poolId: string, amount: string
 
     const totSupply = totalSupply?.[0]
 
-    const lpValue = ( amount !== '' && totValue && totSupply) ?  totValue.mul(BigNumber.from(amount)).div(totSupply) : undefined
+    const lpValue = ( amount !== '' && totValue && totSupply && !totSupply.isZero()) ?  totValue.mul(BigNumber.from(amount)).div(totSupply) : undefined
 
     return lpValue?.toString()
 }

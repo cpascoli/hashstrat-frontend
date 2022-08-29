@@ -36,7 +36,6 @@ const useStyles = makeStyles( theme => ({
         paddingBottom: 20,
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     }
-
 }))
 
 
@@ -44,7 +43,6 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
 
     const classes = useStyles()
     const [selectedTokenIndex, setSelectedTokenIndex] = useState<number>(0)
-
 
     const investTokens = InvestTokens(chainId)
     const tokens = [depositToken, ...investTokens]
@@ -97,6 +95,10 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
                     </Horizontal>
                 </TabPanel>
                 <TabPanel className={classes.tab} value="1" key={1}>
+                    <Box px={2} pb={2} >
+                        <Typography> Withdraw funds from disabled Pools and transfer them to active Pools</Typography>
+                    </Box>
+                   
                     <Horizontal align="center"> 
                         { disabledPoolsViews }
                     </Horizontal>

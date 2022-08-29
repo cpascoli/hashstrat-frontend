@@ -1,46 +1,92 @@
 {
     "kovan": [
         {
+            "poolId": "index01v3",
+            "name": "Index (BTC)",
+            "description": "An Index over all BTC pools with equal weights",
+            "depositToken": "DAI",
+            "investTokens": ["WBTC"]
+        },
+        {
+            "poolId": "index02v3",
+            "name": "Index (ETH)",
+            "description": "An Index over all ETH pools with equal weights",
+            "depositToken": "DAI",
+            "investTokens": ["WETH"]
+        },
+        {
+            "poolId": "index03v3",
+            "name": "Index (BTC + ETH)",
+            "description": "An Index over all BTC and ETH pools with equal weights",
+            "depositToken": "DAI",
+            "investTokens": ["WBTC", "WETH"]
+        },
+
+        {
             "poolId": "index01",
-            "name": "BTC Only Index",
+            "name": "Index (BTC) [Disabled]",
             "description": "An Index over all BTC pools with equal weights",
             "depositToken": "DAI",
             "investTokens": ["WBTC"]
         },
         {
             "poolId": "index02",
-            "name": "ETH Only Index",
+            "name": "Index (ETH) [Disabled]",
             "description": "An Index over all ETH pools with equal weights",
             "depositToken": "DAI",
             "investTokens": ["WETH"]
         },
         {
             "poolId": "index03",
-            "name": "BTC/ETH Index",
+            "name": "Index (BTC + ETH) [Disabled]",
             "description": "An Index over all BTC and ETH pools with equal weights",
             "depositToken": "DAI",
             "investTokens": ["WBTC", "WETH"]
         }
+
+
     ],
     
     "polygon": [
         {
-            "poolId": "index01",
+            "poolId": "index01v3",
             "name": "Index (BTC)",
             "description": "An Index over all BTC pools with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WBTC"]
         },
         {
-            "poolId": "index02",
+            "poolId": "index02v3",
             "name": "Index (ETH)",
             "description": "An Index over all ETH pools with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WETH"]
         },
         {
-            "poolId": "index03",
+            "poolId": "index03v3",
             "name": "Index (BTC + ETH)",
+            "description": "An Index over all BTC and ETH pools with equal weights",
+            "depositToken": "USDC",
+            "investTokens": ["WBTC", "WETH"]
+        },
+
+        {
+            "poolId": "index01",
+            "name": "Index (BTC) [Disabled]",
+            "description": "An Index over all BTC pools with equal weights",
+            "depositToken": "USDC",
+            "investTokens": ["WBTC"]
+        },
+        {
+            "poolId": "index02",
+            "name": "Index (ETH) [Disabled]",
+            "description": "An Index over all ETH pools with equal weights",
+            "depositToken": "USDC",
+            "investTokens": ["WETH"]
+        },
+        {
+            "poolId": "index03",
+            "name": "Index (BTC + ETH) [Disabled]",
             "description": "An Index over all BTC and ETH pools with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WBTC", "WETH"]

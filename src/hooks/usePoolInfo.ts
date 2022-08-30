@@ -591,44 +591,40 @@ export const useTokensInfoForPools = (chainId: number, poolIds: string[], tokens
 export const useUsersForPools = (chainId: number, poolIds: string[], account?: string) => {
     const poolsInfo = PoolsInfo(chainId, poolIds) 
 
- 
-    // Get the  LP balances of the account for every Pool
-    //FIXME add a getUsers function to the Pool contract
-    const poolUsersRequest = poolsInfo.flatMap( pool => {
-        return [0, 1, 2].map( reqIndex => {
-            return { 
-                poolId: pool.poolId, 
-                poolAddress: pool.pool,
-                reqIndex: reqIndex
-            }
-        })
+    // Get the  LP balances of the account for every Index
+    const usersRequest = poolsInfo.map( pool => {
+        return { 
+            poolId: pool.poolId, 
+            poolAddress: pool.pool,
+        }
     })
 
-    const usersReqCalls = poolUsersRequest.map(req => ({
+    const usersReqCalls = usersRequest.map(req => ({
         contract: PoolContract(chainId, req.poolId),
-        method: req.poolId.endsWith('v3') ? 'users' : 'usersArray',
-        args: [req.reqIndex]
+        method: 'getUsers',
+        args: []
     })) ?? []
 
-    const usersReqResults = useCalls(usersReqCalls) ?? []
-    usersReqResults.forEach((result, idx) => {
+ 
+    const usersResults = useCalls(usersReqCalls) ?? []
+    usersResults.forEach((result, idx) => {
         if(result && result.error) {
             console.error(`Error encountered calling 'usersArray' on ${usersReqCalls[idx]?.contract.address}: ${result.error.message}`)
         }
     })
 
-
     const indexeAddresses = IndexesInfo(chainId, IndexesIds(chainId)).map ( el => el.pool )
     let addresses = new Set<string>()
 
-    poolUsersRequest.map( (req, idx)  => {
-        const res = usersReqResults.at(idx)?.value
-        return res
-    }).forEach( res => {
-        if (res && res[0] && !indexeAddresses.includes(res[0])) {
-            addresses.add( res[0] )
+    usersRequest.map( (req, idx)  => {
+        const res = usersResults.at(idx)?.value
+        return { req, res } 
+    }).forEach( el => {
+        if (el.res && el.res[0]) {
+            el.res[0].filter( (el : any) => !indexeAddresses.includes(el) ) .forEach(addresses.add, addresses)
         }
     })
+
 
     return addresses
 }

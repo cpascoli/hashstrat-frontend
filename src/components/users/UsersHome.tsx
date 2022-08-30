@@ -49,7 +49,7 @@ export const UsersHome = ({ chainId } : UsersHomeProps) => {
 
     const accounts = Array.from(users.values()).map( (account : string) => {
         return (
-            <Box ml={3}>
+            <Box ml={3} key={account}>
                 <Horizontal valign="center">
                     <Button onClick={ () => loadData(account) } > {shortenAccount(account)} </Button> 
                     <Link key={account} href={`https://polygonscan.com/address/${account}`} target="_blank"> <Launch/> </Link>

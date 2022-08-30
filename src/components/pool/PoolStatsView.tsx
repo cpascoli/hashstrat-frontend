@@ -13,6 +13,8 @@ import { TimeSeriesAreaChart } from "./TimeSeriesAreaChart"
 import { PoolInfo } from "../../utils/pools"
 
 import { PieChartWithLabels } from "../shared/PieChartWithLabels"
+import { VPieChart } from "../shared/VPieChart"
+
 import { Horizontal } from "../Layout"
 
 import { useTotalDeposited, useTotalWithdrawn } from "../../hooks"
@@ -98,14 +100,14 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
             </Box>
 
             <Horizontal align="center" >
-                <PieChartWithLabels { ...assetAllocationChartData } /> 
+                <VPieChart { ...assetAllocationChartData } /> 
                 <Box className={classes.portfolioInfo} >
                     { assetViews }
                     <TitleValueBox title="Total Asset Value" value={formattedPortfolioValue??""} suffix={depositToken.symbol} />
     
                     <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
                     <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>
-                    <TitleValueBox title="Chainlink Keeper" value={upkeep} />
+                    <TitleValueBox title="Chainlink Keeper" value="Keeper Page" url={upkeep} />
                 </Box>
             </Horizontal>
            

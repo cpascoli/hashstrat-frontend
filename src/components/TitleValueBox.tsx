@@ -63,12 +63,13 @@ interface TitleValueBoxProps {
     title: string,
     value: string,
     suffix?: string,
-    border?: boolean
-    mode?: "small" | "regular"
+    border?: boolean,
+    mode?: "small" | "regular",
+    url?: string,
 }
 
 
-export const TitleValueBox = ({ title, value, suffix="", border=false, mode="regular"} : TitleValueBoxProps ) => {
+export const TitleValueBox = ({ title, value, suffix="", border=false, mode="regular", url } : TitleValueBoxProps ) => {
 
     const useStyles = makeStyles( theme => ({
         container: {
@@ -108,8 +109,8 @@ export const TitleValueBox = ({ title, value, suffix="", border=false, mode="reg
             <Box className={border? classes.container : classes.containerNoBorder}>
                 <div className={classes.label}> {title} </div>
                 {
-                    value && value.startsWith("https://") ? 
-                        <Link href={value} target="_blank"> {value} </Link> :                        
+                    url && url.startsWith("https://") ? 
+                        <Link href={url} target="_blank"> {value} </Link> :                        
                         <div  className={classes.value}> {value} {suffix} </div>
                 }
                

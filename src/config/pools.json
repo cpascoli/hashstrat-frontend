@@ -121,7 +121,7 @@
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
             "strategy": "rebalance_01",
-            "upkeep": "https://keepers.chain.link/polygon/257"
+            "upkeep": "https://keepers.chain.link/polygon/79002496571094123481144899300906489714360532378690686481340404302497134746587"
         },
         {
             "poolId": "pool02v3",
@@ -130,7 +130,7 @@
             "depositToken": "USDC",
             "investTokens": ["WETH"],
             "strategy": "rebalance_01",
-            "upkeep": "https://keepers.chain.link/polygon/258"
+            "upkeep": "https://keepers.chain.link/polygon/50450368942057517251818542225987856339715648009852436119441523960954583885530"
         },
         {
             "poolId": "pool03v3",
@@ -139,7 +139,7 @@
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
             "strategy": "meanrev_01",
-            "upkeep": "https://keepers.chain.link/polygon/253"
+            "upkeep": "https://keepers.chain.link/polygon/18522469544667424901858031948136249394284336119722053322041572278778245468064"
         },
         {
             "poolId": "pool04v3",
@@ -148,7 +148,7 @@
             "depositToken": "USDC",
             "investTokens": ["WETH"],
             "strategy": "meanrev_01",
-            "upkeep": "https://keepers.chain.link/polygon/254"
+            "upkeep": "https://keepers.chain.link/polygon/54210081433007857951351934123936776484778971217906422016953311314951581669133"
         },
         {
             "poolId": "pool05v3",
@@ -157,7 +157,7 @@
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
             "strategy": "trendfollow_01",
-            "upkeep": "https://keepers.chain.link/polygon/259"
+            "upkeep": "https://keepers.chain.link/polygon/77769264019668570071160675248216420635640214499872948314284430908128077621728"
         },
         {
             "poolId": "pool06v3",
@@ -166,8 +166,7 @@
             "depositToken": "USDC",
             "investTokens": ["WETH"],
             "strategy": "trendfollow_01",
-            "upkeep": "https://keepers.chain.link/polygon/260"
+            "upkeep": "https://keepers.chain.link/polygon/804741549652280591869086768180405512810898344588565477262032797996912308004"
         }
-
     ]
 }

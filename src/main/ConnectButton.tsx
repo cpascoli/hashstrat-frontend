@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { useEthers, Kovan, Polygon } from "@usedapp/core";
 
-import { Button, makeStyles } from "@material-ui/core"
-
+import { Button, makeStyles, Box } from "@material-ui/core"
 
 
 const useStyles = makeStyles(theme => ({
@@ -12,8 +11,6 @@ const useStyles = makeStyles(theme => ({
 		margin: 0
 	}
 }))
-
-
 
 
 export interface ConnectedInfo {
@@ -46,13 +43,13 @@ export const ConnectButton = ({ setAccount, setChainId }: ConnectButtonProps) =>
 	const isConnected = account !== undefined && chainId !== undefined
 
 	return (
-		<div className={classes.container}>
+		<>
 
 			{!isConnected &&
-				<Button color="primary" variant="contained" onClick={() => activateBrowserWallet()}>Connect</Button>
+				<Button color="primary" variant="contained" onClick={() => activateBrowserWallet()} fullWidth >Connect</Button>
 				/* <Web3ModalButton /> */
 			}
 
-		</div>
+		</>
 	)
 }

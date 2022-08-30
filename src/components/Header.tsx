@@ -3,7 +3,7 @@ import { useEthers, Kovan, Polygon } from "@usedapp/core";
 
 import { useBlockNumber, shortenAddress } from "@usedapp/core"
 import Switch from "@material-ui/core/Switch";
-import { Button, Link, Menu, MenuProps, MenuItem, Divider, Typography, makeStyles } from  "@material-ui/core"
+import { Button, Link, Menu, MenuProps, MenuItem, Divider, Typography, makeStyles, Box } from  "@material-ui/core"
 import { styled } from "@material-ui/core/styles"
 import { NetworkName } from "../utils/network"
 
@@ -204,7 +204,7 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
                             <Link href="https://medium.com/@hashstrat" target="_blank">
                               <MenuItem onClick={handleClose}>Medium Blog</MenuItem>
                             </Link>
-                            
+
                             <Divider />
                         </nav>
 
@@ -224,8 +224,11 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
 
                         <Divider />
                         <MenuItem onClick={handleClose}>
-                            <Typography variant='body2'> Version 0.4 (0c84) </Typography>
+                          <Box my={1}>
+                             <Typography variant='body2'> Version 0.4 (0c84) </Typography>
+                          </Box>
                         </MenuItem>
+
 
                         {isConnected &&
                           <div>
@@ -240,9 +243,9 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
                         }
                         {!isConnected && 
                           <div>
-                              <Divider />
-                              <MenuItem onClick={handleClose} >
-                                  <ConnectButton setAccount={setAccount} setChainId={setChainId} />
+                            
+                              <MenuItem onClick={handleClose}>
+                                <ConnectButton setAccount={setAccount} setChainId={setChainId} />
                               </MenuItem>
                           </div>
                         }

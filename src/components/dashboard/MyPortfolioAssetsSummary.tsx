@@ -1,8 +1,10 @@
-import { makeStyles, Box, Typography, Link } from "@material-ui/core"
+import { makeStyles, Box, Typography, Accordion, AccordionDetails, AccordionSummary, Link } from "@material-ui/core"
+import { ExpandMore } from "@material-ui/icons"
+
 import { utils } from "ethers"
 
 import { Token } from "../../types/Token"
-import { fromDecimals } from "../../utils/formatter"
+import { fromDecimals, round } from "../../utils/formatter"
 import { PoolSummary } from "../shared/PoolSummary"
 import { Horizontal } from "../Layout"
 
@@ -14,6 +16,9 @@ import { Link as RouterLink } from "react-router-dom"
 
 
 import { useDashboardModel } from "./DashboadModel"
+import { useTotalDeposited, useTotalWithdrawals } from "../../hooks/useUserInfo"
+
+
 
 
 interface MyPortfolioAssetsSummaryProps {
@@ -53,17 +58,19 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
  
     const { poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool } = useDashboardModel(chainId, tokens, depositToken, account)
 
-    console.log("MyPortfolioAssetsSummary", poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool)
+    //console.log("MyPortfolioAssetsSummary", poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool)
+
+    const totalDeposited = useTotalDeposited(chainId, account)
+    const totalWithdrawn = useTotalWithdrawals(chainId, account)
     
-    const tokenBalancesoFormatted = Object.values(portfolioInfo.tokenBalances).map( (item ) => {
+    const tokensBalanceInfo = Object.values(portfolioInfo.tokenBalances).map( (item ) => {
         return {
             symbol: item.symbol,
-            balance: fromDecimals( item.balance, item.decimals, 4),
+            balance: fromDecimals( item.balance, item.decimals, item.symbol === 'USDC' ? 2 : 4),
             value: fromDecimals( item.value, depositToken.decimals, 2),
             depositTokenSymbol: depositToken.symbol,
             decimals: item.decimals
        }
-
     })
  
     const poolsSummaryViews = [...indexesInfo, ...poolsInfo].filter( pool => pool.totalValue.isZero() === false ).map ( pool => {
@@ -76,10 +83,15 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                  />
    
     })
-  
 
     const totalValueFormatted = portfolioInfo.totalValue && fromDecimals( portfolioInfo.totalValue, depositToken.decimals, 2)
-    
+    const totalDepositedFormatted = totalDeposited && fromDecimals( totalDeposited, depositToken.decimals, 2)
+    const totalWithdrawnFormatted = totalWithdrawn && fromDecimals( totalWithdrawn, depositToken.decimals, 2)
+
+    const roiFormatted = (totalValueFormatted && totalWithdrawnFormatted && totalDepositedFormatted && parseFloat(totalDepositedFormatted) > 0) ? 
+                            String(Math.round( 10000 * (parseFloat(totalWithdrawnFormatted) + parseFloat(totalValueFormatted) - parseFloat(totalDepositedFormatted)) / parseFloat(totalDepositedFormatted)) / 100 ) : 'n/a'
+
+
     return (
         <div className={classes.container}>
          
@@ -91,13 +103,13 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                 </Box>
             }
 
-            { account && totalValueFormatted && Number(totalValueFormatted) == 0 && 
+            {/* { account && totalValueFormatted && Number(totalValueFormatted) == 0 && 
                 <StyledAlert severity="info" style={{marginTop: 20, marginBottom: 20}}>
                     <AlertTitle>You have no assets in your portfolio </AlertTitle>
                     Deposit funds into a <Link component={RouterLink} to="/pools">Pool</Link> or
                     an <Link component={RouterLink} to="/indexes">Index</Link> and a summary of your assets will appear here. 
                 </StyledAlert>
-            }
+            } */}
 
 
             {  account &&
@@ -111,12 +123,28 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                     <div className={classes.portfolioSummary} > 
                         <Box className={classes.portfolioInfo} >
                         {
-                            tokenBalancesoFormatted && tokenBalancesoFormatted.map( (token : any)=> {
-                                const valueFormatted = `${ utils.commify(token.balance) } ($ ${token.value})`
-                                return  <TitleValueBox key={token.symbol} title={token.symbol} value={valueFormatted}  mode="small" />
+                            tokensBalanceInfo && tokensBalanceInfo.map( asset => {
+                                const valueFormatted = `${ utils.commify(asset.balance) } ($ ${  utils.commify(asset.value) })`
+                                return  <TitleValueBox key={asset.symbol} title={asset.symbol} value={ valueFormatted }  mode="small" />
                             })
                         }
-                            <TitleValueBox title="Total Value" value={`$ ${ utils.commify(totalValueFormatted) }` }  />
+                        </Box>
+
+                        <Box mt={4} >
+                            <Accordion>
+                                <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
+                                    <Typography > My Portfolio Info </Typography>
+                                </AccordionSummary>
+                                <AccordionDetails >
+                                    <Box>
+                                        <TitleValueBox mode="small" title="My Portfolio Value" value={ utils.commify(totalValueFormatted) } suffix={depositToken.symbol} />
+                                        {/* <TitleValueBox mode="small" title="My Index share" value={lpPercFormatted} suffix="%" /> */}
+                                        <TitleValueBox mode="small" title="My Deposits" value={ utils.commify(totalDepositedFormatted) } suffix={depositToken.symbol} />
+                                        <TitleValueBox mode="small" title="My Withdrawals" value={ utils.commify(totalWithdrawnFormatted) } suffix={depositToken.symbol} />
+                                        <TitleValueBox mode="small" title="ROI" value={roiFormatted?.toString()??""} suffix="%" />
+                                    </Box>
+                                </AccordionDetails>
+                            </Accordion>
                         </Box>
 
                         { totalValueFormatted  && Number(totalValueFormatted) > 0 &&

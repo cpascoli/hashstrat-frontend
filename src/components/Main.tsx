@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter, Routes,Route, useLocation } from "react-router-dom";
 import { Polygon, useEthers } from '@usedapp/core';
 import { Box,Typography, makeStyles } from "@material-ui/core"
 
@@ -16,11 +17,7 @@ import { Socials } from "./Socials"
 import { ConnectButton } from '../main/ConnectButton'
 import { IndexHome } from "./indexes/index/IndexHome"
 
-import {
-    BrowserRouter,
-    Routes,
-    Route,
-  } from "react-router-dom";
+
 import { Horizontal } from "./Layout";
 import { FaqHome } from "./faq/FaqHome";
 import { StrategiesHome } from "./strategies/StrategiesHome";
@@ -52,6 +49,8 @@ const useStyle = makeStyles( theme => ({
 
 export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  { 
   
+  
+
     // the chain to show to the user. 
     // use default chain (Polygon) if no account is connected from a supported chain.
     //const [demoChainId, setDemoChainId] = useState<number>(137);

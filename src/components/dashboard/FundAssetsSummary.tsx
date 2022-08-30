@@ -7,7 +7,7 @@ import { Token } from "../../types/Token"
 import { PoolSummary } from "../shared/PoolSummary"
 import { Horizontal } from "../Layout"
 import { TitleValueBox } from "../TitleValueBox"
-import { PieChartWithLabels } from "../shared/PieChartWithLabels"
+import { VPieChart } from "../shared/VPieChart"
 import { useDashboardModel } from "./DashboadModel"
 
 import { fromDecimals } from "../../utils/formatter"
@@ -99,8 +99,8 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
                 { totalValueFormatted  &&  
                     <Box className={classes.portfolioCharts}>
                         <Horizontal align="center" >
-                            <PieChartWithLabels { ...chartValueByAsset } /> 
-                            <PieChartWithLabels  { ...chartValueByPool } />
+                            <VPieChart { ...chartValueByAsset } /> 
+                            <VPieChart  { ...chartValueByPool } />
                         </Horizontal>
                 </Box>
                 }

@@ -29,7 +29,7 @@ const useStyle = makeStyles( theme => ({
   }
 }))
 
-export const PieChartWithLabels = ( chartData  : ChartData ) => {
+export const PieChartWithLabels = ( chartData : ChartData ) => {
 
   const classes = useStyle()
   const theme = useTheme()
@@ -42,9 +42,9 @@ export const PieChartWithLabels = ( chartData  : ChartData ) => {
     const symbol = chartData.data[index].name
   
     return (
-      <text x={x} y={y} 
+      <text x={x} y={y}  dy={-4} 
           fill={theme.palette.type === 'light' ? theme.palette.grey[800] : "white" } 
-          textAnchor={x > cx ? 'start' : 'end'} 
+          textAnchor= "middle"// {x > cx ? 'start' : 'end'} 
           dominantBaseline="central" >
         { chartData.includePercent ? `${symbol} ${(percent * 100).toFixed(0)}%` :  `${symbol}`  }
       </text>
@@ -58,6 +58,8 @@ export const PieChartWithLabels = ( chartData  : ChartData ) => {
       <Box className={classes.chart}>
         <Typography align='center' variant='body1'> {chartData.title} </Typography>
 
+        <ResponsiveContainer width={chartData.width?? 220} height={chartData.height?? 220}>
+
         <PieChart width={chartData.width?? 220} height={chartData.height?? 220} 
                   style={{marginLeft: 10, marginRight: 10}} >
             <Pie
@@ -65,6 +67,7 @@ export const PieChartWithLabels = ( chartData  : ChartData ) => {
               cx="50%"
               cy="50%"  
               labelLine={false}
+              // label={true}
               label={renderCustomizedLabel}
               innerRadius={0}
               outerRadius={90}
@@ -76,6 +79,7 @@ export const PieChartWithLabels = ( chartData  : ChartData ) => {
               ))}
             </Pie>
           </PieChart>
+          </ResponsiveContainer>
         </Box>
     )
 

@@ -7,7 +7,7 @@ import { PoolSummary } from "../shared/PoolSummary"
 import { Horizontal } from "../Layout"
 
 import { TitleValueBox } from "../TitleValueBox"
-import { PieChartWithLabels } from "../shared/PieChartWithLabels"
+import { VPieChart } from "../shared/VPieChart"
 import { StyledAlert } from "../shared/StyledAlert"
 import { Alert, AlertTitle } from "@material-ui/lab"
 import { Link as RouterLink } from "react-router-dom"
@@ -53,6 +53,8 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
  
     const { poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool } = useDashboardModel(chainId, tokens, depositToken, account)
 
+    console.log("MyPortfolioAssetsSummary", poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool)
+    
     const tokenBalancesoFormatted = Object.values(portfolioInfo.tokenBalances).map( (item ) => {
         return {
             symbol: item.symbol,
@@ -120,8 +122,8 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                         { totalValueFormatted  && Number(totalValueFormatted) > 0 &&
                             <Box className={classes.portfolioCharts}>
                                 <Horizontal align="center" >
-                                    <PieChartWithLabels { ...chartValueByAsset } /> 
-                                    <PieChartWithLabels  { ...chartValueByPool } />
+                                    <VPieChart { ...chartValueByAsset } /> 
+                                    <VPieChart  { ...chartValueByPool } />
                                 </Horizontal>
                             </Box>
                         }

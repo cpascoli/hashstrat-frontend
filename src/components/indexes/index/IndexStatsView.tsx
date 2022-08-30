@@ -6,7 +6,7 @@ import { useIndexModel, PoolSummary } from "./IndexModel"
 import { fromDecimals, round } from "../../../utils/formatter"
 import { BigNumber } from "ethers"
 import { PoolInfo, InvestTokens } from "../../../utils/pools"
-import { PieChartWithLabels } from "../../shared/PieChartWithLabels"
+import { VPieChart } from "../../shared/VPieChart"
 import { Horizontal } from "../../Layout"
 
 
@@ -82,8 +82,8 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
             </Box>
 
             <Horizontal align="center" >
-                <PieChartWithLabels { ...chartValueByAsset } /> 
-                <PieChartWithLabels { ...chartValueByPool } /> 
+                <VPieChart { ...chartValueByAsset } /> 
+                <VPieChart { ...chartValueByPool } /> 
 
                 <Box className={classes.portfolioInfo} >
                     { assetViews }
@@ -99,20 +99,6 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
 
                 </Box>
             </Horizontal>
-
-
-            
-
-{/* 
-            <Typography variant="h6" align="center"> {name}</Typography> 
-            <Typography variant="body2" align="center"> {description}</Typography>  */}
-
-
-            {/* <Box className={classes.chart}>
-                <Horizontal align="center">
-                    <PieChartWithLabels { ...chartData } /> 
-                </Horizontal>
-            </Box> */}
 
         </Box>
        

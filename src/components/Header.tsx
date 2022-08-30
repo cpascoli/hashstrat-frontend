@@ -181,31 +181,33 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
                       >
 
                         <nav  className={classes.menuItemsSmall} > 
-                            <MenuItem onClick={handleClose}>
-                                <Link component={RouterLink} to="/indexes">Indexes</Link>
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                <Link component={RouterLink} to="/pools">Pools</Link>
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                <Link component={RouterLink} to="/strategies">Strategies</Link>
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                <Link component={RouterLink} to="/faq">FAQ</Link>
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                <Link component={RouterLink} to="/dao">DAO</Link>
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                <Link href="https://medium.com/@hashstrat" target="_blank">Medium Blog</Link>
-                            </MenuItem>
-                          
+                            <Link component={RouterLink} to="/indexes">
+                              <MenuItem onClick={handleClose}> Indexes </MenuItem>
+                            </Link>
+
+                            <Link component={RouterLink} to="/pools">
+                              <MenuItem onClick={handleClose}> Pools</MenuItem>
+                            </Link>
+
+                            <Link component={RouterLink} to="/strategies">
+                              <MenuItem onClick={handleClose}>Strategies</MenuItem>
+                            </Link>
+
+                            <Link component={RouterLink} to="/faq">
+                              <MenuItem onClick={handleClose}>FAQ</MenuItem>
+                            </Link>
+                               
+                            <Link component={RouterLink} to="/dao">
+                              <MenuItem onClick={handleClose}>DAO</MenuItem>
+                            </Link>
+
+                            <Link href="https://medium.com/@hashstrat" target="_blank">
+                              <MenuItem onClick={handleClose}>Medium Blog</MenuItem>
+                            </Link>
+                            
                             <Divider />
                         </nav>
 
-                        <MenuItem onClick={handleClose}>
-                            <Typography variant='body1'> Version 0.3 (b351) </Typography>
-                        </MenuItem>
                         <MenuItem onClick={handleClose}>
                            <Horizontal valign='center'>
                               <Typography>
@@ -220,6 +222,11 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
                               </Horizontal>
                         </MenuItem>
 
+                        <Divider />
+                        <MenuItem onClick={handleClose}>
+                            <Typography variant='body2'> Version 0.4 (0c84) </Typography>
+                        </MenuItem>
+
                         {isConnected &&
                           <div>
                               <Divider />
@@ -227,7 +234,7 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
                                   <Typography variant='body1'> Connected to {networkName.toUpperCase()} </Typography>
                               </MenuItem>
                               <MenuItem onClick={handleClose} >
-                                  <Button color="primary" variant="contained" onClick={disconnectPressed}>Disconnect</Button>
+                                  <Button color="primary" variant="contained" onClick={disconnectPressed} fullWidth >Disconnect</Button>
                               </MenuItem>
                           </div>
                         }

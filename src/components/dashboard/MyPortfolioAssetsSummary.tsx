@@ -121,31 +121,26 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                         </Typography>
                     </Box>
                     <div className={classes.portfolioSummary} > 
-                        <Box className={classes.portfolioInfo} >
-                        {
-                            tokensBalanceInfo && tokensBalanceInfo.map( asset => {
-                                const valueFormatted = `${ utils.commify(asset.balance) } ($ ${  utils.commify(asset.value) })`
-                                return  <TitleValueBox key={asset.symbol} title={asset.symbol} value={ valueFormatted }  mode="small" />
-                            })
-                        }
-                        </Box>
 
-                        <Box mt={4} >
-                            <Accordion>
-                                <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
-                                    <Typography > My Portfolio Info </Typography>
-                                </AccordionSummary>
-                                <AccordionDetails >
-                                    <Box>
-                                        <TitleValueBox mode="small" title="My Portfolio Value" value={ utils.commify(totalValueFormatted) } suffix={depositToken.symbol} />
-                                        {/* <TitleValueBox mode="small" title="My Index share" value={lpPercFormatted} suffix="%" /> */}
-                                        <TitleValueBox mode="small" title="My Deposits" value={ utils.commify(totalDepositedFormatted) } suffix={depositToken.symbol} />
-                                        <TitleValueBox mode="small" title="My Withdrawals" value={ utils.commify(totalWithdrawnFormatted) } suffix={depositToken.symbol} />
-                                        <TitleValueBox mode="small" title="ROI" value={roiFormatted?.toString()??""} suffix="%" />
-                                    </Box>
-                                </AccordionDetails>
-                            </Accordion>
-                        </Box>
+                        <Horizontal>
+                            <Box className={classes.portfolioInfo} >
+                            {
+                                tokensBalanceInfo && tokensBalanceInfo.map( asset => {
+                                    const valueFormatted = `${ utils.commify(asset.balance) } ($ ${  utils.commify(asset.value) })`
+                                    return  <TitleValueBox key={asset.symbol} title={asset.symbol} value={ valueFormatted }  mode="small" />
+                                })
+                            }
+
+                            </Box>
+
+                            <Box className={classes.portfolioInfo}>
+                                <TitleValueBox mode="small" title="My Portfolio Value" value={ utils.commify(totalValueFormatted) } suffix={depositToken.symbol} />
+                                {/* <TitleValueBox mode="small" title="My Index share" value={lpPercFormatted} suffix="%" /> */}
+                                <TitleValueBox mode="small" title="My Deposits" value={ utils.commify(totalDepositedFormatted) } suffix={depositToken.symbol} />
+                                <TitleValueBox mode="small" title="My Withdrawals" value={ utils.commify(totalWithdrawnFormatted) } suffix={depositToken.symbol} />
+                                <TitleValueBox mode="small" title="ROI" value={roiFormatted?.toString()??""} suffix="%" />
+                            </Box>
+                        </Horizontal>
 
                         { totalValueFormatted  && Number(totalValueFormatted) > 0 &&
                             <Box className={classes.portfolioCharts}>

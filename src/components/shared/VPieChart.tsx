@@ -61,12 +61,14 @@ export const VPieChart = ( chartData : ChartData ) => {
               labels={ ({ datum }) => (datum.y / total) > 0.08 ?  `${datum.x} (${((datum.y / total) * 100).toFixed(0)}%)` : '' }
 
               style={{
-                labels: { fontSize: 25, fontWeight: 500, fill: theme.palette.type === 'light' ? theme.palette.grey[800] : "white" },
+                labels: { fontSize: 20, fontWeight: 500, fill: theme.palette.type === 'light' ? theme.palette.grey[800] : "white" },
                 data: {
                   fill: ({ datum }) => datum && data[datum.idx] ? COLORS[ Number(datum.idx) % COLORS.length ] : 'white'
                 }
               }}
-              innerRadius={0} labelRadius={50}
+              innerRadius={0} 
+              // radius={150}
+              labelRadius={40}
             />
           </svg>
       </Box>

@@ -147,7 +147,8 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
             <Button> <img src={home} style={{width: 55, height: 55}} /> </Button>
           </Link>
 
-          <nav className={classes.menuItems}>      
+          <nav className={classes.menuItems}>   
+              <Link component={RouterLink} to="/home">Home</Link>
               <Link component={RouterLink} to="/indexes">Indexes</Link>
               <Link component={RouterLink} to="/pools">Pools</Link>
               <Link component={RouterLink} to="/strategies">Strategies</Link>
@@ -225,7 +226,7 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
                         <Divider />
                         <MenuItem onClick={handleClose}>
                           <Box my={1}>
-                             <Typography variant='body2'> Version 0.4 (0c84) </Typography>
+                             <Typography variant='body2'> Version 0.4 (2d2f) </Typography>
                           </Box>
                         </MenuItem>
 

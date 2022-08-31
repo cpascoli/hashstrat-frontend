@@ -59,7 +59,9 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
 
 
   const showModalPressed = (buttonType: 'deposit' | 'withdraw') => {
-    setShowUDepositWithdrawModal(true)
+    if (Number(formattedTokenBalance) > 0) {
+      setShowUDepositWithdrawModal(true)
+    }
     setFormTypeValue(buttonType)
   }
 
@@ -86,7 +88,7 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
           {  formType === 'withdraw' &&  chainId === 137 && formattedTokenStakedBalance && Number(formattedTokenStakedBalance) > 0 &&
               <StyledAlert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
                   <AlertTitle>You have {formattedTokenStakedBalance} staked {symbol} tokens</AlertTitle>
-                  If have to unstake your {symbol} tokens before you can withdraw those funds.
+                  Unstake your {symbol} tokens before you can withdraw those funds.
               </StyledAlert>
           }
 
@@ -98,15 +100,15 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
           }
 
 
-          <div className={classes.balanceView}>
-            <TitleValueBox title={`Available to ${formType}`} value={formattedTokenBalance} suffix={symbol} border={true} />
+          <div className={classes.balanceView} onClick={(e) => showModalPressed( (formType === 'withdraw') ? "withdraw" :  "deposit" )} >
+                <TitleValueBox title={`Available to ${formType}`} value={formattedTokenBalance} suffix={symbol} border={true} />
           </div>
           <Box sx={{ flexGrow: 1, pt: 2 }}>
               <Grid container>
-                { formType === 'deposit' && 
+                { formType === 'deposit' &&
                   <Grid item xs={12}>
                       <Box >
-                          <Button disabled={ poolId.endsWith("v3") === false } name="deposit" variant="contained" color="primary" onClick={(e) => showModalPressed("deposit")}>
+                          <Button disabled={ poolId.endsWith("v3") === false || Number(formattedTokenBalance) === 0 } name="deposit" variant="contained" color="primary" onClick={(e) => showModalPressed("deposit")}>
                             Deposit
                           </Button>
                       </Box>
@@ -115,7 +117,7 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
                 { formType === 'withdraw' &&
                   <Grid item xs={12}>
                       <Box>
-                          <Button name="withdraw" variant="contained" color="primary" onClick={(e) => showModalPressed("withdraw")}>
+                          <Button disabled={ Number(formattedTokenBalance) === 0 } name="withdraw" variant="contained" color="primary" onClick={(e) => showModalPressed("withdraw")}>
                             Withdraw
                           </Button>
                       </Box>

@@ -2,6 +2,8 @@ import React, { useState } from "react"
 
 import { Link as RouterLink } from "react-router-dom"
 import { Box, Divider, makeStyles, Typography, Link, Tab } from "@material-ui/core"
+import { Alert, AlertTitle } from "@material-ui/lab"
+
 import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 
 import { usePoolsInfo } from "../dashboard/DashboadModel"
@@ -96,7 +98,11 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
                 </TabPanel>
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <Box px={2} pb={2} >
-                        <Typography> Withdraw funds from disabled Pools and transfer them to active Pools</Typography>
+                        <Alert severity="warning" style={{  marginBottom: 10 }} > 
+                            <AlertTitle>Disabled Pools</AlertTitle>
+                            Pools have been upgraded to v3 and old pools are now disabled.<br/>
+                            Withdraw funds from disabled Pools and transfer them into active Pools.
+                        </Alert>
                     </Box>
                    
                     <Horizontal align="center"> 

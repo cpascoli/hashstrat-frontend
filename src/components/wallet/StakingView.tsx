@@ -57,7 +57,9 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
   const formattedTokenStakedBalance = tokenStakedBalance && fromDecimals(tokenStakedBalance, token.decimals, 2) || "0.0"
 
   const showModalPressed = () => {
-    setShowStakeUnstakeModal(true)
+    if (Number(formattedTokenBalance) > 0) {
+      setShowStakeUnstakeModal(true)
+    }
   }
 
   const hideModalPreseed = () => {
@@ -80,7 +82,7 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
             }
 
 
-          <div className={classes.balanceView}>
+          <div className={classes.balanceView} onClick={(e) => showModalPressed()} >
             <TitleValueBox title={`Available to ${formType === 'stake' ? 'Stake' : 'Unstake'}`} 
                     value={ formType === 'stake' ? formattedTokenBalance : formattedTokenStakedBalance } suffix={symbol} border={true} />
           </div>
@@ -89,7 +91,7 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
             
                   <Grid item xs={12}>
                       <Box >
-                        <Button name="stake" variant="contained" color="primary" onClick={(e) => showModalPressed()}>
+                        <Button disabled={ Number(formattedTokenBalance) === 0 } name={formType === 'stake' ?  "Stake" : "Unstake"} variant="contained" color="primary" onClick={(e) => showModalPressed()}>
                             { formType === 'stake' ?  "Stake" : "Unstake" }
                         </Button> 
                       </Box>

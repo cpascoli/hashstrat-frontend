@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import { Box, Divider, makeStyles, Typography, Link, Tab } from "@material-ui/core"
-import { TabContext, TabList, TabPanel } from "@material-ui/lab"
+import { Alert, AlertTitle } from "@material-ui/lab"
 
+import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 import { Link as RouterLink } from "react-router-dom"
 import { useIndexesInfo } from "../dashboard/DashboadModel"
 import { InvestTokens } from "../../utils/pools"
@@ -93,7 +94,11 @@ export const IndexesView = ({ chainId, account, depositToken } : IndexesViewProp
                 </TabPanel>
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <Box px={2} pb={2} >
-                        <Typography> Withdraw funds from disabled Indexes and transfer them to active Indexes</Typography>
+                        <Alert severity="warning" style={{  marginBottom: 10 }} > 
+                            <AlertTitle>Disabled Indexes</AlertTitle>
+                            Indexes have been upgraded to v3 and old indexes are now disabled.<br/>
+                            Withdraw funds from disabled Indexes and transfer them into active Indexes.
+                        </Alert>
                     </Box>
                    
                     <Horizontal align="center"> 

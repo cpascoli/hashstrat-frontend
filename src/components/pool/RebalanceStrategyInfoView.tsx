@@ -26,10 +26,6 @@ import {
 } from "../../hooks/usePool"
 
 const useStyle = makeStyles( theme => ({
-    container: {
-        margin: 0,
-        padding: 0,
-    },
     portfolioInfo: {
         maxWidth: 640,
         margin: "auto",
@@ -94,10 +90,13 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
     const classes = useStyle()
 
     return (
-        <Box className={classes.container}>
+        <Box>
             <Box className={classes.portfolioInfo} >
-                <TitleValueBox title="Name" value={name} mode="small" />
-                <TitleValueBox title="Description" value={description} mode="small" />
+                <Box mb={2}>
+                    <Typography variant="h6" align="center"> {name}</Typography> 
+                    <Typography variant="body2" align="center"> {description}</Typography> 
+                </Box>
+
                 <TitleValueBox title="Current Allocation" value={currentAllocationPerc} mode="small" />
                 <TitleValueBox title="Target Allocation" value={targetAllocationPerc} mode="small" />
                 <TitleValueBox title="Rebalancing Band" value={`± ${rebalancingThreshold}%`} mode="small" />

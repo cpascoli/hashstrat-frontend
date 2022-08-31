@@ -81,8 +81,11 @@ export const TrendFollowtrategyInfoView = ( { chainId, poolId, depositToken, inv
 
     return (
         <Box className={classes.portfolioInfo} >
-            <TitleValueBox title="Name" value={name} mode="small" />
-            <TitleValueBox title="Description" value={description} mode="small" />
+            <Box mb={2}>
+                <Typography variant="h6" align="center"> {name}</Typography> 
+                <Typography variant="body2" align="center"> {description}</Typography> 
+            </Box>
+
             <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small"  />
             <TitleValueBox title={`Trend (${movingAveragePeriod}D MA)`} value={movingAverageText} mode="small"  />
             <TitleValueBox title="Deviation From Trend" value={`${round(deltaPricePerc * 100)}`} mode="small"  suffix="%" />

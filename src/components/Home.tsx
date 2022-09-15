@@ -99,7 +99,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <div className={classes.titleSection}> 
                     <div>
                         <p className={classes.title}>
-                            Self-sovereign crypto fund for long term investment
+                            Self-sovereign crypto fund for long term investing
                         </p>
                         <p className={classes.subtitle}>
                             Choose your decentralised, investment strategies executed on-chain <br/>

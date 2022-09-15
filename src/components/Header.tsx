@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
-import { useEthers, Kovan, Polygon } from "@usedapp/core";
+import { useEthers, Kovan, Polygon, shortenAddress } from "@usedapp/core";
 
-import { useBlockNumber, shortenAddress } from "@usedapp/core"
-import Switch from "@material-ui/core/Switch";
-import { Button, Link, Menu, MenuProps, MenuItem, Divider, Typography, makeStyles, Box } from  "@material-ui/core"
-import { styled } from "@material-ui/core/styles"
-import { NetworkName } from "../utils/network"
-
-import { Link as RouterLink } from "react-router-dom"
-import { Horizontal } from './Layout';
-import home from "./img/home.svg"
-import { ConnectButton } from "../main/ConnectButton"
-
+import { useTheme, Button, Link, Menu, MenuProps, MenuItem, Divider, Typography, makeStyles, Box, Switch } from  "@material-ui/core"
 import { Menu as MenuIcon, KeyboardArrowDown, WbSunny, Brightness3 } from "@material-ui/icons"
+import { Alert, AlertTitle } from "@material-ui/lab"
+import { styled } from "@material-ui/core/styles"
+import { useLocation, Link as RouterLink } from "react-router-dom"
+
+import { StyledAlert } from "./shared/StyledAlert"
+import { NetworkName } from "../utils/network"
+import { Horizontal } from './Layout';
+
+import { ConnectButton } from "../main/ConnectButton"
+import home from "./img/home.svg"
+
 
 
 const StyledMenu = styled((props: MenuProps) => (
@@ -95,10 +96,9 @@ interface HeaderProps {
 export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : HeaderProps ) => {
 
     const classes = useStyles()
+    const theme = useTheme();
+
     const [networkName, setNetworkName] = useState<string>("")
-
-    //const blockNumber = useBlockNumber()
-
 
     const handleModeChange = () => {
       localStorage.setItem("darkMode", toggleDark ? 'light' : 'dark');
@@ -116,6 +116,8 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
         const supportedChain = chainId === Polygon.chainId || chainId === Kovan.chainId
         setChainId(supportedChain ? chainId : undefined)
       }
+
+      setAccount(account)
     }, [chainId, account])
 
 
@@ -139,122 +141,156 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
 
 
     const shortAccount = account ? shortenAddress(account) : ''
-    
+    const theLocation = useLocation();
+    const currentLocation = theLocation.pathname
+
+
     return (
-        <header className={classes.container}>
 
-          <Link component={RouterLink} to="/" > 
-            <Button> <img src={home} style={{width: 55, height: 55}} /> </Button>
-          </Link>
+        <header>
+          { !chainId && account && currentLocation !== '/' &&
+               
+               <Alert severity="warning" style={{ marginBottom: 10 }} > 
+                   <AlertTitle>Wrong Network</AlertTitle>
+                   Connect to the <strong>Polygon</strong> network to use the dapp
+               </Alert>
+              
+          }
 
-          <nav className={classes.menuItems}>   
-              <Link component={RouterLink} to="/home">Home</Link>
-              <Link component={RouterLink} to="/indexes">Indexes</Link>
-              <Link component={RouterLink} to="/pools">Pools</Link>
-              <Link component={RouterLink} to="/strategies">Strategies</Link>
-              <Link component={RouterLink} to="/faq">FAQ</Link>
-              <Link component={RouterLink} to="/dao">DAO</Link>
-              <Link href="https://medium.com/@hashstrat" target="_blank">Medium Blog</Link>
-          </nav>
-        
-          <div className={classes.rightItmesContainer}>
-                  <div>
-                      <Button
-                        id="account-button"
-                        aria-controls={open ? 'account-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        variant="contained"
-                        disableElevation
-                        onClick={handleClick}
-                        endIcon={<KeyboardArrowDown />}
-                      >
-                        {isConnected ? shortAccount : 
-                               <MenuIcon /> }
-                      </Button>
+          { !account && chainId && currentLocation !== '/' &&
+              <div style={{textAlign: "center", backgroundColor: theme.palette.type === 'light' ? '#e1eaeb' : '#384142', }}> 
+                  <StyledAlert severity="info" > 
+                     <Horizontal align='center' valign='center'>
+                       <div>
+                          <AlertTitle>No account connected</AlertTitle>
+                          Connect an account to the <strong>Polygon</strong> network to use the dapp
+                        </div>
+                        <div style={{ paddingLeft: 20, paddingRight: 20  }} >
 
-                      <StyledMenu
-                        id="account-menu"
-                        anchorEl={anchorEl}
-                        getContentAnchorEl={null}
-                        open={open}
-                        onClose={handleClose}
-                      >
+                          <ConnectButton />
+                        </div>
+                    </Horizontal>
+                  </StyledAlert>
+              </div>
+           
+            }
 
-                        <nav  className={classes.menuItemsSmall} > 
-                            <Link component={RouterLink} to="/indexes">
-                              <MenuItem onClick={handleClose}> Indexes </MenuItem>
-                            </Link>
 
-                            <Link component={RouterLink} to="/pools">
-                              <MenuItem onClick={handleClose}> Pools</MenuItem>
-                            </Link>
+          <Box className={classes.container}>
 
-                            <Link component={RouterLink} to="/strategies">
-                              <MenuItem onClick={handleClose}>Strategies</MenuItem>
-                            </Link>
+              <Link component={RouterLink} to="/" > 
+                <Button> <img src={home} style={{width: 55, height: 55}} /> </Button>
+              </Link>
 
-                            <Link component={RouterLink} to="/faq">
-                              <MenuItem onClick={handleClose}>FAQ</MenuItem>
-                            </Link>
-                               
-                            <Link component={RouterLink} to="/dao">
-                              <MenuItem onClick={handleClose}>DAO</MenuItem>
-                            </Link>
+              <nav className={classes.menuItems}>   
+                  <Link component={RouterLink} to="/home">Home</Link>
+                  <Link component={RouterLink} to="/indexes">Indexes</Link>
+                  <Link component={RouterLink} to="/pools">Pools</Link>
+                  <Link component={RouterLink} to="/strategies">Strategies</Link>
+                  <Link component={RouterLink} to="/faq">FAQ</Link>
+                  <Link component={RouterLink} to="/dao">DAO</Link>
+                  <Link href="https://medium.com/@hashstrat" target="_blank">Medium Blog</Link>
+              </nav>
+            
+              <div className={classes.rightItmesContainer}>
+                      <div>
+                          <Button
+                            id="account-button"
+                            aria-controls={open ? 'account-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? 'true' : undefined}
+                            variant="contained"
+                            disableElevation
+                            onClick={handleClick}
+                            endIcon={<KeyboardArrowDown />}
+                          >
+                            {isConnected ? shortAccount : 
+                                  <MenuIcon /> }
+                          </Button>
 
-                            <Link href="https://medium.com/@hashstrat" target="_blank">
-                              <MenuItem onClick={handleClose}>Medium Blog</MenuItem>
-                            </Link>
+                          <StyledMenu
+                            id="account-menu"
+                            anchorEl={anchorEl}
+                            getContentAnchorEl={null}
+                            open={open}
+                            onClose={handleClose}
+                          >
+
+                            <nav  className={classes.menuItemsSmall} > 
+                                <Link component={RouterLink} to="/indexes">
+                                  <MenuItem onClick={handleClose}> Indexes </MenuItem>
+                                </Link>
+
+                                <Link component={RouterLink} to="/pools">
+                                  <MenuItem onClick={handleClose}> Pools</MenuItem>
+                                </Link>
+
+                                <Link component={RouterLink} to="/strategies">
+                                  <MenuItem onClick={handleClose}>Strategies</MenuItem>
+                                </Link>
+
+                                <Link component={RouterLink} to="/faq">
+                                  <MenuItem onClick={handleClose}>FAQ</MenuItem>
+                                </Link>
+                                  
+                                <Link component={RouterLink} to="/dao">
+                                  <MenuItem onClick={handleClose}>DAO</MenuItem>
+                                </Link>
+
+                                <Link href="https://medium.com/@hashstrat" target="_blank">
+                                  <MenuItem onClick={handleClose}>Medium Blog</MenuItem>
+                                </Link>
+
+                                <Divider />
+                            </nav>
+
+                            <MenuItem onClick={handleClose}>
+                              <Horizontal valign='center'>
+                                  <Typography>
+                                    { toggleDark ? "Light Mode" : "Dark Mode" }
+                                  </Typography>
+                                  <Switch
+                                      checked={toggleDark}
+                                      onChange={handleModeChange}
+                                      name="toggleDark"
+                                      color="default"
+                                  />
+                                  </Horizontal>
+                            </MenuItem>
 
                             <Divider />
-                        </nav>
-
-                        <MenuItem onClick={handleClose}>
-                           <Horizontal valign='center'>
-                              <Typography>
-                                 { toggleDark ? "Light Mode" : "Dark Mode" }
-                              </Typography>
-                              <Switch
-                                  checked={toggleDark}
-                                  onChange={handleModeChange}
-                                  name="toggleDark"
-                                  color="default"
-                              />
-                              </Horizontal>
-                        </MenuItem>
-
-                        <Divider />
-                        <MenuItem onClick={handleClose}>
-                          <Box my={1}>
-                             <Typography variant='body2'> Version 0.4 (2d2f) </Typography>
-                          </Box>
-                        </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                              <Box my={1}>
+                                <Typography variant='body2'> Version 0.4 (2d2f) </Typography>
+                              </Box>
+                            </MenuItem>
 
 
-                        {isConnected &&
-                          <div>
-                              <Divider />
-                              <MenuItem onClick={handleClose}>
-                                  <Typography variant='body1'> Connected to {networkName.toUpperCase()} </Typography>
-                              </MenuItem>
-                              <MenuItem onClick={handleClose} >
-                                  <Button color="primary" variant="contained" onClick={disconnectPressed} fullWidth >Disconnect</Button>
-                              </MenuItem>
-                          </div>
-                        }
-                        {!isConnected && 
-                          <div>
-                            
-                              <MenuItem onClick={handleClose}>
-                                <ConnectButton setAccount={setAccount} setChainId={setChainId} />
-                              </MenuItem>
-                          </div>
-                        }
-         
-                      </StyledMenu>
-                    </div>
+                            {isConnected &&
+                              <div>
+                                  <Divider />
+                                  <MenuItem onClick={handleClose}>
+                                      <Typography variant='body1'> Connected to {networkName.toUpperCase()} </Typography>
+                                  </MenuItem>
+                                  <MenuItem onClick={handleClose} >
+                                      <Button color="primary" variant="contained" onClick={disconnectPressed} fullWidth >Disconnect</Button>
+                                  </MenuItem>
+                              </div>
+                            }
+                            {!isConnected && 
+                              <div>
+                                
+                                  <MenuItem onClick={handleClose}>
+                                    <ConnectButton />
+                                  </MenuItem>
+                              </div>
+                            }
+            
+                          </StyledMenu>
+                        </div>
 
-          </div>
+              </div>
+        </Box>
 
       </header>
     )

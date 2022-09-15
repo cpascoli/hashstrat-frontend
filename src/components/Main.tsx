@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes,Route, useLocation } from "react-router-dom";
-import { Polygon, useEthers } from '@usedapp/core';
+import { Polygon } from '@usedapp/core';
 import { Box,Typography, makeStyles } from "@material-ui/core"
 
-import { Alert, AlertTitle } from "@material-ui/lab"
-
-import { StyledAlert } from "./shared/StyledAlert"
 import { TokensForPool, PoolIds, IndexesIds, DepositToken } from "../utils/pools"
 import { InvestTokens } from "../utils/pools"
 import { Home } from "./Home"
@@ -14,11 +11,7 @@ import { PoolContainer } from "./pool/PoolContainer";
 import { IndexesHome } from '../components/indexes/IndexesHome'
 import { PoolsContainer } from "../components/pools/PoolsContainer"
 import { Socials } from "./Socials"
-import { ConnectButton } from '../main/ConnectButton'
 import { IndexHome } from "./indexes/index/IndexHome"
-
-
-import { Horizontal } from "./Layout";
 import { FaqHome } from "./faq/FaqHome";
 import { StrategiesHome } from "./strategies/StrategiesHome";
 import { Dashboard } from './dashboard/Dashboard'
@@ -82,29 +75,6 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
 
     return (
         <Box className={classes.container} >
-           
-           {(!chainId && account) &&
-               
-                <Alert severity="warning" style={{  marginBottom: 10 }} > 
-                    <AlertTitle>Wrong Network</AlertTitle>
-                    Connect to the <strong>Polygon</strong> or <strong>Kovan</strong> networks to use the dapp
-                </Alert>
-               
-            }
-
-            { !account && chainId &&
-                <StyledAlert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
-                    <Horizontal align="center">
-                        <div>
-                             <AlertTitle>No account connected</AlertTitle>
-                             Connect an account to the Polygon or Kovan networks to use the dapp
-                        </div>
-                        <div style={{padding: 10}}>
-                            <ConnectButton setAccount={setAccount} setChainId={setChainId} />
-                        </div>
-                    </Horizontal>
-                </StyledAlert>
-            }
 
             <BrowserRouter>
 

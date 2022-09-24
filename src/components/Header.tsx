@@ -12,8 +12,8 @@ import { NetworkName } from "../utils/network"
 import { Horizontal } from './Layout';
 
 import { ConnectButton } from "../main/ConnectButton"
-import home from "./img/home.svg"
-
+import homeLight from "./img/home-light.svg"
+import homeDark from "./img/home-dark.svg"
 
 
 const StyledMenu = styled((props: MenuProps) => (
@@ -97,6 +97,8 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
 
     const classes = useStyles()
     const theme = useTheme();
+    const logImg = theme.palette.type === 'light' ? homeLight : homeDark
+
 
     const [networkName, setNetworkName] = useState<string>("")
 
@@ -179,7 +181,7 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
           <Box className={classes.container}>
 
               <Link component={RouterLink} to="/" > 
-                <Button> <img src={home} style={{width: 55, height: 55}} /> </Button>
+                <Button> <img src={logImg} style={{width: 55, height: 55}} /> </Button>
               </Link>
 
               <nav className={classes.menuItems}>   

@@ -10,7 +10,7 @@ const useStyle = makeStyles( theme => ({
     socials: {
         textAlign: "center",
         paddingBottom: theme.spacing(2),
-        maxWidth: 200,
+        maxWidth: 250,
         margin: "auto"
     },
     icon: {
@@ -27,10 +27,11 @@ export const Socials = () => {
     return (
         <Box className={classes.socials}>
             <Horizontal align="center">
+                <SocialIcon url="mailto:carlo@hashstrat.com" style={{width: 30, height: 30}} target="_blank"  bgColor={bgcolor} />
                 <SocialIcon url="https://t.me/hashstrat" style={{width: 30, height: 30}} target="_blank"  bgColor={bgcolor} />
                 <SocialIcon url="https://github.com/cpascoli/hashstrat" style={{width: 30, height: 30}} target="_blank" bgColor={bgcolor} />
                 <SocialIcon url="https://twitter.com/0xash1" style={{width: 30, height: 30}} target="_blank"  bgColor={bgcolor} />
-                <SocialIcon url="https://www.linkedin.com/in/carlopascoli/" style={{width: 30, height: 30}} target="_blank" bgColor={bgcolor} />
+                <SocialIcon url="https://www.linkedin.com/company/hashstrat" style={{width: 30, height: 30}} target="_blank" bgColor={bgcolor} />
             </Horizontal>
         </Box>
     )

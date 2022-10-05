@@ -148,9 +148,9 @@ export const Home = ( { chainId } : HomeProps ) => {
 
                 <InfoBox title="Autonomous" image={automated}>
                     <Typography variant="body2">
-                        HashStrat uses <Link href="https://docs.chain.link/docs/chainlink-keepers/introduction/" target="_blank">Chainlink Keepers</Link> to automate
+                        HashStrat uses <Link href="https://docs.chain.link/docs/chainlink-automation/introduction/" target="_blank">Chainlink Automation</Link> to automate
                         the execution of on-chain strategies.
-                        This means you can trust the blockchain, a decentralised networks of independent nodes, to keep running the fund.
+                        This means you can trust the blockchain and a decentralised networks of independent nodes to keep operating the fund.
                     </Typography>
                 </InfoBox>
 

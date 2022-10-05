@@ -4,6 +4,7 @@ import { Token } from "../../types/Token"
 import { fromDecimals, round} from "../../utils/formatter"
 import { PoolAddress } from "../../utils/network"
 import { BigNumber } from 'ethers'
+import { PoolInfo } from "../../utils/pools"
 
 
 import { 
@@ -58,12 +59,11 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
     const depositTokenBalance = useTokenBalance(chainId, poolId, depositToken.symbol, poolAddress)
     const investTokenBalance = useTokenBalance(chainId, poolId, investToken.symbol, poolAddress)
 
-
+    const { upkeep } = PoolInfo(chainId, poolId)
 
     const targetAllocationPerc =  targetInvestPerc && `${targetInvestPerc}% / ${(100 - targetInvestPerc )}%`
     const targetPercUp =  (parseInt(targetInvestPerc) + parseInt(rebalancingThreshold) ) / 100
     const targetPercDown =  (parseInt(targetInvestPerc) - parseInt(rebalancingThreshold) ) / 100
-
 
     const depositTokens = depositTokenBalance ? parseFloat(fromDecimals( BigNumber.from(depositTokenBalance), depositToken.decimals, 2)) : undefined
     const investTokens = investTokenBalance ? parseFloat(fromDecimals( BigNumber.from(investTokenBalance), investToken.decimals, 6)) : undefined
@@ -102,8 +102,9 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
                 <TitleValueBox title="Rebalancing Band" value={`± ${rebalancingThreshold}%`} mode="small" />
                 <TitleValueBox title="Rebalancing Targets" value={rebalancingText} mode="small"  />
                 <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small" />
-            </Box>
 
+                <TitleValueBox title="Chainlink Automation" value="Uokeep Page" url={upkeep} mode="small" />
+            </Box>
         </Box>
     )
 }

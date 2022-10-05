@@ -2,8 +2,9 @@ import { Box, makeStyles, Typography } from "@material-ui/core"
 import { TitleValueBox } from "../TitleValueBox"
 import { Token } from "../../types/Token"
 import { fromDecimals, round} from "../../utils/formatter"
-import { NetworkExplorerHost, PoolAddress } from "../../utils/network"
+import { PoolAddress } from "../../utils/network"
 import { BigNumber } from 'ethers'
+import { PoolInfo } from "../../utils/pools"
 
 
 import { 
@@ -45,9 +46,9 @@ interface StrategyInfoViewProps {
 
 export const TrendFollowtrategyInfoView = ( { chainId, poolId, depositToken, investToken } : StrategyInfoViewProps ) => {
 
-    const poolAddress = PoolAddress(chainId, poolId)
-
     const name = useStrategyName(chainId, poolId)
+    const { upkeep } = PoolInfo(chainId, poolId)
+
     const description = useStrategyDescription(chainId, poolId)
     const latestFeedPrice = useFeedLatestPrice(chainId, poolId)
     const feedDecimals = useFeedDecimals(chainId, poolId)
@@ -92,6 +93,8 @@ export const TrendFollowtrategyInfoView = ( { chainId, poolId, depositToken, inv
             <TitleValueBox title="Buy Trigger" value={`${buyTargetText}`} mode="small"  />
             <TitleValueBox title="Sell Trigger" value={`${sellTargetText}`} mode="small" />
             <TitleValueBox title="Trade Size" value={`${tokensToSwapPerc}`} mode="small"  suffix="%" />
+
+            <TitleValueBox title="Chainlink Automation" value="Uokeep Page" url={upkeep} mode="small" />
         </Box>
     )
 }

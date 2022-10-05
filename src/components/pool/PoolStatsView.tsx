@@ -1,18 +1,12 @@
 import { Box, Typography, makeStyles } from "@material-ui/core"
 import { BigNumber } from "ethers"
-
 import { usePoolModel } from "./PoolModel"
-
 import { TitleValueBox } from "../TitleValueBox"
 import { Token } from "../../types/Token"
 import { fromDecimals, round } from "../../utils/formatter"
-import { PoolAddress } from "../../utils/network"
 import { useSwapInfoArray } from "../../hooks"
 import { TimeSeriesAreaChart } from "./TimeSeriesAreaChart"
-
 import { PoolInfo } from "../../utils/pools"
-
-import { PieChartWithLabels } from "../shared/PieChartWithLabels"
 import { VPieChart } from "../shared/VPieChart"
 
 import { Horizontal } from "../Layout"
@@ -51,7 +45,7 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
 
     const classes = useStyle()
 
-    const { name, description, upkeep } = PoolInfo(chainId, poolId)
+    const { name, description } = PoolInfo(chainId, poolId)
     const tokens =  [depositToken, investToken]
     const { poolInfo, portfolioInfo, chartData : assetAllocationChartData } = usePoolModel(chainId, poolId, tokens, depositToken)
 
@@ -107,7 +101,6 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
     
                     <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
                     <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>
-                    <TitleValueBox title="Chainlink Keeper" value="Keeper Page" url={upkeep} />
                 </Box>
             </Horizontal>
            

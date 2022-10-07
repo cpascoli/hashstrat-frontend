@@ -44,7 +44,7 @@ export const TimeSeriesLineChart = ( chartData  : ChartData ) => (
       />
 
       {/* <YAxis name = "Asset 1" type="number" domain={[0, 100]} yAxisId="left-axis" /> */}
-      <YAxis name = "Asset % Chg" type="number" domain={[-100, 100]} yAxisId="right-axis" orientation="right" />
+      <YAxis name = "Asset % Chg" type="number"  yAxisId="right-axis" orientation="right" />
 
       <Legend verticalAlign="top" height={30}/>
       <Tooltip />

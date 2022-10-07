@@ -73,11 +73,11 @@ export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStat
 
                 <Accordion>
                     <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
-                        <Typography > My Pool Info </Typography>
+                        <Typography > My Assets Info </Typography>
                     </AccordionSummary>
                     <AccordionDetails >
                         <Box>
-                            <TitleValueBox mode="small" title="My Portfolio Value" value={utils.commify(formattedPortfolioValue??"")} suffix={depositToken.symbol} />
+                            <TitleValueBox mode="small" title="Assets Value" value={utils.commify(formattedPortfolioValue??"")} suffix={depositToken.symbol} />
                             {/* <TitleValueBox mode="small" title="My Index share" value={lpPercFormatted} suffix="%" /> */}
                             <TitleValueBox mode="small" title="My Deposits" value={utils.commify(formattedDeposits)} suffix={depositToken.symbol} />
                             <TitleValueBox mode="small" title="My Withdrawals" value={utils.commify(formattedWithdrawals)} suffix={depositToken.symbol} />

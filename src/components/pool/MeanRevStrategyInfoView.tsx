@@ -4,7 +4,7 @@ import { Token } from "../../types/Token"
 import { fromDecimals, round} from "../../utils/formatter"
 import { BigNumber } from 'ethers'
 import { PoolInfo } from "../../utils/pools"
-
+import { RoiChart } from "./RoiChart"
 
 import { 
     useFeedDecimals,
@@ -58,7 +58,6 @@ export const MeanRevStrategyInfoView = ( { chainId, poolId, depositToken, invest
     const movingAveragePeriod = useStrategyMovingAveragePeriod(chainId, poolId)
     const tokensToSwapPerc = useStrategyTokensToSwapPerc(chainId, poolId)
 
-
     const formattedPriceTimestant = new Date(feedLatestTimestamp * 1000).toLocaleTimeString()
     const formattedPrice = latestFeedPrice ? fromDecimals( BigNumber.from(latestFeedPrice), parseInt(feedDecimals), 2) : ''
     const feedPriceText = `${formattedPrice} ${depositToken.symbol} at ${formattedPriceTimestant}`
@@ -87,6 +86,8 @@ export const MeanRevStrategyInfoView = ( { chainId, poolId, depositToken, invest
                 <Typography variant="h6" align="center"> {name}</Typography> 
                 <Typography variant="body2" align="center"> {description}</Typography> 
             </Box>
+
+            <RoiChart chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken}  />
 
             <TitleValueBox title={`Trend (${movingAveragePeriod}D MA)`} value={movingAverageText} mode="small"  />
             <TitleValueBox title="Deviation From Trend" value={`${round(deltaPricePerc * 100)}`} mode="small"  suffix="%" />

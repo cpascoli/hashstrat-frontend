@@ -2,16 +2,15 @@ import { Box, makeStyles, Typography } from "@material-ui/core"
 import { TitleValueBox } from "../TitleValueBox"
 import { Token } from "../../types/Token"
 import { fromDecimals, round} from "../../utils/formatter"
-import { PoolAddress } from "../../utils/network"
 import { BigNumber } from 'ethers'
 import { PoolInfo } from "../../utils/pools"
+import { RoiChart } from "./RoiChart"
 
 
 import { 
     useFeedDecimals,
     useFeedLatestPrice,
     useFeedLatestTimestamp,
-    useTokenBalance,
 } from "../../hooks"
 
 import { 
@@ -86,6 +85,8 @@ export const TrendFollowtrategyInfoView = ( { chainId, poolId, depositToken, inv
                 <Typography variant="h6" align="center"> {name}</Typography> 
                 <Typography variant="body2" align="center"> {description}</Typography> 
             </Box>
+
+            <RoiChart chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken}  />
 
             <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small"  />
             <TitleValueBox title={`Trend (${movingAveragePeriod}D MA)`} value={movingAverageText} mode="small"  />

@@ -102,7 +102,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                             Self-sovereign crypto fund for long term investing
                         </p>
                         <p className={classes.subtitle}>
-                            Choose your decentralised, investment strategies executed on-chain <br/>
+                            Choose your transparent, autonomous, investment strategies executed on-chain <br/>
                         </p>
                     </div>
                     <Link component={LinkRouter} to="/home" style={{ textDecoration: 'none' }} > 
@@ -150,7 +150,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                     <Typography variant="body2">
                         HashStrat uses <Link href="https://docs.chain.link/docs/chainlink-automation/introduction/" target="_blank">Chainlink Automation</Link> to automate
                         the execution of on-chain strategies.
-                        This means you can trust the blockchain and a decentralised networks of independent nodes to keep operating the fund.
+                        This means you can trust the blockchain and a decentralised network of independent nodes to keep operating the fund.
                     </Typography>
                 </InfoBox>
 

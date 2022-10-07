@@ -16,7 +16,6 @@ const useStyle = makeStyles( theme => ({
         maxWidth: 700,
         margin: "auto"
     }
-
 }))
 
 
@@ -147,16 +146,17 @@ export const TradesView = ( { chainId, poolId, depositToken, investToken } : Poo
     return (
         <Box className={classes.container}>
 
-            <Typography align="center">Assets Traded (Cumulative % Chg)</Typography>
+            {/* <Typography align="center">Assets Traded (Cumulative % Chg)</Typography>
             <Box className={classes.chart} >
                 <TimeSeriesLineChart title="Assets Traded (Cumulative % Chg)" 
                     label1={label1} 
                     label2={label2} 
                     data={chartData}  
                 /> 
-            </Box>
+            </Box>   <br/>
+            */}
 
-            <br/>
+          
 
             { rows && 
                 <Box> 

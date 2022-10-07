@@ -234,6 +234,7 @@ export const useSwapInfoArray = (chainId: number, poolId: string) => {
           }
 
     })
+
     return info
 }
 

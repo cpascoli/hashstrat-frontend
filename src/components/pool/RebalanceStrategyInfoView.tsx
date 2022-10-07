@@ -5,6 +5,7 @@ import { fromDecimals, round} from "../../utils/formatter"
 import { PoolAddress } from "../../utils/network"
 import { BigNumber } from 'ethers'
 import { PoolInfo } from "../../utils/pools"
+import { RoiChart } from "./RoiChart"
 
 
 import { 
@@ -96,6 +97,8 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
                     <Typography variant="h6" align="center"> {name}</Typography> 
                     <Typography variant="body2" align="center"> {description}</Typography> 
                 </Box>
+
+                <RoiChart chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken}  />
 
                 <TitleValueBox title="Current Allocation" value={currentAllocationPerc} mode="small" />
                 <TitleValueBox title="Target Allocation" value={targetAllocationPerc} mode="small" />

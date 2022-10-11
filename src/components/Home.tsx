@@ -1,7 +1,7 @@
 
 
 
-import { Button, Typography, makeStyles,  Divider, Link, Box } from  "@material-ui/core"
+import { Button, Typography, makeStyles,  Divider, Link, Box, styled } from  "@material-ui/core"
 import { Link as LinkRouter} from "react-router-dom"
 
 import { InfoBox } from "./InfoBox"
@@ -99,15 +99,17 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <div className={classes.titleSection}> 
                     <div>
                         <p className={classes.title}>
-                            Self-sovereign crypto fund for long term investing
+                            Self-sovereign crypto fund 
                         </p>
                         <p className={classes.subtitle}>
-                            Choose your transparent, autonomous, investment strategies executed on-chain <br/>
+                            Choose your transparent, autonomous, investment strategies for long term investing<br/>
                         </p>
                     </div>
-                    <Link component={LinkRouter} to="/home" style={{ textDecoration: 'none' }} > 
-                        <Button variant="contained" color="secondary" style={{ width: 280, height: 40 }} >Launch App</Button>
-                    </Link>
+                    <div style={{ marginTop: 40 }}>
+                        <Link component={LinkRouter} to="/home" style={{ textDecoration: 'none' }} > 
+                            <Button variant="contained" color="secondary" style={{ width: 280, height: 40 }} >Launch App</Button>
+                        </Link>
+                    </div>
                  </div>
 
                 <img className={classes.imageLarge} />
@@ -121,10 +123,13 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <Typography variant="h5">What is HashStrat?</Typography>
                 <br/>
                 <Typography variant="body2">
-                    HashStrat is a <Link href="https://en.wikipedia.org/wiki/Decentralized_finance" target="_target">DeFi</Link> protocol that
-                    allows to allocate capital to transparent, autonomous investment strategies executed on-chain. 
-                <br/>
-                    Different strategies offer different risk profiles, and it's possible to improve your risk/reward further by allocating to indexes over multiple strategies.  
+                    HashStrat is a new DeFi protocol for long-term investing in BTC &amp; ETH through autonomous investment strategies executed on-chain. 
+                </Typography>
+                <Typography variant="body2">
+                    HashStrat strategies are designed to reduce portfolio volatility and drawdowns, whilst being competitive with a simple holding strategy. 
+                </Typography>
+                <Typography variant="body2">
+                    It's also possible to improve your risk/reward further by allocating to indexes over multiple strategies.  
                 </Typography>
             </section>
 

@@ -167,7 +167,6 @@ export const Home = ( { chainId } : HomeProps ) => {
                     </Typography>
                 </InfoBox>
 
-
             </section>
 
         </Box>

@@ -129,7 +129,7 @@ export const NetworkName = (chainId: number) => {
 
 export const PoolContract = (chainId: number, poolId: string) => {
     const isIndex = poolId.startsWith("index")
-    const isV3 = poolId.endsWith("v3") 
+    const isV3 =  /v3.?$/.test(poolId) //poolId.endsWith("v3") 
 
     const abi = (isIndex && isV3) ? abis[ "indexV3" as keyof typeof abis ] as any :
                 isIndex ?           abis[ "index" as keyof typeof abis ] as any :

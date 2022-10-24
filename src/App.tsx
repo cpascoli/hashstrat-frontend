@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { DAppProvider, Kovan, Polygon } from '@usedapp/core';
+import { DAppProvider, Goerli, Kovan, Polygon } from '@usedapp/core';
 
 import { Container } from '@material-ui/core'
 import { Main } from './components/Main'
@@ -43,10 +43,10 @@ const App = () => {
 		<ThemeProvider theme={{ ...appTheme }}>
 
 			<DAppProvider config={{
-				networks: [Kovan, Polygon],
+				networks: [Goerli, Polygon],
 				readOnlyChainId: Polygon.chainId,
 				readOnlyUrls: {
-					[Kovan.chainId]: getDefaultProvider('kovan'),
+					[Goerli.chainId]: getDefaultProvider('goerli'),
 					[Polygon.chainId]: getDefaultProvider('matic'),
 				},
 				// pollingInterval

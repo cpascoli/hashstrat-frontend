@@ -27,11 +27,11 @@ export const Socials = () => {
     return (
         <Box className={classes.socials}>
             <Horizontal align="center">
+                <SocialIcon url="https://medium.com/@hashstrat" style={{width: 30, height: 30}} target="_blank"  bgColor={bgcolor} />
+                <SocialIcon url="https://github.com/cpascoli/hashstrat" style={{width: 30, height: 30}} target="_blank" bgColor={bgcolor} />
+                <SocialIcon url="https://www.linkedin.com/company/hashstrat" style={{width: 30, height: 30}} target="_blank" bgColor={bgcolor} />
                 <SocialIcon url="mailto:carlo@hashstrat.com" style={{width: 30, height: 30}} target="_blank"  bgColor={bgcolor} />
                 <SocialIcon url="https://t.me/hashstrat" style={{width: 30, height: 30}} target="_blank"  bgColor={bgcolor} />
-                <SocialIcon url="https://github.com/cpascoli/hashstrat" style={{width: 30, height: 30}} target="_blank" bgColor={bgcolor} />
-                <SocialIcon url="https://twitter.com/0xash1" style={{width: 30, height: 30}} target="_blank"  bgColor={bgcolor} />
-                <SocialIcon url="https://www.linkedin.com/company/hashstrat" style={{width: 30, height: 30}} target="_blank" bgColor={bgcolor} />
             </Horizontal>
         </Box>
     )

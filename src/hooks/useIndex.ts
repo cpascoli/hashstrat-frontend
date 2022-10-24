@@ -68,7 +68,7 @@ export const useMultiPoolValue = (chainId: number, poolId: string) => {
     const indexContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: indexContract,
-            method: poolId.endsWith('v3') ? 'totalValue' : 'multiPoolValue',
+            method: /v3.?$/.test(poolId) ? 'totalValue' : 'multiPoolValue',
             args: [],
     }) ?? {}
 

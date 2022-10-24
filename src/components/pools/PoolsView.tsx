@@ -7,7 +7,7 @@ import { Alert, AlertTitle } from "@material-ui/lab"
 import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 
 import { usePoolsInfo } from "../dashboard/DashboadModel"
-import { InvestTokens } from "../../utils/pools"
+import { InvestTokens, PoolInfo } from "../../utils/pools"
 import { Horizontal } from "../Layout"
 import { Token } from "../../types/Token"
 import { PoolIds } from "../../utils/pools";
@@ -55,7 +55,7 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
         setSelectedTokenIndex(parseInt(newValue))
     }
 
-    const activePoolsViews = poolsInfo.filter( pool => pool.poolId.endsWith("v3") ).map( pool => {
+    const activePoolsViews = poolsInfo.filter( pool => PoolInfo(chainId, pool.poolId).disabled === 'false' ).map( pool => {
         return (
             <div key={pool.poolId}>
                 <PoolSummary chainId={chainId} poolId={pool.poolId} account={account} depositToken={depositToken} tokens={pool.tokenInfoArray} />
@@ -63,7 +63,7 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
         )
     })
 
-    const disabledPoolsViews = poolsInfo.filter( pool => !pool.poolId.endsWith("v3") ).map( pool => {
+    const disabledPoolsViews = poolsInfo.filter( pool => PoolInfo(chainId, pool.poolId).disabled === 'true' ).map( pool => {
         return (
             <div key={pool.poolId}>
                 <PoolSummary chainId={chainId} poolId={pool.poolId} account={account} depositToken={depositToken} tokens={pool.tokenInfoArray} />
@@ -100,7 +100,7 @@ export const PoolsView = ({ chainId, account, depositToken } : PoolsViewProps) =
                     <Box px={2} pb={2} >
                         <Alert severity="warning" style={{  marginBottom: 10 }} > 
                             <AlertTitle>Disabled Pools</AlertTitle>
-                            Pools have been upgraded to v3 and old pools are now disabled.<br/>
+                            Pools have been upgraded and old pools are now disabled.<br/>
                             Withdraw funds from disabled Pools and transfer them into active Pools.
                         </Alert>
                     </Box>

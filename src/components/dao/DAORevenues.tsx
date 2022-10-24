@@ -62,7 +62,7 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
                     <Card  style={{width: 220}}  >
                         <CardContent>
                                 <div style={{ display:'flex', justifyContent:'center' }}> 
-                                    <Typography variant="body1" style={{ marginBottom: 10 }} > Fees Collected </Typography>
+                                    <Typography variant="body1" style={{ marginBottom: 10 }}> Fees Collected </Typography>
                                 </div>
                                 <div style={{ display:'flex', justifyContent:'center' }}> 
                                     <Typography variant="h5" style={{ marginBottom: 10 }} >

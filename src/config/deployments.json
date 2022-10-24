@@ -1,126 +1,44 @@
 {
-    "kovan": {
 
-        "pool01": {
-            "pool": "0xe7a77915e7f779a5B39C90CfA86007AB17d3a28e",
-            "pool_lp": "0xF7234f7875F04520d14114B516FB4042e171B504",
-            "strategy": "0x2eA91b98EC963D58ea29416381ED9E1b2422378a",
-            "price_feed": "0x6135b13325bfC4B00278B4abC5e20bbce2D6580e"
-        },
-        "pool02": {
-            "pool": "0x22ee99178f6a619c492e1d3c0b3E2A83bbda4849",
-            "pool_lp": "0x626110C8351A3285047730A3C4c36f9a5FC6c022",
-            "strategy": "0xc60d1925fD3019C2a174Cc8C8d7bCe507c22a4e8",
-            "price_feed": "0x9326BFA02ADD2366b30bacB125260Af641031331"
-        },
-        "pool03": {
-            "pool": "0x3303BFD7d919ef7b04ec80728153268CECf962e5",
-            "pool_lp": "0x76FE1B363Fa478f70b656673194BE3f2A27c5806",
-            "strategy": "0x63fC9a3734859c1952fC740299997c87744E9731",
-            "price_feed": "0x6135b13325bfC4B00278B4abC5e20bbce2D6580e"
-        },
-        "pool04": {
-            "pool": "0xfABf63C2CF558573B7BABBe2bd0472F108B9940C",
-            "pool_lp": "0xe0ADa09F241A126AF0CA9ecaf763694ED0F2ACED",
-            "strategy": "0x35bBEc39CF30ca5294ceE26fEcB047168263083C",
-            "price_feed": "0x9326BFA02ADD2366b30bacB125260Af641031331"
-        },
-        "pool05": {
-            "pool": "0xb995c1b6bb43139ae1b2b682db5b4287667fcd7f",
-            "pool_lp": "0xA63ef860658eE67c9a194948d1e0bD495fee28c7",
-            "strategy": "0x71b8AEB1B8bBc0e6591ffa947c0d08B1a2dCe76C",
-            "price_feed": "0x6135b13325bfC4B00278B4abC5e20bbce2D6580e"
-        },
-        "pool06": {
-            "pool": "0xcd52C23b8c8DB708848f5f92eDc574D037831a7e",
-            "pool_lp": "0x832eC9f50878a9DB852c906EfC7fd1F6465f6899",
-            "strategy": "0x6207Fb3baa1CbEb9e340Bbe68B31072F040Dd8EE",
-            "price_feed": "0x9326BFA02ADD2366b30bacB125260Af641031331"
-        },
-
-        "pool01v3": {
-            "pool": "0x1385C8995f23554a8F9C4E0f0dfB058426B81ee3",
-            "pool_lp": "0x58733ED2496A848594db572A1ef62f99A35F1ebD",
-            "strategy": "0x2eA91b98EC963D58ea29416381ED9E1b2422378a",
-            "price_feed": "0x6135b13325bfC4B00278B4abC5e20bbce2D6580e"
-        },
-        "pool02v3": {
-            "pool": "0xFD8347Da2B9C42fcFe02C996eF041Ce43a2490B8",
-            "pool_lp": "0x07524f6d6022318353fE2829630442dD6e79F4B3",
-            "strategy": "0xc60d1925fD3019C2a174Cc8C8d7bCe507c22a4e8",
-            "price_feed": "0x9326BFA02ADD2366b30bacB125260Af641031331"
-        },
-        "pool03v3": {
-            "pool": "0x0420c5a6D73B9e78F7cd40eDFB81B382A3bd589D",
-            "pool_lp": "0x0ECAd1d35469c7BA47F6C05eB89e194a72437A20",
-            "strategy": "0x63fC9a3734859c1952fC740299997c87744E9731",
-            "price_feed": "0x6135b13325bfC4B00278B4abC5e20bbce2D6580e"
-        },
-        "pool04v3": {
-            "pool": "0x89f6a8533A26aeFA197011cA3778478fF1B0dF54",
-            "pool_lp": "0x259d5a7204910f86AaC3037E847E70A48400ed32",
-            "strategy": "0x35bBEc39CF30ca5294ceE26fEcB047168263083C",
-            "price_feed": "0x9326BFA02ADD2366b30bacB125260Af641031331"
-        },
-        "pool05v3": {
-            "pool": "0x5A832F1C84E1365ea52897B3463CA4FECFf2D4eE",
-            "pool_lp": "0x454E7478AAc5e2E4F7df633Ba0A3eAD1f1425a19",
-            "strategy": "0x71b8AEB1B8bBc0e6591ffa947c0d08B1a2dCe76C",
-            "price_feed": "0x6135b13325bfC4B00278B4abC5e20bbce2D6580e"
-        },
-        "pool06v3": {
-            "pool": "0x420F57D0Ca28cFa6CA03685684FdF86c6e8f2Fa7",
-            "pool_lp": "0xD49E42a435A2E48C3AdddEcD8dDe8B06B1b7c5aF",
-            "strategy": "0x6207Fb3baa1CbEb9e340Bbe68B31072F040Dd8EE",
-            "price_feed": "0x9326BFA02ADD2366b30bacB125260Af641031331"
-        },
-
-        "usdc": "",
-        "dai": "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa",
-        "weth": "0xd0A1E359811322d97991E03f863a0C30C2cF029C",
-        "wbtc": "0xe0C9275E44Ea80eF17579d33c55136b7DA269aEb",
-        "hst": "0x36de93a7d635F957A5E8533058786e3c96B3C9e1",
-        "hst_farm": "0x8fd327a3907E8E5FC9E070134015393C373582ba",
-        "governance": "0x5F667187d3B6dA12e31286776cA51D0614e1b977",
-        "indexes": {
-            "index01v3": {
-                "pool": "0x501bf8B88761fb19EebCF22E8bc6527ddA9c5b9d",
-                "pool_lp": "0xE5A3cDb8993c0f670F6c83D6b6CF1833aBf3Ce04"
-            },
-            "index02v3": {
-                "pool": "0x92dd27dA1E70893D3B77d896aD046CeA6eB75105",
-                "pool_lp": "0x08D8f8bB5643940086d6Bc29C11caC98eca8Ca31"
-            },
-            "index03v3": {
-                "pool": "0x05Ead74Ef4beC419EC0d0138133f4022827D3D90",
-                "pool_lp": "0x68D1aeC783AB4c267a354191E0Ce56CbA6904b45"
-            },
-            "index01": {
-                "pool": "0xc7Ac011529AFCe67AEBD7941523A773F341Eab1b",
-                "pool_lp": "0x0c7e579a8a2Af3204AE15Ad6389CCaB0B638a3Ad"
-            },
-            "index02": {
-                "pool": "0xe948064F4e5d27b982c225178d36C4976669D8ec",
-                "pool_lp": "0x101337286dEDdFbb7bf87c3C9eAF23f70d211466"
-            },
-            "index03": {
-                "pool": "0xe62A17b61e4E309c491F1BD26bA7BfE9e463610e",
-                "pool_lp": "0x46cfDDc7ab8348b44b4a0447F0e5077188c4ff14"
-            }
-        },
-        "tokens": {
-            "wbtc": {
-                "address": "0xe0C9275E44Ea80eF17579d33c55136b7DA269aEb",
-                "feed": "0x6135b13325bfC4B00278B4abC5e20bbce2D6580e"
-            },
-            "weth": {
-                "address": "0xd0A1E359811322d97991E03f863a0C30C2cF029C",
-                "feed": "0x9326BFA02ADD2366b30bacB125260Af641031331"
-            }
-        }
-    },
-    
     "polygon": {
+        "pool01v3a": {
+            "pool": "0x8714336322c091924495B08938E368Ec0d19Cc94",
+            "pool_lp": "0x49c3ad1bF4BeFb024607059cb851Eb793c224BaB",
+            "strategy": "0xbfB7A8caF44fD28188673B09aa3B2b00eF301118",
+            "price_feed": "0xc907E116054Ad103354f2D350FD2514433D57F6f"
+        },
+        "pool02v3a": {
+            "pool": "0xD963e4C6BE2dA88a1679A40139C5b75961cc2619",
+            "pool_lp": "0xC27E560E3D1546edeC5DD858D404EbaF2166A763",
+            "strategy": "0xc78BD1257b7fE3Eeb33fC824313C71D145C9754b",
+            "price_feed": "0xF9680D99D6C9589e2a93a78A04A279e509205945"
+        },
+        "pool03v3a": {
+            "pool": "0x63151e56140E09999983CcD8DD05927f9e8be81D",
+            "pool_lp": "0xCdf8886cEea718ad37e02e9a421Eb674F20e5ba1",
+            "strategy": "0x4687faf8e60ca8e532af3173C0225379939261F7",
+            "price_feed": "0xc907E116054Ad103354f2D350FD2514433D57F6f"
+        },
+        "pool04v3a": {
+            "pool": "0xd229428346E5Ba2F08AbAf52fE1d2C941ecB36AD",
+            "pool_lp": "0xe4FF896D756Bdd6aa1208CDf05844335aEA56297",
+            "strategy": "0xB98203780925694BAeAFDC7CB7C6ECb1E6631D17",
+            "price_feed": "0xF9680D99D6C9589e2a93a78A04A279e509205945"
+        },
+        "pool05v3a": {
+            "pool": "0xCfcF4807d10C564204DD131527Ba8fEb08e2cc9e",
+            "pool_lp": "0x80bc0b435b7e7F0Dc3E95C3dEA87c68D5Ade4378",
+            "strategy": "0xBbe4786c0D1cEda012B8EC1ad12a2F7a1A5941f1",
+            "price_feed": "0xc907E116054Ad103354f2D350FD2514433D57F6f"
+        },
+        "pool06v3a": {
+            "pool": "0xa2f3c0FDC55814E70Fdac2296d96bB04840bE132",
+            "pool_lp": "0x2523c4Ab54f5466A8b8eEBCc57D8edC0601faB54",
+            "strategy": "0x62386A92078CC4fEF921F9bb1f515464e2f7918f",
+            "price_feed": "0xF9680D99D6C9589e2a93a78A04A279e509205945"
+        },
+
+
         "pool01v3": {
             "pool": "0xb7BB83e1c826a8945652434DCf1758B46d6A5120",
             "pool_lp": "0xF87c6838EAD55f40B7d3038FBbb1287767898EeB",
@@ -203,6 +121,19 @@
         "hst_farm": "0x130e249DA0B90378eB07845217d6bB832E16f038",
         "governance": "0xD9CF1D8c68f1986D20CCffe2268dd4Cb7F518f4B",
         "indexes": {
+            "index01v3a": {
+                "pool": "0xE61bA2eF1057dD90aAF9f021Fdf24F6B57D902AF",
+                "pool_lp": "0x0560Dd521787e27126B93E98568002A3ef84E36c"
+            },
+            "index02v3a": {
+                "pool": "0x1FB4fa664648a458c81A6fFDC7b3c7120CEb4E45",
+                "pool_lp": "0x8A8dD5a0d50887D16303460ee00CB311D255b034"
+            },
+            "index03v3a": {
+                "pool": "0xe0B5AfF7821bbABd48429D2B956A1202e3BA9b42",
+                "pool_lp": "0x9D91628be9BA8B024644fF612d013956C7ADa928"
+            },
+
             "index01v3": {
                 "pool": "0xE29F6C43994a6D2f4893adE27b05361AABBc4EBE",
                 "pool_lp": "0x8Fa6d8CBD55E068b064F1B8A156409d3BB67F6cd"

@@ -106,7 +106,7 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
                 <TitleValueBox title="Rebalancing Targets" value={rebalancingText} mode="small"  />
                 <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small" />
 
-                <TitleValueBox title="Chainlink Automation" value="Uokeep Page" url={upkeep} mode="small" />
+                <TitleValueBox title="Chainlink Automation" value="Upkeep Page" url={upkeep} mode="small" />
             </Box>
         </Box>
     )

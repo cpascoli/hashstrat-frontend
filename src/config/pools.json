@@ -1,62 +1,132 @@
 {
-    "kovan": [
-        {
-            "poolId": "pool01",
-            "name": "BTC-DAI REB01",
-            "description": "A rebalancing pool targeting 60% BTC and 40% USDC",
-            "depositToken": "DAI",
-            "investTokens": ["WBTC"],
-            "strategy": "rebalance_01",
-            "upkeep": "https://keepers.chain.link/kovan/3737"
-        },
-        {
-            "poolId": "pool02",
-            "name": "ETH-DAI REB01",
-            "description": "A rebalancing pool targeting 60% ETH and 40% USDC",
-            "depositToken": "DAI",
-            "investTokens": ["WETH"],
-            "strategy": "rebalance_01",
-            "upkeep": "https://keepers.chain.link/kovan/3738"
-        },
-        {
-            "poolId": "pool03",
-            "name": "BTC-DAI MEANREV01",
-            "description": "Pool dca-ing in and out of BTC using a 350D mean reversion strategy",
-            "depositToken": "DAI",
-            "investTokens": ["WBTC"],
-            "strategy": "meanrev_01",
-            "upkeep": "https://keepers.chain.link/kovan/3739"
-        },
-        {
-            "poolId": "pool04",
-            "name": "ETH-DAI MEANREV01",
-            "description": "Pool dca-ing in and out of ETH using a 350D mean reversion strategy",
-            "depositToken": "DAI",
-            "investTokens": ["WETH"],
-            "strategy": "meanrev_01",
-            "upkeep": "https://keepers.chain.link/kovan/3740"
-        },
-        {
-            "poolId": "pool05",
-            "name": "BTC-DAI TRDFLW01",
-            "description": "Pool allocating to BTC with a trend following strategy",
-            "depositToken": "DAI",
-            "investTokens": ["WBTC"],
-            "strategy": "trendfollow_01",
-            "upkeep": "https://keepers.chain.link/kovan/3741"
-        },
-        {
-            "poolId": "pool06",
-            "name": "ETH-DAI TRDFLW01",
-            "description": "Pool allocating to ETH with a trend following strategy",
-            "depositToken": "DAI",
-            "investTokens": ["WETH"],
-            "strategy": "trendfollow_01",
-            "upkeep": "https://keepers.chain.link/kovan/3742"
-        }
-    ],
+    
     
     "polygon": [
+        {
+            "poolId": "pool01v3a",
+            "name": "REB (BTC)",
+            "description": "A self-balancing Pool targeting 60% BTC and 40% USDC allocation",
+            "depositToken": "USDC",
+            "investTokens": ["WBTC"],
+            "strategy": "rebalance_01",
+            "upkeep": "https://automation.chain.link/polygon/91005646385663633827425535784957699372696464746208977816837453310329957060170",
+            "disabled": "false"
+        },
+        {
+            "poolId": "pool02v3a",
+            "name": "REB (ETH)",
+            "description": "A self-balancing Pool targeting 60% ETH and 40% USDC allocation",
+            "depositToken": "USDC",
+            "investTokens": ["WETH"],
+            "strategy": "rebalance_01",
+            "upkeep": "https://automation.chain.link/polygon/103517938643315103689615196084595022812086193533833118622635924439886524371",
+            "disabled": "false"
+        },
+        {
+            "poolId": "pool03v3a",
+            "name": "MEANREV (BTC)",
+            "description": "Pool dollar-cost averaging in/out BTC using a 350D mean reversion strategy",
+            "depositToken": "USDC",
+            "investTokens": ["WBTC"],
+            "strategy": "meanrev_01",
+            "upkeep": "https://automation.chain.link/polygon/68329869876839050088077824993505930823446630439340028225947687618812452348767",
+            "disabled": "false"
+        },
+        {
+            "poolId": "pool04v3a",
+            "name": "MEANREV (ETH)",
+            "description": "Pool dollar-cost averaging in/out ETH using a 350D mean reversion strategy",
+            "depositToken": "USDC",
+            "investTokens": ["WETH"],
+            "strategy": "meanrev_01",
+            "upkeep": "https://automation.chain.link/polygon/7950355541882819180691127838721539961890191687059406914937614469331565561438",
+            "disabled": "false"
+        },
+        {
+            "poolId": "pool05v3a",
+            "name": "TRDFLW (BTC)",
+            "description": "Pool allocating to BTC with a trend following strategy",
+            "depositToken": "USDC",
+            "investTokens": ["WBTC"],
+            "strategy": "trendfollow_01",
+            "upkeep": "https://automation.chain.link/polygon/57965953671874927088341633082962703685849252455680241126575028119680182939827",
+            "disabled": "false"
+        },
+        {
+            "poolId": "pool06v3a",
+            "name": "TRDFLW (ETH)",
+            "description": "Pool allocating to ETH with a trend following strategy",
+            "depositToken": "USDC",
+            "investTokens": ["WETH"],
+            "strategy": "trendfollow_01",
+            "upkeep": "https://automation.chain.link/polygon/16560755243522854817010902474008668623517727569689741184071823583987308893266",
+            "disabled": "false"
+        },
+
+
+
+        {
+            "poolId": "pool01v3",
+            "name": "REB (BTC) V3 [DISABLED]",
+            "description": "A self-balancing Pool targeting 60% BTC and 40% USDC allocation",
+            "depositToken": "USDC",
+            "investTokens": ["WBTC"],
+            "strategy": "rebalance_01",
+            "upkeep": "https://keepers.chain.link/polygon/79002496571094123481144899300906489714360532378690686481340404302497134746587",
+            "disabled": "true"
+        },
+        {
+            "poolId": "pool02v3",
+            "name": "REB (ETH) V3 [DISABLED]",
+            "description": "A self-balancing Pool targeting 60% ETH and 40% USDC allocation",
+            "depositToken": "USDC",
+            "investTokens": ["WETH"],
+            "strategy": "rebalance_01",
+            "upkeep": "https://keepers.chain.link/polygon/50450368942057517251818542225987856339715648009852436119441523960954583885530",
+            "disabled": "true"
+        },
+        {
+            "poolId": "pool03v3",
+            "name": "MEANREV (BTC) V3 [DISABLED]",
+            "description": "Pool dollar-cost averaging in/out BTC using a 350D mean reversion strategy",
+            "depositToken": "USDC",
+            "investTokens": ["WBTC"],
+            "strategy": "meanrev_01",
+            "upkeep": "https://keepers.chain.link/polygon/18522469544667424901858031948136249394284336119722053322041572278778245468064",
+            "disabled": "true"
+        },
+        {
+            "poolId": "pool04v3",
+            "name": "MEANREV (ETH) V3 [DISABLED]",
+            "description": "Pool dollar-cost averaging in/out ETH using a 350D mean reversion strategy",
+            "depositToken": "USDC",
+            "investTokens": ["WETH"],
+            "strategy": "meanrev_01",
+            "upkeep": "https://keepers.chain.link/polygon/54210081433007857951351934123936776484778971217906422016953311314951581669133",
+            "disabled": "true"
+        },
+        {
+            "poolId": "pool05v3",
+            "name": "TRDFLW (BTC) V3 [DISABLED]",
+            "description": "Pool allocating to BTC with a trend following strategy",
+            "depositToken": "USDC",
+            "investTokens": ["WBTC"],
+            "strategy": "trendfollow_01",
+            "upkeep": "https://keepers.chain.link/polygon/77769264019668570071160675248216420635640214499872948314284430908128077621728",
+            "disabled": "true"
+        },
+        {
+            "poolId": "pool06v3",
+            "name": "TRDFLW (ETH) V3 [DISABLED]",
+            "description": "Pool allocating to ETH with a trend following strategy",
+            "depositToken": "USDC",
+            "investTokens": ["WETH"],
+            "strategy": "trendfollow_01",
+            "upkeep": "https://keepers.chain.link/polygon/804741549652280591869086768180405512810898344588565477262032797996912308004",
+            "disabled": "true"
+        },
+
+
         {
             "poolId": "pool01",
             "name": "REB (BTC) [DISABLED]",
@@ -64,7 +134,8 @@
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
             "strategy": "rebalance_01",
-            "upkeep": "https://keepers.chain.link/polygon/257"
+            "upkeep": "https://keepers.chain.link/polygon/257",
+            "disabled": "true"
         },
         {
             "poolId": "pool02",
@@ -73,7 +144,8 @@
             "depositToken": "USDC",
             "investTokens": ["WETH"],
             "strategy": "rebalance_01",
-            "upkeep": "https://keepers.chain.link/polygon/258"
+            "upkeep": "https://keepers.chain.link/polygon/258",
+            "disabled": "true"
         },
         {
             "poolId": "pool03",
@@ -82,7 +154,8 @@
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
             "strategy": "meanrev_01",
-            "upkeep": "https://keepers.chain.link/polygon/253"
+            "upkeep": "https://keepers.chain.link/polygon/253",
+            "disabled": "true"
         },
         {
             "poolId": "pool04",
@@ -91,7 +164,8 @@
             "depositToken": "USDC",
             "investTokens": ["WETH"],
             "strategy": "meanrev_01",
-            "upkeep": "https://keepers.chain.link/polygon/254"
+            "upkeep": "https://keepers.chain.link/polygon/254",
+            "disabled": "true"
         },
         {
             "poolId": "pool05",
@@ -100,7 +174,8 @@
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
             "strategy": "trendfollow_01",
-            "upkeep": "https://keepers.chain.link/polygon/259"
+            "upkeep": "https://keepers.chain.link/polygon/259",
+            "disabled": "true"
         },
         {
             "poolId": "pool06",
@@ -109,64 +184,8 @@
             "depositToken": "USDC",
             "investTokens": ["WETH"],
             "strategy": "trendfollow_01",
-            "upkeep": "https://keepers.chain.link/polygon/260"
-        },
-
-
-
-        {
-            "poolId": "pool01v3",
-            "name": "REB (BTC)",
-            "description": "A self-balancing Pool targeting 60% BTC and 40% USDC allocation",
-            "depositToken": "USDC",
-            "investTokens": ["WBTC"],
-            "strategy": "rebalance_01",
-            "upkeep": "https://keepers.chain.link/polygon/79002496571094123481144899300906489714360532378690686481340404302497134746587"
-        },
-        {
-            "poolId": "pool02v3",
-            "name": "REB (ETH)",
-            "description": "A self-balancing Pool targeting 60% ETH and 40% USDC allocation",
-            "depositToken": "USDC",
-            "investTokens": ["WETH"],
-            "strategy": "rebalance_01",
-            "upkeep": "https://keepers.chain.link/polygon/50450368942057517251818542225987856339715648009852436119441523960954583885530"
-        },
-        {
-            "poolId": "pool03v3",
-            "name": "MEANREV (BTC)",
-            "description": "Pool dollar-cost averaging in/out BTC using a 350D mean reversion strategy",
-            "depositToken": "USDC",
-            "investTokens": ["WBTC"],
-            "strategy": "meanrev_01",
-            "upkeep": "https://keepers.chain.link/polygon/18522469544667424901858031948136249394284336119722053322041572278778245468064"
-        },
-        {
-            "poolId": "pool04v3",
-            "name": "MEANREV (ETH)",
-            "description": "Pool dollar-cost averaging in/out ETH using a 350D mean reversion strategy",
-            "depositToken": "USDC",
-            "investTokens": ["WETH"],
-            "strategy": "meanrev_01",
-            "upkeep": "https://keepers.chain.link/polygon/54210081433007857951351934123936776484778971217906422016953311314951581669133"
-        },
-        {
-            "poolId": "pool05v3",
-            "name": "TRDFLW (BTC)",
-            "description": "Pool allocating to BTC with a trend following strategy",
-            "depositToken": "USDC",
-            "investTokens": ["WBTC"],
-            "strategy": "trendfollow_01",
-            "upkeep": "https://keepers.chain.link/polygon/77769264019668570071160675248216420635640214499872948314284430908128077621728"
-        },
-        {
-            "poolId": "pool06v3",
-            "name": "TRDFLW (ETH)",
-            "description": "Pool allocating to ETH with a trend following strategy",
-            "depositToken": "USDC",
-            "investTokens": ["WETH"],
-            "strategy": "trendfollow_01",
-            "upkeep": "https://keepers.chain.link/polygon/804741549652280591869086768180405512810898344588565477262032797996912308004"
+            "upkeep": "https://keepers.chain.link/polygon/260",
+            "disabled": "true"
         }
     ]
 }

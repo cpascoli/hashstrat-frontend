@@ -25,7 +25,7 @@ export const useFeedDecimals = (chainId: number, poolId: string) => {
     }) ?? {}
 
     if (!value) {
-        console.warn("useFeedDecimals - feed decimals is: ",  value, " feed contract: ", contract.address)
+        console.warn("useFeedDecimals - feed decimals is: ", value, " feed contract: ", contract.address)
     }
 
     useDebugValue(value?.[0].toString())

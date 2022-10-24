@@ -56,8 +56,11 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
   const tokenStakedBalance = useStakedTokenBalance(chainId, poolId, account)
   const formattedTokenStakedBalance = tokenStakedBalance && fromDecimals(tokenStakedBalance, token.decimals, 2) || "0.0"
 
+  console.log("formattedTokenBalance: ", formattedTokenBalance, "formattedTokenStakedBalance: ", formattedTokenStakedBalance)
+
+
   const showModalPressed = () => {
-    if (Number(formattedTokenBalance) > 0) {
+    if (formType === 'stake' ? Number(formattedTokenBalance) > 0: Number(formattedTokenStakedBalance) > 0) {
       setShowStakeUnstakeModal(true)
     }
   }
@@ -91,7 +94,8 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
             
                   <Grid item xs={12}>
                       <Box >
-                        <Button disabled={ Number(formattedTokenBalance) === 0 } name={formType === 'stake' ?  "Stake" : "Unstake"} variant="contained" color="primary" onClick={(e) => showModalPressed()}>
+                        <Button disabled={ formType === 'stake' ? Number(formattedTokenBalance) === 0: Number(formattedTokenStakedBalance) === 0 } 
+                                name={formType === 'stake' ?  "Stake" : "Unstake"} variant="contained" color="primary" onClick={(e) => showModalPressed()}>
                             { formType === 'stake' ?  "Stake" : "Unstake" }
                         </Button> 
                       </Box>

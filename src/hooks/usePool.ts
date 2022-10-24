@@ -63,13 +63,13 @@ export const useLpTokensValue = (chainId: number, poolId: string, amount: string
 
     const { value : portfolioValue, error : error0 } = useCall({
         contract: poolContract,
-        method: poolId.endsWith("v3") ? 'totalValue' : 'totalPortfolioValue',
+        method: /v3.?$/.test(poolId) ? 'totalValue' : 'totalPortfolioValue',
         args: [],
     }) ?? {}
 
     const { value : multiPoolValue, error : error1 } = useCall({
         contract: poolContract,
-        method:  poolId.endsWith("v3") ? 'totalValue' : 'multiPoolValue',
+        method: /v3.?$/.test(poolId) ? 'totalValue' : 'multiPoolValue',
         args: [],
     }) ?? {}
 
@@ -133,7 +133,7 @@ export const useTotalPortfolioValue = (chainId: number, poolId: string) => {
     const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
-            method: poolId.endsWith("v3") ? 'totalValue' : 'totalPortfolioValue',
+            method: /v3.?$/.test(poolId) ? 'totalValue' : 'totalPortfolioValue',
             args: [],
     }) ?? {}
     useDebugValue(value?.[0].toString())
@@ -170,7 +170,7 @@ export const useInvestedTokenValue = (chainId: number, poolId: string) => {
     const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
-            method: poolId.endsWith("v3") ? 'riskAssetValue' : 'investedTokenValue',
+            method: /v3.?$/.test(poolId) ? 'riskAssetValue' : 'investedTokenValue',
             args: [],
     }) ?? {}
 
@@ -182,7 +182,7 @@ export const useDepositTokenValue = (chainId: number, poolId: string) => {
     const poolContract = PoolContract(chainId, poolId)
     const { value, error } = useCall({
             contract: poolContract,
-            method: poolId.endsWith("v3") ? 'stableAssetValue' : 'depositTokenValue',
+            method: /v3.?$/.test(poolId) ? 'stableAssetValue' : 'depositTokenValue',
             args: [],
     }) ?? {}
 

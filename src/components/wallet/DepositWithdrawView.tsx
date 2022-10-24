@@ -12,6 +12,7 @@ import { SnackInfo } from "../SnackInfo"
 import { Modal } from "../Modal"
 import { Token } from "../../types/Token"
 import { fromDecimals } from "../../utils/formatter"
+import { PoolInfo } from "../../utils/pools"
 
 
 
@@ -92,7 +93,7 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
               </StyledAlert>
           }
 
-          {  formType === 'deposit' && !poolId.endsWith("v3") &&
+          {  formType === 'deposit' && PoolInfo(chainId, poolId) === 'true' &&
               <StyledAlert severity="info" style={{textAlign: "center", marginBottom: 20}} > 
                   <AlertTitle>Deposits Disabled</AlertTitle>
                   Can't deposit into a disabled { poolId.startsWith("index") ? "Index" : "Pool" }. Withdraw your funds and transfer them into the upgraded v3 { poolId.startsWith("index") ? "Index" : "Pool" }
@@ -108,7 +109,7 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
                 { formType === 'deposit' &&
                   <Grid item xs={12}>
                       <Box >
-                          <Button disabled={ poolId.endsWith("v3") === false || Number(formattedTokenBalance) === 0 } name="deposit" variant="contained" color="primary" onClick={(e) => showModalPressed("deposit")}>
+                          <Button disabled={ (PoolInfo(chainId, poolId).disabled === 'true') || Number(formattedTokenBalance) === 0 } name="deposit" variant="contained" color="primary" onClick={(e) => showModalPressed("deposit")}>
                             Deposit
                           </Button>
                       </Box>

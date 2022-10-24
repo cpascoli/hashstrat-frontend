@@ -100,7 +100,7 @@ export const MeanRevStrategyInfoView = ( { chainId, poolId, depositToken, invest
             <TitleValueBox title="De-risk Target" value={`${sellTargetText}`} mode="small"  />
             <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small"  />
 
-            <TitleValueBox title="Chainlink Automation" value="Uokeep Page" url={upkeep} mode="small" />
+            <TitleValueBox title="Chainlink Automation" value="Upkeep Page" url={upkeep} mode="small" />
         </Box>
     )
 }

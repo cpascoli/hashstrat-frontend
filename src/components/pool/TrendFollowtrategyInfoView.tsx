@@ -95,7 +95,7 @@ export const TrendFollowtrategyInfoView = ( { chainId, poolId, depositToken, inv
             <TitleValueBox title="Sell Trigger" value={`${sellTargetText}`} mode="small" />
             <TitleValueBox title="Trade Size" value={`${tokensToSwapPerc}`} mode="small"  suffix="%" />
 
-            <TitleValueBox title="Chainlink Automation" value="Uokeep Page" url={upkeep} mode="small" />
+            <TitleValueBox title="Chainlink Automation" value="Upkeep Page" url={upkeep} mode="small" />
         </Box>
     )
 }

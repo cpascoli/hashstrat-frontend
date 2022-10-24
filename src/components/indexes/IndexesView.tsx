@@ -5,7 +5,7 @@ import { Alert, AlertTitle } from "@material-ui/lab"
 import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 import { Link as RouterLink } from "react-router-dom"
 import { useIndexesInfo } from "../dashboard/DashboadModel"
-import { InvestTokens } from "../../utils/pools"
+import { InvestTokens, PoolInfo } from "../../utils/pools"
 import { IndexesIds } from "../../utils/pools";
 import { Horizontal } from "../Layout"
 import { Token } from "../../types/Token"
@@ -54,7 +54,7 @@ export const IndexesView = ({ chainId, account, depositToken } : IndexesViewProp
         setSelectedTokenIndex(parseInt(newValue))
     }
 
-    const activeIndexViews = indexes.filter( index => index.poolId.endsWith("v3") ).map( index => {
+    const activeIndexViews = indexes.filter( index => PoolInfo(chainId, index.poolId).disabled === 'false').map( index => {
         return (
             <div key={index.poolId}>
                 <PoolSummary chainId={chainId} poolId={index.poolId} account={account} depositToken={depositToken} tokens={index.tokenInfoArray} />
@@ -62,7 +62,7 @@ export const IndexesView = ({ chainId, account, depositToken } : IndexesViewProp
         )
     })
 
-    const disabledIndexViews = indexes.filter( index => !index.poolId.endsWith("v3") ).map( index => {
+    const disabledIndexViews = indexes.filter( index => PoolInfo(chainId, index.poolId).disabled === 'true').map( index => {
         return (
             <div key={index.poolId}>
                 <PoolSummary chainId={chainId} poolId={index.poolId} account={account} depositToken={depositToken} tokens={index.tokenInfoArray} />
@@ -96,7 +96,7 @@ export const IndexesView = ({ chainId, account, depositToken } : IndexesViewProp
                     <Box px={2} pb={2} >
                         <Alert severity="warning" style={{  marginBottom: 10 }} > 
                             <AlertTitle>Disabled Indexes</AlertTitle>
-                            Indexes have been upgraded to v3 and old indexes are now disabled.<br/>
+                            Indexes have been upgraded and old indexes are now disabled.<br/>
                             Withdraw funds from disabled Indexes and transfer them into active Indexes.
                         </Alert>
                     </Box>

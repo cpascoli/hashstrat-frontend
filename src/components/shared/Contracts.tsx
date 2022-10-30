@@ -3,7 +3,7 @@
 
 import { makeStyles, Link, Typography, Box } from  "@material-ui/core"
 import { NetworkExplorerHost, PoolAddress, PoolLPTokenAddress, 
-     StrategyAddress, FeedAddress, HstTokenAddress, FarmAddress, GovernanceAddress } from "../../utils/network"
+     StrategyAddress, FeedAddress, HstTokenAddress, FarmAddress, DivsDistributorAddress, TreasuryAddress } from "../../utils/network"
 import { Horizontal } from "../Layout"
 
 const useStyle = makeStyles( theme => ({
@@ -32,7 +32,8 @@ export const Contracts = ( { chainId, poolId } : ContractsProps ) => {
     const explorerHost = NetworkExplorerHost(chainId) ?? "polygonscan.com"
     const hstAddress = HstTokenAddress(chainId)
     const farmAddress = FarmAddress(chainId)
-    const governanceAddress = GovernanceAddress(chainId)
+    const divsDistributorAddress = DivsDistributorAddress(chainId)
+    const treasuryAddress = TreasuryAddress(chainId)
 
     const poolAddress = poolId && PoolAddress(chainId, poolId)
     const lpTokenAddress = poolId && PoolLPTokenAddress(chainId, poolId)
@@ -60,7 +61,8 @@ export const Contracts = ( { chainId, poolId } : ContractsProps ) => {
 
                         <Link href={`https://${explorerHost}/address/${hstAddress}` } target="_blank">HST Token</Link>
                         <Link href={`https://${explorerHost}/address/${farmAddress}` } target="_blank">HST Farm</Link>
-                        <Link href={`https://${explorerHost}/address/${governanceAddress}` } target="_blank">Governance</Link>
+                        <Link href={`https://${explorerHost}/address/${divsDistributorAddress}` } target="_blank">Divs Distributor</Link>
+                        <Link href={`https://${explorerHost}/address/${treasuryAddress}` } target="_blank">Treasury</Link>
 
                     </Horizontal>
                 </div>

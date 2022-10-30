@@ -3,8 +3,8 @@ import { Alert } from "@material-ui/lab";
 
 
 export const StyledAlert = styled(Alert)(({ theme }) => ({
-    backgroundColor: theme.palette.type === 'light' ? '#e1eaeb' : '#2f566e',
+    backgroundColor: theme.palette.type === 'light' ? '#e1eaeb' : '#223846',
     margin: "auto",
-    maxWidth: 700,
-    padding: 20,
+    // maxWidth: 700,
+    // padding: 20,
 }));

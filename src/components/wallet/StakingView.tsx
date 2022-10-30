@@ -2,17 +2,16 @@ import { useState } from "react"
 import { useEthers, useTokenBalance } from "@usedapp/core"
 import { useStakedTokenBalance } from "../../hooks/useFarm"
 
-import { Box, Grid, Button, makeStyles, styled} from  "@material-ui/core"
-import { Alert, AlertTitle } from "@material-ui/lab"
+import { Box, Grid, Button, makeStyles } from  "@material-ui/core"
+import { AlertTitle } from "@material-ui/lab"
+
+import { PoolInfo } from "../../utils/pools"
 import { StyledAlert } from "../shared/StyledAlert"
-
 import { TitleValueBox } from '../TitleValueBox'
-
 import { Modal } from "../Modal"
 import { Token } from "../../types/Token"
 import { fromDecimals } from "../../utils/formatter"
 import { SnackInfo } from "../SnackInfo"
-
 import { StakeForm } from "./StakeForm"
 
 
@@ -94,7 +93,10 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
             
                   <Grid item xs={12}>
                       <Box >
-                        <Button disabled={ formType === 'stake' ? Number(formattedTokenBalance) === 0: Number(formattedTokenStakedBalance) === 0 } 
+                        <Button disabled={ formType === 'stake' ? 
+                                            Number(formattedTokenBalance) === 0 || (PoolInfo(chainId, poolId).disabled === 'true') : // disable stake for disabled pools
+                                            Number(formattedTokenStakedBalance) === 0
+                              } 
                                 name={formType === 'stake' ?  "Stake" : "Unstake"} variant="contained" color="primary" onClick={(e) => showModalPressed()}>
                             { formType === 'stake' ?  "Stake" : "Unstake" }
                         </Button> 

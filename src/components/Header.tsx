@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useEthers, Kovan, Polygon, shortenAddress } from "@usedapp/core";
+import { useEthers, Polygon, shortenAddress } from "@usedapp/core";
 
 import { useTheme, Button, Link, Menu, MenuProps, MenuItem, Divider, Typography, makeStyles, Box, Switch } from  "@material-ui/core"
 import { Menu as MenuIcon, KeyboardArrowDown, WbSunny, Brightness3 } from "@material-ui/icons"
@@ -115,7 +115,7 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
         const network = NetworkName(chainId) ?? "Unknown"
         setNetworkName( network )
 
-        const supportedChain = chainId === Polygon.chainId || chainId === Kovan.chainId
+        const supportedChain = chainId === Polygon.chainId  // || chainId === Goerli.chainId
         setChainId(supportedChain ? chainId : undefined)
       }
 
@@ -150,7 +150,7 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
     return (
 
         <header>
-          { !chainId && account && currentLocation !== '/' &&
+          { chainId !== Polygon.chainId && account && currentLocation !== '/' &&
                
                <Alert severity="warning" style={{ marginBottom: 10 }} > 
                    <AlertTitle>Wrong Network</AlertTitle>
@@ -159,19 +159,23 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
               
           }
 
-          { !account && chainId && currentLocation !== '/' &&
+          { !account && currentLocation !== '/' &&
               <div style={{textAlign: "center", backgroundColor: theme.palette.type === 'light' ? '#e1eaeb' : '#384142', }}> 
                   <StyledAlert severity="info" > 
-                     <Horizontal align='center' valign='center'>
-                       <div>
-                          <AlertTitle>No account connected</AlertTitle>
-                          Connect an account to the <strong>Polygon</strong> network to use the dapp
-                        </div>
-                        <div style={{ paddingLeft: 20, paddingRight: 20  }} >
+                      <Horizontal align='center' valign='center'>
+                        <div>
+                            <AlertTitle>No account connected</AlertTitle>
+                            Connect an account to the <strong>Polygon</strong> network to use the dapp.
+                            Follow <Link href="https://academy.binance.com/en/articles/how-to-add-polygon-to-metamask" target="_blank">
+                              these instructions
+                            </Link> if you need help with your digital wallet
 
-                          <ConnectButton />
-                        </div>
-                    </Horizontal>
+                          </div>
+                          <div style={{ paddingLeft: 0, paddingRight: 0  }} >
+
+                            <ConnectButton />
+                          </div>
+                      </Horizontal>
                   </StyledAlert>
               </div>
            

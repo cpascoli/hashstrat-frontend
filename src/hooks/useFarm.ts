@@ -7,7 +7,7 @@ import { useDebugValue } from "react"
 
 export const useStakedTokenBalance = (chainId: number, poolId: string, account?: string) => {
 
-    const farmContract = FarmContract(chainId)
+    const farmContract = FarmContract(chainId, poolId)
     const lptokenAddress = PoolLPTokenAddress(chainId, poolId)
 
     const { value, error } = useCall({
@@ -69,8 +69,8 @@ export const useGetRewardPeriods = (chainId: number, account?: string) => {
 ////// User Actions
 
 
-export const useDepositAndStartStake = (chainId: number) => {
-    const farmContract = FarmContract(chainId)
+export const useDepositAndStartStake = (chainId: number, poolId?: string) => {
+    const farmContract = FarmContract(chainId, poolId)
 
     const { send: depositSend, state: depositState } = useContractFunction(farmContract, "depositAndStartStake", { 
         transactionName: "Deposit and Stake Tokens"
@@ -84,8 +84,8 @@ export const useDepositAndStartStake = (chainId: number) => {
 }
 
 
-export const useEndStakeAndWithdraw = (chainId: number) => {
-    const farmContract = FarmContract(chainId)
+export const useEndStakeAndWithdraw = (chainId: number, poolId?: string) => {
+    const farmContract = FarmContract(chainId, poolId)
 
     const { send: withdrawSend, state: withdrawState } = useContractFunction(farmContract, "endStakeAndWithdraw", { 
         transactionName: "Unstake and Withdraw Tokens"

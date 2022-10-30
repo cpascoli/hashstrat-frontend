@@ -1,0 +1,85 @@
+
+import { constants } from "ethers"
+
+import { useContractFunction, useCall } from "@usedapp/core"
+import { DivsDistributorContract } from "../utils/network"
+import { useDebugValue } from "react"
+
+
+
+export const useGetDistributionIntervals = (chainId: number) => {
+
+    const contract = DivsDistributorContract(chainId)
+    const { value, error } = useCall({
+        contract: contract,
+        method: 'getDistributionIntervals',
+        args: [],
+    }) ?? {}
+
+    console.log(">>> getDistributionIntervals: ", value?.[0] )
+
+    useDebugValue(value?.[0])
+    return value?.[0]
+}
+
+
+export const useGetDistributiontIntervalsCount = (chainId: number) => {
+
+    const contract = DivsDistributorContract(chainId)
+    const { value, error } = useCall({
+        contract: contract,
+        method: 'getDistributiontIntervalsCount',
+        args: [],
+    }) ?? {}
+    
+    useDebugValue(value?.[0])
+    return value?.[0]
+}
+
+
+
+
+export const useClaimableDivs = (chainId: number, account?: string) => {
+
+    const contract = DivsDistributorContract(chainId)
+    const { value, error } = useCall({
+        contract: contract,
+        method: 'claimableDivs',
+        args: account? [account] : [constants.AddressZero]
+
+    }) ?? {}
+    
+    return value?.[0]
+}
+
+
+export const useClaimedDivs = (chainId: number, distributionId: number, account?: string) => {
+
+    const contract = DivsDistributorContract(chainId)
+    const { value, error } = useCall({
+        contract: contract,
+        method: 'claimedDivs',
+        args: account? [distributionId, account] : [0, constants.AddressZero]
+
+    }) ?? {}
+    
+    return value?.[0]
+}
+
+//// User Actions
+
+export const useClaimDivs = (chainId: number) => {
+    const contract = DivsDistributorContract(chainId)
+
+    const { send: claimDivsSend, state: claimDivsState } = useContractFunction(contract, "claimDivs", { 
+        transactionName: "Claim Dividends"
+    })
+
+    const claimDivs = () => {
+        return claimDivsSend()
+    }
+
+    return { claimDivs, claimDivsState }
+}
+
+

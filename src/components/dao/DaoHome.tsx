@@ -72,17 +72,16 @@ export const DaoHome = ({ chainId, account, depositToken } : DaoHomeProps ) => {
 
             <Box  py={3}>
                 <Typography align="center" >
-                    HashStrat DAO is the Decentralized Autonomous Organization governing the HashStrat protocol. <br/>
-                    The HashStrat DAO Token <Link href={`https://${explorerHost}/address/${hstAddress}` } target="_black" >HST</Link> is 
-                    used to participate in the DAO governance and revenue sharing.
+                    HashStrat DAO is the Decentralized Autonomous Organization governing the HashStrat protocol
+   
                 </Typography>
             </Box>
 
             <Box>
                  <TabContext value={selectedTokenIndex.toString()} >
                     <TabList onChange={handleChange} className={classes.tabList}>
-                        <Tab label="DAO Token" value="0" key={0} />
-                        <Tab label="DAO Revenues" value="1" key={1}  />
+                        <Tab label="DAO Token (HST)" value="0" key={0} />
+                        <Tab label="Divs Distribution" value="1" key={1}  />
                     </TabList>
                     <TabPanel className={classes.tab} value="0" key={0}>
                         <DAOToken chainId={chainId} account={account} depositToken={depositToken} />

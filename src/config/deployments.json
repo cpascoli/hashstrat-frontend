@@ -117,8 +117,11 @@
         "dai": "",
         "weth": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
         "wbtc": "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
-        "hst": "0x2223Ad393d666Eb26422d1f7b33A6947BFc2eaCa",
-        "hst_farm": "0x130e249DA0B90378eB07845217d6bB832E16f038",
+        "hst": "0x77Ee22B63176DB8D904EF4aB5A4492BB700A8b39",
+        "hst_farm": "0x08487dBb81Fcb2420b4C996f10E6B6DA9f37EB05",
+        "hst_farm_disabled": "0x130e249DA0B90378eB07845217d6bB832E16f038",
+        "treasury": "0x645216B9Ae8e11bd3Fb997fA22753F1288094197",
+        "divs_distributor": "0x35c1D11D1A28Aa454386C9A13dFa7dA773caFA1F",
         "governance": "0xD9CF1D8c68f1986D20CCffe2268dd4Cb7F518f4B",
         "indexes": {
             "index01v3a": {

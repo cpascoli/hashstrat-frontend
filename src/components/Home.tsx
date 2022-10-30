@@ -12,6 +12,7 @@ import key from "./img/key.svg"
 import automated from "./img/automated.svg"
 import lock from "./img/lock.svg"
 import dao from "./img/dao.svg"
+import { Horizontal } from "./Layout"
 
 const useStyle = makeStyles( theme => ({
 
@@ -53,8 +54,11 @@ const useStyle = makeStyles( theme => ({
     title: {
         margin: 0,
         fontWeight: 200,
-        fontSize: "2.1rem",
+        fontSize: "3.2rem",
         textAlign: "center",
+        [theme.breakpoints.down('sm')]: {
+            fontSize: "2.7rem",
+        },
     },
     subtitle: {
         fontWeight: 100,
@@ -106,9 +110,14 @@ export const Home = ( { chainId } : HomeProps ) => {
                         </p>
                     </div>
                     <div style={{ marginTop: 40 }}>
-                        <Link component={LinkRouter} to="/home" style={{ textDecoration: 'none' }} > 
-                            <Button variant="contained" color="secondary" style={{ width: 280, height: 40 }} >Launch App</Button>
-                        </Link>
+                        <Horizontal align="center">
+                            <Link component={LinkRouter} to="/home" style={{ textDecoration: 'none' }} > 
+                                <Button variant="contained" color="primary" style={{ width: 200, height: 40 }} >Launch App</Button>
+                            </Link>
+                            <Link href="https://medium.com/@hashstrat" target="_blank" style={{ textDecoration: 'none' }} > 
+                                <Button variant="outlined" color="primary" style={{ width: 200, height: 40 }} >Read Blog</Button>
+                            </Link>
+                        </Horizontal>
                     </div>
                  </div>
 
@@ -118,35 +127,68 @@ export const Home = ( { chainId } : HomeProps ) => {
              <Divider style={{marginTop: 40, marginBottom: 40}} />
 
             <section className={classes.midSection}>
-
                 <img className={classes.imagePhone} />
                 <Typography variant="h5">What is HashStrat?</Typography>
-                <br/>
-                <Typography variant="body2">
-                    HashStrat is a new DeFi protocol for long-term investing in BTC &amp; ETH through autonomous investment strategies executed on-chain. 
-                </Typography>
-                <Typography variant="body2">
-                    HashStrat strategies are designed to reduce portfolio volatility and drawdowns, whilst being competitive with a simple holding strategy. 
-                </Typography>
-                <Typography variant="body2">
-                    It's also possible to improve your risk/reward further by allocating to indexes over multiple strategies.  
-                </Typography>
+                <ul>
+                    <li>
+                        <Typography variant="body1">
+                            HashStrat is a new DeFi protocol for investing in BTC &amp; ETH with a long-term outlook.
+                        </Typography>
+                    </li>
+                    <li>
+                        <Typography variant="body1">
+                           In HashStrat, users' funds are managed by transparent, autonomous strategies executed on-chain. 
+                        </Typography>
+                    </li>
+                    <li>
+                        <Typography variant="body1">
+                            HashStrat strategies are designed to reduce portfolio volatility and drawdowns, whilst providing returns competitive with a simple holding strategy. 
+                        </Typography>
+                    </li>
+                    <li>
+                        <Typography variant="body1">
+                            It's also possible to improve your risk/reward further by allocating capital to indexes over multiple strategies.  
+                        </Typography>
+                    </li>
+                </ul>
+            </section>
+
+            <section className={classes.midSection}>
+                <Typography variant="h5">Who is it for?</Typography>
+                <ul>
+                    <li>
+                        <Typography variant="body1">
+                            <strong>Individual investors</strong> wanting to automate the management of their crypto-portfolios improving returns and reducing volatility, whilst retaining control over their digital assets at all times.
+                        </Typography>
+                    </li>
+                    <li>
+                        <Typography variant="body1">
+                            <strong>DAO treasuries</strong> wanting to protect the value of their stablecoin holdings from currency debasement, by getting some exposure to pristine crypto assets, like BTC or ETH, in a trustless and verifiable way.
+                        </Typography>
+                    </li>
+
+                    <li>
+                        <Typography variant="body1">
+                            <strong>DeFi protocols</strong> wanting to safely offload some of their stablecoin liquidity and aim for high returns over the long term.
+                        </Typography>
+                    </li>
+                </ul>
             </section>
 
             <section className={classes.bottomSecion}>
                 <InfoBox title="Self-sovereign" image={key}>
                     <Typography variant="body2">
-                        HashStrat crypto-funds are immutable smart contracts executed on the blockchain.
-                        Nobody can stop them or change their behaviour.  <br/>
-                        Users stay in control of their funds at all times.
+                        Users interact directly with the blockchain through their digital wallets.
+                        Users stay in control of their funds at all times.<br/>
+                        No personal information is ever shared or leaked.
                     </Typography>
                 </InfoBox>
 
                 <InfoBox title="DAO Governance" image={dao}>
                     <Typography variant="body2">
-                        Users participate in protocol governance and revenue sharing through
-                        the HashStrat DAO token. <br/>
-                        <Link component={LinkRouter} to="/dao">HST</Link> has fixed supply and fair distribution.
+                        Users can participate in protocol governance and revenue sharing through
+                        the HashStrat DAO token (<Link component={LinkRouter} to="/dao">HST</Link>). <br/>
+                        HST has a fixed supply and fair distribution.
                         It can only be earned by using of the protocol.
                     </Typography>
                 </InfoBox>
@@ -154,8 +196,8 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <InfoBox title="Autonomous" image={automated}>
                     <Typography variant="body2">
                         HashStrat uses <Link href="https://docs.chain.link/docs/chainlink-automation/introduction/" target="_blank">Chainlink Automation</Link> to automate
-                        the execution of on-chain strategies.
-                        This means you can trust the blockchain and a decentralised network of independent nodes to keep operating the fund.
+                        the execution of its on-chain strategies.
+                        This means you can trust the blockchain and a decentralised network of independent nodes, to keep operating the fund.
                     </Typography>
                 </InfoBox>
 
@@ -163,7 +205,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                     <Typography variant="body2">
                         All code is open source and smart contracts verified on-chain.
                         This means their behaviour is predictable and transparent. <br/>
-                        Users interact directly with the blockchain through their digital wallets and no personal information is ever shared or leaked.
+                        HashStrat smart contracts are immutable. Nobody can stop them or change their behaviour. 
                     </Typography>
                 </InfoBox>
 

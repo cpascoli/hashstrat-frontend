@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react"
 import { BigNumber, utils , ethers } from "ethers"
-import { useEthers, useNotifications } from "@usedapp/core";
+import { useNotifications } from "@usedapp/core";
 
 import { Box, Accordion, AccordionDetails, AccordionSummary, makeStyles, 
-        Typography, Link, Button, CircularProgress, Card, CardContent, CardActions
+        Typography, Button, CircularProgress, Card, CardContent, CardActions
      } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
 import { ExpandMore, Info } from "@material-ui/icons"
 
-
+import { useMaxSupply, useTotalSupply } from "../../hooks/useHST"
+import { useTokenBalance  } from "../../hooks/useErc20Tokens"
 import { useGetRewardPeriods, useStakedLP, useClaimableRewards, useClaimReward  } from "../../hooks/useFarm"
-import { useTokenBalance, useTokenTotalSupply } from "../../hooks"
+
 import { fromDecimals, round } from "../../utils/formatter"
 import { TitleValueBox } from "../TitleValueBox"
 
@@ -18,7 +19,7 @@ import { Horizontal } from "../Layout"
 import { Token } from "../../types/Token"
 
 import { SnackInfo } from "../SnackInfo"
-import { NetworkExplorerHost, NetworkExplorerName, HstTokenAddress } from "../../utils/network"
+import { NetworkExplorerHost, NetworkExplorerName } from "../../utils/network"
 import { StyledAlert } from "../shared/StyledAlert"
 
 import { HstToken } from "../../utils/Tokens"
@@ -33,7 +34,7 @@ interface DAOTokenProps {
 
 const useStyles = makeStyles( theme => ({
     tokenInfo: {
-        maxWidth: 600,
+        // maxWidth: 600,
         margin: "auto"
     },
     container: {
@@ -49,6 +50,9 @@ const useStyles = makeStyles( theme => ({
         display: "flex",
         justifyContent: "space-around",
         paddingBottom: 20
+    },
+    accordion: {
+        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
     }
 }))
 
@@ -59,7 +63,9 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
     
     const rewardPeriods = useGetRewardPeriods(chainId)
     const hstBalance = useTokenBalance(chainId, "", "HST", account)
-    const hstSupply  = useTokenTotalSupply(chainId, "", "hst")
+
+    const hstMaxSupply  = useMaxSupply(chainId)
+    const hstTotalSupply  = useTotalSupply(chainId)
 
     const tokenStakedBalance = useStakedLP(chainId, account)
     const claimableRewards = useClaimableRewards(chainId, account)
@@ -132,18 +138,20 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
     const formattedTokenStakedBalance = tokenStakedBalance? fromDecimals(tokenStakedBalance, depositToken.decimals, 2) : ""
     const formattedClaimableRewards = claimableRewards? fromDecimals(claimableRewards, 18, 2) : ""
     const formattedHstBalance = hstBalance? fromDecimals(hstBalance, 18, 2) : ""
-    const formattedHstSupply = hstSupply? fromDecimals(hstSupply, 18, 2) : ""
+    
+    const formattedHstMaxSupply = hstMaxSupply? fromDecimals(hstMaxSupply, 18, 2) : ""
 
     const totalRewardPaid = rewardPeriods && rewardPeriods.reduce( (acc : BigNumber, val : { [ x:string ] : BigNumber } ) => {
         return acc.add(val.totalRewardsPaid)
     }, BigNumber.from(0))
 
-    const formattedTotalRewardPaid = totalRewardPaid ? fromDecimals(totalRewardPaid, 18, 2) : ""
+    const formattedHstTotalSupply = hstTotalSupply? fromDecimals(hstTotalSupply, 18, 2) : ""
 
-    const circulatingPerc = (formattedTotalRewardPaid && formattedHstSupply ) ? 
-             round(Number(formattedTotalRewardPaid) /  Number(formattedHstSupply), 4) : ''
+    const circulatingPerc = (formattedHstTotalSupply && formattedHstMaxSupply ) ? 
+             `${round(Number(formattedHstTotalSupply) /  Number(formattedHstMaxSupply), 4)}% ` : 'n/a'
 
-             
+
+
     return (
 
         <Box className={classes.container}>
@@ -159,25 +167,27 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
 
             <Box className={classes.tokenInfo}>
                 <Accordion >
-                    <AccordionSummary expandIcon={<ExpandMore />} >
-                        <Typography > The HashStrat DAO Token (HST) </Typography> &nbsp;&nbsp;&nbsp; <Info color="primary" />
+
+                    <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" className={classes.accordion} >
+
+                        <Typography > The DAO Token (HST) is used to participate in the DAO governance and revenue sharing.  </Typography>
                     </AccordionSummary>
                     <AccordionDetails style={{paddingLeft: 0, margin: 0}}>
                         <ul>
                             <li style={{marginBottom: 10}}>
-                               <Typography> HST is a non mintable ERC20 token with a fixed supply of 1 million and no premine.</Typography>
+                               <Typography variant="body2" > HST is a ERC20 token with a fixed supply of 1 million and no premine.</Typography>
                             </li>
                             <li style={{marginBottom: 10}}>
-                            <Typography>HST has a fair distribution and can only be acquired by using of the HashStrat protocol.</Typography>
+                            <Typography variant="body2"  >HST has a fair distribution and can only be acquired by using of the HashStrat protocol.</Typography>
                             </li>
                             <li style={{marginBottom: 10}}>
-                            <Typography>Users who deposit funds in any Pools &amp; Indexes, can stake their LP tokens and farm HST.</Typography>
+                            <Typography variant="body2"  >Users who deposit funds in any Pools &amp; Indexes, can stake their LP tokens and farm HST.</Typography>
                             </li>
                             <li style={{marginBottom: 10}}>
-                            <Typography> HST gets distributed with a fixed schedule over a 10 years period.</Typography>
+                            <Typography variant="body2"  > HST gets distributed with a fixed schedule over a 10 years period.</Typography>
                             </li>
                             <li style={{marginBottom: 10}}>
-                                <Typography>The rate of distributon of HST tokens decreases exponentially, halving every year, to incentivise early adopters and supporters of the protocol.</Typography>
+                                <Typography variant="body2" >The rate of distributon of HST tokens decreases exponentially, halving every year, to incentivise early adopters and supporters of the protocol.</Typography>
                             </li>
                         </ul>
                     </AccordionDetails>
@@ -192,9 +202,9 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
                         <Card>
                             <CardContent>
                                 <Typography variant="h5" style={{ marginBottom: 10 }} >HST Token Stats</Typography>
-                                <TitleValueBox title="Total Supply" value={ utils.commify(formattedHstSupply )} mode="small" />
-                                <TitleValueBox title="Circulating Supply" value={ utils.commify(formattedTotalRewardPaid) }  mode="small" />
-                                <TitleValueBox title="Circulating %" value={`${circulatingPerc}`} suffix="%"  mode="small"/>
+                                <TitleValueBox title="Max Supply" value={ utils.commify( formattedHstMaxSupply )} mode="small" />
+                                <TitleValueBox title="Circulating Supply" value={ utils.commify(formattedHstTotalSupply) }  mode="small" />
+                                <TitleValueBox title="Circulating %" value={`${circulatingPerc}`} suffix=""  mode="small"/>
                             </CardContent>
                             <CardActions   >
                                 <Button variant="contained" color="secondary" fullWidth onClick={handleAddTokenButtonPressed} style={{ margin: 20, height: 40 }} > 
@@ -223,6 +233,9 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
   
                     </Box>
                 </Horizontal>
+
+
+
 
             </Box>
 

@@ -38,10 +38,6 @@ export const Tickers = ({ chainId, account, depositToken } : DaoHomeProps ) => {
     const classes = useStyles()
     const investTokens = InvestTokens(chainId)
 
-    // LP token staked
-    const tokenStakedBalance = useStakedLP(chainId, account)
-    const claimableRewards = useClaimableRewards(chainId, account)
-
     // token balances
     const hstBalance = useTokenBalance(chainId, "", "HST", account)
     const depositTokenBalance = useTokenBalance(chainId, "", depositToken.symbol, account)

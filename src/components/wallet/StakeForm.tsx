@@ -77,9 +77,9 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
     const { symbol, image } = token
 
     // PoolLP Token Allowance 
-    const allowance = useTokenAllowance(chainId, poolId, symbol, FarmAddress(chainId)) // in token decimals
+    const allowance = useTokenAllowance(chainId, poolId, symbol, FarmAddress(chainId, poolId)) // in token decimals
 
-    const { approveErc20, approveErc20State } = useTokenApprove(chainId, poolId, symbol, FarmAddress(chainId))
+    const { approveErc20, approveErc20State } = useTokenApprove(chainId, poolId, symbol, FarmAddress(chainId, poolId))
 
     const classes = useStyle()
     const { notifications } = useNotifications()
@@ -152,7 +152,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
     const allowanceOk = formattedAllowance && isValidAmount && (parseFloat(formattedAllowance) >= Number(amount) )
 
     // Deposit and Stake LP Tokens
-    const { deposit, depositState } = useDepositAndStartStake(chainId)
+    const { deposit, depositState } = useDepositAndStartStake(chainId, poolId)
     const isDepositMining = depositState.status === "Mining"
 
     const submitDeposit = () => {
@@ -161,7 +161,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
     }
 
     // End Stake and Withdraw Tokens
-    const { withdraw, withdrawState } = useEndStakeAndWithdraw(chainId)
+    const { withdraw, withdrawState } = useEndStakeAndWithdraw(chainId, poolId)
     const isWithdrawMining = withdrawState.status === "Mining"
     
     const submitWithdrawal = () => {
@@ -279,8 +279,8 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
             <Box mt={3} mb={4}>
                 <Grid container justifyContent="flex-start"> 
                     <Link href="#" color="inherit" variant="body2" onClick={() => balancePressed()} style={{textDecoration: "underline"}} >
-                        Balance: {balance}
-                    </Link>
+                        Balance: {balance} 
+                    </Link> 
                 </Grid>
 
                 <Grid container justifyContent="space-between">

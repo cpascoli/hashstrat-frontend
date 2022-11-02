@@ -8,7 +8,7 @@ import { Token } from "../../types/Token"
 import { Contracts } from "../shared/Contracts"
 import { DAOToken } from "./DAOToken"
 import { DAORevenues } from "./DAORevenues"
-
+import { DAOTreasury } from "./DAOTreasury"
 
 interface DaoHomeProps {
     chainId: number,
@@ -82,12 +82,16 @@ export const DaoHome = ({ chainId, account, depositToken } : DaoHomeProps ) => {
                     <TabList onChange={handleChange} className={classes.tabList}>
                         <Tab label="DAO Token (HST)" value="0" key={0} />
                         <Tab label="Divs Distribution" value="1" key={1}  />
+                        <Tab label="Treasury" value="2" key={2}  />
                     </TabList>
                     <TabPanel className={classes.tab} value="0" key={0}>
                         <DAOToken chainId={chainId} account={account} depositToken={depositToken} />
                     </TabPanel>
                     <TabPanel className={classes.tab} value="1" key={1}>
                         <DAORevenues chainId={chainId} account={account} depositToken={depositToken} />
+                    </TabPanel>
+                    <TabPanel className={classes.tab} value="2"key={2}>
+                        <DAOTreasury chainId={chainId} account={account} depositToken={depositToken} />
                     </TabPanel>
                 </TabContext>
             </Box>

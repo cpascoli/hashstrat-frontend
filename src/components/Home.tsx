@@ -142,7 +142,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                     </li>
                     <li>
                         <Typography variant="body1">
-                            HashStrat strategies are designed to reduce portfolio volatility and drawdowns, whilst providing returns competitive with a simple holding strategy. 
+                            HashStrat strategies are designed to reduce portfolio volatility &amp; drawdowns, and produce returns competitive with the benchmark buy-and-hold strategy. 
                         </Typography>
                     </li>
                     <li>
@@ -158,7 +158,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <ul>
                     <li>
                         <Typography variant="body1">
-                            <strong>Individual investors</strong> wanting to automate the management of their crypto-portfolios improving returns and reducing volatility, whilst retaining control over their digital assets at all times.
+                            <strong>Individual investors</strong> wanting to automate the management of their crypto-portfolios, improving returns and reducing volatility, whilst retaining control over their digital assets at all times.
                         </Typography>
                     </li>
                     <li>

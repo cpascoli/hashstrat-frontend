@@ -1,7 +1,7 @@
 
-import { constants } from "ethers"
+import { BigNumber, constants } from "ethers"
 
-import { useContractFunction, useCall } from "@usedapp/core"
+import { useContractFunction, useCall, useCalls } from "@usedapp/core"
 import { FarmContract, PoolLPTokenAddress } from "../utils/network"
 import { useDebugValue } from "react"
 
@@ -21,19 +21,43 @@ export const useStakedTokenBalance = (chainId: number, poolId: string, account?:
 }
 
 
-// the sum of the balance of all LP tokens staked
+export type LPBalanceInfo = {
+    lptoken: string,
+    lpBalance: BigNumber | undefined,
+}
+
+
+// the sum of the balance of all LP tokens staked in the farm
 export const useStakedLP = (chainId: number, account?: string) => {
 
-    const farmContract = FarmContract(chainId)
     const { value, error } = useCall({
-        contract: farmContract,
-        method: 'getStakedLP',
-        args:  account ? [account] : [constants.AddressZero],
+        contract: FarmContract(chainId),
+        method: 'getLPTokens',
+        args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
-    return value?.[0].toString()
+    const lptokens = value?.[0] ?? []
+
+    const stakedLpBalanceCalls = lptokens && (lptokens.map( (lptokenAddress: string ) => ({
+        contract: FarmContract(chainId),
+        method: 'getStakedBalance',
+        args: account? [account, lptokenAddress] : [constants.AddressZero, constants.AddressZero]
+    })) ?? [])
+
+    const stakedLpBalanceResults = useCalls(stakedLpBalanceCalls) ?? []
+
+    const totalBalance = lptokens && lptokens.map( (lptokenAddr : string, idx: number) => {
+        const stakedBalance = stakedLpBalanceResults[idx]?.value && stakedLpBalanceResults[idx]?.value[0]
+        return stakedBalance
+
+    }).reduce( (total : BigNumber, balance? : BigNumber) => {
+        total =  balance ? total.add(balance) : total
+        return total
+    }, BigNumber.from(0) )
+
+    return totalBalance
 }
+
 
 
 export const useClaimableRewards = (chainId: number, account?: string) => {

@@ -12,7 +12,7 @@ export const fromDecimals = (amount: BigNumber, decimals: Number, precision: Num
     return decimal.toString()
 }
 
-export const toDecimals = (amount: string | number, decimals: number) => {
+export const toDecimals = (amount: string | number, decimals: number = 18) => {
     const formatted = ethers.utils.parseUnits(amount.toString(), decimals)
     return formatted.toString()
 }

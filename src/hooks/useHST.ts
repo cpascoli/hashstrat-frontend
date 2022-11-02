@@ -29,25 +29,25 @@ export const useMaxSupply = (chainId: number) => {
 }
 
 
-export const useGetPastVotes = (chainId: number, from: number, account?: string) => {
+export const useGetPastVotes = (chainId: number, block: number, account?: string) => {
     const tokenContract = HstContract(chainId) 
 
     const { value, error } = useCall({
             contract: tokenContract,
             method: 'getPastVotes',
-            args: account ? [account, from] : [constants.AddressZero, 0],
+            args: account && block ? [account, block] : [constants.AddressZero, 0],
         }) ?? {}
 
     return value?.[0].toString()
 }
 
-export const useGetPastTotalSupply = (chainId: number, from: number) => {
+export const useGetPastTotalSupply = (chainId: number, block?: number) => {
     const tokenContract = HstContract(chainId) 
 
     const { value, error } = useCall({
             contract: tokenContract,
             method: 'getPastTotalSupply',
-            args: [ from ],
+            args: block ? [ block ] : [0],
         }) ?? {}
 
     return value?.[0].toString()

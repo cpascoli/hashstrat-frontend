@@ -12,7 +12,7 @@ export const useStrategyName = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -24,7 +24,7 @@ export const useStrategyDescription = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -36,7 +36,7 @@ export const useStrategyDepositTokenAddress = (chainId: number, poolId: string) 
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -48,7 +48,7 @@ export const useStrategyInvestTokenAddress = (chainId: number, poolId: string) =
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -60,7 +60,7 @@ export const useStrategyFeedAddress = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -73,7 +73,7 @@ export const useStrategyMovingAveragePeriod = (chainId: number, poolId: string) 
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -85,7 +85,7 @@ export const useStrategyMovingAverage = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -98,7 +98,7 @@ export const useStrategyTargetPricePercUp = (chainId: number, poolId: string) =>
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -110,7 +110,7 @@ export const useStrategyTargetPricePercDown = (chainId: number, poolId: string) 
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -122,7 +122,7 @@ export const useStrategyTokensToSwapPerc = (chainId: number, poolId: string) => 
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 

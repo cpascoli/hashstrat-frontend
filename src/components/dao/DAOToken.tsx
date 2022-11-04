@@ -85,7 +85,6 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
     }
 
     const hstToken = HstToken(chainId)
-    const ethereum = new ethers.providers.Web3Provider(window.ethereum);
 
     const handleAddTokenButtonPressed = () => {
 
@@ -148,7 +147,7 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
     const formattedHstTotalSupply = hstTotalSupply? fromDecimals(hstTotalSupply, 18, 2) : ""
 
     const circulatingPerc = (formattedHstTotalSupply && formattedHstMaxSupply ) ? 
-             `${round(Number(formattedHstTotalSupply) /  Number(formattedHstMaxSupply), 4)}% ` : 'n/a'
+             `${100 * round(Number(formattedHstTotalSupply) /  Number(formattedHstMaxSupply), 4)}% ` : 'n/a'
 
 
 
@@ -201,10 +200,10 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
                     <Box mb={3} style={{minWidth: 320 }} >
                         <Card>
                             <CardContent>
-                                <Typography variant="h5" style={{ marginBottom: 10 }} >HST Token Stats</Typography>
-                                <TitleValueBox title="Max Supply" value={ utils.commify( formattedHstMaxSupply )} mode="small" />
-                                <TitleValueBox title="Circulating Supply" value={ utils.commify(formattedHstTotalSupply) }  mode="small" />
-                                <TitleValueBox title="Circulating %" value={`${circulatingPerc}`} suffix=""  mode="small"/>
+                                <Typography variant="h5" style={{ marginBottom: 10 }} >HST Token</Typography>
+                                <TitleValueBox title="Max Supply" value={ utils.commify( formattedHstMaxSupply )} />
+                                <TitleValueBox title="Circulating Supply" value={ utils.commify(formattedHstTotalSupply) }  />
+                                <TitleValueBox title="Circulating %" value={`${circulatingPerc}`} suffix="" />
                             </CardContent>
                             <CardActions   >
                                 <Button variant="contained" color="secondary" fullWidth onClick={handleAddTokenButtonPressed} style={{ margin: 20, height: 40 }} > 
@@ -219,9 +218,9 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
                         <Card variant="outlined">
                             <CardContent>
                                 <Typography variant="h5" style={{ marginBottom: 10 }}>Your HST Token Farm</Typography>
-                                <TitleValueBox title="LP tokens farming" value={ utils.commify(formattedTokenStakedBalance) } mode="small"/>
-                                <TitleValueBox title="HST collected" value={ utils.commify(formattedHstBalance) } mode="small" />
-                                <TitleValueBox title="HST available to collect" value={ utils.commify(formattedClaimableRewards) } mode="small" />
+                                <TitleValueBox title="LP tokens farming" value={ utils.commify(formattedTokenStakedBalance) } />
+                                <TitleValueBox title="HST collected" value={ utils.commify(formattedHstBalance) } />
+                                <TitleValueBox title="HST available to collect" value={ utils.commify(formattedClaimableRewards) }  />
                             </CardContent>
                             <CardActions   >
                                 <Button variant="contained" color="primary" fullWidth onClick={handleClaimButtonPressed} style={{ margin: 20, height: 40 }} > 

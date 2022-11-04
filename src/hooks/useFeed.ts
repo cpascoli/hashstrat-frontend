@@ -12,7 +12,7 @@ export const useFeedLatestPrice = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -28,7 +28,7 @@ export const useFeedDecimals = (chainId: number, poolId: string) => {
         console.warn("useFeedDecimals - feed decimals is: ", value, " feed contract: ", contract.address)
     }
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString() ?? 8
 }
 
@@ -40,6 +40,6 @@ export const useFeedLatestTimestamp = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }

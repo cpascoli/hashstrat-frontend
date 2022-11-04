@@ -261,13 +261,15 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
                     </StyledAlert>
                 </div>
             }
-                
-            <div className={classes.section1}>
-                <h1 className={classes.title}> {formType === 'deposit'? `Deposit ${symbol}` : `Withdraw ${depositToken?.symbol}` } </h1>
-                <Typography color="textSecondary"> 
-                   First approve and then transfer the tokens.
-                </Typography>
-            </div>
+            
+            { formType === 'deposit' &&
+                <div className={classes.section1}>
+                    <h1 className={classes.title}> {formType === 'deposit'? `Deposit ${symbol}` : `Withdraw ${depositToken?.symbol}` } </h1>
+                    <Typography color="textSecondary"> 
+                    First approve and then transfer the tokens.
+                    </Typography>
+                </div>
+            }
             
             <Divider />
 

@@ -3,9 +3,11 @@ import React, { useState, useEffect } from "react"
 import { utils } from "ethers"
 import { useBlockMeta, useNotifications } from "@usedapp/core"
 
+
 import { Button, Popover, CircularProgress, Box, makeStyles, Typography, Card, CardContent } from  "@material-ui/core"
+import { DataGrid, GridColDef } from "@material-ui/data-grid"
 import { Info } from "@material-ui/icons"
-import { Alert, AlertTitle } from "@material-ui/lab"
+import { AlertTitle } from "@material-ui/lab"
 
 import { useGetDistributionIntervals, useClaimableDivs, useClaimedDivs, useClaimDivs } from "../../hooks/useDivsDistributor"
 import { useGetPastVotes, useGetPastTotalSupply } from "../../hooks/useHST"
@@ -18,6 +20,7 @@ import { Token } from "../../types/Token"
 import { Horizontal } from "../Layout"
 import { NetworkExplorerHost, NetworkExplorerName } from "../../utils/network"
 import { StyledAlert } from "../shared/StyledAlert"
+
 
 
 
@@ -51,7 +54,8 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
 
     const blockInfo = useBlockMeta()
     const distributionIntervals = useGetDistributionIntervals(chainId)
-    const claimedDivs = useClaimedDivs(chainId, 1, account)
+
+    const claimedDivs = useClaimedDivs(chainId, distributionIntervals?.length, account)
     const claimableDivs = useClaimableDivs(chainId, account)
     
     const claimableDivsFormatted = claimableDivs ? fromDecimals(claimableDivs, depositToken.decimals, 2) : "0"
@@ -101,24 +105,23 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
     }, [notifications, chainId, claimedLink])
 
 
-    const periods = distributionIntervals && distributionIntervals.map( (period : any) => {
+    const periods = distributionIntervals?.slice().reverse().map( (period : any) => {
         return {
-            id: period.id,
-            from: period.from,
-            to: period.to,
+            id: period.id?.toNumber(),
+            from: period.from?.toNumber(),
+            to: period.to?.toNumber(),
             reward: period.reward ? fromDecimals(period.reward, depositToken.decimals, 2) : "0",
-            rewardPaid: period.rewardPaid ? fromDecimals(period.rewardPaid, depositToken.decimals, 2) : "0",
+            rewardsPaid: period.rewardsPaid ? fromDecimals(period.rewardsPaid, depositToken.decimals, 2) : "0",
         }
     })
 
 
-    const lastPeriod = periods && periods.length > 0 ? periods[periods.length-1] : undefined
+    const lastPeriod = periods && periods.length > 0 ? periods[0] : undefined
     const totalDivsFormatted = lastPeriod ? lastPeriod.reward : ""
-    const rewardsPaidFormatted = lastPeriod ? lastPeriod.rewardPaid : ''
+    const rewardsPaidFormatted = lastPeriod ? lastPeriod.rewardsPaid : ""
 
-    
     const avgBlockTime = 2
-    let seconds = blockInfo?.blockNumber && lastPeriod ? Math.abs(lastPeriod.to.toNumber() - blockInfo.blockNumber) * avgBlockTime: undefined
+    let seconds = blockInfo?.blockNumber && lastPeriod?.to ? Math.abs(lastPeriod.to - blockInfo.blockNumber) * avgBlockTime: undefined
     let timeFormatted = undefined
     
     if (seconds) {
@@ -127,22 +130,93 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
         const hrs = Math.floor(seconds / 3600);
         seconds -= hrs*3600;
         const mnts = Math.floor(seconds / 60);
-        console.log(days+" days, "+hrs+" Hrs, "+mnts+" Minutes");
         timeFormatted =  days > 0 ? `${days}d, ${hrs}h, ${mnts}m` : hrs > 0 ? `${hrs}h, ${mnts}m` : `${mnts}m`
     }
 
-
-    const activeDistribution = blockInfo && lastPeriod && blockInfo.blockNumber ? (blockInfo.blockNumber >= lastPeriod.from && blockInfo.blockNumber <= lastPeriod.to) : undefined
-    const distributionInfo = activeDistribution !== undefined && timeFormatted ? `Dividend distribution started at block ${lastPeriod.from.toNumber()} and will end at block ${lastPeriod.to.toNumber()}, in approximately ${timeFormatted}`  : ''
-
+    const activeDistribution = lastPeriod?.from && lastPeriod?.to && blockInfo?.blockNumber ? (blockInfo.blockNumber >= lastPeriod.from && blockInfo.blockNumber <= lastPeriod.to) : undefined
+    const distributionInfo = activeDistribution !== undefined && timeFormatted ? `Distribution started at block ${lastPeriod?.from} and will end at block ${lastPeriod?.to}, in approximately ${timeFormatted}`  : ''
 
     const pastTokens = useGetPastVotes(chainId, lastPeriod?.from, account)
     const pastTotalSupply = useGetPastTotalSupply(chainId, lastPeriod?.from)
     const pastTokensFormatted = pastTokens ? fromDecimals(pastTokens, 18, 2) : ''
-    const divsInfo = lastPeriod?.from ? `Your dividends are based on your balance of ${pastTokensFormatted} HST at block ${lastPeriod.from.toNumber()}` : ''
+    const divsInfo = lastPeriod?.from ? `Your dividends are based on your balance of ${pastTokensFormatted} HST at block ${lastPeriod.from}` : ''
 
 
-    // popovers
+    const pastDistributions = blockInfo?.blockNumber && blockInfo.blockNumber && periods ? periods.slice().filter( (p : { to: number }) => (p.to < blockInfo.blockNumber! ) ) : undefined
+
+
+    
+
+    ///// past distribution table
+
+               
+     // table headers
+     const columns: GridColDef[] = [
+        { 
+            field: 'from', 
+            headerName: 'From block', 
+            type: 'number',
+            width: 150, 
+            sortable: false,
+            align: 'center',
+            headerAlign: 'center',
+        },
+        { 
+            field: 'to', 
+            headerName: 'To block', 
+            type: 'number',
+            width: 150, 
+            sortable: false,
+            align: 'center',
+            headerAlign: 'center',
+        },
+        {
+            field: 'reward',
+            headerName: 'Divs Distributed',
+            description: 'The amount of dividends being distributed',
+            type: 'string',
+            align: 'right',
+            headerAlign: 'center',
+            width: 200,
+            sortable: false,
+            renderCell: (params) => {
+                const amount = params.value ? utils.commify(params.value.toString()) : '0'
+                return`${amount} ${depositToken.symbol}`
+            },
+        },
+        {
+            field: 'rewardsPaid',
+            headerName: 'Divs Claimed',
+            description: 'The amount of dividends being distributed',
+            type: 'string',
+            align: 'right',
+            headerAlign: 'center',
+            width: 200,
+            sortable: false,
+            renderCell: (params) => {
+                const amount = params.value ? utils.commify(params.value.toString()) : '0'
+                return`${amount} ${depositToken.symbol}`
+            },
+
+        },
+    ];
+
+
+    // table rows
+    const rows = pastDistributions?.map( (data: any, index: number) => {
+        return {
+            id: data.id,
+            from: data.from,
+            to: data.to, 
+            reward: data.reward,
+            rewardsPaid: data.rewardsPaid
+        }
+    })
+
+
+
+
+    /////  popovers //// 
     const [anchorEl0, setAnchorEl0] = useState<HTMLButtonElement | null>(null);
     const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
 
@@ -188,10 +262,10 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
                         There are no dividends being distributed right now. Please come back when the next distribution starts.
                     </StyledAlert>
                 }
-                
+
                 { activeDistribution == true && 
                     <>
-                    <Card style={{ width: 270, height: 200 }}  >
+                    <Card style={{ width: 270, height: 200 }} variant="outlined"  >
                         <CardContent>
                             <div style={{ display:'flex', justifyContent:'center',  marginBottom: 15 }}> 
 
@@ -202,8 +276,6 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
                                 <Popover id={id0} open={open0} anchorEl={anchorEl0} onClose={handleClose0} anchorOrigin={{vertical: 'bottom', horizontal: 'center' }} >
                                     <Typography style={{ padding: 10}}> { distributionInfo } </Typography>
                                 </Popover>
-
-
                             </div>
                             <div style={{ display:'flex', justifyContent:'center' }}> 
                                 <Typography variant="h5" style={{ marginBottom: 40 }} >
@@ -217,7 +289,7 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
                         </CardContent>
                     </Card>
 
-                    <Card style={{ width: 270, height: 200 }}  >
+                    <Card style={{ width: 270, height: 200 }} variant="outlined"  >
                         <CardContent>
                             <div style={{ display:'flex', justifyContent:'center', marginBottom: 15 }}> 
 
@@ -238,7 +310,9 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
                             
                             <div style={{ display:'flex', justifyContent:'center', marginTop: 20 }}>
                                 { didClaimDivs && 
-                                    <Typography variant="body2" align="center"> you already claimed {claimedDivsFormatted} {depositToken.symbol}</Typography>
+                                    <Box style={{ marginTop: 10 }} >
+                                        <Typography variant="body2" align="center"> you already claimed {claimedDivsFormatted} {depositToken.symbol}</Typography>
+                                    </Box>
                                 }    
                                 { !didClaimDivs && 
                                     <Button fullWidth disabled={ didClaimDivs || Number(claimableDivsFormatted) === 0 } name="claim_divs" variant="contained" color="primary" onClick={() => handleClaimButtonPressed()}>
@@ -253,6 +327,28 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
                     </>
                 }
                 </Horizontal>
+
+
+                { rows && 
+                    <Box py={2} > 
+                        <div style={{ height: rows.length * 56 + 110, width: '100%', marginTop: 20 }}>
+                            <Typography variant="h5" style={{ marginBottom: 10 }} >
+                               Past Distributions
+                            </Typography>
+
+                            <DataGrid
+                                rows={rows}
+                                columns={columns}
+                                pageSize={10}
+                                rowsPerPageOptions={[10]}
+                                disableSelectionOnClick={true}
+                            />
+                        </div>
+                    </Box> 
+                }
+
+
+
             </Box>
         </Box>
 

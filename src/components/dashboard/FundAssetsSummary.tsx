@@ -78,8 +78,11 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
          
             <Box>
                 <Typography variant="h4" align="center" >Asset Summary</Typography>
-                <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
-                    Assets across all Pools &amp; Indexes
+                <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 10}}>
+                  Value of assets across all Pools &amp; Indexes (TVL)
+                </Typography>
+                <Typography variant="h5" align="center" style={{marginTop: 0, marginBottom: 20}}>
+                    <strong> ${`${ utils.commify( totalValueFormatted )}`} </strong> 
                 </Typography>
             </Box>
 
@@ -91,9 +94,6 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
                             return  <TitleValueBox key={token.symbol} title={token.symbol} value={valueFormatted}  mode="small" />
                         })
                     }
-
-                <TitleValueBox title="TVL" value={`$ ${ utils.commify( totalValueFormatted )}` }  />    
-
                 </Box>
 
                 { totalValueFormatted  &&  

@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react"
 
-import { utils, BigNumber } from "ethers"
-
+import { utils } from "ethers"
 import { Link, Box, makeStyles, Typography, Card, CardContent, CircularProgress } from  "@material-ui/core"
 import { DataGrid, GridColDef } from "@material-ui/data-grid"
 
@@ -45,7 +43,7 @@ export const DAOTreasury = ({ chainId, account, depositToken } : DAOTreasuryProp
     const treasuryBalanceFormatted = treasuryBalance ? fromDecimals(treasuryBalance, depositToken.decimals, 2) : undefined
     
 
-    const paymentList = payments && payments.map( (payment : any) => {
+    const paymentList = payments?.slice().reverse().map( (payment : any) => {
         return {
             id: payment.id,
             amount: payment.amount,
@@ -75,22 +73,27 @@ export const DAOTreasury = ({ chainId, account, depositToken } : DAOTreasuryProp
             type: 'number',
             width: 150,
             sortable: false,
+            align: 'center',
+            headerAlign: 'center',
+
+            renderCell: (params) => {
+                const amount = params.value ? utils.commify(params.value.toString()) : '0'
+                return`${amount} ${depositToken.symbol}`
+            },
         },
         {
             field: 'recepient',
             headerName: `Recepient`,
             description: 'The recepeint of this payment',
             type: 'string',
+            width: 350,
+            sortable: false,
             align: 'center',
             headerAlign: 'center',
-            sortable: false,
-            width: 350,
+
             renderCell: (params) => {
                 const url = `https://${explorerHost}/address/${params.value}`
                 const name = divsDistributor.toLowerCase() === params.value?.toString().toLowerCase() ? "Divs Distribution Contract" : params.value
-                console.log("divsDistributor", divsDistributor)
-
-
                 return <Link href={url} target="_blank">{name}</Link>;
             },
         },
@@ -122,7 +125,7 @@ export const DAOTreasury = ({ chainId, account, depositToken } : DAOTreasuryProp
             <Box my={4}>
 
                 <Horizontal align="center">
-                    <Card style={{ width: 250, height: 150 }}  >
+                    <Card style={{ width: 250, height: 150 }} variant="outlined" >
                         <CardContent>
                             <div style={{ display:'flex', justifyContent:'center' }}> 
                                 <Typography variant="body1" style={{ marginBottom: 30 }}> Funds held in the Treasury </Typography>
@@ -152,7 +155,7 @@ export const DAOTreasury = ({ chainId, account, depositToken } : DAOTreasuryProp
                                 pageSize={10}
                                 rowsPerPageOptions={[10]}
                                 disableSelectionOnClick={true}
-                        />
+                            />
                         </div>
                     </Box> 
                 }

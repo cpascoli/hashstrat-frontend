@@ -47,7 +47,7 @@ export const usePortfolioValue = (chainId: number, poolId: string, account: stri
             args: [account],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -67,11 +67,16 @@ export const useLpTokensValue = (chainId: number, poolId: string, amount: string
         args: [],
     }) ?? {}
 
+    error0 && console.error("error in custom hoock: ", error0)
+
     const { value : multiPoolValue, error : error1 } = useCall({
         contract: poolContract,
         method: /v3.?$/.test(poolId) ? 'totalValue' : 'multiPoolValue',
         args: [],
     }) ?? {}
+
+    error1 && console.error("error in custom hoock: ", error1)
+
 
     const totValue0 = portfolioValue?.[0]
     const totValue1 = multiPoolValue?.[0]
@@ -82,6 +87,9 @@ export const useLpTokensValue = (chainId: number, poolId: string, amount: string
             method: 'totalSupply',
             args: [],
     }) ?? {}
+
+    error2 && console.error("error in custom hoock: ", error2)
+
 
     const totSupply = totalSupply?.[0]
 
@@ -111,7 +119,7 @@ export const useGetDeposits = (chainId: number, poolId: string, account: string)
             args: [account],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -124,7 +132,7 @@ export const useGetWithdrawals = (chainId: number, poolId: string, account: stri
             args: [account],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -136,7 +144,8 @@ export const useTotalPortfolioValue = (chainId: number, poolId: string) => {
             method: /v3.?$/.test(poolId) ? 'totalValue' : 'totalPortfolioValue',
             args: [],
     }) ?? {}
-    useDebugValue(value?.[0].toString())
+
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -149,7 +158,7 @@ export const useTotalDeposited = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -161,7 +170,7 @@ export const useTotalWithdrawn = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -174,7 +183,7 @@ export const useInvestedTokenValue = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -186,7 +195,7 @@ export const useDepositTokenValue = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -249,7 +258,7 @@ export const useFeesForWithdraw = (chainId: number, poolId: string, lpTokensAmou
             args: account ? [amount, account] : [amount, constants.AddressZero],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 

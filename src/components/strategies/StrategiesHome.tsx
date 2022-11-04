@@ -85,22 +85,21 @@ export const StrategiesHome = () => {
                         <div>     
                             <strong>Rule</strong> <br/>
                             Given a ETH/USD Pool with 60%/40% target allocation and 10% rebalance trigger, <br />
-                            When the value of ETH rises above 70% (drops below 60%) of the overall value in the Pool<br />
+                            When the value of ETH rises above 70% (drops below 50%) of the overall value in the Pool<br />
                             Then the Pool is rebalanced by selling ETH (buying ETH) to restore the original 60%/40% allocation.
                         </div>
                         <br />
                         <div>     
                             <strong>Pools</strong> <br/>
                             <Horizontal>
-                                <Link component={RouterLink} to="/pools/pool01">BTC-USDC REB01</Link>
-                                <Link component={RouterLink} to="/pools/pool02">ETH-USDC REB01</Link>
+                                <Link component={RouterLink} to="/pools/pool01v3a">BTC-USDC REB01</Link>
+                                <Link component={RouterLink} to="/pools/pool02v3a">ETH-USDC REB01</Link>
                             </Horizontal>
                         </div>
                         <br />
                         <div>     
                             <strong>Returns</strong> <br/>
-                            Using this strategy, from Jan 2019 to July 2022, a $1,000 Pool would have returned $6,386. <br/>
-                            A Pool with $400 in USDC and $600 in ETH, would have turned that into $2,396 in USDC and $3,990 in ETH.
+                            Using this strategy, from Jan 2019 to July 2022, a $1,000 Pool would have returned $6,386.
                         </div>
                         <div>   
                             <img src={strategy1} className={classes.chart} alt="RebalancingStrategyV1 strategy stats"/>
@@ -145,15 +144,14 @@ export const StrategiesHome = () => {
                         <div>     
                             <strong>Pools</strong> <br/>
                             <Horizontal>
-                                <Link component={RouterLink} to="/pools/pool03">BTC-USDC MEANREV01</Link>
-                                <Link component={RouterLink} to="/pools/pool04">ETH-USDC MEANREV01</Link>
+                                <Link component={RouterLink} to="/pools/pool03v3a">BTC-USDC MEANREV01</Link>
+                                <Link component={RouterLink} to="/pools/pool04v3a">ETH-USDC MEANREV01</Link>
                             </Horizontal>
                         </div>
                         <br />
                         <div>     
                             <strong>Returns</strong> <br/>
-                            Using this strategy, from Jan 2019 to July 2022, a $1,000 Pool would have returned $8,533. <br/>
-                            A Pool with $800 in USDC and $200 in ETH, would have turned that into $5,282 in USDC and $3,251 in ETH.
+                            Using this strategy, from Jan 2019 to July 2022, a $1,000 Pool would have returned $8,533.
                         </div>
                         <div>   
                             <img src={strategy2} className={classes.chart} alt="MeanReversionV1 strategy stats"/>
@@ -195,15 +193,14 @@ export const StrategiesHome = () => {
                         <div>     
                             <strong>Pools</strong> <br/>
                             <Horizontal>
-                                <Link component={RouterLink} to="/pools/pool05">BTC-USDC TRDFLW01</Link>
-                                <Link component={RouterLink} to="/pools/pool06">ETH-USDC TRDFLW01</Link>
+                                <Link component={RouterLink} to="/pools/pool05v3a">BTC-USDC TRDFLW01</Link>
+                                <Link component={RouterLink} to="/pools/pool06v3a">ETH-USDC TRDFLW01</Link>
                             </Horizontal>
                         </div>
                         <br />
                         <div>     
                             <strong>Returns</strong> <br/>
-                            Using this strategy, from Jan 2019 to July 2022, a $1,000 Pool would have returned $18,917.<br/>
-                            A Pool with $800 in USDC and $200 in ETH, would have turned that into $18,917 in USDC and $0 in ETH.
+                            Using this strategy, from Jan 2019 to July 2022, a $1,000 Pool would have returned $18,917.
                         </div>
                         <div>   
                             <img src={strategy3} className={classes.chart} alt="TrendFollowV1 strategy stats"/>

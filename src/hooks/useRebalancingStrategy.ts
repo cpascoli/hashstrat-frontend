@@ -12,7 +12,7 @@ export const useStrategyName = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -24,7 +24,7 @@ export const useStrategyDescription = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -36,7 +36,7 @@ export const useStrategyDepositTokenAddress = (chainId: number, poolId: string) 
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -48,7 +48,7 @@ export const useStrategyInvestTokenAddress = (chainId: number, poolId: string) =
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -60,7 +60,7 @@ export const useStrategyFeedAddress = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -73,7 +73,7 @@ export const useStrategyRebalancingThreshold = (chainId: number, poolId: string)
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }
 
@@ -85,6 +85,6 @@ export const useStrategyTargetInvestPerc = (chainId: number, poolId: string) => 
             args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0].toString()
 }

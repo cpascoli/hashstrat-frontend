@@ -11,7 +11,7 @@ export const useGetBalance = (chainId: number) => {
         args:  [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0]
 }
 
@@ -24,7 +24,7 @@ export const useGetPayments = (chainId: number) => {
         args: [],
     }) ?? {}
 
-    useDebugValue(value?.[0].toString())
+    error && console.error("error in custom hoock: ", error)
     return value?.[0]
 }
 

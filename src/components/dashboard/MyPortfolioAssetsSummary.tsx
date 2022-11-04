@@ -116,8 +116,11 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                 <div>
                     <Box>
                         <Typography variant="h4" align="center" >Portfolio Summary </Typography>
-                        <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
-                            Your assets across all Pools &amp; Indexes
+                        <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 10}}>
+                            The value of your assets across all Pools &amp; Indexes
+                        </Typography>
+                        <Typography variant="h5" align="center" style={{marginTop: 0, marginBottom: 20}}>
+                           <strong>{ utils.commify(totalValueFormatted) } {depositToken.symbol} </strong> 
                         </Typography>
                     </Box>
                     <div className={classes.portfolioSummary} > 
@@ -134,11 +137,9 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                             </Box>
 
                             <Box className={classes.portfolioInfo}>
-                                <TitleValueBox mode="small" title="My Portfolio Value" value={ utils.commify(totalValueFormatted) } suffix={depositToken.symbol} />
-                                {/* <TitleValueBox mode="small" title="My Index share" value={lpPercFormatted} suffix="%" /> */}
+                                <TitleValueBox mode="small" title="ROI" value={roiFormatted?.toString()??""} suffix="%" />
                                 <TitleValueBox mode="small" title="My Deposits" value={ utils.commify(totalDepositedFormatted) } suffix={depositToken.symbol} />
                                 <TitleValueBox mode="small" title="My Withdrawals" value={ utils.commify(totalWithdrawnFormatted) } suffix={depositToken.symbol} />
-                                <TitleValueBox mode="small" title="ROI" value={roiFormatted?.toString()??""} suffix="%" />
                             </Box>
                         </Horizontal>
 

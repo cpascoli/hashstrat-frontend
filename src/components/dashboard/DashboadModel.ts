@@ -9,7 +9,7 @@ import { fromDecimals } from "../../utils/formatter"
 import { PieChartsData, ChartData } from "../shared/PieChartWithLabels"
 import { TokenInfo } from "../../types/TokenInfo"
 
-type TokenBalances = {[ x: string] : { symbol: string, decimals: number, value: BigNumber, balance: BigNumber }}
+type TokenBalances = {[ x: string] : { symbol: string, decimals: number, value: BigNumber, balance: BigNumber, loaded: boolean }}
 
 
 type PoolData =  { 
@@ -32,6 +32,7 @@ export type DashboadModel = {
     chartValueByPool: ChartData,
     poolsInfo: PoolData[],
     indexesInfo: PoolData[],
+    didLoad: boolean
 }
 
 
@@ -68,7 +69,8 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
             symbol: val.symbol, 
             decimals: val.decimals, 
             value: BigNumber.from(0), 
-            balance: BigNumber.from(0) 
+            balance: BigNumber.from(0),
+            loaded: false
         }
         return acc
     }, {} as TokenBalances )
@@ -93,10 +95,19 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
                 totals[symbol].balance = (account && tokenInfo.accountBalance) ? totals[symbol].balance.add(tokenInfo.accountBalance) : 
                                          tokenInfo.balance ? totals[symbol].balance.add(tokenInfo.balance) : totals[symbol].balance
             }
+            
+            totals[symbol].loaded = (tokenInfo.balance!== undefined || tokenInfo.balance !== undefined)
         })
         return totals
 
     }, initValues )
+
+ 
+
+    const didLoad : boolean = Object.values(tokenBalances).reduce( (loaded, token ) : boolean => {
+        return (loaded || token.loaded === true)
+    }, false )
+
 
     const totalValue: BigNumber = Object.values(tokenBalances).reduce( (total, token ) : BigNumber => {
         return total.add(token.value)
@@ -124,6 +135,7 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
         chartValueByPool: { title: "Pool Allocation", data: valueByPool, width: 300, height: 250, includePercent: false},
         poolsInfo,
         indexesInfo,
+        didLoad,
     }
 
 }

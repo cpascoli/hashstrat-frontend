@@ -1,5 +1,5 @@
-import { makeStyles, Box, Typography, Accordion, AccordionDetails, AccordionSummary, Link } from "@material-ui/core"
-import { ExpandMore } from "@material-ui/icons"
+import { makeStyles, Box, Typography, CircularProgress } from "@material-ui/core"
+import { Skeleton } from "@material-ui/lab"
 
 import { utils } from "ethers"
 
@@ -56,7 +56,7 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
     const classes = useStyles()
     const tokens = [depositToken, ...investTokens]
  
-    const { poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool } = useDashboardModel(chainId, tokens, depositToken, account)
+    const { poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool, didLoad } = useDashboardModel(chainId, tokens, depositToken, account)
 
     //console.log("MyPortfolioAssetsSummary", poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool)
 
@@ -94,8 +94,14 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
 
     return (
         <div className={classes.container}>
+
+            { !didLoad && 
+                <div style={{height: 300, paddingTop: 140}} >
+                    <Horizontal align="center" > <CircularProgress color="secondary" /> </Horizontal>  
+                </div>
+            }
          
-            { !account &&
+            { didLoad && !account &&
                 <Box>
                     <Typography variant="body2" align="center" style={{marginTop: 20, marginBottom: 20}}>
                         Connect an account to the Polygon netowrk to see your Assets across all Pools &amp; Indexes
@@ -112,7 +118,7 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
             } */}
 
 
-            {  account &&
+            {  didLoad && account &&
                 <div>
                     <Box>
                         <Typography variant="h4" align="center" >Portfolio Summary </Typography>
@@ -120,7 +126,7 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                             The value of your assets across all Pools &amp; Indexes
                         </Typography>
                         <Typography variant="h5" align="center" style={{marginTop: 0, marginBottom: 20}}>
-                           <strong>{ utils.commify(totalValueFormatted) } {depositToken.symbol} </strong> 
+                           { utils.commify(totalValueFormatted) } {depositToken.symbol}
                         </Typography>
                     </Box>
                     <div className={classes.portfolioSummary} > 

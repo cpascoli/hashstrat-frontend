@@ -82,7 +82,7 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
                   Value of assets across all Pools &amp; Indexes (TVL)
                 </Typography>
                 <Typography variant="h5" align="center" style={{marginTop: 0, marginBottom: 20}}>
-                    <strong> ${`${ utils.commify( totalValueFormatted )}`} </strong> 
+                   ${`${ utils.commify( totalValueFormatted )}`}
                 </Typography>
             </Box>
 

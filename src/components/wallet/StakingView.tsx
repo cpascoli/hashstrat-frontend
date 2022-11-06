@@ -55,9 +55,6 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
   const tokenStakedBalance = useStakedTokenBalance(chainId, poolId, account)
   const formattedTokenStakedBalance = tokenStakedBalance && fromDecimals(tokenStakedBalance, token.decimals, 2) || "0.0"
 
-  console.log("formattedTokenBalance: ", formattedTokenBalance, "formattedTokenStakedBalance: ", formattedTokenStakedBalance)
-
-
   const showModalPressed = () => {
     if (formType === 'stake' ? Number(formattedTokenBalance) > 0: Number(formattedTokenStakedBalance) > 0) {
       setShowStakeUnstakeModal(true)

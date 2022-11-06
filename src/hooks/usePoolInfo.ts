@@ -1,12 +1,13 @@
 
 import { useCalls } from "@usedapp/core"
 
-import { PoolIds, IndexesInfo, PoolsInfo, IndexesIds } from "../utils/pools"
+
+import { IndexesInfo, PoolInfo, PoolsInfo, IndexesIds } from "../utils/pools"
 import { Token } from "../types/Token"
 import { groupBy } from "../utils/formatter"
 
 import { BigNumber, constants } from "ethers"
-import { FarmContract  } from "../utils/network"
+import { FarmContract, DisabledFarmContract  } from "../utils/network"
 
 import { FeedContractsForTokens, ERC20Contract, PoolLPContract, PoolContract } from "../utils/network"
 
@@ -312,68 +313,85 @@ export const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string
         const indexesInfo = IndexesInfo(chainId,  indexIds)
 
         // Indexes addresses
-        const lpTokensRequests = indexesInfo.map( index =>  {
+        const lpTokens1Requests = indexesInfo.filter(req => PoolInfo(chainId, req.poolId).disabled === 'false') .map( index =>  {
             return {
                 indexId: index.poolId,
                 indexAddress: index.pool,
                 lptokenAddress: index.lptoken
             }
         })
+
+        const lpTokens2Requests = indexesInfo.filter(req => PoolInfo(chainId, req.poolId).disabled === 'true') .map( index =>  {
+            return {
+                indexId: index.poolId,
+                indexAddress: index.pool,
+                lptokenAddress: index.lptoken
+            }
+        })
+
+
         
         // get the IndexLP non staked balances
-        const untakedLpBalanceCalls = lpTokensRequests.map(req => ({
+        const unstakedLpBalanc1Calls = lpTokens1Requests.map(req => ({
+            contract: PoolLPContract(chainId, req.indexId),
+            method: 'balanceOf',
+            args: account? [account] : [constants.AddressZero]
+        })) ?? []
+
+        const unstakedLpBalanc2Calls = lpTokens2Requests.map(req => ({
             contract: PoolLPContract(chainId, req.indexId),
             method: 'balanceOf',
             args: account? [account] : [constants.AddressZero]
         })) ?? []
       
     
-        const unstakedLpBalanceResults = useCalls(untakedLpBalanceCalls) ?? []
-        unstakedLpBalanceResults.forEach((result, idx) => {
-            if(result && result.error) {
-                console.error(`Error encountered calling 'balanceOf' on ${untakedLpBalanceCalls[idx]?.contract.address}: ${result.error.message}`)
-            }
-        })
+        const unstakedLpBalance1Results = useCalls(unstakedLpBalanc1Calls) ?? []
+        const unstakedLpBalance2Results = useCalls(unstakedLpBalanc2Calls) ?? []
 
 
         // get the IndexLP staked balances
-        const stakedLpBalanceCalls = lpTokensRequests.map(req => ({
+        const stakedLpBalance1Calls = lpTokens1Requests.map(req => ({
             contract: FarmContract(chainId),
             method: 'getStakedBalance',
             args: account? [account, req.lptokenAddress] : [constants.AddressZero, req.lptokenAddress]
         })) ?? []
 
-        const stakedLpBalanceResults = useCalls(stakedLpBalanceCalls) ?? []
-        // stakedLpBalanceResults.forEach((result, idx) => {
-        //     if(result && result.error) {
-        //     console.error(`Error encountered calling 'getStakedBalance' on ${stakedLpBalanceCalls[idx]?.contract.address}: ${result.error.message}`)
-        //     }
-        // })
+        const stakedLpBalance2Calls = lpTokens2Requests.map(req => ({
+            contract: DisabledFarmContract(chainId),
+            method: 'getStakedBalance',
+            args: account? [account, req.lptokenAddress] : [constants.AddressZero, req.lptokenAddress]
+        })) ?? []
+
+        const stakedLpBalance1Results = useCalls(stakedLpBalance1Calls) ?? []
+        const stakedLpBalance2Results = useCalls(stakedLpBalance2Calls) ?? []
+
 
     
         // LP tokens supply
-        const totalSupplyCalls = lpTokensRequests.map(req => ({
+        const totalSupply1Calls = lpTokens1Requests.map(req => ({
+            contract: PoolLPContract(chainId, req.indexId),
+            method: 'totalSupply',
+            args: []
+        })) ?? []
+
+        const totalSupply2Calls = lpTokens2Requests.map(req => ({
             contract: PoolLPContract(chainId, req.indexId),
             method: 'totalSupply',
             args: []
         })) ?? []
       
 
-        const totalSupplyResults = useCalls(totalSupplyCalls) ?? []
-        totalSupplyResults.forEach((result, idx) => {
-            if(result && result.error) {
-                console.error(`Error encountered calling 'totalSupply' on ${totalSupplyCalls[idx]?.contract.address}: ${result.error.message}`)
-            }
-        })
+        const totalSupply1Results = useCalls(totalSupply1Calls) ?? []
+        const totalSupply2Results = useCalls(totalSupply2Calls) ?? []
+ 
 
+        const lpBalances1 = lpTokens1Requests.map( (req, idx) => {
 
-        const lpBalancesByIndex = lpTokensRequests.map( (req, idx) => {
-
-            const unstakedBalance = unstakedLpBalanceResults[idx]?.value && unstakedLpBalanceResults[idx]?.value[0]
-            const stakedBalance = stakedLpBalanceResults[idx]?.value && stakedLpBalanceResults[idx]?.value[0]
+            const unstakedBalance = unstakedLpBalance1Results[idx]?.value && unstakedLpBalance1Results[idx]?.value[0]
+            const stakedBalance = stakedLpBalance1Results[idx]?.value && stakedLpBalance1Results[idx]?.value[0]
 
             const balance = (unstakedBalance &&  stakedBalance) ? unstakedBalance.add(stakedBalance) : undefined
-            const supply = totalSupplyResults[idx]?.value && totalSupplyResults[idx]?.value[0]
+            const supply = totalSupply1Results[idx]?.value && totalSupply1Results[idx]?.value[0]
             const precision = BigNumber.from(10000)
 
             const perc = (balance && supply && !supply.isZero()) ? precision.mul(balance).div(supply).toNumber() / 10000 : undefined
@@ -384,7 +402,29 @@ export const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string
                 lpTotalSupply: supply,
                 perc: perc,
             }
-        }).reduce( (acc, item) => {
+        })
+        
+        const lpBalances2 = lpTokens2Requests.map( (req, idx) => {
+
+            const unstakedBalance = unstakedLpBalance2Results[idx]?.value && unstakedLpBalance2Results[idx]?.value[0]
+            const stakedBalance = stakedLpBalance2Results[idx]?.value && stakedLpBalance2Results[idx]?.value[0]
+
+            const balance = (unstakedBalance &&  stakedBalance) ? unstakedBalance.add(stakedBalance) : undefined
+            const supply = totalSupply2Results[idx]?.value && totalSupply2Results[idx]?.value[0]
+            const precision = BigNumber.from(10000)
+
+            const perc = (balance && supply && !supply.isZero()) ? precision.mul(balance).div(supply).toNumber() / 10000 : undefined
+            
+            return {
+                poolId: req.indexId,
+                lpBalance: balance,
+                lpTotalSupply: supply,
+                perc: perc,
+            }
+        })
+    
+        
+        const lpBalancesByIndex = [...lpBalances1, ...lpBalances2].reduce( (acc, item) => {
             acc[item.poolId] = item
             return acc
         }, {  }  as  { [ x : string] : LPBalanceInfo } )
@@ -727,7 +767,16 @@ const useTokensPoolsBalances = (chainId : number, tokens: Token[],  poolsInfo: a
 const useAccountLPBalancesForPools = (chainId : number, account: string | undefined, poolsInfo: any[] ) : LPBalanceInfo[] => {
 
     // Get the  LP balances of the account for every Pool
-    const lptokensRequests = poolsInfo.map( pool => {
+    const lptokens1Requests = poolsInfo.filter(req => PoolInfo(chainId, req.poolId).disabled === 'false').map( pool => {
+        return { 
+            poolId: pool.poolId, 
+            lptokenAddress: pool.lptoken, 
+            account: account,
+            depositToken: pool.depositToken,
+        }
+    })
+
+    const lptokens2Requests = poolsInfo.filter(req => PoolInfo(chainId, req.poolId).disabled === 'true').map( pool => {
         return { 
             poolId: pool.poolId, 
             lptokenAddress: pool.lptoken, 
@@ -737,55 +786,62 @@ const useAccountLPBalancesForPools = (chainId : number, account: string | undefi
     })
 
     // get the LP non staked balances
-    const lpBalanceCalls = lptokensRequests.map(req => ({
+    const lpBalance1Calls = lptokens1Requests.map(req => ({
         contract: PoolLPContract(chainId, req.poolId),
         method: 'balanceOf',
         args:  req.account? [req.account] : [constants.AddressZero]
     })) ?? []
 
-    // console.log("useAccountLPBalancesForPools poolsInfo: ", poolsInfo, "lptokensRequests", lptokensRequests)
+    const lpBalance2Calls = lptokens2Requests.map(req => ({
+        contract: PoolLPContract(chainId, req.poolId),
+        method: 'balanceOf',
+        args:  req.account? [req.account] : [constants.AddressZero]
+    })) ?? []
 
-    const lpBalanceResults = useCalls(lpBalanceCalls) ?? []
-    lpBalanceResults.forEach((result, idx) => {
-        if(result && result.error) {
-            console.error(`Error encountered calling 'balanceOf' on ${lpBalanceCalls[idx]?.contract.address}: ${result.error.message}`, "request:", lptokensRequests[idx] , "call: ", lpBalanceCalls[idx])
-        }
-    })
+    const lpBalance1Results = useCalls(lpBalance1Calls) ?? []
+    const lpBalance2Results = useCalls(lpBalance2Calls) ?? []
 
-    // get the LP staked balances
-    const stakedLpBalanceCalls = lptokensRequests.map(req => ({
+
+    // get the LP staked balances for the "enabled" pools
+    const stakedLpBalance1Calls = lptokens1Requests.map(req => ({
         contract: FarmContract(chainId),
         method: 'getStakedBalance',
         args: req.account? [req.account, req.lptokenAddress] : [constants.AddressZero, req.lptokenAddress]
     })) ?? []
 
-    const stakedLpBalanceResults = useCalls(stakedLpBalanceCalls) ?? []
-    stakedLpBalanceResults.forEach((result, idx) => {
-        if(result && result.error) {
-        console.error(`Error encountered calling 'getStakedBalance' on ${stakedLpBalanceCalls[idx]?.contract.address}: ${result.error.message}`)
-        }
-    })
+    // get the LP staked balances for the "disabled" pools
+    const stakedLpBalance2Calls = lptokens2Requests.map(req => ({
+        contract: DisabledFarmContract(chainId),
+        method: 'getStakedBalance',
+        args: req.account? [req.account, req.lptokenAddress] : [constants.AddressZero, req.lptokenAddress]
+    })) ?? []
+
+
+    const stakedLpBalance1Results = useCalls(stakedLpBalance1Calls) ?? []
+    const stakedLpBalance2Results = useCalls(stakedLpBalance2Calls) ?? []
 
 
     // get the LP total supplies
-    const lpTotalSupplyCalls = lptokensRequests.map(req => ({
-        contract: PoolLPContract(chainId, req.poolId), // new Contract(req.lptokenAddress, new utils.Interface(abi)),
+    const lpTotalSupply1Calls = lptokens1Requests.map(req => ({
+        contract: PoolLPContract(chainId, req.poolId),
         method: 'totalSupply',
         args: []
     })) ?? []
 
-    const lpTotalSupplyResults = useCalls(lpTotalSupplyCalls) ?? []
-    lpTotalSupplyResults.forEach((result, idx) => {
-        if(result && result.error) {
-            console.error(`Error encountered calling 'totalSupply' on ${lpTotalSupplyCalls[idx]?.contract.address}: ${result.error.message}`)
-        }
-    })
-    
-    const lpBalanceResponses = lptokensRequests.map( (req, idx) => {
+    const lpTotalSupply2Calls = lptokens2Requests.map(req => ({
+        contract: PoolLPContract(chainId, req.poolId),
+        method: 'totalSupply',
+        args: []
+    })) ?? []
 
-        const balanceNotStaked = lpBalanceResults.at(idx)?.value
-        const balanceStaked = stakedLpBalanceResults.at(idx)?.value
-        const supply = ( lpTotalSupplyResults.at(idx)?.value && lpTotalSupplyResults.at(idx)?.value[0] ) as BigNumber | undefined
+
+    const lpTotalSupply1Results = useCalls(lpTotalSupply1Calls) ?? []
+    const lpTotalSupply2Results = useCalls(lpTotalSupply2Calls) ?? []
+    
+    const lpBalance1Responses = lptokens1Requests.map( (req, idx) => {
+        const balanceNotStaked = lpBalance1Results.at(idx)?.value
+        const balanceStaked = stakedLpBalance1Results.at(idx)?.value
+        const supply = ( lpTotalSupply1Results.at(idx)?.value && lpTotalSupply1Results.at(idx)?.value[0] ) as BigNumber | undefined
         const totalBalance = ( balanceNotStaked && balanceStaked && balanceNotStaked[0].add(balanceStaked[0]) )  as BigNumber | undefined
 
         const precision = BigNumber.from(10000)
@@ -799,7 +855,25 @@ const useAccountLPBalancesForPools = (chainId : number, account: string | undefi
         }
     })
 
-    return lpBalanceResponses
+    const lpBalance2Responses = lptokens2Requests.map( (req, idx) => {
+        const balanceNotStaked = lpBalance2Results.at(idx)?.value
+        const balanceStaked = stakedLpBalance2Results.at(idx)?.value
+        const supply = ( lpTotalSupply2Results.at(idx)?.value && lpTotalSupply2Results.at(idx)?.value[0] ) as BigNumber | undefined
+        const totalBalance = ( balanceNotStaked && balanceStaked && balanceNotStaked[0].add(balanceStaked[0]) )  as BigNumber | undefined
+
+        const precision = BigNumber.from(10000)
+        const perc = (totalBalance && supply && !supply.isZero()) ? precision.mul(totalBalance).div(supply).toNumber() / 10000 : undefined
+
+        return {
+            poolId: req.poolId,
+            lpBalance: totalBalance,
+            lpTotalSupply: supply,
+            perc: perc,
+        }
+    })
+
+
+    return [...lpBalance1Responses, ...lpBalance2Responses]
 }
 
 

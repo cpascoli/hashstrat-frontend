@@ -58,8 +58,6 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
  
     const { poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool, didLoad } = useDashboardModel(chainId, tokens, depositToken, account)
 
-    //console.log("MyPortfolioAssetsSummary", poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool)
-
     const totalDeposited = useTotalDeposited(chainId, account)
     const totalWithdrawn = useTotalWithdrawals(chainId, account)
     

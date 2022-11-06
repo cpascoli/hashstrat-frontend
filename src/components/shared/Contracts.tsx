@@ -2,8 +2,8 @@
 
 
 import { makeStyles, Link, Typography, Box } from  "@material-ui/core"
-import { NetworkExplorerHost, PoolAddress, PoolLPTokenAddress, 
-     StrategyAddress, FeedAddress, HstTokenAddress, FarmAddress, DivsDistributorAddress, TreasuryAddress } from "../../utils/network"
+import { NetworkExplorerHost, PoolAddress, PoolLPTokenAddress, StrategyAddress, FeedAddress,
+      HstTokenAddress, FarmAddress, DaoOperationsAddress, DivsDistributorAddress, TreasuryAddress } from "../../utils/network"
 import { Horizontal } from "../Layout"
 
 const useStyle = makeStyles( theme => ({
@@ -32,6 +32,7 @@ export const Contracts = ( { chainId, poolId } : ContractsProps ) => {
     const explorerHost = NetworkExplorerHost(chainId) ?? "polygonscan.com"
     const hstAddress = HstTokenAddress(chainId)
     const farmAddress = FarmAddress(chainId)
+    const daoOperationsAddress = DaoOperationsAddress(chainId)
     const divsDistributorAddress = DivsDistributorAddress(chainId)
     const treasuryAddress = TreasuryAddress(chainId)
 
@@ -51,9 +52,6 @@ export const Contracts = ( { chainId, poolId } : ContractsProps ) => {
                     <Horizontal>
                         <Typography variant="body2">Contracts</Typography>
 
-                        {/* { !poolId &&  <Link href={`https://${explorerHost}/address/${depositToken?.address}#code` } target="_blank">{depositToken?.symbol}</Link> }
-                        { !poolId &&  <Link href={`https://${explorerHost}/address/${investToken?.address}#code` } target="_blank">{investToken?.symbol}</Link> } */}
-
                         { poolAddress && <Link href={`https://${explorerHost}/address/${poolAddress}` } target="_blank">Pool</Link> }
                         { lpTokenAddress && <Link href={`https://${explorerHost}/address/${lpTokenAddress}` } target="_blank">LP Token</Link> }
                         { strategyAddress && <Link href={`https://${explorerHost}/address/${strategyAddress}` } target="_blank">Strategy</Link> }
@@ -61,6 +59,8 @@ export const Contracts = ( { chainId, poolId } : ContractsProps ) => {
 
                         <Link href={`https://${explorerHost}/address/${hstAddress}` } target="_blank">HST Token</Link>
                         <Link href={`https://${explorerHost}/address/${farmAddress}` } target="_blank">HST Farm</Link>
+                        
+                        <Link href={`https://${explorerHost}/address/${daoOperationsAddress}` } target="_blank">DAO Operations</Link>
                         <Link href={`https://${explorerHost}/address/${divsDistributorAddress}` } target="_blank">Divs Distributor</Link>
                         <Link href={`https://${explorerHost}/address/${treasuryAddress}` } target="_blank">Treasury</Link>
 

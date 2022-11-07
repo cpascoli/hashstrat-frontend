@@ -169,7 +169,9 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
 
                     <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" className={classes.accordion} >
 
-                        <Typography > The DAO Token (HST) is used to participate in the DAO governance and revenue sharing.  </Typography>
+                        <Typography > The DAO Token (HST) is used to participate in the DAO governance and revenue sharing.  <br/>
+                            You can earn it by depositing into the HashStratp Pools &amp; Indexes and staking your LP tokens. 
+                        </Typography>
                     </AccordionSummary>
                     <AccordionDetails style={{paddingLeft: 0, margin: 0}}>
                         <ul>

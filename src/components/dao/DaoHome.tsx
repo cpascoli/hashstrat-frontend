@@ -59,23 +59,28 @@ export const DaoHome = ({ chainId, account, depositToken } : DaoHomeProps ) => {
                 </Breadcrumbs>
             </Box>
 
+            <Box px={2} mt={3}>
+                <Typography>
+                    The HashStrat DAO is the decentralized organization running the protocol.
+                    Here users of the protocol can farm their DAO tokens (HST), collect their share of the protocol dividends and partecipate to the governance process. 
+                </Typography>
+            </Box>
 
             <Horizontal align="center">
-            
                 <Box my={3} style={{ maxWidth: 800 }} >
                     <Card variant="outlined">
-                        <CardHeader title="HashStrat DAO"  />
+                        <CardHeader title="Governance"  />
                         <CardContent>
-                            Here you can farm your DAO tokens (HST) and collect your share of the DAO dividends. Use the <Link href="https://www.tally.xyz/governance/eip155:137:0xEEE17dd25c6ac652c434977D291b016b9bA61a1A" target="_blank" >Tally</Link> app to create, vote and execute governance proposals.
+                            DAO governance allows HST holders to participate to improvements to the HashStrat protocol.
+                            HST holders can use the Tally app to create, vote and execute governance proposals.
                         </CardContent>
                         <CardActions style={{justifyContent: 'center', paddingBottom: 20}}>
                             <Link href="https://www.tally.xyz/governance/eip155:137:0xEEE17dd25c6ac652c434977D291b016b9bA61a1A" target="_blank" style={{ textDecoration: 'none' }} > 
-                                <Button variant="outlined" color="primary" > Go to Governance </Button>
+                                <Button variant="outlined" color="primary" > Launch Tally </Button>
                             </Link>
                         </CardActions>
                     </Card>
                 </Box>
-
             </Horizontal>
 
             <Divider variant="middle" style={{  marginBottom: 20 }}/>

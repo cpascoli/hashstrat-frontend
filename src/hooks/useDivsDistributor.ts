@@ -55,7 +55,7 @@ export const useClaimedDivs = (chainId: number, distributionId: number, account?
     const { value, error } = useCall({
         contract: contract,
         method: 'claimedDivs',
-        args: account? [distributionId, account] : [0, constants.AddressZero]
+        args: distributionId && account ? [distributionId, account] : [0, constants.AddressZero]
 
     }) ?? {}
     

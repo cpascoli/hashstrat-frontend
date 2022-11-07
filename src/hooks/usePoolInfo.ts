@@ -365,7 +365,6 @@ export const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string
         const stakedLpBalance1Results = useCalls(stakedLpBalance1Calls) ?? []
         const stakedLpBalance2Results = useCalls(stakedLpBalance2Calls) ?? []
 
-
     
         // LP tokens supply
         const totalSupply1Calls = lpTokens1Requests.map(req => ({

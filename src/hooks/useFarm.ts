@@ -3,10 +3,10 @@ import { BigNumber, constants } from "ethers"
 
 import { useContractFunction, useCall, useCalls } from "@usedapp/core"
 import { FarmContract, PoolLPTokenAddress } from "../utils/network"
-import { useDebugValue } from "react"
+
 
 export const useStakedTokenBalance = (chainId: number, poolId: string, account?: string) => {
-
+    
     const farmContract = FarmContract(chainId, poolId)
     const lptokenAddress = PoolLPTokenAddress(chainId, poolId)
 

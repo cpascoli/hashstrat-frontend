@@ -4,6 +4,8 @@ import { Link, Box, makeStyles, Typography, Card, CardContent, CircularProgress 
 import { DataGrid, GridColDef } from "@material-ui/data-grid"
 
 import { useGetBalance, useGetPayments } from "../../hooks/useTreasury"
+import { useCollectableFees } from "../../hooks/useDaoOperations"
+
 import { fromDecimals } from "../../utils/formatter"
 import { Token } from "../../types/Token"
 import { Horizontal } from "../Layout"
@@ -38,9 +40,13 @@ export const DAOTreasury = ({ chainId, account, depositToken } : DAOTreasuryProp
 
     const classes = useStyles()
     const treasuryBalance = useGetBalance(chainId)
+    const colleclableFees = useCollectableFees(chainId)
+
     const payments = useGetPayments(chainId)
 
+
     const treasuryBalanceFormatted = treasuryBalance ? fromDecimals(treasuryBalance, depositToken.decimals, 2) : undefined
+    const colleclableFeesFormatted = colleclableFees ? fromDecimals(colleclableFees, depositToken.decimals, 2) : undefined
     
 
     const paymentList = payments?.slice().reverse().map( (payment : any) => {
@@ -125,24 +131,30 @@ export const DAOTreasury = ({ chainId, account, depositToken } : DAOTreasuryProp
             <Box my={4}>
 
                 <Horizontal align="center">
-                    <Card style={{ width: 250, height: 150 }} variant="outlined" >
+                    <Card style={{ width: 250, height: 190 }} variant="outlined" >
                         <CardContent>
                             <div style={{ display:'flex', justifyContent:'center' }}> 
-                                <Typography variant="body1" style={{ marginBottom: 30 }}> Funds held in the Treasury </Typography>
+                                <Typography variant="body1" style={{ marginBottom: 40 }}> Funds held in the Treasury </Typography>
                             </div>
                             <div style={{ display:'flex', justifyContent:'center' }}> 
                             { !treasuryBalanceFormatted && <CircularProgress color="secondary" />}
                             { treasuryBalanceFormatted && 
-                                <Typography variant="h5" style={{ marginBottom: 30 }} >
+                                <Typography variant="h5" style={{ marginBottom: 40 }} >
                                     { utils.commify( treasuryBalanceFormatted ) } { depositToken.symbol }
                                 </Typography>
                             }
                             </div>
+                            { colleclableFeesFormatted && 
+                                <Typography variant="body2" style={{ paddingBottom: 0, paddingTop:0 }} align="center" >
+                                   Fees held in pools: { utils.commify( colleclableFeesFormatted ) } { depositToken.symbol }
+                                </Typography>
+                            }
+                            
                         </CardContent>
                     </Card>
                 </Horizontal>
 
-                { rows && 
+                { rows?.length > 0 && 
                     <Box py={2} > 
                         <div style={{ height: rows.length * 56 + 110, width: '100%', marginTop: 20 }}>
                             <Typography variant="h5" style={{ marginBottom: 10 }} >

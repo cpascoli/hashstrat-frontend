@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react"
 
 import { utils } from "ethers"
 import { useBlockMeta, useNotifications } from "@usedapp/core"
-
-
-import { Button, Popover, CircularProgress, Box, makeStyles, Typography, Card, CardContent } from  "@material-ui/core"
+import { Button, Popover, CircularProgress, Box, makeStyles, Typography, Card, CardContent, Link } from  "@material-ui/core"
 import { DataGrid, GridColDef } from "@material-ui/data-grid"
 import { Info } from "@material-ui/icons"
 import { AlertTitle } from "@material-ui/lab"
@@ -38,7 +36,6 @@ const useStyles = makeStyles( theme => ({
     container: {
         // textAlign: "center",
         padding: theme.spacing(2),
-        minHeight: 300
     },
     info:{
         margin: "auto"
@@ -115,8 +112,9 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
         }
     })
 
+    const loading = periods === undefined
 
-    const lastPeriod = periods && periods.length > 0 ? periods[0] : undefined
+    const lastPeriod = periods?.length > 0 ? periods[0] : undefined
     const totalDivsFormatted = lastPeriod ? lastPeriod.reward : ""
     const rewardsPaidFormatted = lastPeriod ? lastPeriod.rewardsPaid : ""
 
@@ -133,7 +131,9 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
         timeFormatted =  days > 0 ? `${days}d, ${hrs}h, ${mnts}m` : hrs > 0 ? `${hrs}h, ${mnts}m` : `${mnts}m`
     }
 
-    const activeDistribution = lastPeriod?.from && lastPeriod?.to && blockInfo?.blockNumber ? (blockInfo.blockNumber >= lastPeriod.from && blockInfo.blockNumber <= lastPeriod.to) : undefined
+    const activeDistribution = (blockInfo?.blockNumber && periods?.length === 0) ? false :
+                               (lastPeriod?.from && lastPeriod?.to && blockInfo?.blockNumber) ? (lastPeriod.from <= blockInfo.blockNumber && blockInfo.blockNumber <= lastPeriod.to) : undefined
+    
     const distributionInfo = activeDistribution !== undefined && timeFormatted ? `Distribution started at block ${lastPeriod?.from} and will end at block ${lastPeriod?.to}, in approximately ${timeFormatted}`  : ''
 
     const pastTokens = useGetPastVotes(chainId, lastPeriod?.from, account)
@@ -250,10 +250,10 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
             </Box>
 
 
-            <Box my={4}>
+            <Box mt={4}>
                 <Horizontal align="center">
 
-                { activeDistribution === undefined && <CircularProgress color="secondary" /> } 
+                { loading && <CircularProgress color="secondary" /> } 
 
                 { activeDistribution == false && 
     
@@ -329,7 +329,7 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
                 </Horizontal>
 
 
-                { rows && 
+                { rows?.length > 0 &&
                     <Box py={2} > 
                         <div style={{ height: rows.length * 56 + 110, width: '100%', marginTop: 20 }}>
                             <Typography variant="h5" style={{ marginBottom: 10 }} >
@@ -347,11 +347,13 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
                     </Box> 
                 }
 
-
-
+                <Box mt={3} > 
+                    <Typography> 
+                        The next dividend distributions will be automatically created by <Link href="https://automation.chain.link/polygon/17553453363497962628290284202419212017061392835438076565532197524285281222582" target="_blank">Chainlink Automation</Link>
+                    </Typography>
+                </Box>
             </Box>
         </Box>
-
     )
 }
 

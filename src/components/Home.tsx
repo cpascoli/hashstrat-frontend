@@ -90,6 +90,9 @@ const useStyle = makeStyles(theme => ({
     imageDeFi: {
         content: `url(  ${theme.palette.type === 'light' ? experienceDefiLight : experienceDefiDark} )`,
         maxWidth: "480px",
+        [theme.breakpoints.down('sm')]: {
+            maxWidth: "380px",
+        },
     }
 }))
 
@@ -135,19 +138,17 @@ export const Home = ({ chainId }: HomeProps) => {
             <section className={classes.midSection}>
                
                 <Horizontal align="center"  valign="center"> 
-                    <img className={classes.imageDeFi} />
                     <Typography variant="h4" align="center" >
-                        Experience the power of  <br/>
+                        Experience the power of<br/>
                         Decentralized Finance
                     </Typography>
-
-                    </Horizontal>
+                    <img className={classes.imageDeFi} />
+                </Horizontal>
             </section>
 
 
             <section className={classes.midSection}>
-                <img className={classes.imagePhone} />
-                <Typography variant="h5">What is HashStrat?</Typography>
+                <Typography variant="h4">What is HashStrat?</Typography>
                 <ul>
                     <li>
                         <Typography variant="body1">
@@ -174,7 +175,7 @@ export const Home = ({ chainId }: HomeProps) => {
 
 
             <section className={classes.midSection}>
-                <Typography variant="h5">Who is it for?</Typography>
+                <Typography variant="h4">Who is it for?</Typography>
                 <ul>
                     <li>
                         <Typography variant="body1">

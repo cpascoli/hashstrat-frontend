@@ -34,10 +34,26 @@ const App = () => {
 				default: toggleDark ? '#303030' : '#909090',
 			 },
 		},	
+
 	});
 
-	console.log("theme: ", appTheme)
+	appTheme.typography.h4 = {
+		fontSize: '1.9rem',
+		fontWeight: 400,
+        [appTheme.breakpoints.down('sm')]: {
+			fontSize: '1.6rem',
+        },
+	};
 
+	appTheme.typography.h5 = {
+		fontSize: '1.8em',
+		fontWeight: 400,
+        [appTheme.breakpoints.down('sm')]: {
+			fontSize: '1.4rem',
+        },
+	};
+
+	console.log("theme: ", appTheme)
 
 	return (
 		<ThemeProvider theme={{ ...appTheme }}>

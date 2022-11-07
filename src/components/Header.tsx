@@ -267,7 +267,7 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
                             <Divider />
                             <MenuItem onClick={handleClose}>
                               <Box my={1}>
-                                <Typography variant='body2'> Version 0.4 (2d2f) </Typography>
+                                <Typography variant='body2'> Version 0.5 (90d2e5a) </Typography>
                               </Box>
                             </MenuItem>
 

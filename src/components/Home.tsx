@@ -1,20 +1,23 @@
 
 
 
-import { Button, Typography, makeStyles,  Divider, Link, Box, styled } from  "@material-ui/core"
-import { Link as LinkRouter} from "react-router-dom"
+import { Button, Typography, makeStyles, Divider, Link, Box, styled } from "@material-ui/core"
+import { Link as LinkRouter } from "react-router-dom"
 
 import { InfoBox } from "./InfoBox"
 
 import brainDark from "./img/brain-dark.png"
 import brainLignt from "./img/brain-light.png"
+import experienceDefiLight from "./img/experience-defi-light.png"
+import experienceDefiDark from "./img/experience-defi-dark.png"
+
 import key from "./img/key.svg"
 import automated from "./img/automated.svg"
 import lock from "./img/lock.svg"
 import dao from "./img/dao.svg"
 import { Horizontal } from "./Layout"
 
-const useStyle = makeStyles( theme => ({
+const useStyle = makeStyles(theme => ({
 
     topSection: {
         marginTop: 20,
@@ -67,16 +70,15 @@ const useStyle = makeStyles( theme => ({
         color: theme.palette.type === 'light' ? theme.palette.grey[800] : theme.palette.grey[100],
     },
     imageLarge: {
-        content:`url(  ${theme.palette.type === 'light' ? brainLignt : brainDark } )`,
-        border: `1px solid ${theme.palette.type === 'light' ? 'black' : 'white' }`,
+        content: `url(  ${theme.palette.type === 'light' ? brainLignt : brainDark} )`,
         maxWidth: 350,
         [theme.breakpoints.down('sm')]: {
             display: "none"
         },
     },
     imagePhone: {
-        content:`url(  ${theme.palette.type === 'light' ? brainLignt : brainDark } )`,
-        border: `1px solid ${theme.palette.type === 'light' ? 'black' : 'white' }`,
+        content: `url(  ${theme.palette.type === 'light' ? brainLignt : brainDark} )`,
+        border: `1px solid ${theme.palette.type === 'light' ? 'black' : 'white'}`,
         maxWidth: "100%",
         paddingLeft: 80,
         paddingRight: 80,
@@ -84,6 +86,10 @@ const useStyle = makeStyles( theme => ({
         [theme.breakpoints.up('sm')]: {
             display: "none"
         },
+    },
+    imageDeFi: {
+        content: `url(  ${theme.palette.type === 'light' ? experienceDefiLight : experienceDefiDark} )`,
+        maxWidth: "480px",
     }
 }))
 
@@ -93,38 +99,51 @@ export interface HomeProps {
 }
 
 
-export const Home = ( { chainId } : HomeProps ) => {
+export const Home = ({ chainId }: HomeProps) => {
 
     const classes = useStyle()
 
     return (
         <Box py={3}>
-             <section className={classes.topSection}>
-                <div className={classes.titleSection}> 
+            <section className={classes.topSection}>
+                <div className={classes.titleSection}>
                     <div>
                         <p className={classes.title}>
-                            Self-sovereign crypto fund 
+                            Self-sovereign crypto fund
                         </p>
                         <p className={classes.subtitle}>
-                            Choose your transparent, autonomous, investment strategies for long term investing<br/>
+                            Choose your transparent, autonomous, investment strategies for long term investing<br />
                         </p>
                     </div>
                     <div style={{ marginTop: 40 }}>
                         <Horizontal align="center">
-                            <Link component={LinkRouter} to="/home" style={{ textDecoration: 'none' }} > 
+                            <Link component={LinkRouter} to="/home" style={{ textDecoration: 'none' }} >
                                 <Button variant="contained" color="primary" style={{ width: 200, height: 40 }} >Launch App</Button>
                             </Link>
-                            <Link href="https://medium.com/@hashstrat" target="_blank" style={{ textDecoration: 'none' }} > 
+                            <Link href="https://medium.com/@hashstrat" target="_blank" style={{ textDecoration: 'none' }} >
                                 <Button variant="outlined" color="primary" style={{ width: 200, height: 40 }} >Read Blog</Button>
                             </Link>
                         </Horizontal>
                     </div>
-                 </div>
+                </div>
 
                 <img className={classes.imageLarge} />
-             </section>
+            </section>
 
-             <Divider style={{marginTop: 40, marginBottom: 40}} />
+            <Divider style={{ marginTop: 40, marginBottom: 40 }} />
+
+            <section className={classes.midSection}>
+               
+                <Horizontal align="center"  valign="center"> 
+                    <img className={classes.imageDeFi} />
+                    <Typography variant="h4" align="center" >
+                        Experience the power of  <br/>
+                        Decentralized Finance
+                    </Typography>
+
+                    </Horizontal>
+            </section>
+
 
             <section className={classes.midSection}>
                 <img className={classes.imagePhone} />
@@ -137,21 +156,22 @@ export const Home = ( { chainId } : HomeProps ) => {
                     </li>
                     <li>
                         <Typography variant="body1">
-                           In HashStrat, users' funds are managed by transparent, autonomous strategies executed on-chain. 
+                            In HashStrat, users' funds are managed by transparent, autonomous strategies executed on-chain.
                         </Typography>
                     </li>
                     <li>
                         <Typography variant="body1">
-                            HashStrat strategies are designed to reduce portfolio volatility &amp; drawdowns, and produce returns competitive with the benchmark buy-and-hold strategy. 
+                            HashStrat strategies are designed to reduce portfolio volatility &amp; drawdowns, and produce returns competitive with the benchmark buy-and-hold strategy.
                         </Typography>
                     </li>
                     <li>
                         <Typography variant="body1">
-                            It's also possible to improve your risk/reward further by allocating capital to indexes over multiple strategies.  
+                            It's also possible to improve your risk/reward further by allocating capital to indexes over multiple strategies.
                         </Typography>
                     </li>
                 </ul>
             </section>
+
 
             <section className={classes.midSection}>
                 <Typography variant="h5">Who is it for?</Typography>
@@ -179,7 +199,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <InfoBox title="Self-sovereign" image={key}>
                     <Typography variant="body2">
                         Users interact directly with the blockchain through their digital wallets.
-                        Users stay in control of their funds at all times.<br/>
+                        Users stay in control of their funds at all times.<br />
                         No personal information is ever shared or leaked.
                     </Typography>
                 </InfoBox>
@@ -187,7 +207,7 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <InfoBox title="DAO Governance" image={dao}>
                     <Typography variant="body2">
                         Users can participate in protocol governance and revenue sharing through
-                        the HashStrat DAO token (<Link component={LinkRouter} to="/dao">HST</Link>). <br/>
+                        the HashStrat DAO token (<Link component={LinkRouter} to="/dao">HST</Link>). <br />
                         HST has a fixed supply and fair distribution.
                         It can only be earned by using of the protocol.
                     </Typography>
@@ -204,8 +224,8 @@ export const Home = ( { chainId } : HomeProps ) => {
                 <InfoBox title="Secure" image={lock}>
                     <Typography variant="body2">
                         All code is open source and smart contracts verified on-chain.
-                        This means their behaviour is predictable and transparent. <br/>
-                        HashStrat smart contracts are immutable. Nobody can stop them or change their behaviour. 
+                        This means their behaviour is predictable and transparent. <br />
+                        HashStrat smart contracts are immutable. Nobody can stop them or change their behaviour.
                     </Typography>
                 </InfoBox>
 

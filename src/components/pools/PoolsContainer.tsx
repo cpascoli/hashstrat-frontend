@@ -1,5 +1,4 @@
 import { makeStyles, Link, Typography, Breadcrumbs } from "@material-ui/core"
-import { useLocation } from "react-router-dom"
 import { PoolsView } from "./PoolsView"
 import { Token } from "../../types/Token"
 import { Link as RouterLink } from "react-router-dom"
@@ -20,7 +19,6 @@ const useStyles = makeStyles( theme => ({
 
 export const PoolsContainer = ({ chainId, account, depositToken } : PoolsContainerProps) => {
     const classes = useStyles()
-    const location = useLocation();
 
     return (
         <div className={classes.container}>

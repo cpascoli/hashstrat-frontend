@@ -1,19 +1,15 @@
 import { makeStyles, Box, Typography, CircularProgress } from "@material-ui/core"
-import { Skeleton } from "@material-ui/lab"
-
 import { utils } from "ethers"
+import { Alert, AlertTitle } from "@material-ui/lab"
 
 import { Token } from "../../types/Token"
-import { fromDecimals, round } from "../../utils/formatter"
+import { fromDecimals } from "../../utils/formatter"
 import { PoolSummary } from "../shared/PoolSummary"
 import { Horizontal } from "../Layout"
 
 import { TitleValueBox } from "../TitleValueBox"
 import { VPieChart } from "../shared/VPieChart"
-import { StyledAlert } from "../shared/StyledAlert"
-import { Alert, AlertTitle } from "@material-ui/lab"
-import { Link as RouterLink } from "react-router-dom"
-
+import { PoolInfo } from "../../utils/pools"
 
 import { useDashboardModel } from "./DashboadModel"
 import { useTotalDeposited, useTotalWithdrawals } from "../../hooks/useUserInfo"
@@ -71,6 +67,12 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
        }
     })
  
+    const userHasDisabledPools = [...indexesInfo, ...poolsInfo].filter( pool => pool.totalValue.isZero() === false ).reduce( (acc, val ) => {
+        return acc = acc || PoolInfo(chainId, val.poolId).disabled === 'true'
+    }, false)
+
+
+
     const poolsSummaryViews = [...indexesInfo, ...poolsInfo].filter( pool => pool.totalValue.isZero() === false ).map ( pool => {
         return <PoolSummary key={pool.poolId} 
                     chainId={chainId} 
@@ -90,6 +92,7 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                             String(Math.round( 10000 * (parseFloat(totalWithdrawnFormatted) + parseFloat(totalValueFormatted) - parseFloat(totalDepositedFormatted)) / parseFloat(totalDepositedFormatted)) / 100 ) : 'n/a'
 
 
+
     return (
         <div className={classes.container}>
 
@@ -107,17 +110,22 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                 </Box>
             }
 
-            {/* { account && totalValueFormatted && Number(totalValueFormatted) == 0 && 
-                <StyledAlert severity="info" style={{marginTop: 20, marginBottom: 20}}>
-                    <AlertTitle>You have no assets in your portfolio </AlertTitle>
-                    Deposit funds into a <Link component={RouterLink} to="/pools">Pool</Link> or
-                    an <Link component={RouterLink} to="/indexes">Index</Link> and a summary of your assets will appear here. 
-                </StyledAlert>
-            } */}
-
+            { userHasDisabledPools && 
+                <Box pb={2} >
+                    <Alert severity="warning" > 
+                        <AlertTitle>Upgraded Pools &amp; Indexes</AlertTitle>
+                        New versions of all Pools &amp; Indexes have been deployed and the old versions are now disabled.<br/>
+                        Withdraw your funds from disabled Pools &amp; Indexes and deposit into active ones. <br/>
+                        If you had "staked" your LP tokens remember to "unstake" them before you can withdraw.
+                    </Alert>
+                </Box>
+            }
 
             {  didLoad && account &&
                 <div>
+
+
+
                     <Box>
                         <Typography variant="h4" align="center" >Portfolio Summary </Typography>
                         <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 10}}>

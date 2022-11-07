@@ -1,5 +1,4 @@
 import { makeStyles, Link, Typography, Breadcrumbs } from "@material-ui/core"
-import { useLocation } from "react-router-dom"
 import { IndexesView } from "./IndexesView"
 import { Token } from "../../types/Token"
 import { Link as RouterLink } from "react-router-dom"
@@ -20,7 +19,6 @@ const useStyles = makeStyles( theme => ({
 
 export const IndexesHome = ({ chainId, account, depositToken } : IndexesHomeProps) => {
     const classes = useStyles()
-    const location = useLocation();
 
     return (
         <div className={classes.container}>

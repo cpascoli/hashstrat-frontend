@@ -60,7 +60,7 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken, account } :
     const totalValueFormatted = fromDecimals(totalValues.pool, depositToken.decimals, 2 )
     const accountPercFormatted = `${round( perc ? perc * 100 : 0)}`
 
-    const { name, description } = PoolInfo(chainId, poolId)
+    const { name, description, disabled } = PoolInfo(chainId, poolId)
 
     const tokenViews = tokens && tokens.map( token => {
         const accountBalanceFormatted = token.accountBalance && fromDecimals(token.accountBalance ?? BigNumber.from(0), token.decimals, 4 )
@@ -72,6 +72,11 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken, account } :
 
     const myShareFormatted = `$ ${utils.commify(totalAccountValueFormatted) } (${accountPercFormatted}%)`
     const link = poolId.startsWith("index") ? `/indexes/${poolId}` : `/pools/${poolId}`
+
+
+    if (totalAccountValueFormatted == '0' && disabled === 'true') {
+        return <div></div>
+    }
 
 
     return (

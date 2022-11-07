@@ -47,7 +47,7 @@ const useStyles = makeStyles( theme => ({
 
 
 
-export const Dashboard = ({ chainId, depositToken, investTokens, account} : DashboardProps) => {
+export const Dashboard = ({ chainId, depositToken, investTokens, account } : DashboardProps) => {
     
     const classes = useStyles()
     const [selectedTokenIndex, setSelectedTokenIndex] = useState<number>(0)

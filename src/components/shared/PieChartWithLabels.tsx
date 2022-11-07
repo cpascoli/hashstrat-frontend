@@ -3,7 +3,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { makeStyles, Box, Typography, useTheme } from  "@material-ui/core"
 
 
-const COLORS = ['#0088FE', '#FF8042', '#00C49F', '#F9D423', '#9187A2', '#CC527A', '#2F9599', '#45ADA8'];
+const COLORS = ['#7ac1ff', '#ffa87d', '#45ffdc', '#F9D423', '#9187A2', '#CC527A', '#2F9599', '#45ADA8'];
 
 const RADIAN = Math.PI / 180;
 

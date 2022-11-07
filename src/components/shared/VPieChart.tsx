@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom';
 import { VictoryPie } from 'victory';
 
 
-const COLORS = ['#0088DE', '#EE8042', '#00C49F', '#F9D423', '#9187A2', '#CC527A', '#2F9599', '#45ADA8'];
+const COLORS = ['#7ac1ff', '#ffa87d', '#45ffdc', '#F9D423', '#9187A2', '#CC527A', '#2F9599', '#45ADA8'];
 
 const RADIAN = Math.PI / 180;
 
@@ -61,7 +61,7 @@ export const VPieChart = ( chartData : ChartData ) => {
               labels={ ({ datum }) => (datum.y / total) > 0.08 ?  `${datum.x} (${((datum.y / total) * 100).toFixed(0)}%)` : '' }
 
               style={{
-                labels: { fontSize: 20, fontWeight: 500, fill: theme.palette.type === 'light' ? theme.palette.grey[800] : "white" },
+                labels: { fontSize: 20, fontWeight: 500, fill: theme.palette.type === 'light' ? theme.palette.grey[800] : theme.palette.grey[100] },
                 data: {
                   fill: ({ datum }) => datum && data[datum.idx] ? COLORS[ Number(datum.idx) % COLORS.length ] : 'white'
                 }

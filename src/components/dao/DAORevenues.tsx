@@ -258,7 +258,7 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
                 { activeDistribution == false && 
     
                     <StyledAlert severity={userMessage?.type}>
-                        <AlertTitle> No divs distribution in progress</AlertTitle>
+                        <AlertTitle> No dividends distribution in progress</AlertTitle>
                         There are no dividends being distributed right now. Please come back when the next distribution starts.
                     </StyledAlert>
                 }

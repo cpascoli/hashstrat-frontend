@@ -147,8 +147,7 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
     const formattedHstTotalSupply = hstTotalSupply? fromDecimals(hstTotalSupply, 18, 2) : ""
 
     const circulatingPerc = (formattedHstTotalSupply && formattedHstMaxSupply ) ? 
-             `${100 * round(Number(formattedHstTotalSupply) /  Number(formattedHstMaxSupply), 4)}% ` : 'n/a'
-
+             `${ Math.round(10000 * Number(formattedHstTotalSupply) /  Number(formattedHstMaxSupply)) / 100 }% ` : 'n/a'
 
 
     return (

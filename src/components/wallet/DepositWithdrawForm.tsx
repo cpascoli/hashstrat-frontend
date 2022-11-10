@@ -185,6 +185,10 @@ export const DepositWithdrawForm = ({ formType, chainId, poolId, token, balance,
                 notification.type === "transactionSucceed" &&
                 notification.transactionName === "Approve Token Transfer"
         ).length > 0) {
+
+            //TODO update UI
+            console.log("Token transfer approved. New allowance: ", formattedAllowance)
+
             const info : SnackInfo = {
                 type: "info",
                 title: "Success",

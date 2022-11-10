@@ -6,11 +6,8 @@ import { Link as LinkRouter } from "react-router-dom"
 
 import { InfoBox } from "./InfoBox"
 
-import brainDark from "./img/brain-dark.png"
-import brainLignt from "./img/brain-light.png"
 import experienceDefiLight from "./img/experience-defi-light.png"
 import experienceDefiDark from "./img/experience-defi-dark.png"
-
 import key from "./img/key.svg"
 import automated from "./img/automated.svg"
 import lock from "./img/lock.svg"
@@ -40,24 +37,20 @@ const useStyle = makeStyles(theme => ({
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
         gap: theme.spacing(0),
-        // border: "1px solid black "
-
         [theme.breakpoints.down('sm')]: {
             gridTemplateColumns: "1fr",
         },
     },
 
-
     titleSection: {
         textAlign: "center",
-        maxWidth: 480,
         paddingLeft: 10,
         paddingRight: 10,
     },
     title: {
         margin: 0,
         fontWeight: 200,
-        fontSize: "3.2rem",
+        fontSize: "3.7rem",
         textAlign: "center",
         [theme.breakpoints.down('sm')]: {
             fontSize: "2.7rem",
@@ -68,24 +61,6 @@ const useStyle = makeStyles(theme => ({
         fontSize: "1.2rem",
         textAlign: "center",
         color: theme.palette.type === 'light' ? theme.palette.grey[800] : theme.palette.grey[100],
-    },
-    imageLarge: {
-        content: `url(  ${theme.palette.type === 'light' ? brainLignt : brainDark} )`,
-        maxWidth: 350,
-        [theme.breakpoints.down('sm')]: {
-            display: "none"
-        },
-    },
-    imagePhone: {
-        content: `url(  ${theme.palette.type === 'light' ? brainLignt : brainDark} )`,
-        border: `1px solid ${theme.palette.type === 'light' ? 'black' : 'white'}`,
-        maxWidth: "100%",
-        paddingLeft: 80,
-        paddingRight: 80,
-        marginBottom: 20,
-        [theme.breakpoints.up('sm')]: {
-            display: "none"
-        },
     },
     imageDeFi: {
         content: `url(  ${theme.palette.type === 'light' ? experienceDefiLight : experienceDefiDark} )`,
@@ -107,15 +82,18 @@ export const Home = ({ chainId }: HomeProps) => {
     const classes = useStyle()
 
     return (
+        <>
         <Box py={3}>
             <section className={classes.topSection}>
                 <div className={classes.titleSection}>
                     <div>
                         <p className={classes.title}>
-                            Self-sovereign crypto fund
+                            Crypto Fund for <br/> self-sovereign investing
                         </p>
+     
                         <p className={classes.subtitle}>
-                            Choose your transparent, autonomous, investment strategies for long term investing<br />
+                            Automated management of digital asset portfolios<br/>
+                            On-chain strategies for long-term investors
                         </p>
                     </div>
                     <div style={{ marginTop: 40 }}>
@@ -130,7 +108,6 @@ export const Home = ({ chainId }: HomeProps) => {
                     </div>
                 </div>
 
-                <img className={classes.imageLarge} />
             </section>
 
             <Divider style={{ marginTop: 40, marginBottom: 40 }} />
@@ -139,13 +116,14 @@ export const Home = ({ chainId }: HomeProps) => {
                
                 <Horizontal align="center"  valign="center"> 
                     <Typography variant="h4" align="center" >
-                        Experience the power of<br/>
+                        Experience the Power of<br/>
                         Decentralized Finance
                     </Typography>
                     <img className={classes.imageDeFi} />
                 </Horizontal>
             </section>
 
+            <Divider style={{ marginTop: 0, marginBottom: 40 }} />
 
             <section className={classes.midSection}>
                 <Typography variant="h4">What is HashStrat?</Typography>
@@ -196,6 +174,8 @@ export const Home = ({ chainId }: HomeProps) => {
                 </ul>
             </section>
 
+            <Divider style={{ marginTop: 0, marginBottom: 40 }} />
+
             <section className={classes.bottomSecion}>
                 <InfoBox title="Self-sovereign" image={key}>
                     <Typography variant="body2">
@@ -231,7 +211,11 @@ export const Home = ({ chainId }: HomeProps) => {
                 </InfoBox>
 
             </section>
-
         </Box>
+
+        <Divider style={{ marginTop: 0, marginBottom: 0 }} />
+
+        </>
+
     )
 }

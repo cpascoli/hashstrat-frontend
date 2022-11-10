@@ -76,7 +76,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
 
     const { symbol, image } = token
 
-    // PoolLP Token Allowance 
+    // PoolLP Token allowance 
     const allowance = useTokenAllowance(chainId, poolId, symbol, FarmAddress(chainId, poolId)) // in token decimals
 
     const { approveErc20, approveErc20State } = useTokenApprove(chainId, poolId, symbol, FarmAddress(chainId, poolId))
@@ -95,7 +95,6 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
     const [userMessage, setUserMessage] = useState<SnackInfo>()
 
     // formatted values
-    // let formattedAllowance  //= allowance && fromDecimals(allowance, token.decimals, 4)
     const [formattedAllowance, setFormattedAllowance] = useState('');
 
 
@@ -103,7 +102,8 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
         if (allowance) {
             setFormattedAllowance( fromDecimals(allowance, token.decimals, 4) )
         }
-     }, [allowance])
+    }, [allowance])
+
 
 
     // Form Handlers
@@ -187,6 +187,9 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
                 notification.type === "transactionSucceed" &&
                 notification.transactionName === "Approve Token Transfer"
         ).length > 0) {
+            //TODO udpate UI
+            console.log("Token transfer approved. New allowance: ", formattedAllowance)
+
             const info : SnackInfo = {
                 type: "info",
                 title: "Success",

@@ -27,7 +27,6 @@ export const FaqHome = () => {
 
             <Divider variant="middle" style={{marginTop: 20, marginBottom: 0}}/>
 
-
             <Box my={2}>
                 <Alert severity="warning">
                     <AlertTitle> Scary Disclaimer </AlertTitle>
@@ -36,20 +35,47 @@ export const FaqHome = () => {
                 </Alert>
             </Box>
 
-           <Accordion>
+            <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
                     <Typography style={{fontSize: 20, fontWeight: 400}} > What is HashStrat?  </Typography>
                 </AccordionSummary>
                 <AccordionDetails >
                     <Typography variant="body2" >
-                        HashStrat is a DeFi protocol for self-sovereign crypto-funds on the blockchain. <br/> 
-                        Users deposit capital, in the form of stable crypto-assets (USDC), into Pools managed by on-chain strategies.
+                        HashStrat is a DeFi protocol for a self-sovereign crypto-fund. <br/> 
+                        Users deposit funds, in the form of a stable crypto-assets (USDC) into Pools managed by on-chain strategies.
                         <br/>
                         When users deposit funds into a Pool, they receive "Pool LP tokens" that represent ownership of their share of the Pool.<br/>
-                        Users can "stake" their PoolLP tokens and "farm" HST tokens that allow to participate in the protocol gorvernance and revenue 
-                        sharing programs.<br/>
+                        Users can "stake" their Pool LP tokens and "farm" HST tokens that allow to participate in the protocol gorvernance and revenue sharing programs.<br/>
                         Users can withdraw their funds at any time by returning their LP tokens to the Pools.
                     </Typography>
+                </AccordionDetails>
+            </Accordion>
+
+            <Accordion>
+                <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
+                    <Typography style={{fontSize: 20, fontWeight: 400}} > Why a self-sovereign crypto-fund on the blockchain? </Typography>
+                </AccordionSummary>
+                <AccordionDetails >
+                    <Box>
+                        Because Decentralized Finance (DeFi) is the future of Finance. <br />
+                        When well execured DeFi provides the following benefits:
+                        <ul>
+                            <li>No need to trust any counterparty to manage your funds with integrity </li>
+                            <li>No minimum investing requirements, no barriers to entry and no gatekeepers</li>
+                            <li>Users stay in control of their funds at all times. No need to ask someone to get your mney back </li>
+                            <li>Ownership of digital asset is auditable by anybody on the blockchain</li>
+                            <li>All trades are auditable by anybody on the blockchain</li>
+                            <li>Behaviour of trading strategies is deterministic and transparent</li>
+                            <li>Correctness of execution is guaranteed by the blcokchain </li>
+                            <li>All code is open source and smart contracts are verified on-chain</li>
+                            <li>Seamless integration with other DeFi protocols</li>
+                            <li>Seamless access to on-chain liquidity</li>
+                        </ul>
+
+                        Additionally, HashStrat can prevent loosing money by solo trading.  <br/>
+                        Buying when price (and sentiment) is low and selling when price (and sentiment) is high is hard.<br/>
+                        Smart contracts don't suffer from emotions that can prevent human investors from executing correctly on their plan.<br/>
+                    </Box>
                 </AccordionDetails>
             </Accordion>
 
@@ -138,7 +164,6 @@ export const FaqHome = () => {
                 </AccordionDetails>
             </Accordion>
  
-
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
                     <Typography style={{fontSize: 20, fontWeight: 400}} > What is the HashStrat DAO?</Typography>
@@ -146,9 +171,8 @@ export const FaqHome = () => {
                 <AccordionDetails >
                     <Typography variant="body2">
                         The HashStrat protocol is governed by a Decentralized Autonomous Organization, the HashStrat DAO. <br/>
-                        DAO members are users of the protocol themselves, who participate in the governance and revenue sharing programs. <br />
-                        The HashStat DAO token <Link component={RouterLink} to="/dao">HST</Link> facilitates all DAO decisions and operations.<br />
-                        All HST tokens in existance are being distributed to users of the HashStat pools who stake their PoolLP tokens. <br/>
+                        Every user of the protocol can earn the DAO token <Link component={RouterLink} to="/dao">HST</Link> and become a member of the DAO.<br/>
+                        HST holders are able to participate in the protocol governance and revenue sharing programs.
                     </Typography> 
                 </AccordionDetails>
             </Accordion>
@@ -159,10 +183,9 @@ export const FaqHome = () => {
                 </AccordionSummary>
                 <AccordionDetails >
                     <Typography variant="body2">
-                        The HashStrat protocol generaets revenues by taxing profits that are withdrawn from HashStrat Pools &amp; Indexes. <br/>
+                        The HashStrat protocol generaets revenues by taxing profits withdrawn from Pools &amp; Indexes. <br/>
                         The withdrawal fee is currently set to 1% of profits.<br/>
-                        Fees stay within the pool and soon, DAO memebers will be able to decide their destination.<br/>
-                        Possible uses include distibution among DAO token holders, or allocation to marketing and R&amp;D budgets.
+                        These fees are periodically collected into the DAO Treasury and then distributed to DAO token holders as "dividends".<br/>
                     </Typography> 
                 </AccordionDetails>
             </Accordion>

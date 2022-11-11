@@ -1,4 +1,4 @@
-import { makeStyles, Link, Typography, Breadcrumbs } from "@material-ui/core"
+import { Box, Link, Typography, Breadcrumbs } from "@material-ui/core"
 import { PoolsView } from "./PoolsView"
 import { Token } from "../../types/Token"
 import { Link as RouterLink } from "react-router-dom"
@@ -10,26 +10,19 @@ interface PoolsContainerProps {
     depositToken: Token
 }
 
-const useStyles = makeStyles( theme => ({
-    container: {
-        padding: theme.spacing(2),
-    }
-}))
 
 
 export const PoolsContainer = ({ chainId, account, depositToken } : PoolsContainerProps) => {
-    const classes = useStyles()
 
     return (
-        <div className={classes.container}>
-            
+        <Box px={2} >
             <Breadcrumbs aria-label="breadcrumb">
                 <Link component={RouterLink} to="/home"> Home </Link>
                 <Typography>Pools</Typography>
             </Breadcrumbs>
 
             <PoolsView chainId={chainId} account={account} depositToken={depositToken} />
-        </div>
+        </Box>
     )
 }
 

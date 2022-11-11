@@ -2,10 +2,8 @@ import { constants, BigNumber } from "ethers"
 
 import {  useCalls } from "@usedapp/core"
 
-import { PoolContract } from "../utils/network"
-import { useDebugValue } from "react"
-
-import { PoolIds, IndexesIds } from "../utils/pools"
+import { PoolContract, PoolLPContract } from "../utils/network"
+import { PoolIds, IndexesIds,  PoolInfo, PoolsInfo } from "../utils/pools"
 
 
 
@@ -67,4 +65,3 @@ export const useTotalWithdrawals = (chainId: number, account: string | undefined
 
     return total
 }
-

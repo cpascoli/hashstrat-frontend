@@ -14,7 +14,7 @@ const useStyles = makeStyles( theme => ({
         margin: 0,
         alignItems: "center",
         borderRadius: 0,
-        width: 140,
+        minWidth: 110,
     }
 }))
 
@@ -24,7 +24,7 @@ export const TickerInfo = ({ symbol, value,  } : TickerInfoProps) => {
     
     return (
         <div className={classes.container}>
-            <Horizontal valign="center" >
+            <Horizontal spacing="between">
                 <Typography variant="body2"> {symbol} </Typography>
                 <Typography variant="body2"> {value} </Typography>
             </Horizontal>

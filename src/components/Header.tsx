@@ -194,8 +194,8 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
                   <Link component={RouterLink} to="/pools">Pools</Link>
                   <Link component={RouterLink} to="/strategies">Strategies</Link>
                   <Link component={RouterLink} to="/faq">FAQ</Link>
+                  <Link href="https://medium.com/@hashstrat" target="_blank">Blog</Link>
                   <Link component={RouterLink} to="/dao">DAO</Link>
-                  <Link href="https://medium.com/@hashstrat" target="_blank">Medium Blog</Link>
               </nav>
             
               <div className={classes.rightItmesContainer}>

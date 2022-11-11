@@ -1,6 +1,5 @@
 
-import { makeStyles, Link, Box, Divider, Typography, Button, Breadcrumbs } from "@material-ui/core"
-import { useLocation } from "react-router-dom"
+import { Link, Box, Typography, Breadcrumbs } from "@material-ui/core"
 
 import { PoolTabs } from "./PoolTabs"
 import { Token } from "../../types/Token"
@@ -20,26 +19,14 @@ interface PoolContainerProps {
 }
 
 
-const useStyles = makeStyles( theme => ({
-    container: {
-        paddingTop: theme.spacing(2),
-        // paddingBottom: theme.spacing(2),
-       
-    }
-}))
-
 
 export const PoolContainer = ({ chainId, poolId, account, tokens, investToken } : PoolContainerProps) => {
     
-    const location = useLocation();
-    console.log("pathname: ", location.pathname);
-    const classes = useStyles()
-
     const { name } = PoolInfo(chainId, poolId)
 
     return (
-        <div className={classes.container}>
-            <Breadcrumbs aria-label="breadcrumb" style={{paddingLeft: 10, paddingRight: 10}}>
+        <Box px={2} >
+            <Breadcrumbs aria-label="breadcrumb" >
                 <Link component={RouterLink} to="/home"> Home </Link>
                 <Link component={RouterLink} to="/pools"> Pools </Link>
                 <Typography>{name}</Typography>
@@ -47,7 +34,7 @@ export const PoolContainer = ({ chainId, poolId, account, tokens, investToken } 
 
             <PoolTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens} investToken={investToken} />
             <Contracts chainId={chainId} poolId={poolId} />
-        </div>
+        </Box>
     )
 }
 

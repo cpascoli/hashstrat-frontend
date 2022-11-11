@@ -1,4 +1,4 @@
-import { makeStyles, Link, Typography, Breadcrumbs } from "@material-ui/core"
+import { makeStyles, Link, Typography, Breadcrumbs, Box } from "@material-ui/core"
 import { IndexesView } from "./IndexesView"
 import { Token } from "../../types/Token"
 import { Link as RouterLink } from "react-router-dom"
@@ -10,18 +10,11 @@ interface IndexesHomeProps {
     depositToken: Token
 }
 
-const useStyles = makeStyles( theme => ({
-    container: {
-        padding: theme.spacing(2),
-    }
-}))
-
 
 export const IndexesHome = ({ chainId, account, depositToken } : IndexesHomeProps) => {
-    const classes = useStyles()
 
     return (
-        <div className={classes.container}>
+        <Box px={2} >
             
             <Breadcrumbs aria-label="breadcrumb">
                 <Link component={RouterLink} to="/home"> Home </Link>
@@ -29,7 +22,7 @@ export const IndexesHome = ({ chainId, account, depositToken } : IndexesHomeProp
             </Breadcrumbs>
 
             <IndexesView chainId={chainId} account={account} depositToken={depositToken} />
-        </div>
+        </Box>
     )
 }
 

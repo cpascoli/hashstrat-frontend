@@ -2,7 +2,8 @@
 import { BigNumber, constants } from "ethers"
 
 import { useContractFunction, useCall, useCalls } from "@usedapp/core"
-import { FarmContract, PoolLPTokenAddress } from "../utils/network"
+import { FarmContract, PoolLPContract, PoolLPTokenAddress } from "../utils/network"
+import { PoolIds, IndexesIds, PoolInfo, PoolsInfo } from "../utils/pools"
 
 
 export const useStakedTokenBalance = (chainId: number, poolId: string, account?: string) => {
@@ -135,4 +136,45 @@ export const useClaimReward = (chainId: number) => {
     }
 
     return { claimReward, claimRewardState }
+}
+
+
+
+export const useUnstakedLP = (chainId : number, account: string | undefined) => {
+
+    const poolIds : string[] = [...PoolIds(chainId), ...IndexesIds(chainId)]
+    const poolsInfo = PoolsInfo(chainId, poolIds) 
+
+    // Get the  LP balances of the account for every Pool
+    const lptokens1Requests = poolsInfo.map( pool => {
+        return { 
+            poolId: pool.poolId, 
+            lptokenAddress: pool.lptoken, 
+            account: account,
+            depositToken: pool.depositToken,
+        }
+    })
+
+    // get the LP non staked balances
+    const lpBalance1Calls = lptokens1Requests.map(req => ({
+        contract: PoolLPContract(chainId, req.poolId),
+        method: 'balanceOf',
+        args:  req.account? [req.account] : [constants.AddressZero]
+    })) ?? []
+
+    const unstakedLpBalance1Results = useCalls(lpBalance1Calls) ?? []
+
+    const total = lptokens1Requests.map( (req, idx) => {
+        const unstakedBalance = unstakedLpBalance1Results[idx]?.value && unstakedLpBalance1Results[idx]?.value[0]
+        return {
+            poolId: req.poolId,
+            lpBalance: unstakedBalance,
+        }
+    }).reduce( (acc, val) => {
+         return val?.lpBalance ? acc.add(val.lpBalance) : acc
+    },  BigNumber.from(0) )
+
+    console.log("useUnstakedLP - balances: ", total?.toString() )
+
+    return total
 }

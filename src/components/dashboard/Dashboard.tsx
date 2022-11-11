@@ -59,10 +59,6 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account } : Das
 
     return (
         <div className={classes.container} >
-            <div className={classes.tickers}>
-                <Tickers chainId={chainId} depositToken={depositToken} account={account} />
-            </div>
-
             <TabContext value={selectedTokenIndex.toString()}>
                 <TabList onChange={handleChange} className={classes.tabList}>
                       <Tab label="My Assets" value="0" key={0} />

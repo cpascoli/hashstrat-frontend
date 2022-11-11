@@ -48,8 +48,8 @@ export const StrategiesHome = () => {
 
 
             <Box my={3} >
-                <Typography>Strategies are set of rules, coded into smart contracts, to manage the assets held into the HashStrat Pools.</Typography>
-                <Typography>All strategies aim to grow the Pools' capital over the long term. </Typography>
+                <Typography>Strategies are set of rules, encoded into smart contracts, that can trade the assets held into HashStrat Pools.</Typography>
+                <Typography>All strategies are designed to grow the Pools' value over the long term. </Typography>
                 <br/>
                 <Typography>As new strategies are developed they'll be added to this list:</Typography>
             </Box>
@@ -62,7 +62,7 @@ export const StrategiesHome = () => {
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
                     <div>
 
-                        <Typography variant="body1">
+                        <Typography variant="h5">
                             <strong> Rebalancing Strategy </strong>
                         </Typography>
                         <Typography>A rebalancing strategy over a 2 asset portfolio</Typography>
@@ -114,7 +114,7 @@ export const StrategiesHome = () => {
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
 
                      <div>
-                        <Typography variant="body1">
+                        <Typography variant="h5">
                             <strong> Mean Reversion</strong>
                         </Typography>
                         <Typography>A strategy for dollar-cost averaging in and out a risk asset when its price diverges substantially from its long term trend</Typography>
@@ -165,7 +165,7 @@ export const StrategiesHome = () => {
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
                     <div>
-                        <Typography variant="body1">
+                        <Typography variant="h5">
                             <strong> Trend Follow  </strong>
                         </Typography>
                         <Typography>A trend-following strategy trading in the direction of the underlying trend</Typography>

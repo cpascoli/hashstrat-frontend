@@ -112,7 +112,7 @@ export const DAOTreasury = ({ chainId, account, depositToken } : DAOTreasuryProp
         return {
             date: new Date(data.timestamp * 1000),
             id: data.id,
-            amount: parseFloat(fromDecimals(data.amount, depositToken.decimals, 2)),
+            amount: parseFloat(fromDecimals(data.amount, depositToken.decimals, 4)),
             recepient: data.recepient,
         }
     })

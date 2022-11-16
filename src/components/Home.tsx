@@ -49,18 +49,21 @@ const useStyle = makeStyles(theme => ({
     },
     title: {
         margin: 0,
-        fontWeight: 200,
-        fontSize: "3.7rem",
+        fontWeight: 400,
+        fontSize: "2.6rem",
         textAlign: "center",
         [theme.breakpoints.down('sm')]: {
-            fontSize: "2.7rem",
+            fontSize: "2.2rem",
         },
     },
     subtitle: {
         fontWeight: 100,
-        fontSize: "1.2rem",
+        fontSize: "1.5rem",
         textAlign: "center",
         color: theme.palette.type === 'light' ? theme.palette.grey[800] : theme.palette.grey[100],
+        [theme.breakpoints.down('sm')]: {
+            fontSize: "1.0rem",
+        },
     },
     imageDeFi: {
         content: `url(  ${theme.palette.type === 'light' ? experienceDefiLight : experienceDefiDark} )`,
@@ -88,7 +91,7 @@ export const Home = ({ chainId }: HomeProps) => {
                 <div className={classes.titleSection}>
                     <div>
                         <p className={classes.title}>
-                            Crypto Fund for <br/> self-sovereign investing
+                            Self-sovereign, digital asset investments
                         </p>
      
                         <p className={classes.subtitle}>
@@ -96,7 +99,7 @@ export const Home = ({ chainId }: HomeProps) => {
                             On-chain strategies for long-term investors
                         </p>
                     </div>
-                    <div style={{ marginTop: 40 }}>
+                    <div style={{ marginTop: 50, marginBottom: 30 }}>
                         <Horizontal align="center">
                             <Link component={LinkRouter} to="/home" style={{ textDecoration: 'none' }} >
                                 <Button variant="contained" color="primary" style={{ width: 200, height: 40 }} >Launch App</Button>
@@ -130,7 +133,7 @@ export const Home = ({ chainId }: HomeProps) => {
                 <ul>
                     <li>
                         <Typography variant="body1">
-                            HashStrat is a new DeFi protocol for investing in BTC &amp; ETH with a long-term outlook.
+                            HashStrat is a new DeFi protocol for investing in digital assets (e.g. BTC &amp; ETH) with a long-term outlook.
                         </Typography>
                     </li>
                     <li>

@@ -8,6 +8,8 @@ import { InfoBox } from "./InfoBox"
 
 import experienceDefiLight from "./img/experience-defi-light.png"
 import experienceDefiDark from "./img/experience-defi-dark.png"
+import background from "./img/homepage-bg.jpg"
+
 import key from "./img/key.svg"
 import automated from "./img/automated.svg"
 import lock from "./img/lock.svg"
@@ -17,11 +19,14 @@ import { Horizontal } from "./Layout"
 const useStyle = makeStyles(theme => ({
 
     topSection: {
-        marginTop: 20,
+        paddingTop: 40,
+        paddingBottom: 40,
         paddingLeft: theme.spacing(0),
         paddingRight: theme.spacing(0),
+
         display: "flex",
         justifyContent: "space-around",
+        backgroundImage: theme.palette.type === 'light' ? `url( ${background} )` : '',
     },
 
     midSection: {
@@ -49,11 +54,12 @@ const useStyle = makeStyles(theme => ({
     },
     title: {
         margin: 0,
-        fontWeight: 400,
-        fontSize: "2.6rem",
+        fontWeight: 200,
+        fontSize: "3.4rem",
         textAlign: "center",
+        maxWidth: 600,
         [theme.breakpoints.down('sm')]: {
-            fontSize: "2.2rem",
+            fontSize: "2.3rem",
         },
     },
     subtitle: {
@@ -71,7 +77,7 @@ const useStyle = makeStyles(theme => ({
         [theme.breakpoints.down('sm')]: {
             maxWidth: "380px",
         },
-    }
+    },
 }))
 
 
@@ -86,14 +92,15 @@ export const Home = ({ chainId }: HomeProps) => {
 
     return (
         <>
-        <Box py={3}>
+        <Box>
+
             <section className={classes.topSection}>
                 <div className={classes.titleSection}>
                     <div>
                         <p className={classes.title}>
-                            Self-sovereign, digital asset investments
+                            Self-sovereign digital asset investments
                         </p>
-     
+    
                         <p className={classes.subtitle}>
                             Automated management of digital asset portfolios<br/>
                             On-chain strategies for long-term investors
@@ -110,13 +117,12 @@ export const Home = ({ chainId }: HomeProps) => {
                         </Horizontal>
                     </div>
                 </div>
-
             </section>
 
-            <Divider style={{ marginTop: 40, marginBottom: 40 }} />
+            <Divider style={{ marginTop: 0, marginBottom: 40 }} />
 
             <section className={classes.midSection}>
-               
+            
                 <Horizontal align="center"  valign="center"> 
                     <Typography variant="h4" align="center" >
                         Experience the Power of<br/>
@@ -216,7 +222,7 @@ export const Home = ({ chainId }: HomeProps) => {
             </section>
         </Box>
 
-        <Divider style={{ marginTop: 0, marginBottom: 0 }} />
+        <Divider style={{ marginTop: 10, marginBottom: 20 }} />
 
         </>
 

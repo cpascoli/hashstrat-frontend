@@ -23,7 +23,6 @@ const useStyle = makeStyles(theme => ({
         paddingBottom: 40,
         paddingLeft: theme.spacing(0),
         paddingRight: theme.spacing(0),
-
         display: "flex",
         justifyContent: "space-around",
         backgroundImage: theme.palette.type === 'light' ? `url( ${background} )` : '',
@@ -55,11 +54,11 @@ const useStyle = makeStyles(theme => ({
     title: {
         margin: 0,
         fontWeight: 200,
-        fontSize: "3.4rem",
+        fontSize: "2.3rem",
         textAlign: "center",
         maxWidth: 600,
         [theme.breakpoints.down('sm')]: {
-            fontSize: "2.3rem",
+            fontSize: "2.1rem",
         },
     },
     subtitle: {
@@ -93,14 +92,14 @@ export const Home = ({ chainId }: HomeProps) => {
     return (
         <>
         <Box>
+        <Divider style={{ marginTop: 0, marginBottom: 0 }} />
 
             <section className={classes.topSection}>
                 <div className={classes.titleSection}>
                     <div>
                         <p className={classes.title}>
-                            Self-sovereign digital asset investments
+                            Self-sovereign, digital asset investments 
                         </p>
-    
                         <p className={classes.subtitle}>
                             Automated management of digital asset portfolios<br/>
                             On-chain strategies for long-term investors

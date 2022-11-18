@@ -19,15 +19,27 @@ import { Horizontal } from "./Layout"
 const useStyle = makeStyles(theme => ({
 
     topSection: {
-        paddingTop: 40,
-        paddingBottom: 40,
+        paddingTop: 70,
+        paddingBottom: 110,
         paddingLeft: theme.spacing(0),
         paddingRight: theme.spacing(0),
         display: "flex",
         justifyContent: "space-around",
         backgroundImage: theme.palette.type === 'light' ? `url( ${background} )` : '',
+        [theme.breakpoints.down('sm')]: {
+            paddingTop: 50,
+            paddingBottom: 50,
+        },
     },
-
+    actionButtons: {
+        marginTop: 90, 
+        marginBottom: 30,
+        maxWidth: 500,
+        margin: 'auto',
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 60,
+        },
+    },
     midSection: {
         margin: "auto",
         paddingTop: 0,
@@ -36,7 +48,6 @@ const useStyle = makeStyles(theme => ({
         paddingBottom: 40,
         color: theme.palette.type === 'light' ? theme.palette.grey[800] : theme.palette.grey[100],
     },
-
     bottomSecion: {
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
@@ -45,18 +56,19 @@ const useStyle = makeStyles(theme => ({
             gridTemplateColumns: "1fr",
         },
     },
-
     titleSection: {
         textAlign: "center",
         paddingLeft: 10,
         paddingRight: 10,
+        [theme.breakpoints.down('sm')]: {
+            maxWidth: 600,
+        },
     },
     title: {
         margin: 0,
         fontWeight: 200,
-        fontSize: "2.3rem",
+        fontSize: "3.0rem",
         textAlign: "center",
-        maxWidth: 600,
         [theme.breakpoints.down('sm')]: {
             fontSize: "2.1rem",
         },
@@ -98,14 +110,14 @@ export const Home = ({ chainId }: HomeProps) => {
                 <div className={classes.titleSection}>
                     <div>
                         <p className={classes.title}>
-                            Self-sovereign, digital asset investments 
+                            Self-sovereign digital asset investments 
                         </p>
                         <p className={classes.subtitle}>
                             Automated management of digital asset portfolios<br/>
                             On-chain strategies for long-term investors
                         </p>
                     </div>
-                    <div style={{ marginTop: 50, marginBottom: 30 }}>
+                    <div className={classes.actionButtons}>
                         <Horizontal align="center">
                             <Link component={LinkRouter} to="/home" style={{ textDecoration: 'none' }} >
                                 <Button variant="contained" color="primary" style={{ width: 200, height: 40 }} >Launch App</Button>

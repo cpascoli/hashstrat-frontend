@@ -139,31 +139,19 @@
                 "pool_lp": "0x9D91628be9BA8B024644fF612d013956C7ADa928"
             },
 
-            "index01v3": {
-                "pool": "0xE29F6C43994a6D2f4893adE27b05361AABBc4EBE",
-                "pool_lp": "0x8Fa6d8CBD55E068b064F1B8A156409d3BB67F6cd"
+            "index04v3a": {
+                "pool": "0x87324A1beeA3B49013C95541036b0e5b5d0aBF15",
+                "pool_lp": "0xE07cCF71Dc5726A608C60e7cc213854d29592938"
             },
-            "index02v3": {
-                "pool": "0x593e9D3490b934DD367d8e4dF1a844cb5f334334",
-                "pool_lp": "0xdc304d3dfA3Eb07Af6cA01c00a9C1bEa5be4c393"
+            "index05v3a": {
+                "pool": "0x7F29b0439015f12a001a0608Db92e84c63b7989f",
+                "pool_lp": "0xDd00b39AeCc0109f6C023696cec1112eA36d7CB6"
             },
-            "index03v3": {
-                "pool": "0x39b9c334fcFE93e966872948B93cf999223F9725",
-                "pool_lp": "0xB9Ef06a29abA0BF14A764739C9062BBFD40C61Be"
-            },
-
-            "index01": {
-                "pool": "0x371B94a526A0aA76A2fa30b6Dcaf871c4449edCA",
-                "pool_lp": "0x6dB28fA2325E9Fa4A2Ed24120FC89D8849Ec6596"
-            },
-            "index02": {
-                "pool": "0x4244fA37A32231Bd6d35A9f81e43fB0a8b25AA55",
-                "pool_lp": "0x7851086E8A77940067B22540a9661Fe7D716b9FB"
-            },
-            "index03": {
-                "pool": "0x826c28BB9d308E46D97E12ef95bDC5653f796bdC",
-                "pool_lp": "0x5A832F1C84E1365ea52897B3463CA4FECFf2D4eE"
+            "index06v3a": {
+                "pool": "0x4bA87145C1fdBc277bB06D5AE2147C646B760565",
+                "pool_lp": "0x09f1Ab39467a9AE7c598a6659720EF586c7593Aa"
             }
+
         },
         "tokens": {
             "wbtc": {

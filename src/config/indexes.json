@@ -1,84 +1,62 @@
 {
-  
     "polygon": [
         {
             "poolId": "index01v3a",
-            "name": "Index (BTC) V3",
-            "description": "An Index over all BTC pools with equal weights",
+            "name": "Rebal/MeanRev/TrendFollow [BTC]",
+            "description": "Index over all BTC strategies with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
+            "strategy": "rebalance_01,meanrev_01,trendfollow_01",
             "disabled": "false"
         },
         {
             "poolId": "index02v3a",
-            "name": "Index (ETH) V3",
-            "description": "An Index over all ETH pools with equal weights",
+            "name": "Rebal/MeanRev/TrendFollow [ETH]",
+            "description": "Index over all ETH strategies with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WETH"],
+            "strategy": "rebalance_01,meanrev_01,trendfollow_01",
+
             "disabled": "false"
         },
         {
             "poolId": "index03v3a",
-            "name": "Index (BTC + ETH) V3",
-            "description": "An Index over all BTC and ETH pools with equal weights",
+            "name": "Rebal/MeanRev/TrendFollow [BTC,ETH]",
+            "description": "Index over all BTC and ETH strategies with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WBTC", "WETH"],
+            "strategy": "rebalance_01,meanrev_01,trendfollow_01",
             "disabled": "false"
         },
 
 
-
         {
-            "poolId": "index01v3",
-            "name": "Index (BTC) V3 [DISABLED]",
-            "description": "An Index over all BTC pools with equal weights",
-            "depositToken": "USDC",
-            "investTokens": ["WBTC"],
-            "disabled": "true"
-        },
-        {
-            "poolId": "index02v3",
-            "name": "Index (ETH) V3 [DISABLED]",
-            "description": "An Index over all ETH pools with equal weights",
-            "depositToken": "USDC",
-            "investTokens": ["WETH"],
-            "disabled": "true"
-        },
-        {
-            "poolId": "index03v3",
-            "name": "Index (BTC + ETH) V3 [DISABLED]",
-            "description": "An Index over all BTC and ETH pools with equal weights",
+            "poolId": "index04v3a",
+            "name": "Rebalancing [BTC,ETH]",
+            "description": "Index over the Rebalancing strategy for BTC and ETH with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WBTC", "WETH"],
-            "disabled": "true"
-        },
-
-        {
-            "poolId": "index01",
-            "name": "Index (BTC) [DISABLED]",
-            "description": "An Index over all BTC pools with equal weights",
-            "depositToken": "USDC",
-            "investTokens": ["WBTC"],
-            "disabled": "true"
-
+            "strategy": "rebalance_01",
+            "disabled": "false"
         },
         {
-            "poolId": "index02",
-            "name": "Index (ETH) [DISABLED]",
-            "description": "An Index over all ETH pools with equal weights",
-            "depositToken": "USDC",
-            "investTokens": ["WETH"],
-            "disabled": "true"
-
-        },
-        {
-            "poolId": "index03",
-            "name": "Index (BTC + ETH) [DISABLED]",
-            "description": "An Index over all BTC and ETH pools with equal weights",
+            "poolId": "index05v3a",
+            "name": "Mean Reversion [BTC,ETH]",
+            "description": "Index over the Mean Reversion strategy for BTC and ETH with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WBTC", "WETH"],
-            "disabled": "true"
+            "strategy": "meanrev_01",
 
+            "disabled": "false"
+        },
+        {
+            "poolId": "index06v3a",
+            "name": "Trend Following [BTC,ETH]",
+            "description": "Index over the Trend Following strategy for BTC and ETH with equal weights",
+            "depositToken": "USDC",
+            "investTokens": ["WBTC", "WETH"],
+            "strategy": "trendfollow_01",
+            "disabled": "false"
         }
     ]
 }

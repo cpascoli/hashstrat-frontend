@@ -10,7 +10,7 @@ import { Contracts } from "../shared/Contracts"
 import { Link as RouterLink } from "react-router-dom"
 
 
-interface PoolContainerProps {
+interface PoolHomeProps {
     poolId: string,
     chainId: number,
     account?: string,
@@ -20,17 +20,21 @@ interface PoolContainerProps {
 
 
 
-export const PoolContainer = ({ chainId, poolId, account, tokens, investToken } : PoolContainerProps) => {
+export const PoolHome = ({ chainId, poolId, account, tokens, investToken } : PoolHomeProps) => {
     
-    const { name } = PoolInfo(chainId, poolId)
+    const { name, description } = PoolInfo(chainId, poolId)
 
     return (
         <Box px={2} >
-            <Breadcrumbs aria-label="breadcrumb" >
+            <Breadcrumbs aria-label="breadcrumb" style={{paddingLeft: 10, paddingRight: 10}} >
                 <Link component={RouterLink} to="/home"> Home </Link>
-                <Link component={RouterLink} to="/pools"> Pools </Link>
+                <Link component={RouterLink} to="/invest"> Invest </Link>
                 <Typography>{name}</Typography>
             </Breadcrumbs>
+
+            <Box mt={2}>
+                <Typography align="center">{description}</Typography>
+            </Box>
 
             <PoolTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens} investToken={investToken} />
             <Contracts chainId={chainId} poolId={poolId} />

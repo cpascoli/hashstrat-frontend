@@ -190,12 +190,12 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
 
               <nav className={classes.menuItems}>   
                   <Link component={RouterLink} to="/home">Home</Link>
-                  <Link component={RouterLink} to="/indexes">Indexes</Link>
-                  <Link component={RouterLink} to="/pools">Pools</Link>
+                  <Link component={RouterLink} to="/invest">Invest</Link>
                   <Link component={RouterLink} to="/strategies">Strategies</Link>
                   <Link component={RouterLink} to="/faq">FAQ</Link>
-                  <Link href="https://medium.com/@hashstrat" target="_blank">Blog</Link>
                   <Link component={RouterLink} to="/dao">DAO</Link>
+                  <Link href="https://medium.com/@hashstrat" target="_blank">Blog</Link>
+                  <Link href="./whitepaper.pdf" target="_blank">Whitepaper</Link>
               </nav>
             
               <div className={classes.rightItmesContainer}>
@@ -223,12 +223,9 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
                           >
 
                             <nav  className={classes.menuItemsSmall} > 
-                                <Link component={RouterLink} to="/indexes">
-                                  <MenuItem onClick={handleClose}> Indexes </MenuItem>
-                                </Link>
 
-                                <Link component={RouterLink} to="/pools">
-                                  <MenuItem onClick={handleClose}> Pools</MenuItem>
+                                <Link component={RouterLink} to="/invest">
+                                  <MenuItem onClick={handleClose}> Invest </MenuItem>
                                 </Link>
 
                                 <Link component={RouterLink} to="/strategies">
@@ -244,7 +241,11 @@ export const Header = ( { toggleDark, setToggleDark, setAccount, setChainId } : 
                                 </Link>
 
                                 <Link href="https://medium.com/@hashstrat" target="_blank">
-                                  <MenuItem onClick={handleClose}>Medium Blog</MenuItem>
+                                  <MenuItem onClick={handleClose}>Blog</MenuItem>
+                                </Link>
+
+                                <Link href="./whitepaper.pdf" target="_blank">
+                                  <MenuItem onClick={handleClose}>Whitepaper</MenuItem>
                                 </Link>
 
                                 <Divider />

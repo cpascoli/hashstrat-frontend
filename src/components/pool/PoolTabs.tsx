@@ -10,6 +10,7 @@ import { WalletTabs } from "../wallet/WalletTabs"
 import { RebalanceStrategyInfoView } from "./RebalanceStrategyInfoView"
 import { MeanRevStrategyInfoView } from "./MeanRevStrategyInfoView"
 import { TrendFollowtrategyInfoView } from "./TrendFollowtrategyInfoView"
+
 import { PoolInfo } from "../../utils/pools"
 
 
@@ -58,9 +59,10 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
 
     const { strategy } = PoolInfo(chainId, poolId)
 
-    const isRebalanceStrategy = strategy === "rebalance_01"
+    const isRebalanceStrategy = strategy === "rebalance_01" 
     const isMeanRevStrategy = strategy === "meanrev_01"
     const isTrendFollowStrategy = strategy === "trendfollow_01"
+
 
     return (
         <Box className={classes.container}>

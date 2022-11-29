@@ -12,7 +12,7 @@ export const MainWithTitle = ( { children } : ChildrenProps )  =>  {
     useEffect(() => {
         const page = `${currentLocation.replace('/', '')}`
         const pageCapitalized = page.length > 0 ? page.charAt(0).toUpperCase() + page.slice(1) : 'Index'
-        document.title = `${pageCapitalized} | HashStrat | Self-sovereign Crypto Fund for Long Term Investing`
+        document.title = `${pageCapitalized} | HashStrat | Self-sovereign digital asset investments`
     }, [currentLocation])
   
     return (

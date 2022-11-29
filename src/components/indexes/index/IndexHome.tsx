@@ -21,33 +21,25 @@ interface IndexHomeProps {
 }
 
 
-const useStyles = makeStyles( theme => ({
-    container: {
-        paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2),
-    }
-}))
-
-
 export const IndexHome = ({ chainId, poolId, account, tokens, investTokens } : IndexHomeProps) => {
     
-    const location = useLocation();
-    const classes = useStyles()
-  
-    const { name } = PoolInfo(chainId, poolId)
- 
+    const { name, description } = PoolInfo(chainId, poolId)
 
     return (
-        <div className={classes.container}>
+        <Box px={2}>
             <Breadcrumbs aria-label="breadcrumb" style={{paddingLeft: 10, paddingRight: 10}}>
                 <Link component={RouterLink} to="/home"> Home </Link>
-                <Link component={RouterLink} to="/indexes"> Indexes </Link>
+                <Link component={RouterLink} to="/invest"> Invest </Link>
                 <Typography>{name}</Typography>
             </Breadcrumbs>
 
+            <Box mt={2}>
+                <Typography align="center">{description}</Typography>
+            </Box>
+
             <IndexTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens} investTokens={investTokens} />
             <Contracts chainId={chainId} poolId={poolId} />
-        </div>
+        </Box>
     )
 }
 

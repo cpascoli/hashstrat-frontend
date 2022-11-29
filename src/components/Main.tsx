@@ -9,18 +9,14 @@ import { Home } from "./Home"
 import { Header } from './Header';
 import { Dashboard } from './dashboard/Dashboard'
 import { Tickers } from "./dashboard/Tickers"
+import { InvestHome } from "./invest/InvestHome"
+
 import { IndexHome } from "./indexes/index/IndexHome"
-import { IndexesHome } from './indexes/IndexesHome'
-import { PoolsContainer } from "./pools/PoolsContainer"
-import { PoolContainer } from "./pool/PoolContainer";
-
+import { PoolHome } from "./pool/PoolHome";
 import { Socials } from "./Socials"
-
 import { FaqHome } from "./faq/FaqHome";
 import { StrategiesHome } from "./strategies/StrategiesHome";
-
 import { DaoHome } from './dao/DaoHome'
-
 import { MainWithTitle } from "./MainWithTitle"
 import { UsersHome } from "./users//UsersHome"
 
@@ -95,16 +91,10 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                                 <Dashboard chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} investTokens={investTokens}  /> 
                             </>
                         } />
-                        <Route path="/indexes" element={
+                        <Route path="/invest" element={
                             <>
                                 <Tickers chainId={chainId || defaultChainId} depositToken={depositToken!} account={account} />
-                                <IndexesHome chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} />
-                            </>
-                        } />
-                        <Route path="/pools" element={
-                            <>
-                                <Tickers chainId={chainId || defaultChainId} depositToken={depositToken!} account={account} />
-                                <PoolsContainer chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} />
+                                <InvestHome chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} />
                             </>
                         } />
                         <Route path="/strategies" element={
@@ -133,7 +123,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                                     <Route key={`${poolId}`} path={`/pools/${poolId}`} element={
                                         <>
                                             <Tickers chainId={chainId || defaultChainId} depositToken={depositToken!} account={account} />
-                                            <PoolContainer chainId={chainId || defaultChainId} poolId={`${poolId}`} account={account} tokens={supportedTokens} investToken={investToken} />
+                                            <PoolHome chainId={chainId || defaultChainId} poolId={`${poolId}`} account={account} tokens={supportedTokens} investToken={investToken} />
                                         </>
                                     } />
                                 )

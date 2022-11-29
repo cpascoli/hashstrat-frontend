@@ -31,7 +31,7 @@ export const FaqHome = () => {
                 <Alert severity="warning">
                     <AlertTitle> Scary Disclaimer </AlertTitle>
                     Hashtrat is an experimental platform under active development.<br/>
-                    Don't use it if you don't know what you are doing or be prepared to loose all your funds!
+                    Be careful or you could loose your funds!
                 </Alert>
             </Box>
 
@@ -41,11 +41,11 @@ export const FaqHome = () => {
                 </AccordionSummary>
                 <AccordionDetails >
                     <Typography variant="body2" >
-                        HashStrat is a DeFi protocol for a self-sovereign crypto-fund. <br/> 
-                        Users deposit funds, in the form of a stable crypto-assets (USDC) into Pools managed by on-chain strategies.
+                        HashStrat is a DeFi protocol to automatically manage portfolios of digital assets.<br/> 
+                        Users deposit funds, in the form of a stable coin (USDC), into Pools managed by on-chain strategies.
                         <br/>
-                        When users deposit funds into a Pool, they receive "Pool LP tokens" that represent ownership of their share of the Pool.<br/>
-                        Users can "stake" their Pool LP tokens and "farm" HST tokens that allow to participate in the protocol gorvernance and revenue sharing programs.<br/>
+                        When users deposit funds into a Pool, they receive LP tokens that represent ownership of their share of the Pool.<br/>
+                        Users can "stake" their LP tokens and "farm" HST tokens that allow to participate in the protocol gorvernance and revenue sharing programs.<br/>
                         Users can withdraw their funds at any time by returning their LP tokens to the Pools.
                     </Typography>
                 </AccordionDetails>
@@ -53,7 +53,7 @@ export const FaqHome = () => {
 
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
-                    <Typography style={{fontSize: 20, fontWeight: 400}} > Why a self-sovereign crypto-fund on the blockchain? </Typography>
+                    <Typography style={{fontSize: 20, fontWeight: 400}} > Why self-sovereign digital asset management?</Typography>
                 </AccordionSummary>
                 <AccordionDetails >
                     <Box>
@@ -87,39 +87,11 @@ export const FaqHome = () => {
                     <Typography variant="body2" >
                         Strategies are set of rules, encoded into a smart contract, designed to manage the assets held in a Pool.<br/>
                         Their goal is to grow the value of the assets in the Pool over time. <br/>
-                        Strategies decide how to allocate capital to risk assets and how to manage risk, trading back into stable assets.<br/>
-                        HashStrat strategies are desigend to work best on the long term (think 3-5 years minimum) capture
+                        Strategies decide when to allocate capital to risk assets and how to manage risk, trading back into stable assets.<br/>
+                        HashStrat strategies are desigend to work best on the long term (think 3-5 years timeframe) capture
                         the appreciation of pristine crypto assets like BTC and ETH, whilst at the same time reducing drawdowns compared to
                         simple buy &amp; hold strategies.
                     </Typography>
-                </AccordionDetails>
-            </Accordion>
-
-            <Accordion>
-                <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
-                    <Typography style={{fontSize: 20, fontWeight: 400}} > Why a self-sovereign crypto-fund on the blockchain? </Typography>
-                </AccordionSummary>
-                <AccordionDetails >
-                    <Box>
-                        Because Decentralized Finance (DeFi) is the future of Finance. <br />
-                        When well execured DeFi provides the following benefits:
-                        <ul>
-                            <li>No need to trust any counterparty to manage your funds with integrity </li>
-                            <li>No minimum investing requirements, no barriers to entry and no gatekeepers</li>
-                            <li>Users stay in control of their funds at all times. No need to ask someone to get your mney back </li>
-                            <li>Ownership of digital asset is auditable by anybody on the blockchain</li>
-                            <li>All trades are auditable by anybody on the blockchain</li>
-                            <li>Behaviour of trading strategies is deterministic and transparent</li>
-                            <li>Correctness of execution is guaranteed by the blcokchain </li>
-                            <li>All code is open source and smart contracts are verified on-chain</li>
-                            <li>Seamless integration with other DeFi protocols</li>
-                            <li>Seamless access to on-chain liquidity</li>
-                        </ul>
-
-                        Additionally, HashStrat can prevent loosing money by solo trading.  <br/>
-                        Buying when price (and sentiment) is low and selling when price (and sentiment) is high is hard.<br/>
-                        Smart contracts don't suffer from emotions that can prevent human investors from executing correctly on their plan.<br/>
-                    </Box>
                 </AccordionDetails>
             </Accordion>
 
@@ -143,7 +115,7 @@ export const FaqHome = () => {
 
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
-                    <Typography style={{fontSize: 20, fontWeight: 400}} > How do you deposit into Hashtrat crypto-funds? </Typography>
+                    <Typography style={{fontSize: 20, fontWeight: 400}} > How do you deposit into Hashtrat Pools? </Typography>
                 </AccordionSummary>
                 <AccordionDetails >
                     <Box>
@@ -171,7 +143,7 @@ export const FaqHome = () => {
                 <AccordionDetails >
                     <Typography variant="body2">
                         The HashStrat protocol is governed by a Decentralized Autonomous Organization, the HashStrat DAO. <br/>
-                        Every user of the protocol can earn the DAO token <Link component={RouterLink} to="/dao">HST</Link> and become a member of the DAO.<br/>
+                        Users of the protocol can earn the DAO token <Link component={RouterLink} to="/dao">HST</Link> and become members of the DAO.<br/>
                         HST holders are able to participate in the protocol governance and revenue sharing programs.
                     </Typography> 
                 </AccordionDetails>
@@ -183,9 +155,9 @@ export const FaqHome = () => {
                 </AccordionSummary>
                 <AccordionDetails >
                     <Typography variant="body2">
-                        The HashStrat protocol generaets revenues by taxing profits withdrawn from Pools &amp; Indexes. <br/>
+                        The protocol generates its revenues by taxing profits withdrawn from Pools &amp; Indexes. <br/>
                         The withdrawal fee is currently set to 1% of profits.<br/>
-                        These fees are periodically collected into the DAO Treasury and then distributed to DAO token holders as "dividends".<br/>
+                        These fees are periodically collected into the DAO Treasury and re-distributed to DAO token holders as "dividends".<br/>
                     </Typography> 
                 </AccordionDetails>
             </Accordion>

@@ -41,6 +41,14 @@ export const StrategyAddress = (chainId: number, poolId: string) => {
     return deployments[networkName][poolId]["strategy"]
 }
 
+export const FeedAddressForToken = (chainId: number, symbol: string) => {
+
+    if (!chainId) return constants.AddressZero
+    const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
+
+    const deployments = networkMappings as any
+    return deployments[networkName]['tokens'][symbol.toLowerCase()]["feed"]
+}
 
 export const FeedAddress = (chainId: number, poolId: string) => {
     if (!chainId) return constants.AddressZero
@@ -181,6 +189,11 @@ export const StrategyContract = (chainId: number, poolId: string) => {
 export const FeedContract = (chainId: number, poolId: string) => {
     const abi = abis[ "price_feed" as keyof typeof abis ] as any
     return new Contract(FeedAddress(chainId, poolId) , new utils.Interface(abi))
+}
+
+export const FeedContractForAddress = (feedAddress: string) => {
+    const abi = abis[ "price_feed" as keyof typeof abis ] as any
+    return new Contract(feedAddress, new utils.Interface(abi))
 }
 
 export const FarmContract = (chainId: number, poolId?: string) => {

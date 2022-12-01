@@ -28,7 +28,12 @@ export interface ChartData {
 }
 
 
-export const TimeSeriesAreaChart = ( chartData  : ChartData ) => (
+export const TimeSeriesAreaChart = ( chartData  : ChartData ) => {
+  
+  const start = (chartData.data && chartData.data.length > 1) ? chartData.data[0].time : (new Date()).getTime() - 604800 * 1000
+  const end =   (chartData.data && chartData.data.length > 1) ? chartData.data[chartData.data.length-1].time : (new Date()).getTime()
+
+  return (
   <ResponsiveContainer width = '95%' height = {300} >
     <AreaChart 
           margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
@@ -37,7 +42,7 @@ export const TimeSeriesAreaChart = ( chartData  : ChartData ) => (
     >
       <XAxis
         dataKey = 'time'
-        domain = {['auto', 'auto']}
+        domain = {[start, end]}
         name = 'Time'
         tickFormatter = {(unixTime) => moment(unixTime).format('yyyy-MM-DD')}
         type = 'number'
@@ -68,5 +73,5 @@ export const TimeSeriesAreaChart = ( chartData  : ChartData ) => (
 
     </AreaChart>
   </ResponsiveContainer>
-)
+)}
 

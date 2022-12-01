@@ -1,6 +1,6 @@
 
-import { useEthers, useContractFunction, useCall, useCalls } from "@usedapp/core"
-import { ERC20Contract, PoolAddress } from "../utils/network"
+import { useEthers, useContractFunction, useCall } from "@usedapp/core"
+import { ERC20Contract } from "../utils/network"
 import { constants } from "ethers"
 
 

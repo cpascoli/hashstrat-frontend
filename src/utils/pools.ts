@@ -103,7 +103,7 @@ export const IndexesIds = (chainId: number) : string[] => {
 
 
 //// TOKENS HELPERS
-export const InvestTokens = (chainId: number) : Array<Token> =>  {
+export const InvestTokens = (chainId: number) : Token[] =>  {
 
     const poolids = PoolIds(chainId) 
     let tokenSet = new Set<Token>();

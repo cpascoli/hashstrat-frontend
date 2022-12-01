@@ -174,7 +174,5 @@ export const useUnstakedLP = (chainId : number, account: string | undefined) => 
          return val?.lpBalance ? acc.add(val.lpBalance) : acc
     },  BigNumber.from(0) )
 
-    console.log("useUnstakedLP - balances: ", total?.toString() )
-
     return total
 }

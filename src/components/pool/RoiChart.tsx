@@ -2,12 +2,17 @@ import { BigNumber, ethers } from 'ethers'
 
 import { Box, Typography, makeStyles } from "@material-ui/core"
 import { Token } from "../../types/Token"
-import { useSwapInfoArray } from "../../hooks"
-import { useFeedLatestPrice, useFeedLatestTimestamp } from "../../hooks/useFeed"
-import { roiDataForSwaps } from "../../utils/roiCalculator"
-import { fromDecimals, round } from "../../utils/formatter"
+import { useSwapInfoArray } from "../../hooks/usePool"
+import { usePoolSwapsInfoForIndex } from "../../hooks/useIndex"
 
+import { useFeedLatestPrice, useFeedLatestTimestamp } from "../../hooks/useFeed"
+import { roiDataForSwaps as poolRoiDataForSwaps } from "../../utils/calculators/poolRoiCalculator"
+import { roiDataForSwaps as indexRoiDataForSwaps } from "../../utils/calculators/indexRoiCalculator"
+
+import { fromDecimals, round } from "../../utils/formatter"
 import { TimeSeriesLineChart } from "./TimeSeriesLineChart"
+import { PoolTokensSwapsInfo } from "../../types/PoolTokensSwapsInfo"
+import { InvestTokens } from "../../utils/pools"
 
 
 const useStyle = makeStyles( theme => ({
@@ -29,7 +34,61 @@ interface RoiChartProps {
     investToken: Token
 }
 
+interface IndexRoiChartProps {
+    chainId: number,
+    indexId: string,
+    depositToken: Token,
+}
 
+
+export const IndexRoiChart = ( { chainId, indexId, depositToken } : IndexRoiChartProps ) => {
+
+    const classes = useStyle()
+
+
+    const swapsInfo = usePoolSwapsInfoForIndex(chainId, indexId)
+    const investTokens = InvestTokens(chainId)
+
+    const roiData = swapsInfo && indexRoiDataForSwaps(swapsInfo as PoolTokensSwapsInfo[], depositToken, investTokens)
+
+    console.log("IndexRoiChart", roiData )
+
+    // chart labels & data
+    const label1 = `Index ROI`
+    const label2 = `Buy & Hold ROI`
+
+    // cumulative % of tokens traded
+
+    const chartData = roiData?.map( (data: any) => {
+        let record : any = {}
+        record['time'] = data.date * 1000
+    
+        record[label1] = round(data.strategyROI)
+        record[label2] = round(data.buyAndHoldROI)
+        return record
+    })
+
+        
+
+    return (
+        <Box className={classes.container}>
+
+            <Box className={classes.chart} >
+                {
+                    chartData && 
+                    <TimeSeriesLineChart title="Index ROI vs Benchmark" 
+                        label1={label1} 
+                        label2={label2} 
+                        data={chartData}  
+                    /> 
+                }
+  
+            </Box>
+
+        </Box>
+    )
+
+}
 
 export const RoiChart = ( { chainId, poolId, depositToken, investToken } : RoiChartProps ) => {
 
@@ -39,28 +98,22 @@ export const RoiChart = ( { chainId, poolId, depositToken, investToken } : RoiCh
    
     const price = useFeedLatestPrice(chainId, poolId)
     const latestTimestamp = useFeedLatestTimestamp(chainId, poolId)
-
     const priceFormatted = price && parseFloat(fromDecimals(BigNumber.from(price), 8, 2))
     const priceTimestamp = latestTimestamp && BigNumber.from(latestTimestamp).toNumber()
-
-    const roiData = swaps && priceFormatted && latestTimestamp && roiDataForSwaps(swaps, priceFormatted, priceTimestamp, depositToken, investToken)
+    const roiData = swaps && priceFormatted && latestTimestamp && poolRoiDataForSwaps(swaps, priceFormatted, priceTimestamp, depositToken, investToken)
 
     // chart labels & data
     const label1 = `Strategy ROI`
     const label2 = `Buy & Hold ROI`
 
     // cumulative % of tokens traded
-    let depositTonensPerc = 0
-    let investTokensPerc = 0
 
     const chartData = roiData?.map( (data: any) => {
-        const date = data.date * 1000
-  
         let record : any = {}
         record['time'] = data.date * 1000
  
-        record[label1] =  data.strategyROI
-        record[label2] =  data.buyAndHoldROI
+        record[label1] = round(data.strategyROI)
+        record[label2] = round(data.buyAndHoldROI)
         return record
     })
 

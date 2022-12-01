@@ -47,9 +47,9 @@ export const useIndexModel = (chainId: number, indexId: string, tokens: Token[],
     const poolsBalances : PoolValueMapForIndexMap = usePoolsInfoForIndexes(chainId, [indexId], tokens, account)
 
     // get the array of pools in this index, their ids and weights
-    const poolInfoArray = usePoolInfoArray(chainId, indexId)
-    const poolIds = poolInfoArray?.map( ( el : { [x  : string] : string } ) => el.name.toLowerCase() )
-    const weights = poolInfoArray?.map( ( el : { [x  : string] : string } ) => el.weight )
+    const poolInfoArray = usePoolInfoArray(chainId, indexId) ?? []
+    const poolIds = poolInfoArray?.map( ( el ) => el.name!.toLowerCase() )
+    const weights = poolInfoArray?.map( ( el ) => el.weight! )
 
     // the info fot each pool in this index (name, weight, value)
     const poolsValueInfoMap = poolsBalances[indexId] // .poolBalances

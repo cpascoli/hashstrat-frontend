@@ -1,3 +1,4 @@
+import { utils } from "ethers"
 import { Box, Typography, makeStyles } from "@material-ui/core"
 import { BigNumber } from "ethers"
 import { usePoolModel } from "./PoolModel"
@@ -11,18 +12,21 @@ import { VPieChart } from "../shared/VPieChart"
 
 import { Horizontal } from "../Layout"
 
-import { useTotalDeposited, useTotalWithdrawn } from "../../hooks"
+import { useTotalDeposited, useTotalWithdrawn, useFeedLatestPrice, useFeedLatestTimestamp  } from "../../hooks"
+
 
 
 const useStyle = makeStyles( theme => ({
     container: {
         margin: 0,
-        padding: 0,
+        // padding: 0,
+        paddingBottom: theme.spacing(2),
     },
-    portfolioInfo: {
+    poolInfo: {
         paddingTop: 20,
         minWidth: 340,
         margin: "auto",
+        marginTop: 0,
         padding: theme.spacing(1)
     },
     chart: {
@@ -51,8 +55,10 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
 
     const totalDeposited = useTotalDeposited(chainId, poolId)
     const totalWithdrawn = useTotalWithdrawn(chainId, poolId)
+    const price = useFeedLatestPrice(chainId, poolId)
+    const latestTimestamp = useFeedLatestTimestamp(chainId, poolId)
 
-    const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : undefined
+    const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : ""
     const formattedDeposited = (totalDeposited) ? fromDecimals(totalDeposited, depositToken.decimals, 2) : ""
     const formatteWithdrawn = (totalWithdrawn) ? fromDecimals(totalWithdrawn, depositToken.decimals, 2) : ""
 
@@ -60,19 +66,6 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
     const label1 = `${depositToken.symbol} Value %`
     const label2 = `${investToken.symbol} Value %`
   
-    const assetValuePercChartData = swaps?.map( (data: any) => {
-        const date = data.timestamp * 1000
-        const price = parseFloat(fromDecimals(data.feedPrice, 8, 2))
-        const asset1 = parseFloat(fromDecimals(data.depositTokenBalance, depositToken.decimals, 2))
-        const asset2 = parseFloat(fromDecimals(data.investTokenBalance, investToken.decimals, 6))
-
-        let record : any = {}
-        record['time'] = date
-        record[label1] = round( 100 * asset1 / (asset1 + asset2 * price ))          // stable asset % 
-        record[label2] = round( 100 * asset2 * price / (asset1 + asset2 * price ))  // risk asset % 
-        return record
-    })
-
 
     const assetViews = poolInfo.tokenInfoArray.map( token => {
         const balance = token.balance ?? BigNumber.from(0)
@@ -86,6 +79,40 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
     }).map( it => <TitleValueBox key={it.symbol} title={it.symbol} value={it.valueFormatted} /> )
 
 
+    /// move contruction of 'assetValuePercChartData' to until function
+    const swapsData = swaps?.map( (data: any) => {
+        const price = parseFloat(fromDecimals(data.feedPrice, 8, 2))
+        const asset1 = parseFloat(fromDecimals(data.depositTokenBalance, depositToken.decimals, 2))
+        const asset2 = parseFloat(fromDecimals(data.investTokenBalance, investToken.decimals, 6))
+
+        let record : any = {}
+        record['time'] = data.timestamp * 1000
+        record[label1] = round( 100 * asset1 / (asset1 + asset2 * price ))          // stable asset % 
+        record[label2] = round( 100 * asset2 * price / (asset1 + asset2 * price ))  // risk asset % 
+        return record
+    })
+
+    //TODO use balance of assets in the pool rather than values from the last trade
+    const priceTimestamp = latestTimestamp && BigNumber.from(latestTimestamp).toNumber()
+    const priceFormatted = parseFloat(fromDecimals(price, 8, 2))
+    const asset1 = swaps && swaps.length > 0 ? parseFloat(fromDecimals(swaps[swaps.length-1].depositTokenBalance, depositToken.decimals, 2)) : undefined
+    const asset2 = swaps && swaps.length > 0 ? parseFloat(fromDecimals(swaps[swaps.length-1].investTokenBalance, investToken.decimals, 6)) : undefined
+
+    let last : any = {}
+    if (asset1 !== undefined && asset2 !== undefined && price !== undefined && priceTimestamp !== undefined) {
+        console.log("assetValuePercChartData: ", asset1, asset2, "price: ", priceFormatted)
+
+        last['time'] = priceTimestamp * 1000
+        last[label1] = round( 100 * asset1 / (asset1 + asset2 * priceFormatted ))
+        last[label2] = round( 100 * asset2 * priceFormatted / (asset1 + asset2 * priceFormatted ))
+    }
+
+    const assetValuePercChartData = swapsData && last ? [...swapsData, last] : []
+
+    // console.log("assetValuePercChartData: ", assetValuePercChartData)
+
+    ///
+
 
     return (
         <Box className={classes.container}>
@@ -94,20 +121,25 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
                 <Typography variant="body2" align="center"> {description}</Typography> 
             </Box>
 
-            <Horizontal align="center" >
+            <Box mb={4}>
+                <Typography variant="h4" align="center"> ${utils.commify(formattedPortfolioValue)} </Typography>
+                <Typography variant="body2" align="center"> Value of all assets in the Pool</Typography>
+            </Box>
+
+            <Horizontal align="center" valign="top" >
                 <VPieChart { ...assetAllocationChartData } /> 
-                <Box className={classes.portfolioInfo} >
+                <Box className={classes.poolInfo} >
+                    <Typography variant="h6" align="center">Pool Info</Typography>
+
                     { assetViews }
-                    <TitleValueBox title="Total Asset Value" value={formattedPortfolioValue??""} suffix={depositToken.symbol} />
-    
                     <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
                     <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>
                 </Box>
             </Horizontal>
            
 
-            <Typography align="center" style={{textTransform: "uppercase", marginTop: 20}}>
-                Asset value %
+            <Typography align="center" variant="h6" style={{marginTop: 20}}>
+                Assets Value Percentages
             </Typography>
 
             <TimeSeriesAreaChart title="Asset Value %" 

@@ -9,7 +9,6 @@ import { PoolInfo, InvestTokens } from "../../../utils/pools"
 import { VPieChart } from "../../shared/VPieChart"
 import { Horizontal } from "../../Layout"
 
-
 const useStyle = makeStyles( theme => ({
     container: {
         margin: 0,
@@ -67,7 +66,7 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
     const poolsInIndex = poolsInfo?.map( ( pool : PoolSummary) => {
         const valueFormatted = pool.value ? fromDecimals(pool.value, depositToken.decimals, 2) : ''
         return <TitleValueBox mode="small" key={pool.poolId} 
-                        title={`${pool.name} (${pool.weight}/${totalWeights})`}
+                        title={`${pool.weight}/${totalWeights } ${pool.name}`}
                         value={`$ ${ utils.commify(valueFormatted) }`}  />
     })
 
@@ -81,24 +80,30 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
                 <Typography variant="body2" align="center"> {description}</Typography> 
             </Box>
 
-            <Horizontal align="center" >
-                <VPieChart { ...chartValueByAsset } /> 
-                <VPieChart { ...chartValueByPool } /> 
+            <Box mb={4}>
+                <Typography variant="h4" align="center"> ${utils.commify(formattedPortfolioValue)} </Typography>
+                <Typography variant="body2" align="center"> Value of all assets in the Index</Typography>
+            </Box>
+
+            <Horizontal align="center">
+                { chartValueByAsset.data.length > 0 &&   <VPieChart { ...chartValueByAsset } />  }
+                { chartValueByPool.data.length > 0 &&   <VPieChart { ...chartValueByPool } />  }
 
                 <Box className={classes.portfolioInfo} >
+                    <Typography>Index composition by Asset</Typography>
                     { assetViews }
-                    <TitleValueBox mode="small" title="TVL" value={ `$ ${utils.commify(formattedPortfolioValue)}`} />
-    
-                    {/* <TitleValueBox title="Total Deposited" value={formattedDeposited} suffix={depositToken.symbol} />
-                    <TitleValueBox title="Total Withdrawn" value={formatteWithdrawn} suffix={depositToken.symbol}/>
-         */}
                 </Box>
 
                 <Box className={classes.portfolioInfo} >
+                    <Typography>Index composition by Pool</Typography>
                     { poolsInIndex }
-
                 </Box>
+
             </Horizontal>
+
+            {/* <Box p={0}>
+                    <IndexInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} />
+            </Box> */}
 
         </Box>
        

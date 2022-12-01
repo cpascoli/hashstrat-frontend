@@ -28,8 +28,6 @@ export type ChartData = {
 
 export const VPieChart = ( chartData : ChartData ) => {
 
-
-  // chartData.height?? 
   const useStyle = makeStyles( theme => ({
     chart: {
         margin: "auto",

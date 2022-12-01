@@ -2,7 +2,6 @@ import React, { useState } from "react"
 
 import { Box, makeStyles, Typography, Link, Breadcrumbs, Divider, Tab, Button, Card, CardHeader, CardContent, CardActions } from "@material-ui/core"
 import { TabContext, TabList, TabPanel } from "@material-ui/lab"
-import { NetworkExplorerHost, HstTokenAddress } from "../../utils/network"
 import { Link as RouterLink } from "react-router-dom"
 import { Token } from "../../types/Token"
 import { Contracts } from "../shared/Contracts"
@@ -10,6 +9,7 @@ import { DAOToken } from "./DAOToken"
 import { DAORevenues } from "./DAORevenues"
 import { DAOTreasury } from "./DAOTreasury"
 import { Horizontal } from "../Layout"
+
 
 interface DaoHomeProps {
     chainId: number,
@@ -58,6 +58,8 @@ export const DaoHome = ({ chainId, account, depositToken } : DaoHomeProps ) => {
                     <Typography>DAO</Typography>
                 </Breadcrumbs>
             </Box>
+
+            {/* <Tickers chainId={chainId || defaultChainId} depositToken={depositToken!} account={account} /> */}
 
             <Box px={2} mt={3}>
                 <Typography>

@@ -74,7 +74,7 @@ const App = () => {
 			}}>
 
 				<CssBaseline />
-				<Container maxWidth="md" disableGutters>
+				<Container maxWidth="xl" disableGutters>
 					<Main toggleDark={toggleDark} setToggleDark={setToggleDark} />
 				</Container>
 			</DAppProvider>

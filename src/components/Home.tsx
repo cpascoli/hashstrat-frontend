@@ -15,8 +15,13 @@ import automated from "./img/automated.svg"
 import lock from "./img/lock.svg"
 import dao from "./img/dao.svg"
 import { Horizontal } from "./Layout"
+import { FaqContent } from "./faq/FaqContent"
+
 
 const useStyle = makeStyles(theme => ({
+    container: {
+        backgroundColor: theme.palette.type === 'light' ? 'white' : theme.palette.grey[900],
+    },
 
     topSection: {
         paddingTop: 70,
@@ -46,7 +51,8 @@ const useStyle = makeStyles(theme => ({
         paddingLeft: 20,
         paddingRight: 20,
         paddingBottom: 40,
-        color: theme.palette.type === 'light' ? theme.palette.grey[800] : theme.palette.grey[100],
+        backgroundColor: theme.palette.type === 'light' ? 'white' : theme.palette.grey[900],
+        color: theme.palette.type === 'light' ? theme.palette.grey[900] : theme.palette.grey[100],
     },
     bottomSecion: {
         display: "grid",
@@ -55,6 +61,7 @@ const useStyle = makeStyles(theme => ({
         [theme.breakpoints.down('sm')]: {
             gridTemplateColumns: "1fr",
         },
+        paddingBottom: 40
     },
     titleSection: {
         textAlign: "center",
@@ -103,7 +110,8 @@ export const Home = ({ chainId }: HomeProps) => {
 
     return (
         <>
-        <Box>
+        <Box className={classes.container}>
+
         <Divider style={{ marginTop: 0, marginBottom: 0 }} />
 
             <section className={classes.topSection}>
@@ -122,8 +130,8 @@ export const Home = ({ chainId }: HomeProps) => {
                             <Link component={LinkRouter} to="/home" style={{ textDecoration: 'none' }} >
                                 <Button variant="contained" color="primary" style={{ width: 200, height: 40 }} >Launch App</Button>
                             </Link>
-                            <Link href="https://medium.com/@hashstrat" target="_blank" style={{ textDecoration: 'none' }} >
-                                <Button variant="outlined" color="primary" style={{ width: 200, height: 40 }} >Read Blog</Button>
+                            <Link href="./whitepaper.pdf" target="_blank" style={{ textDecoration: 'none' }} >
+                                <Button variant="outlined" color="primary" style={{ width: 200, height: 40 }} >White paper</Button>
                             </Link>
                         </Horizontal>
                     </div>
@@ -143,58 +151,7 @@ export const Home = ({ chainId }: HomeProps) => {
                 </Horizontal>
             </section>
 
-            <Divider style={{ marginTop: 0, marginBottom: 40 }} />
-
-            <section className={classes.midSection}>
-                <Typography variant="h4">What is HashStrat?</Typography>
-                <ul>
-                    <li>
-                        <Typography variant="body1">
-                            HashStrat is a new DeFi protocol for investing in digital assets (e.g. BTC &amp; ETH) with a long-term outlook.
-                        </Typography>
-                    </li>
-                    <li>
-                        <Typography variant="body1">
-                            In HashStrat, users' funds are managed by transparent, autonomous strategies executed on-chain.
-                        </Typography>
-                    </li>
-                    <li>
-                        <Typography variant="body1">
-                            HashStrat strategies are designed to reduce portfolio volatility &amp; drawdowns, and produce returns competitive with the benchmark buy-and-hold strategy.
-                        </Typography>
-                    </li>
-                    <li>
-                        <Typography variant="body1">
-                            It's also possible to improve your risk/reward further by allocating capital to indexes over multiple strategies.
-                        </Typography>
-                    </li>
-                </ul>
-            </section>
-
-
-            <section className={classes.midSection}>
-                <Typography variant="h4">Who is it for?</Typography>
-                <ul>
-                    <li>
-                        <Typography variant="body1">
-                            <strong>Individual investors</strong> wanting to automate the management of their crypto-portfolios, improving returns and reducing volatility, whilst retaining control over their digital assets at all times.
-                        </Typography>
-                    </li>
-                    <li>
-                        <Typography variant="body1">
-                            <strong>DAO treasuries</strong> wanting to protect the value of their stablecoin holdings from currency debasement, by getting some exposure to pristine crypto assets, like BTC or ETH, in a trustless and verifiable way.
-                        </Typography>
-                    </li>
-
-                    <li>
-                        <Typography variant="body1">
-                            <strong>DeFi protocols</strong> wanting to safely offload some of their stablecoin liquidity and aim for high returns over the long term.
-                        </Typography>
-                    </li>
-                </ul>
-            </section>
-
-            <Divider style={{ marginTop: 0, marginBottom: 40 }} />
+            <Divider style={{ marginTop: 0, marginBottom: 60 }} />
 
             <section className={classes.bottomSecion}>
                 <InfoBox title="Self-sovereign" image={key}>
@@ -231,9 +188,24 @@ export const Home = ({ chainId }: HomeProps) => {
                 </InfoBox>
 
             </section>
+
+            <Divider style={{ marginTop: 0, marginBottom: 40 }} />
+
+            <section className={classes.midSection}  > 
+                <Box>
+                    <Box pb={3}>
+                        <Typography variant="h4" align="center"> Frequently Asked Questions </Typography>
+                    </Box>
+                    <FaqContent />
+                </Box>
+                
+            </section>
+
+           
+
         </Box>
 
-        <Divider style={{ marginTop: 10, marginBottom: 20 }} />
+      
 
         </>
 

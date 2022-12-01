@@ -22,8 +22,8 @@ interface DashboardProps {
 
 const useStyles = makeStyles( theme => ({
     container: {
-        paddingTop: 0,
-        marginBottom: 10,
+        paddingTop: 2,
+        marginBottom: 2,
     },
     tickers: {
         maxWidth: 800,

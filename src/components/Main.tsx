@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes,Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes,Route } from "react-router-dom";
 import { Polygon } from '@usedapp/core';
-import { Box,Typography, makeStyles } from "@material-ui/core"
+import { Box, makeStyles } from "@material-ui/core"
 
 import { TokensForPool, PoolIds, IndexesIds, DepositToken } from "../utils/pools"
 import { InvestTokens } from "../utils/pools"
@@ -13,13 +13,13 @@ import { InvestHome } from "./invest/InvestHome"
 
 import { IndexHome } from "./indexes/index/IndexHome"
 import { PoolHome } from "./pool/PoolHome";
-import { Socials } from "./Socials"
+
 import { FaqHome } from "./faq/FaqHome";
 import { StrategiesHome } from "./strategies/StrategiesHome";
 import { DaoHome } from './dao/DaoHome'
 import { MainWithTitle } from "./MainWithTitle"
 import { UsersHome } from "./users//UsersHome"
-
+import { Footer } from "./Footer"
 
 
 interface MainProps {
@@ -30,19 +30,13 @@ interface MainProps {
 const useStyle = makeStyles( theme => ({
     container: {
         margin: "auto",
-        padding: 0,
+
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
-    },
-    footer: {
-        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-        textAlign: "center",
-        padding: theme.spacing(2)
     }
 }))
 
 
 export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  { 
-  
   
 
     // the chain to show to the user. 
@@ -86,28 +80,19 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                             <Home chainId={chainId || defaultChainId} /> 
                         } />
                         <Route path="/home"  element={
-                            <>
-                                <Tickers chainId={chainId || defaultChainId} depositToken={depositToken!} account={account} />
-                                <Dashboard chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} investTokens={investTokens}  /> 
-                            </>
+                            <Dashboard chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} investTokens={investTokens}  /> 
                         } />
                         <Route path="/invest" element={
-                            <>
-                                <Tickers chainId={chainId || defaultChainId} depositToken={depositToken!} account={account} />
-                                <InvestHome chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} />
-                            </>
+                            <InvestHome chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} />
                         } />
                         <Route path="/strategies" element={
                             <StrategiesHome />
                         } />
                         <Route path="/faq" element={
-                             <FaqHome  />
+                             <FaqHome />
                         } />
                         <Route path="/dao" element={
-                            <>
-                                <Tickers chainId={chainId || defaultChainId} depositToken={depositToken!} account={account} />
-                                <DaoHome chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} />
-                            </>
+                            <DaoHome chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} />
                         } />
 
                         <Route path="/users" element={
@@ -149,10 +134,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
             </MainWithTitle>
             </BrowserRouter>
 
-            <footer className={classes.footer}>
-                <Socials />
-                <Typography variant="body2"> © 2022 HashStrat. All rights reserved </Typography>
-            </footer>
+            <Footer />
         
         </Box>
     )

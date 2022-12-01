@@ -2,8 +2,8 @@
 
 import React, { useState } from "react"
 
-import { makeStyles, Tab } from "@material-ui/core"
-import { TabContext, TabList, TabPanel } from "@material-ui/lab"
+import { Box, makeStyles, Tab, Typography, } from "@material-ui/core"
+import { TabContext, TabList, TabPanel, Skeleton } from "@material-ui/lab"
 
 import { Token } from "../../types/Token"
 
@@ -49,8 +49,9 @@ const useStyles = makeStyles( theme => ({
 
 export const Dashboard = ({ chainId, depositToken, investTokens, account } : DashboardProps) => {
     
+    const selIdx =  0 //account === undefined ? 1 : 0
     const classes = useStyles()
-    const [selectedTokenIndex, setSelectedTokenIndex] = useState<number>(0)
+    const [selectedTokenIndex, setSelectedTokenIndex] = useState<number>(selIdx)
    
     const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
         setSelectedTokenIndex(parseInt(newValue))
@@ -65,7 +66,10 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account } : Das
                       <Tab label="HashStrat" value="1" key={1}  />
                 </TabList>
                 <TabPanel className={classes.tab} value="0" key={0}>
-                    <MyPortfolioAssetsSummary chainId={chainId}  depositToken={depositToken} investTokens={investTokens} account={account} />
+                 { account  &&  <MyPortfolioAssetsSummary chainId={chainId}  depositToken={depositToken} investTokens={investTokens} account={account} /> }
+                 { !account &&  <Box style={{paddingTop: 80, paddingBottom: 80}}>
+                    <Typography align="center" > Connect an account to access your assets </Typography>
+                </Box>  }
                 </TabPanel>
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <FundAssetsSummary chainId={chainId}  depositToken={depositToken} investTokens={investTokens} />

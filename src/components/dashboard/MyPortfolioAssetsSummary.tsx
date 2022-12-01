@@ -47,11 +47,12 @@ const useStyles = makeStyles( theme => ({
 }))
 
 
-export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, account} : MyPortfolioAssetsSummaryProps) => {
+export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, account } : MyPortfolioAssetsSummaryProps) => {
     
     const classes = useStyles()
     const tokens = [depositToken, ...investTokens]
  
+
     const { poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool, didLoad } = useDashboardModel(chainId, tokens, depositToken, account)
 
     const totalDeposited = useTotalDeposited(chainId, account)
@@ -66,6 +67,8 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
             decimals: item.decimals
        }
     })
+
+
  
     const userHasDisabledPools = [...indexesInfo, ...poolsInfo].filter( pool => pool.totalValue.isZero() === false ).reduce( (acc, val ) => {
         return acc = acc || PoolInfo(chainId, val.poolId).disabled === 'true'
@@ -92,6 +95,8 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                             String(Math.round( 10000 * (parseFloat(totalWithdrawnFormatted) + parseFloat(totalValueFormatted) - parseFloat(totalDepositedFormatted)) / parseFloat(totalDepositedFormatted)) / 100 ) : 'n/a'
 
 
+    // console.log("account", account, "totalValueFormatted: ", totalValueFormatted)
+
 
     return (
         <div className={classes.container}>
@@ -105,7 +110,7 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
             { didLoad && !account &&
                 <Box>
                     <Typography variant="body2" align="center" style={{marginTop: 20, marginBottom: 20}}>
-                        Connect an account to the Polygon netowrk to see your Assets across all Pools &amp; Indexes
+                        Connect an account to the Polygon netowrk to access your Assets across all Pools &amp; Indexes
                     </Typography>
                 </Box>
             }
@@ -127,12 +132,12 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
 
 
                     <Box>
-                        <Typography variant="h4" align="center" >Portfolio Summary </Typography>
+                        <Typography variant="h4" align="center" > Portfolio Summary </Typography>
                         <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 10}}>
                             The value of your assets across all Pools &amp; Indexes
                         </Typography>
                         <Typography variant="h5" align="center" style={{marginTop: 0, marginBottom: 20}}>
-                           { utils.commify(totalValueFormatted) } {depositToken.symbol}
+                           ${ utils.commify(totalValueFormatted) }
                         </Typography>
                     </Box>
                     <div className={classes.portfolioSummary} > 

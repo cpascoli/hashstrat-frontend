@@ -1,3 +1,4 @@
+import { utils } from "ethers"
 import { Box, makeStyles, Typography } from "@material-ui/core"
 import { TitleValueBox } from "../TitleValueBox"
 import { Token } from "../../types/Token"
@@ -64,7 +65,7 @@ export const MeanRevStrategyInfoView = ( { chainId, poolId, depositToken, invest
 
     // moving average
     const formattedMovingAverage = movingAverage ? fromDecimals( BigNumber.from(movingAverage), parseInt(feedDecimals), 2) : ''
-    const movingAverageText = `${formattedMovingAverage} ${depositToken.symbol}`
+    const movingAverageText = `$${ utils.commify( formattedMovingAverage )}`
 
     // strategy parameters
     const deltaPricePerc = round((latestFeedPrice - movingAverage) / movingAverage, 4)
@@ -92,7 +93,7 @@ export const MeanRevStrategyInfoView = ( { chainId, poolId, depositToken, invest
             <TitleValueBox title={`Trend (${movingAveragePeriod}D MA)`} value={movingAverageText} mode="small"  />
             <TitleValueBox title="Deviation From Trend" value={`${round(deltaPricePerc * 100)}`} mode="small"  suffix="%" />
             <TitleValueBox title="Upper Target Price %" value={`${targetPricePercUp}`} mode="small"  suffix="%" />
-            <TitleValueBox title="Lower Target Price %" value={`- ${targetPricePercDown}`} mode="small"  suffix="%" />
+            <TitleValueBox title="Lower Target Price %" value={`-${targetPricePercDown}`} mode="small"  suffix="%" />
             <TitleValueBox title="Trade Size" value={`${tokensToSwapPerc}`} mode="small"  suffix="%" />
             <TitleValueBox title="Min allocation" value={`${minAllocationPerc}`} mode="small"  suffix="%" />
             

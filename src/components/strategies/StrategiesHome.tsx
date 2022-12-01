@@ -63,7 +63,7 @@ export const StrategiesHome = () => {
                     <div>
 
                         <Typography variant="h5">
-                            <strong> Rebalancing Strategy </strong>
+                            <strong> Rebalancing </strong>
                         </Typography>
                         <Typography>A rebalancing strategy over a 2 asset portfolio</Typography>
                         
@@ -99,7 +99,7 @@ export const StrategiesHome = () => {
                         <br />
                         <div>     
                             <strong>Returns</strong> <br/>
-                            Using this strategy, from Jan 2019 to July 2022, a $1,000 Pool would have returned $6,386.
+                            From Jan 2019 to July 2022 this strategy would have returned 6.4x your investment.
                         </div>
                         <div>   
                             <img src={strategy1} className={classes.chart} alt="RebalancingStrategyV1 strategy stats"/>
@@ -151,7 +151,7 @@ export const StrategiesHome = () => {
                         <br />
                         <div>     
                             <strong>Returns</strong> <br/>
-                            Using this strategy, from Jan 2019 to July 2022, a $1,000 Pool would have returned $8,533.
+                            From Jan 2019 to July 2022 this strategy would have returned 8.5x your investment.
                         </div>
                         <div>   
                             <img src={strategy2} className={classes.chart} alt="MeanReversionV1 strategy stats"/>
@@ -166,9 +166,9 @@ export const StrategiesHome = () => {
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
                     <div>
                         <Typography variant="h5">
-                            <strong> Trend Follow  </strong>
+                            <strong> Trend Following </strong>
                         </Typography>
-                        <Typography>A trend-following strategy trading in the direction of the underlying trend</Typography>
+                        <Typography>A momentum strategy trading in the direction of the underlying trend</Typography>
                         
                         <div>
                             <Link href="https://medium.com/@hashstrat/trend-following-strategy-7dce9756eaa" target="_blank">Medium article</Link> &nbsp;&nbsp;&nbsp;&nbsp;
@@ -200,7 +200,7 @@ export const StrategiesHome = () => {
                         <br />
                         <div>     
                             <strong>Returns</strong> <br/>
-                            Using this strategy, from Jan 2019 to July 2022, a $1,000 Pool would have returned $18,917.
+                            From Jan 2019 to July 2022 this strategy would have returned 18.9x your investment.
                         </div>
                         <div>   
                             <img src={strategy3} className={classes.chart} alt="TrendFollowV1 strategy stats"/>

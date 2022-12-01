@@ -14,6 +14,11 @@ import { TokenInfo } from "../../types/TokenInfo"
 
 import { ExpandMore } from "@material-ui/icons"
 
+import usdc from "../img/usdc.png"
+import wbtc from "../img/wbtc.png"
+import weth from "../img/weth.png"
+import { Horizontal } from "../Layout"
+
 
 interface PoolSummaryProps {
     chainId: number,
@@ -60,7 +65,8 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken, account } :
     const totalValueFormatted = fromDecimals(totalValues.pool, depositToken.decimals, 2 )
     const accountPercFormatted = `${round( perc ? perc * 100 : 0)}`
 
-    const { name, description, disabled } = PoolInfo(chainId, poolId)
+    const { name, description, investTokens, depositToken : depositTokenSymbol, disabled } = PoolInfo(chainId, poolId)
+
 
     const tokenViews = tokens && tokens.map( token => {
         const accountBalanceFormatted = token.accountBalance && fromDecimals(token.accountBalance ?? BigNumber.from(0), token.decimals, 4 )
@@ -78,21 +84,23 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken, account } :
         return <div></div>
     }
 
+    const assetImages = [...investTokens, depositTokenSymbol].map( (item, idx) => {
+       const imageSrc = item === 'WBTC' ? wbtc : item === 'WETH' ? weth : item === 'USDC' ? usdc : ''
+       return <img key={idx} src={imageSrc} style={{width: 25, height: 25, marginLeft: 5}} />
+    })
 
+    const outlineColout = poolId.startsWith("index") ? "primary" : "secondary"
     return (
       
             <Link component={RouterLink} to={link} style={{ textDecoration: 'none' }} > 
-                <Button variant="outlined" color="primary" className={classes.container} >
+                <Button variant="outlined" color={`${outlineColout}`} className={classes.container} >
                     <Box className={classes.pool}>
-
-                        <Typography variant="h5" align="center"> {name} </Typography>
+                        <Typography variant="h6" align="center"> {name} </Typography>
                         <Typography variant="body2"> {description} </Typography>
-
+                        <Box>{assetImages} </Box>
                         <Divider variant="fullWidth" style={{marginTop: 20, marginBottom: 20}} />
-
                         <TitleValueBox title="TVL" value={`$ ${utils.commify(totalValueFormatted)}`} mode="small" />
                         <TitleValueBox title="My Share" value={myShareFormatted} mode="small" />
-
                         <Typography variant="body1" align="left" style={{marginTop: 20 }}> My Assets </Typography>
                         { tokenViews }
                     </Box>
@@ -100,7 +108,3 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken, account } :
             </Link>
     )
 }
-
-
-
-

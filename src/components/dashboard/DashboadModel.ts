@@ -12,7 +12,7 @@ import { TokenInfo } from "../../types/TokenInfo"
 type TokenBalances = {[ x: string] : { symbol: string, decimals: number, value: BigNumber, balance: BigNumber, loaded: boolean }}
 
 
-type PoolData =  { 
+export type PoolData =  { 
     poolId: string, 
     tokenInfoArray: TokenInfo[], 
     totalValue: BigNumber 
@@ -54,11 +54,11 @@ export const useIndexesInfo = (chainId: number, indexIds: string[], tokens: Toke
 
 export const useDashboardModel = (chainId: number, tokens: Token[], depositToken: Token, account?: string) : DashboadModel => {
 
-    //   combine pools and indexes stats and return aggeragated token amount & value totals 
+    // combine pools and indexes stats and return aggeragated token amount & value totals 
     const poolsBalances = useTokensInfoForPools(chainId, PoolIds(chainId), tokens, account)
     const indexesBalances = useTokensInfoForIndexes(chainId, IndexesIds(chainId), tokens, account)
 
-    //   combine pools and indexes stats and return aggeragated token amount & value totals 
+    // combine pools and indexes stats and return aggeragated token amount & value totals 
     // const poolsBalances = useTokensInfoForPools(chainId, PoolIds(chainId), tokens, account)
     // const indexesBalances = useTokensInfoForIndexes(chainId, IndexesIds(chainId), tokens, account)
 
@@ -96,7 +96,7 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
                                          tokenInfo.balance ? totals[symbol].balance.add(tokenInfo.balance) : totals[symbol].balance
             }
             
-            totals[symbol].loaded = (tokenInfo.balance!== undefined || tokenInfo.balance !== undefined)
+            totals[symbol].loaded = (tokenInfo.value !== undefined && tokenInfo.balance !== undefined)
         })
         return totals
 
@@ -105,9 +105,10 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
  
 
     const didLoad : boolean = Object.values(tokenBalances).reduce( (loaded, token ) : boolean => {
-        return (loaded || token.loaded === true)
-    }, false )
+        return (loaded && token.loaded === true)
+    }, true )
 
+    // console.log("useDashboardModel = didLoad: ", didLoad, "account: ", account)
 
     const totalValue: BigNumber = Object.values(tokenBalances).reduce( (total, token ) : BigNumber => {
         return total.add(token.value)

@@ -218,7 +218,7 @@ export const Home = ({ chainId }: HomeProps) => {
                     <Typography variant="body2">
                         HashStrat uses <Link href="https://docs.chain.link/docs/chainlink-automation/introduction/" target="_blank">Chainlink Automation</Link> to automate
                         the execution of its on-chain strategies.
-                        This means you can trust the blockchain and a decentralised network of independent nodes, to keep operating the fund.
+                        This means you can trust the blockchain and a decentralised network of independent nodes, to keep running the strategies.
                     </Typography>
                 </InfoBox>
 

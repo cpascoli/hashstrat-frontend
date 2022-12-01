@@ -3,19 +3,18 @@
 
 import { Button, Typography, makeStyles, Divider, Link, Box, styled } from "@material-ui/core"
 import { Link as LinkRouter } from "react-router-dom"
-
 import { InfoBox } from "./InfoBox"
-
 import experienceDefiLight from "./img/experience-defi-light.png"
 import experienceDefiDark from "./img/experience-defi-dark.png"
 import background from "./img/homepage-bg.jpg"
-
 import key from "./img/key.svg"
 import automated from "./img/automated.svg"
 import lock from "./img/lock.svg"
 import dao from "./img/dao.svg"
 import { Horizontal } from "./Layout"
 import { FaqContent } from "./faq/FaqContent"
+import { StrategyCarousel } from "./home/StrategyCarousel"
+
 
 
 const useStyle = makeStyles(theme => ({
@@ -45,6 +44,16 @@ const useStyle = makeStyles(theme => ({
             marginTop: 60,
         },
     },
+    carouselSection: {
+        margin: "auto",
+        paddingTop: 40,
+        paddingLeft: 5,
+        paddingRight: 5,
+        paddingBottom: 40,
+        backgroundColor: theme.palette.type === 'light' ? '#eee' : theme.palette.grey[900],
+        color: theme.palette.type === 'light' ? theme.palette.grey[900] : theme.palette.grey[100],
+    },
+
     midSection: {
         margin: "auto",
         paddingTop: 0,
@@ -53,6 +62,12 @@ const useStyle = makeStyles(theme => ({
         paddingBottom: 40,
         backgroundColor: theme.palette.type === 'light' ? 'white' : theme.palette.grey[900],
         color: theme.palette.type === 'light' ? theme.palette.grey[900] : theme.palette.grey[100],
+
+        [theme.breakpoints.down('sm')]: {
+            paddingLeft: 0,
+            paddingRight: 0,
+        },
+
     },
     bottomSecion: {
         display: "grid",
@@ -138,6 +153,14 @@ export const Home = ({ chainId }: HomeProps) => {
                 </div>
             </section>
 
+            <section className={classes.carouselSection} >
+                <Box pb={2}>
+                    <Typography variant="h4" align="center">Our on-chain Strategies</Typography>
+                </Box>
+                <StrategyCarousel />
+            </section>
+
+
             <Divider style={{ marginTop: 0, marginBottom: 40 }} />
 
             <section className={classes.midSection}>
@@ -198,14 +221,8 @@ export const Home = ({ chainId }: HomeProps) => {
                     </Box>
                     <FaqContent />
                 </Box>
-                
             </section>
-
-           
-
         </Box>
-
-      
 
         </>
 

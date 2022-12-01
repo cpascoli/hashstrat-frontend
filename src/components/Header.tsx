@@ -63,6 +63,15 @@ const useStyles = makeStyles(theme => ({
 			display: "none"
 		},
 	},
+
+	darkModeSwitch: {
+		display: 'flex',
+		alignItems: 'center',
+		[theme.breakpoints.down('xs')]: {
+			display: "none"
+		},
+	},
+
 	menuItemsSmall: {
 		[theme.breakpoints.up('sm')]: {
 			display: "none"
@@ -76,13 +85,7 @@ const useStyles = makeStyles(theme => ({
 		gap: theme.spacing(4),
 	},
 	
-	darkModeSwitch: {
-		display: 'flex',
-		alignItems: 'center',
-		[theme.breakpoints.down('sm')]: {
-			display: "none"
-		},
-	},
+
 
 	burgerMenu: {
 		[theme.breakpoints.up('sm')]: {
@@ -210,9 +213,9 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 				<nav className={classes.menuItems}>
 					{isHome && <Link component={RouterLink} to="/dao">DAO</Link> }
 					{/* {!isHome && <Link component={RouterLink} to="/invest">Invest</Link>} */}
-					<Link component={RouterLink} to="/strategies">Strategies</Link>
-					<Link href="https://medium.com/@hashstrat" target="_blank">Blog</Link>
-					<Link href="./whitepaper.pdf" target="_blank">Whitepaper</Link>
+					{/* <Link component={RouterLink} to="/strategies">Strategies</Link> */}
+					{/* <Link href="https://medium.com/@hashstrat" target="_blank">Blog</Link> */}
+					{/* <Link href="./whitepaper.pdf" target="_blank">Whitepaper</Link> */}
 				</nav>
 
 
@@ -270,17 +273,17 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 									</Link>
 								} */}
 
-								<Link component={RouterLink} to="/strategies">
+								{/* <Link component={RouterLink} to="/strategies">
 									<MenuItem onClick={handleClose}>Strategies</MenuItem>
-								</Link>
+								</Link> */}
 
-								<Link href="https://medium.com/@hashstrat" target="_blank">
+								{/* <Link href="https://medium.com/@hashstrat" target="_blank">
 									<MenuItem onClick={handleClose}>Blog</MenuItem>
-								</Link>
-
+								</Link> */}
+								{/* 
 								<Link href="./whitepaper.pdf" target="_blank">
 									<MenuItem onClick={handleClose}>Whitepaper</MenuItem>
-								</Link>
+								</Link> */}
 
 								<Divider />
 

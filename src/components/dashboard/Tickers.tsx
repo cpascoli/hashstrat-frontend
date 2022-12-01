@@ -1,17 +1,12 @@
 
 import { Box, makeStyles } from "@material-ui/core"
 import { utils } from "ethers"
-
 import { InvestTokens } from "../../utils/pools"
-
 import { useStakedLP, useUnstakedLP  } from "../../hooks/useFarm"
-
 import { useTokenBalance } from "../../hooks"
 import { fromDecimals } from "../../utils/formatter"
-
 import { Horizontal } from "../Layout"
 import { Token } from "../../types/Token"
-import { NetworkExplorerHost, HstTokenAddress } from "../../utils/network"
 import { TickerInfo } from "./TickerInfo"
 
 

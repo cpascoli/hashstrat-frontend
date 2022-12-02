@@ -130,7 +130,7 @@ export const Item = (props: {data: StrategyInfo}) =>  {
     const classes = useStyle()
 
     return (
-        <Card variant="elevation"  className={classes.card}>
+        <Card variant="elevation" className={classes.card}>
             <CardContent>
                 <div className={classes.item}>
                     <Box>
@@ -141,7 +141,7 @@ export const Item = (props: {data: StrategyInfo}) =>  {
                         <Box className={classes.itemDetail}>
                             <Typography variant="body2" align="center"><strong>Goal:</strong> {props.data.goal} </Typography>
                         </Box>
-                        <Horizontal align='center'> <Link href={props.data.link} target="_blank">  Learn More  </Link> </Horizontal>
+
                     </Box>
 
                     <Box className={classes.roi}>
@@ -152,6 +152,11 @@ export const Item = (props: {data: StrategyInfo}) =>  {
                         <Typography variant="body2" align="center" color={'textSecondary'}> {props.data.timeframe}</Typography>
                     </Box>
                 </div>
+
+                <Horizontal align='center'> 
+                    <Link href={props.data.link} target="_blank" style={{ paddingTop: 20 }} > Learn More </Link>
+                </Horizontal>
+
             </CardContent>
             <CardActions >
             </CardActions>

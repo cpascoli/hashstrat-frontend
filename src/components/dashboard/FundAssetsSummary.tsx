@@ -77,7 +77,7 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
         <div className={classes.container}>
          
             <Box>
-                <Typography variant="h4" align="center" >Asset Summary</Typography>
+                <Typography variant="h4" align="center" >Value Under Management</Typography>
                 <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 10}}>
                   Value of assets across all Pools &amp; Indexes (TVL)
                 </Typography>

@@ -9,8 +9,7 @@ import { Token } from "../../types/Token"
 
 import { FundAssetsSummary } from "./FundAssetsSummary"
 import { MyPortfolioAssetsSummary } from "./MyPortfolioAssetsSummary"
-import { Tickers } from "./Tickers"
-
+import { DaoHome } from '../dao/DaoHome'
 
 interface DashboardProps {
     chainId: number,
@@ -62,8 +61,9 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account } : Das
         <div className={classes.container} >
             <TabContext value={selectedTokenIndex.toString()}>
                 <TabList onChange={handleChange} className={classes.tabList}>
-                      <Tab label="My Assets" value="0" key={0} />
-                      <Tab label="HashStrat" value="1" key={1}  />
+                    <Tab label="My Assets" value="0" key={0} />
+                    <Tab label="HashStrat" value="1" key={1}  />
+                    <Tab label="DAO" value="2" key={2} />
                 </TabList>
                 <TabPanel className={classes.tab} value="0" key={0}>
                  { account  &&  <MyPortfolioAssetsSummary chainId={chainId}  depositToken={depositToken} investTokens={investTokens} account={account} /> }
@@ -74,6 +74,10 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account } : Das
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <FundAssetsSummary chainId={chainId}  depositToken={depositToken} investTokens={investTokens} />
                 </TabPanel>
+                <TabPanel className={classes.tab} value="2" key={2}>
+                    <DaoHome chainId={chainId} account={account} depositToken={depositToken!} />
+                </TabPanel>
+
             </TabContext>
         </div>
     )

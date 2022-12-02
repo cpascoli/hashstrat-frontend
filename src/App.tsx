@@ -21,12 +21,11 @@ const App = () => {
 				main: toggleDark ? '#0091EA' : '#0091EA',
 			},
 			secondary: {
-				main: toggleDark ? '#ffaf49' : '#ffaf49',
+				main: toggleDark ? '#ffaf49' : '#ff8238',
 			},
 			info: {
 				light: toggleDark ? '#222222' : '#4b5f6',
 				main: toggleDark ? '#2196f3' : '#2196f3',
-				// main: toggleDark ? '#2196f3' : '#2196f3	',  //2196f3
 				dark: toggleDark ? '#1976d2' : '#1976d2',
 			 },
 			 background: {

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
+
 import { useEthers, Polygon, shortenAddress } from "@usedapp/core";
+import { styled } from "@material-ui/core/styles"
 
 import { useTheme, Button, Link, Menu, MenuProps, MenuItem, Divider, Typography, makeStyles, Box, Switch } from "@material-ui/core"
 import { Menu as MenuIcon, KeyboardArrowDown, WbSunny, Brightness3 } from "@material-ui/icons"
 
-import { Alert, AlertTitle } from "@material-ui/lab"
-import { styled } from "@material-ui/core/styles"
-import { useLocation, Link as RouterLink } from "react-router-dom"
 
+import { Alert, AlertTitle } from "@material-ui/lab"
+import { useLocation, Link as RouterLink } from "react-router-dom"
 import { StyledAlert } from "./shared/StyledAlert"
 import { NetworkName } from "../utils/network"
 import { Horizontal } from './Layout';
@@ -40,9 +41,10 @@ const StyledMenu = styled((props: MenuProps) => (
 	// },
 }));
 
+
 const useStyles = makeStyles(theme => ({
 	container: {
-		backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+		// backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
 		display: "flex",
 		justifyContent: "space-between",
 		borderRadius: 0,
@@ -51,6 +53,7 @@ const useStyles = makeStyles(theme => ({
 		boxShadow: `0px 2px 0px ${theme.palette.secondary.main}`, /* offset-x | offset-y | blur-radius | color */
 		alignContent: "middle",
 	},
+
 	menuItems: {
 		display: "flex",
 		justifyContent: "space-around",
@@ -67,32 +70,21 @@ const useStyles = makeStyles(theme => ({
 	darkModeSwitch: {
 		display: 'flex',
 		alignItems: 'center',
-		[theme.breakpoints.down('xs')]: {
-			display: "none"
-		},
 	},
 
-	menuItemsSmall: {
-		[theme.breakpoints.up('sm')]: {
-			display: "none"
-		},
-	},
-	
 	rightItmesContainer: {
-		padding: theme.spacing(2),
+		paddingTop: theme.spacing(2),
+		paddingRight: theme.spacing(2),
+		paddingBottom: theme.spacing(2),
+
 		display: "flex",
 		justifyContent: "flex-end",
-		gap: theme.spacing(4),
+		gap: theme.spacing(2),
 	},
 	
-
-
-	burgerMenu: {
-		[theme.breakpoints.up('sm')]: {
-			display: "none"
-		},
+	logoFilter: {
+		filter: "invert(20%)"
 	}
-
 }))
 
 
@@ -165,6 +157,8 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 	const shortAccount = account ? shortenAddress(account) : ''
 	const theLocation = useLocation();
 	const isHome = theLocation.pathname === '/home'
+	const isRoot = theLocation.pathname === '/'
+
 	const isConnected = account !== undefined
 
 	console.log("isHome:", isHome, "isConnected", isConnected, "account", account, "path: ", theLocation.pathname)
@@ -206,124 +200,107 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 			<Box className={classes.container}>
 
 				<Link component={RouterLink} to="/" >
-					<Button> <img src={logImg} style={{ width: 55, height: 55 }} /> </Button>
+					<Button> <img src={logImg} style={{ width: 55, height: 55 }} className={classes.logoFilter} /> </Button>
 				</Link>
 
-
-				<nav className={classes.menuItems}>
-					{isHome && <Link component={RouterLink} to="/dao">DAO</Link> }
-					{/* {!isHome && <Link component={RouterLink} to="/invest">Invest</Link>} */}
-					{/* <Link component={RouterLink} to="/strategies">Strategies</Link> */}
-					{/* <Link href="https://medium.com/@hashstrat" target="_blank">Blog</Link> */}
-					{/* <Link href="./whitepaper.pdf" target="_blank">Whitepaper</Link> */}
-				</nav>
-
-
+				
 				<div className={classes.rightItmesContainer}>
 
-					<div className={classes.darkModeSwitch} >
-						{ !lightMode && <Brightness3 color='primary'/> }
-						{ lightMode && <WbSunny color='primary'/> }
-						<Switch
-								checked={toggleDark}
-								onChange={handleModeChange}
-								name="toggleDark"
-								color="default"
-						/>
-						
-					</div>
+					{isRoot && 
+						<div className={classes.darkModeSwitch} >
+							{ !lightMode &&  <Brightness3 color='primary' onClick={handleModeChange} /> }
+							{ lightMode &&   <WbSunny color='primary' onClick={handleModeChange} /> }
+						</div>
+					}
 
-					{ isConnected && <Button color="primary" variant="contained" onClick={disconnectPressed} fullWidth >Disconnect</Button> }
+					
+					{ isConnected && !isRoot &&
+						<div>
+							
+							<Button
+								id="account-button"
+								aria-controls={open ? 'account-menu' : undefined}
+								aria-haspopup="true"
+								aria-expanded={open ? 'true' : undefined}
+								variant="contained"
+								disableElevation
+								onClick={handleClick}
+								endIcon={<KeyboardArrowDown />}
+							>
+								{isConnected ? shortAccount :
+									<MenuIcon />}
+							</Button>
 
+							<StyledMenu
+								id="account-menu"
+								anchorEl={anchorEl}
+								getContentAnchorEl={null}
+								open={open}
+								onClose={handleClose}
+							>
+									
 
-					<div className={classes.burgerMenu}>
-						<Button
-							id="account-button"
-							aria-controls={open ? 'account-menu' : undefined}
-							aria-haspopup="true"
-							aria-expanded={open ? 'true' : undefined}
-							variant="contained"
-							disableElevation
-							onClick={handleClick}
-							endIcon={<KeyboardArrowDown />}
-						>
-							{isConnected ? shortAccount :
-								<MenuIcon />}
-						</Button>
-
-						<StyledMenu
-							id="account-menu"
-							anchorEl={anchorEl}
-							getContentAnchorEl={null}
-							open={open}
-							onClose={handleClose}
-						>
-								
-
-							<nav className={classes.menuItemsSmall} >
-								{isHome &&
-									<Link component={RouterLink} to="/dao">
-										<MenuItem onClick={handleClose}>DAO</MenuItem>
-									</Link>
-								}
-
-								{/* {!isHome &&
+								<nav>
+									
 									<Link component={RouterLink} to="/invest">
 										<MenuItem onClick={handleClose}> Invest </MenuItem>
 									</Link>
-								} */}
 
-								{/* <Link component={RouterLink} to="/strategies">
-									<MenuItem onClick={handleClose}>Strategies</MenuItem>
-								</Link> */}
+									<Link component={RouterLink} to="/strategies">
+										<MenuItem onClick={handleClose}>Strategies</MenuItem>
+									</Link>
 
-								{/* <Link href="https://medium.com/@hashstrat" target="_blank">
-									<MenuItem onClick={handleClose}>Blog</MenuItem>
-								</Link> */}
-								{/* 
-								<Link href="./whitepaper.pdf" target="_blank">
-									<MenuItem onClick={handleClose}>Whitepaper</MenuItem>
-								</Link> */}
+									<Link href="https://medium.com/@hashstrat" target="_blank">
+										<MenuItem onClick={handleClose}>Blog</MenuItem>
+									</Link>
+									
+									<Link href="./whitepaper.pdf" target="_blank">
+										<MenuItem onClick={handleClose}>Whitepaper</MenuItem>
+									</Link>
 
-								<Divider />
+									<Divider />
 
-								<MenuItem onClick={handleClose}>
-									{ !lightMode && <Brightness3 color='primary'/> }
-									{ lightMode && <WbSunny color='primary'/> }
-									<Switch
+									<MenuItem onClick={handleClose}>
+										<span style={{minWidth: 110}}> { lightMode ?  'Dark' : 'Light' } mode </span>
+
+										<Switch
 											checked={toggleDark}
 											onChange={handleModeChange}
 											name="toggleDark"
 											color="default"
-									/>
-								</MenuItem>
-							</nav>
-
-
-							{isConnected &&
-								<div>
-									<Divider />
-									<MenuItem onClick={handleClose}>
-										<Typography variant='body1'> Connected to {networkName.toUpperCase()} </Typography>
+										/>
+										{ lightMode && <Brightness3 color='primary'/> }
+										{ !lightMode && <WbSunny color='primary'/> }
 									</MenuItem>
-									<MenuItem onClick={handleClose} >
-										<Button color="primary" variant="contained" onClick={disconnectPressed} fullWidth >Disconnect</Button>
-									</MenuItem>
-								</div>
-							}
-							{!isConnected && isHome &&
-								<div>
+								</nav>
 
-									<MenuItem onClick={handleClose}>
-										<ConnectButton />
-									</MenuItem>
-								</div>
-							}
 
-						</StyledMenu>
-					</div>
+								{isConnected &&
+									<div>
+										<Divider />
+										<MenuItem onClick={handleClose}>
+											<Typography variant='body1'> Connected to {networkName.toUpperCase()} </Typography>
+										</MenuItem>
+										<MenuItem onClick={handleClose} >
+											<Button color="primary" variant="contained" onClick={disconnectPressed} fullWidth >Disconnect</Button>
+										</MenuItem>
+									</div>
+								}
+								{!isConnected && isHome &&
+									<div>
+										<MenuItem onClick={handleClose}>
+											<ConnectButton />
+										</MenuItem>
+									</div>
+								}
 
-				</div>
+							</StyledMenu>
+						</div>
+					}
+					
+
+				</div> 
+					
 			</Box>
 
 		</header>

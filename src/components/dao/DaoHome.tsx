@@ -22,7 +22,6 @@ const useStyles = makeStyles( theme => ({
     container: {
         paddingTop: theme.spacing(2),
     },
-
     tabList: { 
         maxWidth: 800,
         padding: 0,
@@ -36,7 +35,6 @@ const useStyles = makeStyles( theme => ({
         paddingTop: 20,
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     }
-
 }))
 
 
@@ -52,19 +50,10 @@ export const DaoHome = ({ chainId, account, depositToken } : DaoHomeProps ) => {
 
         <Box className={classes.container}>
 
-            <Box px={2}>
-                <Breadcrumbs aria-label="breadcrumb">
-                    <Link component={RouterLink} to="/home"> Home </Link>
-                    <Typography>DAO</Typography>
-                </Breadcrumbs>
-            </Box>
-
-            {/* <Tickers chainId={chainId || defaultChainId} depositToken={depositToken!} account={account} /> */}
-
-            <Box px={2} mt={3}>
+            <Box px={2} mt={0}>
                 <Typography>
-                    The HashStrat DAO is the decentralized organization running the protocol.
-                    Here users of the protocol can farm their DAO tokens (HST), collect their share of the protocol dividends and partecipate to the governance process. 
+                    The HashStrat <strong>DAO</strong> is the decentralized organization running the protocol. <br/>
+                    Users of the protocol can farm their DAO tokens (HST), collect their share of the protocol dividends and partecipate to the governance process. 
                 </Typography>
             </Box>
 
@@ -106,7 +95,6 @@ export const DaoHome = ({ chainId, account, depositToken } : DaoHomeProps ) => {
                 </TabContext>
             </Box>
     
-
             <Box p={2}>
                 <Contracts chainId={chainId} />
             </Box>

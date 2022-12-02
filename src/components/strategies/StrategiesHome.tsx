@@ -56,8 +56,7 @@ export const StrategiesHome = () => {
 
             <Box>
 
-<ul style={{listStyleType: "none", listStyle: "none", paddingLeft: 0}}>
-    <li>
+
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
                     <div>
@@ -107,9 +106,7 @@ export const StrategiesHome = () => {
                     </div>
                 </AccordionDetails>
             </Accordion>
-    </li>
-    <li>
-
+ 
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
 
@@ -160,8 +157,7 @@ export const StrategiesHome = () => {
                     </div>
                 </AccordionDetails>
             </Accordion>
-    </li>
-    <li>
+            
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
                     <div>
@@ -208,8 +204,7 @@ export const StrategiesHome = () => {
                     </div>
                 </AccordionDetails>
             </Accordion>
-        </li>
-    </ul>
+
      
             </Box>
         </Box>

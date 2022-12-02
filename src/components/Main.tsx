@@ -21,6 +21,10 @@ import { MainWithTitle } from "./MainWithTitle"
 import { UsersHome } from "./users//UsersHome"
 import { Footer } from "./Footer"
 
+import background from "./img/homepage-bg.jpg"
+import backgroundSmall from "./img/homepage-bg-small.jpg"
+import backgroundDark from "./img/homepage-bg-dark.jpg"
+import backgroundDarkSmall from "./img/homepage-bg-dark-small.jpg"
 
 interface MainProps {
     toggleDark: boolean,
@@ -30,8 +34,13 @@ interface MainProps {
 const useStyle = makeStyles( theme => ({
     container: {
         margin: "auto",
+        backgroundColor: theme.palette.type === 'light' ? 'white' : theme.palette.grey[900],
+        backgroundImage: theme.palette.type === 'light' ? `url( ${background} )` : `url( ${backgroundDark} )` ,
 
-        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
+        [theme.breakpoints.down('xs')]: {
+            backgroundImage: theme.palette.type === 'light' ? `url( ${backgroundSmall} )` :  `url( ${backgroundDarkSmall} )` ,
+        },
+
     }
 }))
 
@@ -106,10 +115,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                                 const investToken = tokens.investTokens[0]
                                 return (
                                     <Route key={`${poolId}`} path={`/pools/${poolId}`} element={
-                                        <>
-                                            <Tickers chainId={chainId || defaultChainId} depositToken={depositToken!} account={account} />
-                                            <PoolHome chainId={chainId || defaultChainId} poolId={`${poolId}`} account={account} tokens={supportedTokens} investToken={investToken} />
-                                        </>
+                                        <PoolHome chainId={chainId || defaultChainId} poolId={`${poolId}`} account={account} tokens={supportedTokens} investToken={investToken} />
                                     } />
                                 )
                              })
@@ -122,10 +128,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                                 const investTokens = tokens.investTokens
                                 return (
                                     <Route key={`${indexId}`} path={`/indexes/${indexId}`} element={
-                                        <>
-                                            <Tickers chainId={chainId || defaultChainId} depositToken={depositToken!} account={account} />
-                                            <IndexHome chainId={chainId || defaultChainId} poolId={`${indexId}`} account={account} tokens={supportedTokens} investTokens={investTokens} />
-                                        </>
+                                        <IndexHome chainId={chainId || defaultChainId} poolId={`${indexId}`} account={account} tokens={supportedTokens} investTokens={investTokens} />
                                     } />
                                 )
                              })

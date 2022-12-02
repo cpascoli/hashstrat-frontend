@@ -1,14 +1,11 @@
 
 import { makeStyles, Link, Box, Divider, Typography, Button, Breadcrumbs } from "@material-ui/core"
-import { useLocation } from "react-router-dom"
 
 import { PoolInfo } from "../../../utils/pools"
 
 import { IndexTabs } from "./IndexTabs"
 import { Token } from "../../../types/Token"
-
 import { Contracts } from "../../shared/Contracts"
-
 import { Link as RouterLink } from "react-router-dom"
 
 
@@ -26,12 +23,14 @@ export const IndexHome = ({ chainId, poolId, account, tokens, investTokens } : I
     const { name, description } = PoolInfo(chainId, poolId)
 
     return (
-        <Box px={2}>
+        <Box px={2} pt={2}>
             <Breadcrumbs aria-label="breadcrumb" style={{paddingLeft: 10, paddingRight: 10}}>
                 <Link component={RouterLink} to="/home"> Home </Link>
                 <Link component={RouterLink} to="/invest"> Invest </Link>
                 <Typography>{name}</Typography>
             </Breadcrumbs>
+
+            <Divider variant="middle" style={{marginTop: 20, marginBottom: 0}}/>
 
             <Box mt={2}>
                 <Typography align="center">{description}</Typography>

@@ -1,5 +1,5 @@
 
-import { Link, Box, Typography, Breadcrumbs } from "@material-ui/core"
+import { Link, Box, Typography, Breadcrumbs, Divider } from "@material-ui/core"
 
 import { PoolTabs } from "./PoolTabs"
 import { Token } from "../../types/Token"
@@ -25,12 +25,14 @@ export const PoolHome = ({ chainId, poolId, account, tokens, investToken } : Poo
     const { name, description } = PoolInfo(chainId, poolId)
 
     return (
-        <Box px={2} >
+        <Box px={2} pt={2}>
             <Breadcrumbs aria-label="breadcrumb" style={{paddingLeft: 10, paddingRight: 10}} >
                 <Link component={RouterLink} to="/home"> Home </Link>
                 <Link component={RouterLink} to="/invest"> Invest </Link>
                 <Typography>{name}</Typography>
             </Breadcrumbs>
+
+            <Divider variant="middle" style={{marginTop: 20, marginBottom: 0}}/>
 
             <Box mt={2}>
                 <Typography align="center">{description}</Typography>

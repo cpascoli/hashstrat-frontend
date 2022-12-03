@@ -6,7 +6,7 @@ import { Box, Accordion, AccordionDetails, AccordionSummary, makeStyles,
         Typography, Button, CircularProgress, Card, CardContent, CardActions
      } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
-import { ExpandMore, Info } from "@material-ui/icons"
+import { ExpandMore } from "@material-ui/icons"
 
 import { useMaxSupply, useTotalSupply } from "../../hooks/useHST"
 import { useTokenBalance  } from "../../hooks/useErc20Tokens"

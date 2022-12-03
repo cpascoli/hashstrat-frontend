@@ -4,16 +4,17 @@
 import { Button, Typography, makeStyles, Divider, Link, Box, styled } from "@material-ui/core"
 import { Link as LinkRouter } from "react-router-dom"
 import { InfoBox } from "./InfoBox"
-import experienceDefiLight from "./img/experience-defi-light.png"
-import experienceDefiDark from "./img/experience-defi-dark.png"
+
+import { Horizontal } from "./Layout"
+import { FaqContent } from "./faq/FaqContent"
+import { StrategyCarousel } from "./home/StrategyCarousel"
 
 import key from "./img/key.svg"
 import automated from "./img/automated.svg"
 import lock from "./img/lock.svg"
 import dao from "./img/dao.svg"
-import { Horizontal } from "./Layout"
-import { FaqContent } from "./faq/FaqContent"
-import { StrategyCarousel } from "./home/StrategyCarousel"
+import experienceDefi from "./img/experience-defi-light.png"
+// import experienceDefiDark from "./img/experience-defi-dark.png"
 
 
 
@@ -22,17 +23,51 @@ const useStyle = makeStyles(theme => ({
     topSection: {
         paddingTop: 70,
         paddingBottom: 50,
-        paddingLeft: theme.spacing(0),
-        paddingRight: theme.spacing(0),
-        display: "flex",
-        justifyContent: "space-around",
+        // backgroundColor: "red",
+    
+        // justifyContent: "space-around",
         [theme.breakpoints.down('sm')]: {
             paddingTop: 50,
             paddingBottom: 50,
         },
     },
+
+    titleSection: {
+        // backgroundColor: "yellow",
+        margin: "auto",
+        paddingLeft: 10,
+        paddingRight: 10,
+        [theme.breakpoints.down('sm')]: {
+            maxWidth: 600,
+        },
+    },
+    title: {
+        margin: 0,
+        maxWidth: 800,
+        fontFamily: "Alexandria",
+        fontWeight: 400,
+        fontSize: "52px",
+        color: theme.palette.text.primary,
+
+        [theme.breakpoints.down('xs')]: {
+            fontSize: "2.1rem",
+            textAlign: 'center'
+        },
+    },
+    subtitle: {
+        fontFamily: "Alexandria",
+        fontWeight: 300,
+        fontSize: "1.5rem",
+        color: theme.palette.type === 'light' ? theme.palette.text.primary : '#ffaf49',
+        [theme.breakpoints.down('xs')]: {
+            fontSize: "1.3rem",
+            textAlign: 'center'
+        },
+    },
+
+
     actionButtons: {
-        marginTop: 90, 
+        marginTop: 60, 
         marginBottom: 30,
         maxWidth: 500,
         margin: 'auto',
@@ -73,44 +108,27 @@ const useStyle = makeStyles(theme => ({
         [theme.breakpoints.down('sm')]: {
             gridTemplateColumns: "1fr",
         },
-        paddingBottom: 0
+        paddingBottom: 0,
+        maxWidth: 1024,
+        margin: "auto"
+
     },
 
-    titleSection: {
-        textAlign: "center",
-        paddingLeft: 10,
-        paddingRight: 10,
-        [theme.breakpoints.down('sm')]: {
-            maxWidth: 600,
-        },
-    },
-    title: {
-        margin: 0,
-        fontWeight: 200,
-        fontSize: "3.0rem",
-        textAlign: "center",
-        color: theme.palette.text.primary,
-
-        [theme.breakpoints.down('xs')]: {
-            fontSize: "2.1rem",
-        },
-    },
-    subtitle: {
-        fontWeight: 100,
-        fontSize: "1.5rem",
-        textAlign: "center",
-        color: theme.palette.type === 'light' ? theme.palette.text.secondary : '#ffaf49',
-        [theme.breakpoints.down('sm')]: {
-            fontSize: "1.4rem",
+    infoSection: {
+        [theme.breakpoints.down('md')]: {
+            display: "none",
         },
     },
     imageDeFi: {
-        content: `url(  ${theme.palette.type === 'light' ? experienceDefiLight : experienceDefiDark} )`,
-        maxWidth: "480px",
-        [theme.breakpoints.down('sm')]: {
-            maxWidth: "380px",
-        },
+        content: `url( ${experienceDefi} )`,
+        maxWidth: "320px",
+        filter: theme.palette.type === 'light' ? "grayscale(0.6)" : "grayscale(0.6)",
     },
+    brightnessFilter: {
+        filter:  theme.palette.type === 'light' ? "brightness(1)" : "brightness(1)"
+    },
+
+    
 }))
 
 
@@ -131,26 +149,56 @@ export const Home = ({ chainId }: HomeProps) => {
 
             <section className={classes.topSection}>
           
-                    <div className={classes.titleSection}>
-                        <div>
-                            <p className={classes.title}>
-                                Automate your digital asset investments
-                            </p>
-                            <p className={classes.subtitle}>
-                                Use proven on-chain strategies to manage volatility &amp; risk of your portfolio
-                            </p>
-                        </div>
-                        <div className={classes.actionButtons}>
+                    
+                        <div className={classes.titleSection} >
                             <Horizontal align="center">
-                                <Link component={LinkRouter} to="/home" style={{ textDecoration: 'none' }} >
-                                    <Button variant="contained" color="primary" style={{ width: 200, height: 40 }} >Launch App</Button>
-                                </Link>
-                                <Link href="./whitepaper.pdf" target="_blank" style={{ textDecoration: 'none' }} >
-                                    <Button variant="outlined" color="primary" style={{ width: 200, height: 40 }} >White paper</Button>
-                                </Link>
+                                <div>
+                                    <div>
+                                        <p className={classes.title}>
+                                            Automate your digital asset investments
+                                        </p>
+                                        <p className={classes.subtitle}>
+                                            1. Use proven on-chain strategies to manage risk in your portfolio 
+                                            <div style={{minHeight: 4}}/>
+                                            2. Stay in control of your assets and watch your portfolio grow
+                                        </p>
+                                    </div>
+                                    <div className={classes.actionButtons}>
+                                        <Horizontal align="center">
+                                            <Link component={LinkRouter} to="/home" style={{ textDecoration: 'none' }} >
+                                                <Button variant="contained" color="primary" style={{ width: 200, height: 40 }} >Launch App</Button>
+                                            </Link>
+                                            <Link href="./whitepaper.pdf" target="_blank" style={{ textDecoration: 'none' }} >
+                                                <Button variant="outlined" color="primary" style={{ width: 200, height: 40 }} >White paper</Button>
+                                            </Link>
+                                        </Horizontal>
+                                    </div>
+                                </div>
+                                <div className={classes.infoSection}>
+                                    <div className={classes.brightnessFilter}>
+                                         <img className={classes.imageDeFi} alt="DeFi"/>
+                                    </div>
+                                    <Horizontal> 
+                                        <ul>
+                                            <li>
+                                                <Typography variant="body2" >Build &amp; grow your digital asset portfolio</Typography> 
+                                            </li>
+                                            <li>
+                                            <Typography variant="body2" >Earn DAO tokens</Typography> 
+                                            </li>
+                                            <li>
+                                            <Typography variant="body2" >Participate in DAO Governance</Typography> 
+                                            </li>
+                                            <li>
+                                            <Typography variant="body2" >Collect protocol dividends</Typography> 
+                                            </li>
+                                        </ul>
+                                    </Horizontal>
+                                </div>
+
                             </Horizontal>
                         </div>
-                    </div>
+             
 
             </section>
 
@@ -218,7 +266,7 @@ export const Home = ({ chainId }: HomeProps) => {
                         <Typography variant="h4" align="center"> Frequently Asked Questions </Typography>
                     </Box>
                     <Horizontal align="center">
-                        <Box style={{maxWidth: 800}}>
+                        <Box style={{ maxWidth: 1024 }}>
                             <FaqContent />
                         </Box>
                     </Horizontal>

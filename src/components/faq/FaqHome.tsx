@@ -37,6 +37,7 @@ export const FaqHome = () => {
                     Be careful or you could loose your funds!
                 </Alert>
             </Box>
+            
             <FaqContent />
 
         </div>

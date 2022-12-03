@@ -2,14 +2,18 @@
 
 import React, { useState } from "react"
 
-import { Box, makeStyles, Tab, Typography, } from "@material-ui/core"
-import { TabContext, TabList, TabPanel, Skeleton } from "@material-ui/lab"
+import { Box, makeStyles, Tab, Link  } from "@material-ui/core"
+import { TabContext, TabList, TabPanel, Alert, AlertTitle } from "@material-ui/lab"
 
 import { Token } from "../../types/Token"
 
 import { FundAssetsSummary } from "./FundAssetsSummary"
 import { MyPortfolioAssetsSummary } from "./MyPortfolioAssetsSummary"
 import { DaoHome } from '../dao/DaoHome'
+import { StyledAlert } from "../shared/StyledAlert"
+import { ConnectButton } from "../../main/ConnectButton"
+import { Horizontal } from '../Layout';
+
 
 interface DashboardProps {
     chainId: number,
@@ -68,8 +72,24 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account } : Das
                 <TabPanel className={classes.tab} value="0" key={0}>
                  { account  &&  <MyPortfolioAssetsSummary chainId={chainId}  depositToken={depositToken} investTokens={investTokens} account={account} /> }
                  { !account &&  <Box style={{paddingTop: 80, paddingBottom: 80}}>
-                    <Typography align="center" > Connect an account to access your assets </Typography>
-                </Box>  }
+
+
+              
+                        <div style={{ textAlign: "center", maxWidth: 600, margin: 'auto', padding: 10}}>
+                            <StyledAlert severity="info" >
+                                <Horizontal align='center' valign='center'>
+                                    <div>
+                                        <AlertTitle>No account connected</AlertTitle>
+                                        Connect an account to the <Link href="https://academy.binance.com/en/articles/how-to-add-polygon-to-metamask" target="_blank">Polygon</Link> network to access your assets and use this dapp. <br/>
+                                    </div>
+                                    <div style={{ paddingLeft: 0, paddingRight: 0, marginTop: 10, marginBottom: 20 }} >
+                                        <ConnectButton />
+                                    </div>
+                                </Horizontal>
+                            </StyledAlert>
+                        </div>
+
+                </Box> }
                 </TabPanel>
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <FundAssetsSummary chainId={chainId}  depositToken={depositToken} investTokens={investTokens} />

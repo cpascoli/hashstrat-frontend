@@ -2,6 +2,8 @@
 
 import { makeStyles, Box, Typography } from "@material-ui/core"
 import { utils } from "ethers"
+import { useEthers } from "@usedapp/core";
+
 
 import { Token } from "../../types/Token"
 import { PoolSummary } from "../shared/PoolSummary"
@@ -11,6 +13,8 @@ import { VPieChart } from "../shared/VPieChart"
 import { useDashboardModel } from "./DashboadModel"
 
 import { fromDecimals } from "../../utils/formatter"
+import { PoolExplorer } from "../invest/PoolExprorer"
+
 
 interface FundAssetsSummaryProps {
     chainId: number,
@@ -45,7 +49,7 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
     
     const classes = useStyles()
     const tokens = [depositToken, ...investTokens]
-
+	const { account } = useEthers()
 
     const { poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool } = useDashboardModel(chainId, tokens, depositToken)
 
@@ -77,7 +81,7 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
         <div className={classes.container}>
          
             <Box>
-                <Typography variant="h4" align="center" >Value Under Management</Typography>
+                <Typography variant="h4" align="center" >Assets under Management</Typography>
                 <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 10}}>
                   Value of assets across all Pools &amp; Indexes (TVL)
                 </Typography>
@@ -107,6 +111,9 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
 
 
             </div>
+
+
+            <PoolExplorer chainId={chainId} account={account} depositToken={depositToken} />
 {/* 
             <Box my={4} >
                 <Typography variant="h4" align="center" >Asset Allocation</Typography>

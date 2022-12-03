@@ -1,4 +1,4 @@
-import { makeStyles, Box, Typography, CircularProgress } from "@material-ui/core"
+import { makeStyles, Box, Typography, Accordion, AccordionDetails, AccordionSummary, CircularProgress } from "@material-ui/core"
 import { utils } from "ethers"
 import { Alert, AlertTitle } from "@material-ui/lab"
 
@@ -13,8 +13,9 @@ import { PoolInfo } from "../../utils/pools"
 
 import { useDashboardModel } from "./DashboadModel"
 import { useTotalDeposited, useTotalWithdrawals } from "../../hooks/useUserInfo"
+import { DepositWorkflow } from "./DepositWorkflow"
 
-
+import { ExpandMore } from "@material-ui/icons"
 
 
 interface MyPortfolioAssetsSummaryProps {
@@ -140,47 +141,57 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                            ${ utils.commify(totalValueFormatted) }
                         </Typography>
                     </Box>
-                    <div className={classes.portfolioSummary} > 
 
-                        <Horizontal>
-                            <Box className={classes.portfolioInfo} >
-                            {
-                                tokensBalanceInfo && tokensBalanceInfo.map( asset => {
-                                    const valueFormatted = `${ utils.commify(asset.balance) } ($ ${  utils.commify(asset.value) })`
-                                    return  <TitleValueBox key={asset.symbol} title={asset.symbol} value={ valueFormatted }  mode="small" />
-                                })
+
+                    { !portfolioInfo?.totalValue.isZero && 
+
+                        <div className={classes.portfolioSummary} > 
+
+                            <Horizontal>
+                                <Box className={classes.portfolioInfo} >
+                                {
+                                    tokensBalanceInfo && tokensBalanceInfo.map( asset => {
+                                        const valueFormatted = `${ utils.commify(asset.balance) } ($ ${  utils.commify(asset.value) })`
+                                        return  <TitleValueBox key={asset.symbol} title={asset.symbol} value={ valueFormatted }  mode="small" />
+                                    })
+                                }
+
+                                </Box>
+
+                                <Box className={classes.portfolioInfo}>
+                                    <TitleValueBox mode="small" title="ROI" value={roiFormatted?.toString()??""} suffix="%" />
+                                    <TitleValueBox mode="small" title="My Deposits" value={ utils.commify(totalDepositedFormatted) } suffix={depositToken.symbol} />
+                                    <TitleValueBox mode="small" title="My Withdrawals" value={ utils.commify(totalWithdrawnFormatted) } suffix={depositToken.symbol} />
+                                </Box>
+                            </Horizontal>
+
+                            { totalValueFormatted  && Number(totalValueFormatted) > 0 &&
+                                <Box className={classes.portfolioCharts}>
+                                    <Horizontal align="center" >
+                                        <VPieChart { ...chartValueByAsset } /> 
+                                        <VPieChart  { ...chartValueByPool } />
+                                    </Horizontal>
+                                </Box>
                             }
+                        </div>
+                    }
 
-                            </Box>
+                    <Box my={4} >
+                        <DepositWorkflow  chainId={chainId} depositToken={depositToken} investTokens={investTokens} account={account} />
+                    </Box>
 
-                            <Box className={classes.portfolioInfo}>
-                                <TitleValueBox mode="small" title="ROI" value={roiFormatted?.toString()??""} suffix="%" />
-                                <TitleValueBox mode="small" title="My Deposits" value={ utils.commify(totalDepositedFormatted) } suffix={depositToken.symbol} />
-                                <TitleValueBox mode="small" title="My Withdrawals" value={ utils.commify(totalWithdrawnFormatted) } suffix={depositToken.symbol} />
-                            </Box>
-                        </Horizontal>
-
-                        { totalValueFormatted  && Number(totalValueFormatted) > 0 &&
-                            <Box className={classes.portfolioCharts}>
-                                <Horizontal align="center" >
-                                    <VPieChart { ...chartValueByAsset } /> 
-                                    <VPieChart  { ...chartValueByPool } />
-                                </Horizontal>
-                            </Box>
-                        }
-                    </div>
-
-                    { poolsSummaryViews && poolsSummaryViews.length > 0 &&
+                    {/* { poolsSummaryViews && poolsSummaryViews.length > 0 &&
                         <Box my={4} >
                             <Typography variant="h4" align="center" >Asset Allocation</Typography>
-                            <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 20}}>
+                            <Typography variant="body2" align="center" style={{marginTop: 10, marginBottom: 20}}>
                                 Your assets allocation in the different Pools
                             </Typography>
                             <Horizontal align="center" > 
                                 { poolsSummaryViews }
                             </Horizontal>
                         </Box>
-                    }
+                    } */}
+
                 </div>
             }
 

@@ -21,7 +21,6 @@ export const FaqContent = () => {
     return (
         <Box>
 
-
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
                     <Typography style={{fontSize: 20, fontWeight: 400}} > What is HashStrat?  </Typography>

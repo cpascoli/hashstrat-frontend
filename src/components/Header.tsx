@@ -175,7 +175,7 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 
 			}
 
-			{!isConnected && isHome &&
+			{/* {!isConnected && isHome &&
 				<div style={{ textAlign: "center", backgroundColor: theme.palette.type === 'light' ? '#e1eaeb' : '#384142', }}>
 					<StyledAlert severity="info" >
 						<Horizontal align='center' valign='center'>
@@ -194,7 +194,7 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 					</StyledAlert>
 				</div>
 
-			}
+			} */}
 
 
 			<Box className={classes.container}>

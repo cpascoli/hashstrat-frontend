@@ -196,7 +196,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
                 message: "Token transfer approved",
                 linkUrl: approveLink,
                 linkText: `View on ${NetworkExplorerName(chainId)}`,
-                snackDuration: 10000
+                snackDuration: 15000
             }
             setUserMessage({
                 type: "info",
@@ -215,7 +215,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
                 message: "Staking of LP tokens completed",
                 linkUrl: depositLink,
                 linkText: `View on ${NetworkExplorerName(chainId)}`,
-                snackDuration: 10000
+                snackDuration: 15000
             }
             setUserMessage({
                 type: "info",
@@ -236,7 +236,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
                 message: "Unstaking of LP tokens completed",
                 linkUrl: withdrawLink,
                 linkText: `View on ${NetworkExplorerName(chainId)}`,
-                snackDuration: 10000
+                snackDuration: 15000
             }
             setUserMessage({
                 type: "info",
@@ -255,98 +255,98 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
 
 
     return (
-        <>
-        <div className={classes.container}>
+        <Box p={3}>
+            <div className={classes.container}>
 
-            { userMessage &&
-                <div className={classes.info}>
-                     <StyledAlert severity={userMessage?.type}>
-                        <AlertTitle> {userMessage?.title} </AlertTitle>
-                        {userMessage?.message}
-                    </StyledAlert>
-                </div>
-            }
+                { userMessage &&
+                    <div className={classes.info}>
+                        <StyledAlert severity={userMessage?.type}>
+                            <AlertTitle> {userMessage?.title} </AlertTitle>
+                            {userMessage?.message}
+                        </StyledAlert>
+                    </div>
+                }
                 
-            <div className={classes.section1}>
-                <h1 className={classes.title}> { formType === 'stake' ? `Stake ${symbol}` : `Unstake ${symbol}` } </h1>
-                <Typography color="textSecondary"> 
-                    { formType === 'stake' ? 
-                        "First approve the token transfer and then Stake the tokens" : 
-                         "Unstake LP tokens to withdraw your funds in the Pool" 
-                    }
-                </Typography>
-            </div>
-            
-            <Divider />
+                <div className={classes.section1}>
+                    <h1 className={classes.title}> { formType === 'stake' ? `Stake ${symbol}` : `Unstake ${symbol}` } </h1>
+                    <Typography color="textSecondary"> 
+                        { formType === 'stake' ? 
+                            "First approve the token transfer and then Stake the tokens" : 
+                            "Unstake LP tokens to withdraw your funds in the Pool" 
+                        }
+                    </Typography>
+                </div>
+                
+                <Divider />
 
-            <Box mt={3} mb={4}>
-                <Grid container justifyContent="flex-start"> 
-                    <Link href="#" color="inherit" variant="body2" onClick={() => balancePressed()} style={{textDecoration: "underline"}} >
-                        Balance: {balance} 
-                    </Link> 
-                </Grid>
+                <Box mt={3} mb={4}>
+                    <Grid container justifyContent="flex-start"> 
+                        <Link href="#" color="inherit" variant="body2" onClick={() => balancePressed()} style={{textDecoration: "underline"}} >
+                            Balance: {balance} 
+                        </Link> 
+                    </Grid>
 
-                <Grid container justifyContent="space-between">
-                    {/* first row */}
-                    <Grid item xs={9} >
-                        <Input className={classes.amount} inputProps={{min: 0, style: { textAlign: 'right' }}}  
-                            value={amount} placeholder="0.0" autoFocus onChange={handleInputChange} /> 
-                    </Grid> 
-                    <Grid item xs={3} >
-                        <Box style={{paddingTop: 12, paddingLeft: 5}}>
-                            <Typography color="textSecondary" variant="body1" style={{minWidth:70}}>{symbol}</Typography>
-                        </Box>
-                    </Grid> 
-                    <Grid item xs={2} > </Grid> 
-                </Grid>
+                    <Grid container justifyContent="space-between">
+                        {/* first row */}
+                        <Grid item xs={9} >
+                            <Input className={classes.amount} inputProps={{min: 0, style: { textAlign: 'right' }}}  
+                                value={amount} placeholder="0.0" autoFocus onChange={handleInputChange} /> 
+                        </Grid> 
+                        <Grid item xs={3} >
+                            <Box style={{paddingTop: 12, paddingLeft: 5}}>
+                                <Typography color="textSecondary" variant="body1" style={{minWidth:70}}>{symbol}</Typography>
+                            </Box>
+                        </Grid> 
+                        <Grid item xs={2} > </Grid> 
+                    </Grid>
 
-            </Box>
-
-            { formType === 'stake' &&
-                <Box mb={2} >
-                    { showApproveButton &&
-                    <Button variant="contained" color="secondary" fullWidth disabled={ !isValidAmount }
-                        onClick={() => approveButtonPressed()} >
-                        Approve transfer
-                        { isApproveMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
-                    </Button>
-                    }
-
-
-                    { showDepositButton && 
-                    <Button variant="contained" color="primary" fullWidth  
-                        onClick={() => submitForm()} >
-                        { submitButtonTitle }
-                        { isDepositMining && <Horizontal >  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
-                    </Button>
-                    }
-
-                    { userMessage && userMessage.title === 'Staking completed' &&
-                        <Box mt={2} >
-                            <Button variant="contained" color="secondary" fullWidth onClick={onClose} >
-                                Close
-                            </Button>
-                        </Box>
-                    }
                 </Box>
-  
-            }  
-            { formType === 'unstake' &&
-                <Box mb={2} >
-                    <Button variant="contained" color="primary" fullWidth disabled={ !isValidAmount }
-                        onClick={() => submitForm()}>
-                        { submitButtonTitle }
-                        { isWithdrawMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
-                    </Button>
-                    { userMessage && userMessage.title === 'Unstaking completed' &&
-                        <Box mt={2} >
-                            <Button variant="contained" color="secondary" fullWidth onClick={onClose} >
-                                Close
-                            </Button>
-                        </Box>
-                    }
-                </Box>
-            }
+
+                { formType === 'stake' &&
+                    <Box mb={2} >
+                        { showApproveButton &&
+                        <Button variant="contained" color="secondary" fullWidth disabled={ !isValidAmount }
+                            onClick={() => approveButtonPressed()} >
+                            Approve transfer
+                            { isApproveMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
+                        </Button>
+                        }
+
+
+                        { showDepositButton && 
+                        <Button variant="contained" color="primary" fullWidth  
+                            onClick={() => submitForm()} >
+                            { submitButtonTitle }
+                            { isDepositMining && <Horizontal >  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
+                        </Button>
+                        }
+
+                        { userMessage && userMessage.title === 'Staking completed' &&
+                            <Box mt={2} >
+                                <Button variant="contained" color="secondary" fullWidth onClick={onClose} >
+                                    Close
+                                </Button>
+                            </Box>
+                        }
+                    </Box>
+    
+                }  
+                { formType === 'unstake' &&
+                    <Box mb={2} >
+                        <Button variant="contained" color="primary" fullWidth disabled={ !isValidAmount }
+                            onClick={() => submitForm()}>
+                            { submitButtonTitle }
+                            { isWithdrawMining && <Horizontal>  &nbsp; <CircularProgress size={22} color="inherit" />  </Horizontal>  }  
+                        </Button>
+                        { userMessage && userMessage.title === 'Unstaking completed' &&
+                            <Box mt={2} >
+                                <Button variant="contained" color="secondary" fullWidth onClick={onClose} >
+                                    Close
+                                </Button>
+                            </Box>
+                        }
+                    </Box>
+                }
 
             </div>
         
@@ -358,8 +358,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
                         { approveErc20State.errorMessage } { depositState.errorMessage } { withdrawState.errorMessage }
                     </Typography> : ''
             }
-
-        </>
+        </Box>
     )
 }
 

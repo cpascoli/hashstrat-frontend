@@ -27,7 +27,7 @@ const useStyle = makeStyles( theme => ({
         marginTop: 22,
         paddingBottom: 0,
         maxWidth: 800,
-        margin: "auto"
+        margin: "auto",
     },
     tabList: { 
         padding: 0,
@@ -77,10 +77,10 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
                 </TabList>
                 <TabPanel className={classes.tab} value="0" key={0}>
                     { account &&
-                        <>
+                        <Box>
                             <MyStatsView chainId={chainId} poolId={poolId} account={account} depositToken={depositToken} />
                             <WalletTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens!} />
-                        </>
+                        </Box>
                     || 
                         <Box py={8}>
                             <Typography align="center"> Connect an acount to view your assets</Typography>

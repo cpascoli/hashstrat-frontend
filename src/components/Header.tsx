@@ -133,8 +133,6 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 
 		setAccount(account)
 	}, [chainId, account])
-
-
 	
 
 	// manage menu
@@ -158,10 +156,8 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 	const theLocation = useLocation();
 	const isHome = theLocation.pathname === '/home'
 	const isRoot = theLocation.pathname === '/'
-
 	const isConnected = account !== undefined
 
-	console.log("isHome:", isHome, "isConnected", isConnected, "account", account, "path: ", theLocation.pathname)
 
 	return (
 
@@ -242,6 +238,10 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 
 								<nav>
 									
+									<Link component={RouterLink} to="/dao">
+										<MenuItem onClick={handleClose}> DAO </MenuItem>
+									</Link>
+									
 									<Link component={RouterLink} to="/invest">
 										<MenuItem onClick={handleClose}> Invest </MenuItem>
 									</Link>
@@ -257,6 +257,8 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 									<Link href="./whitepaper.pdf" target="_blank">
 										<MenuItem onClick={handleClose}>Whitepaper</MenuItem>
 									</Link>
+
+
 
 									<Divider />
 

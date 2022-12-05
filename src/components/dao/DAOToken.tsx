@@ -123,7 +123,7 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
                 message: "HST tokens claimed",
                 linkUrl: claimedLink,
                 linkText: `View on ${NetworkExplorerName(chainId)}`,
-                snackDuration: 10000
+                snackDuration: 15000
             }
             setUserMessage({
                 type: "info",

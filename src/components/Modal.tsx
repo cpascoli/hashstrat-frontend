@@ -12,7 +12,7 @@ const useStyles = makeStyles( theme => ({
          backgroundColor: theme.palette.type == 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
          boxShadow: "0 1px 27px 0 rgba(0,0,0,0.19)",
          borderRadius: "10px",
-         padding: "14px",
+         padding: "0px",
          zIndex: 120,
          color: theme.palette.text.primary,
      },

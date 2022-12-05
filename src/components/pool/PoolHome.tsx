@@ -25,7 +25,7 @@ export const PoolHome = ({ chainId, poolId, account, tokens, investToken } : Poo
     const { name, description } = PoolInfo(chainId, poolId)
 
     return (
-        <Box px={2} pt={2}>
+        <Box px={0} pt={2}>
             <Breadcrumbs aria-label="breadcrumb" style={{paddingLeft: 10, paddingRight: 10}} >
                 <Link component={RouterLink} to="/home"> Home </Link>
                 <Link component={RouterLink} to="/invest"> Invest </Link>

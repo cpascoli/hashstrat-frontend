@@ -3,7 +3,7 @@
         {
             "poolId": "index01v3a",
             "name": "Rebal/MeanRev/TrendFollow [BTC]",
-            "description": "Index over all BTC strategies with equal weights",
+            "description": "Index over 3 BTC strategies with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
             "strategy": "rebalance_01,meanrev_01,trendfollow_01",
@@ -12,7 +12,7 @@
         {
             "poolId": "index02v3a",
             "name": "Rebal/MeanRev/TrendFollow [ETH]",
-            "description": "Index over all ETH strategies with equal weights",
+            "description": "Index over 3 ETH strategies with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WETH"],
             "strategy": "rebalance_01,meanrev_01,trendfollow_01",
@@ -22,7 +22,7 @@
         {
             "poolId": "index03v3a",
             "name": "Rebal/MeanRev/TrendFollow [BTC,ETH]",
-            "description": "Index over all BTC and ETH strategies with equal weights",
+            "description": "Index over 3 BTC and ETH strategies with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WBTC", "WETH"],
             "strategy": "rebalance_01,meanrev_01,trendfollow_01",

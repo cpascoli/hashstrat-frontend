@@ -7,7 +7,8 @@ import { useStakedTokenBalance } from "../../hooks/useFarm"
 
 import { StyledAlert } from "../shared/StyledAlert"
 import { TitleValueBox } from '../TitleValueBox'
-import { DepositWithdrawForm } from './DepositWithdrawForm'
+import { DepositForm } from './DepositForm'
+import { WithdrawForm } from './WithdrawForm'
 import { SnackInfo } from "../SnackInfo"
 import { Modal } from "../Modal"
 import { Token } from "../../types/Token"
@@ -51,8 +52,7 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
   const { symbol, image, address } = token
   const { account } = useEthers()
   const tokenBalance = useTokenBalance(address, account)
-  const formattedTokenBalance = tokenBalance ? fromDecimals(tokenBalance, token.decimals, 2) : ''
-
+  const formattedTokenBalance = tokenBalance ? fromDecimals(tokenBalance, token.decimals, 6) : ''
 
   const tokenStakedBalance = useStakedTokenBalance(chainId, poolId, account)
   const formattedTokenStakedBalance = tokenStakedBalance && fromDecimals(tokenStakedBalance, token.decimals, 2)
@@ -61,7 +61,7 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
 
   const showModalPressed = (buttonType: 'deposit' | 'withdraw') => {
     if (Number(formattedTokenBalance) > 0) {
-      setShowUDepositWithdrawModal(true)
+        setShowUDepositWithdrawModal(true)
     }
     setFormTypeValue(buttonType)
   }
@@ -130,18 +130,33 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
 
           { showUDepositWithdrawModal && account && (
             <Modal onClose={(e) => hideModalPreseed()}>
-              <DepositWithdrawForm
-                formType={formTypeValue}
-                balance={formattedTokenBalance}
-                chainId={chainId}
-                poolId={poolId}
-                token={token}
-                account={account}
-                handleSuccess={handleSuccess}
-                handleError={handleError}
-                allowanceUpdated={handleAllowanceUpdated}
-                onClose={hideModalPreseed}
-              /> 
+              { formTypeValue === "deposit" && 
+                <DepositForm
+                  balance={formattedTokenBalance}
+                  chainId={chainId}
+                  poolId={poolId}
+                  token={token}
+                  account={account}
+                  handleSuccess={handleSuccess}
+                  handleError={handleError}
+                  allowanceUpdated={handleAllowanceUpdated}
+                  onClose={hideModalPreseed}
+                /> 
+              }
+
+              { formTypeValue === "withdraw" && 
+                <WithdrawForm
+                  balance={formattedTokenBalance}
+                  chainId={chainId}
+                  poolId={poolId}
+                  token={token}
+                  account={account}
+                  handleSuccess={handleSuccess}
+                  handleError={handleError}
+                  allowanceUpdated={handleAllowanceUpdated}
+                  onClose={hideModalPreseed}
+                /> 
+              }
             </Modal>
           )}
       </Box>

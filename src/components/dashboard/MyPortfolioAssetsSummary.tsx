@@ -1,4 +1,8 @@
-import { makeStyles, Box, Typography, Accordion, AccordionDetails, AccordionSummary, CircularProgress } from "@material-ui/core"
+
+import { useState, useEffect } from "react"
+
+import { makeStyles, Box, Link, Typography, Button, Snackbar, CircularProgress } from "@material-ui/core"
+
 import { utils } from "ethers"
 import { Alert, AlertTitle } from "@material-ui/lab"
 
@@ -15,7 +19,11 @@ import { useDashboardModel } from "./DashboadModel"
 import { useTotalDeposited, useTotalWithdrawals } from "../../hooks/useUserInfo"
 import { DepositWorkflow } from "./DepositWorkflow"
 
-import { ExpandMore } from "@material-ui/icons"
+import { Modal } from "../Modal"
+import { StyledAlert } from "../shared/StyledAlert"
+
+import { SnackInfo } from "../SnackInfo"
+
 
 
 interface MyPortfolioAssetsSummaryProps {
@@ -23,15 +31,20 @@ interface MyPortfolioAssetsSummaryProps {
     account?: string,
     depositToken: Token,
     investTokens: Array<Token>,
+
+    onPortfolioLoad? : (didLoad: boolean) => void
 }
 
 
 const useStyles = makeStyles( theme => ({
     container: {
         padding: theme.spacing(2),
+        [theme.breakpoints.down('xs')]: {
+            padding: theme.spacing(0),
+        },
     },
     portfolioSummary: {
-        maxWidth: 700,
+        maxWidth: 900,
         margin: "auto"
     },
     portfolioInfo: {
@@ -48,17 +61,28 @@ const useStyles = makeStyles( theme => ({
 }))
 
 
-export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, account } : MyPortfolioAssetsSummaryProps) => {
+export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, account, onPortfolioLoad } : MyPortfolioAssetsSummaryProps) => {
     
     const classes = useStyles()
     const tokens = [depositToken, ...investTokens]
- 
+
 
     const { poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool, didLoad } = useDashboardModel(chainId, tokens, depositToken, account)
 
     const totalDeposited = useTotalDeposited(chainId, account)
     const totalWithdrawn = useTotalWithdrawals(chainId, account)
     
+    const [showDepositModal, setShowDepositModal] = useState(false);
+    const [showBuildPortfolio, setShowBuildPortfolio]  = useState(false);
+
+    const depositButtonPressed = () => {
+        setShowDepositModal(true)
+    }
+
+    const hideModalPreseed = () => {
+        setShowDepositModal(false)
+      }
+
     const tokensBalanceInfo = Object.values(portfolioInfo.tokenBalances).map( (item ) => {
         return {
             symbol: item.symbol,
@@ -68,13 +92,10 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
             decimals: item.decimals
        }
     })
-
-
- 
+    
     const userHasDisabledPools = [...indexesInfo, ...poolsInfo].filter( pool => pool.totalValue.isZero() === false ).reduce( (acc, val ) => {
         return acc = acc || PoolInfo(chainId, val.poolId).disabled === 'true'
     }, false)
-
 
 
     const poolsSummaryViews = [...indexesInfo, ...poolsInfo].filter( pool => pool.totalValue.isZero() === false ).map ( pool => {
@@ -85,7 +106,6 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                     depositToken={depositToken}
                     account={account}
                  />
-   
     })
 
     const totalValueFormatted = portfolioInfo.totalValue && fromDecimals( portfolioInfo.totalValue, depositToken.decimals, 2)
@@ -96,7 +116,44 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                             String(Math.round( 10000 * (parseFloat(totalWithdrawnFormatted) + parseFloat(totalValueFormatted) - parseFloat(totalDepositedFormatted)) / parseFloat(totalDepositedFormatted)) / 100 ) : 'n/a'
 
 
-    // console.log("account", account, "totalValueFormatted: ", totalValueFormatted)
+    // show build portfolio workfow if have no assets
+    useEffect(() => {
+        if ( didLoad && totalValueFormatted === "0") {
+            setShowBuildPortfolio(true)
+		} 
+        if (onPortfolioLoad) {
+            onPortfolioLoad(didLoad)
+        }
+
+	}, [didLoad, totalValueFormatted])
+
+    
+    /// DepositWorkflow Callbacks
+    const hidePortfolioWorkflow = () => {
+        setShowDepositModal(false)
+        setShowBuildPortfolio(false)
+    }
+
+    const handleSuccess = (info: SnackInfo) => {
+        setSnackContent(info)
+        setShowSnack(true)
+    }
+
+    const handleError = (error: SnackInfo) => {
+        setSnackContent(error)
+        setShowSnack(true)
+    }
+
+
+
+
+    // SNACK
+    const [showSnack, setShowSnack] = useState(false)
+    const [snackContent, setSnackContent] = useState<SnackInfo>()
+
+    const handleCloseSnack = () => {
+        setShowSnack(false)
+    }
 
 
     return (
@@ -129,23 +186,36 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
 
             {  didLoad && account &&
                 <div>
+                    { didLoad && showBuildPortfolio && 
+                        <Box mb={4}>
+                            <Horizontal align="center"> 
+                                <DepositWorkflow  
+                                    chainId={chainId} 
+                                    depositToken={depositToken} 
+                                    investTokens={investTokens}
+                                    isInitialDeposit={true}
+                                    account={account} 
+                                    onClose={hidePortfolioWorkflow}
+                                    onSuccess={handleSuccess}
+                                    onError={handleError}
+                                />                     
+                            </Horizontal>
+                        </Box>
+                    }
 
-
-
-                    <Box>
-                        <Typography variant="h4" align="center" > Portfolio Summary </Typography>
-                        <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 10}}>
-                            The value of your assets across all Pools &amp; Indexes
-                        </Typography>
-                        <Typography variant="h5" align="center" style={{marginTop: 0, marginBottom: 20}}>
-                           ${ utils.commify(totalValueFormatted) }
-                        </Typography>
-                    </Box>
-
-
-                    { !portfolioInfo?.totalValue.isZero && 
+                    { !showBuildPortfolio  && 
 
                         <div className={classes.portfolioSummary} > 
+
+                            <Box>   
+                                <Typography variant="h4" align="center" > Portfolio Summary </Typography>
+                                <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 10}}>
+                                    The total value of your assets
+                                </Typography>
+                                <Typography variant="h5" align="center" style={{marginTop: 0, marginBottom: 20}}>
+                                ${ utils.commify(totalValueFormatted) }
+                                </Typography>
+                            </Box>
 
                             <Horizontal>
                                 <Box className={classes.portfolioInfo} >
@@ -174,13 +244,10 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                                 </Box>
                             }
                         </div>
+                        
                     }
 
-                    <Box my={4} >
-                        <DepositWorkflow  chainId={chainId} depositToken={depositToken} investTokens={investTokens} account={account} />
-                    </Box>
-
-                    {/* { poolsSummaryViews && poolsSummaryViews.length > 0 &&
+                    { !showBuildPortfolio && poolsSummaryViews && poolsSummaryViews.length > 0 &&
                         <Box my={4} >
                             <Typography variant="h4" align="center" >Asset Allocation</Typography>
                             <Typography variant="body2" align="center" style={{marginTop: 10, marginBottom: 20}}>
@@ -190,10 +257,48 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                                 { poolsSummaryViews }
                             </Horizontal>
                         </Box>
-                    } */}
+                    }
 
+                    { !showBuildPortfolio &&
+                        <Horizontal align="center"> 
+                            <Button variant="contained" onClick={depositButtonPressed} color="primary" size="large" > Deposit </Button>
+                        </Horizontal>
+                    }
+
+                    { showDepositModal && 
+                        <Modal onClose={(e) => hideModalPreseed()}>
+                            <Box m={0}>
+                                <DepositWorkflow  
+                                    chainId={chainId} 
+                                    depositToken={depositToken} 
+                                    investTokens={investTokens} 
+                                    isInitialDeposit={false}
+                                    account={account} 
+                                    onClose={hidePortfolioWorkflow}
+                                    onSuccess={handleSuccess}
+                                    onError={handleError}
+                                />
+                            </Box>
+
+                        </Modal>
+                    }
                 </div>
             }
+
+
+            <Snackbar
+                open={showSnack}
+                anchorOrigin={ { horizontal: 'right',  vertical: 'bottom' } }
+                autoHideDuration={snackContent?.snackDuration ?? 15000}
+                onClose={handleCloseSnack}
+            >
+                <StyledAlert onClose={handleCloseSnack} severity={snackContent?.type}>
+                    <AlertTitle> {snackContent?.title} </AlertTitle>
+                    {snackContent?.message}
+                    <br/>
+                    <Link href={snackContent?.linkUrl} target="_blank"> {snackContent?.linkText} </Link>
+                </StyledAlert>
+            </Snackbar>
 
         </div>
     )

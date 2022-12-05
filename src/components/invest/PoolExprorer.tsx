@@ -1,5 +1,4 @@
-import { makeStyles, Box, Link, Typography, Breadcrumbs, Checkbox, FormControl, InputLabel, Select, MenuItem,
-     FormControlLabel, FormGroup, Button, Popover, Paper, Divider } from "@material-ui/core"
+import { makeStyles, Box, Link, Typography, FormControl, InputLabel, Select, MenuItem, Button, Popover, Paper } from "@material-ui/core"
 import { useState } from "react";
 
 import { Token } from "../../types/Token"
@@ -85,7 +84,6 @@ const isMyPool = (pool: PoolData) : boolean => {
 
 
 const filterPools = (chainId: number, poolsInfo: PoolData[], strategy: string | undefined, asset: string | undefined, mypools: boolean) => {
-    console.log("filterPools strategy", strategy, "asset", asset)
 
     const filtered = poolsInfo.filter( pool => { 
 
@@ -193,9 +191,9 @@ export const PoolExplorer = ({ chainId, account, depositToken } : PoolExplorerPr
             <Box my={4} >
                 <Paper>
 
-                    <Box py={2} >
+                    <Box pt={2} >
 
-                        <Horizontal align="center"  >
+                        <Horizontal align="center">
                             <Typography variant="body1" align="center" >
                                 Select a strategy/asset combination to find a Pool or an Index to invest
                                 <Button onClick={handleClick0} style={{ height: 40, width: 40 }} ><Info /></Button>
@@ -251,26 +249,22 @@ export const PoolExplorer = ({ chainId, account, depositToken } : PoolExplorerPr
                                         </Select>
                                     </FormControl>
 
-                                    <FormGroup>
-                                        <FormControlLabel control={<Checkbox checked={mypools} onChange={ e => handleMyPoolsChange(e) }  />} label="My Pools" />
-                                    </FormGroup>
-
                                 </Horizontal>
                             </Box>
 
                     </Horizontal>
 
+                    { poolsViews && poolsViews.length > 0 && 
+                        <Box py={3} >
+                            <Horizontal align="center"> { poolsViews } </Horizontal>
+                        </Box>
+                    }
+                    
                 </Paper>
 
             </Box>
 
-            { poolsViews && poolsViews.length > 0 && 
-                <Paper>
-                    <Box py={3} >
-                        <Horizontal align="center"> { poolsViews } </Horizontal>
-                    </Box>
-                </Paper>
-            }
+
         </Box>
     )
 }

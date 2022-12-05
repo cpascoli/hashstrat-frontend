@@ -21,6 +21,9 @@ const useStyles = makeStyles( theme => ({
 
     container: {
         paddingTop: theme.spacing(2),
+        [theme.breakpoints.up('xs')]: {
+            padding: theme.spacing(1),
+        },
     },
     tabList: { 
         maxWidth: 800,
@@ -50,9 +53,11 @@ export const DaoHome = ({ chainId, account, depositToken } : DaoHomeProps ) => {
 
         <Box className={classes.container}>
 
-            <Box px={2} mt={0}>
+            <Box px={2} mt={0} pt={2}>
                 <Typography>
                     The HashStrat <strong>DAO</strong> is the decentralized organization running the protocol. <br/>
+                </Typography>
+                <Typography style={{ marginTop: 10 }}>
                     Users of the protocol can farm their DAO tokens (HST), collect their share of the protocol dividends and partecipate to the governance process. 
                 </Typography>
             </Box>

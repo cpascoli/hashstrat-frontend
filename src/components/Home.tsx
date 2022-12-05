@@ -1,7 +1,7 @@
 
 
 
-import { Button, Typography, makeStyles, Divider, Link, Box, styled } from "@material-ui/core"
+import { Button, Typography, makeStyles, Divider, Link, Box, Paper } from "@material-ui/core"
 import { Link as LinkRouter } from "react-router-dom"
 import { InfoBox } from "./InfoBox"
 
@@ -13,8 +13,7 @@ import key from "./img/key.svg"
 import automated from "./img/automated.svg"
 import lock from "./img/lock.svg"
 import dao from "./img/dao.svg"
-import experienceDefi from "./img/experience-defi-light.png"
-// import experienceDefiDark from "./img/experience-defi-dark.png"
+import experienceDefi from "./img/experience-defi.png"
 
 
 
@@ -23,9 +22,6 @@ const useStyle = makeStyles(theme => ({
     topSection: {
         paddingTop: 70,
         paddingBottom: 50,
-        // backgroundColor: "red",
-    
-        // justifyContent: "space-around",
         [theme.breakpoints.down('sm')]: {
             paddingTop: 50,
             paddingBottom: 50,
@@ -45,20 +41,21 @@ const useStyle = makeStyles(theme => ({
         margin: 0,
         maxWidth: 800,
         fontFamily: "Alexandria",
-        fontWeight: 400,
-        fontSize: "52px",
-        color: theme.palette.text.primary,
+        fontWeight: 600,
+        fontSize: "2.8rem",
+        color:  theme.palette.type === 'light' ? theme.palette.grey[800] : theme.palette.text.primary,
 
         [theme.breakpoints.down('xs')]: {
-            fontSize: "2.1rem",
+            fontSize: "1.9rem",
             textAlign: 'center'
         },
     },
     subtitle: {
-        fontFamily: "Alexandria",
+        fontFamily: "Roboto",
         fontWeight: 300,
+        maxWidth: 800,
         fontSize: "1.5rem",
-        color: theme.palette.type === 'light' ? theme.palette.text.primary : '#ffaf49',
+        color: theme.palette.type === 'light' ? theme.palette.grey[700] : '#ffaf49',
         [theme.breakpoints.down('xs')]: {
             fontSize: "1.3rem",
             textAlign: 'center'
@@ -115,6 +112,7 @@ const useStyle = makeStyles(theme => ({
     },
 
     infoSection: {
+        paddingBottom: 10,
         [theme.breakpoints.down('md')]: {
             display: "none",
         },
@@ -148,20 +146,20 @@ export const Home = ({ chainId }: HomeProps) => {
         <Divider style={{ marginTop: 0, marginBottom: 0 }} />
 
             <section className={classes.topSection}>
-          
                     
                         <div className={classes.titleSection} >
                             <Horizontal align="center">
                                 <div>
                                     <div>
-                                        <p className={classes.title}>
+                                        <div className={classes.title}>
                                             Automate your digital asset investments
-                                        </p>
-                                        <p className={classes.subtitle}>
-                                            1. Use proven on-chain strategies to manage risk in your portfolio 
-                                            <div style={{minHeight: 4}}/>
-                                            2. Stay in control of your assets and watch your portfolio grow
-                                        </p>
+                                        </div>
+                                        <div className={classes.subtitle}>
+                                            <ul>
+                                                <li>Use proven on-chain strategies to build your digital asset portfolio, capture volatility and manage risk in your investment. </li>
+                                                <li>Stay in control of your assets and watch your portfolio grow. </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                     <div className={classes.actionButtons}>
                                         <Horizontal align="center">
@@ -174,27 +172,30 @@ export const Home = ({ chainId }: HomeProps) => {
                                         </Horizontal>
                                     </div>
                                 </div>
-                                <div className={classes.infoSection}>
-                                    <div className={classes.brightnessFilter}>
-                                         <img className={classes.imageDeFi} alt="DeFi"/>
+
+                                <Paper>
+                                    <div className={classes.infoSection}>
+                                        <div className={classes.brightnessFilter}>
+                                            <img className={classes.imageDeFi} alt="Info graphics"/>
+                                        </div>
+                                        <Horizontal> 
+                                            <ol>
+                                                <li>
+                                                    <Typography variant="body2" >Build your digital asset portfolio</Typography> 
+                                                </li>
+                                                <li>
+                                                <Typography variant="body2" >Earn DAO tokens</Typography> 
+                                                </li>
+                                                <li>
+                                                <Typography variant="body2" >Participate in DAO Governance</Typography> 
+                                                </li>
+                                                <li>
+                                                <Typography variant="body2" >Collect protocol dividends</Typography> 
+                                                </li>
+                                            </ol>
+                                        </Horizontal>
                                     </div>
-                                    <Horizontal> 
-                                        <ul>
-                                            <li>
-                                                <Typography variant="body2" >Build &amp; grow your digital asset portfolio</Typography> 
-                                            </li>
-                                            <li>
-                                            <Typography variant="body2" >Earn DAO tokens</Typography> 
-                                            </li>
-                                            <li>
-                                            <Typography variant="body2" >Participate in DAO Governance</Typography> 
-                                            </li>
-                                            <li>
-                                            <Typography variant="body2" >Collect protocol dividends</Typography> 
-                                            </li>
-                                        </ul>
-                                    </Horizontal>
-                                </div>
+                                </Paper>
 
                             </Horizontal>
                         </div>

@@ -32,6 +32,9 @@ const App = () => {
 				paper: toggleDark ? '#424242' : '#fff',
 				default: toggleDark ? '#303030' : '#909090',
 			 },
+			 action: { 
+				active: toggleDark ? '#E4821B' : '#1c7ec5',
+			 }
 		},	
 
 	});

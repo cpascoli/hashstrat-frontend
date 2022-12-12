@@ -29,19 +29,20 @@ export const FaqContent = () => {
                     <Typography variant="body1" >
                         <ul>
                             <li>
-                                HashStrat is a new DeFi protocol for investing in digital assets (e.g. BTC & ETH) with a long-term outlook.
+                                HashStrat is a new DeFi protocol to help you invest in digital assets with a long-term outlook.
                             </li>
                             <li>
-                                With HashStrat you can build a portfolio of digital assets and let on-chain strategies automatically manage risk for you.
+                                You select what assets you want to hold (e.g. BTC &amp; ETH), pick your favourite management strategies (e.g. Rebalancing, Mean Reversion, etc. ) and the protocol takes care of the rest. 
                             </li>
                             <li>
-                                You pick your combination of assets &amp; management strategies, you deposit USDC and the protocol takes care of the rest.
+                                Your management strategies determine the initial allocation of your portfolio and automate risk management for you.
+                            </li>
+
+                            <li>
+                                Your strategies decide when to spend USDC to buy more of your favourite assets and when to sell into USDC to offload some risk.
                             </li>
                             <li>
-                                Your strategies decide when to spend USDC to buy your favourite assets and when to sell into USDC to offload some risk.
-                            </li>
-                            <li>
-                                You can withdraw the funds in your portfolio in USDC at any time.
+                                HashStrat is a trustless, self-custodial protocol, which means you stay in control of your assets at all times.
                             </li>
                         </ul>
 
@@ -56,11 +57,12 @@ export const FaqContent = () => {
                 </AccordionSummary>
                 <AccordionDetails >
                     <Typography variant="body1" >
-                        HashStrat will help you to invest in digital assets:
+                        HashStrat can help you to be a more successful, long-term investor:
                         <ul>
-                            <li>Our on-chain strategies can dramatically reduce volatility &amp; drawdowns of your portfolio and produce returns competitive with a simple holding strategy.</li>
-                            <li>Reduced volatility helps you to avoid FOMO buying or panic selling your investments at the wrong time. </li>
-                            <li>HashStrat will make it easier for you to stay invested for longer and rip greater returns over the long term.</li>
+                            <li>Automated portfolio management prevents FOMO-buying or panic-selling your investments at the wrong time. </li>
+                            <li>Built-in risk management helps to lock-in gains when price &amp; sentiment is high and scaling in your investments when price &amp; sentiment is low.</li>
+                            <li>Our strategies can dramatically reduce volatility &amp; drawdowns of your portfolio and aim for returns competitive with a simple holding strategy.</li>
+                            <li>HashStrat will make it easier for you to stay invested for longer and reap greater rewards over the long term.</li>
                         </ul>
 
                         Being an honest DeFi protocol, you'll also get all the benefits of DeFi:

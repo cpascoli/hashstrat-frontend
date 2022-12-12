@@ -75,8 +75,8 @@ export const StrategyCarousel = () =>  {
         {
             name: "Mean Reversion",
             description: "A strategy to dollar-cost average in and out a risk asset according to its long term trend",
-            goal: "Accumulate the asset when its price is significantly below its long term trend and progressively divest when it's significantly above.",
-            rule: "Dollar-cost average i is below its 350D moveing average",
+            goal: "Accumulate the risk asset when its price is significantly below its long term trend and progressively divest when it's significantly above.",
+            rule: "",
             returns: "8.5x",
             timeframe: "From Jan 2019 to July 2022",
             link: "https://medium.com/@hashstrat/hashstrat-mean-reversion-strategy-b1a576b05d5f"
@@ -84,7 +84,7 @@ export const StrategyCarousel = () =>  {
         {
             name: "Rebalancing",
             description: "A strategy to rebalance a 2 asset portfolio",
-            goal: "Capture volatility in the risk asset the value of either assets deviates significantly from the rebalancing target.",
+            goal: "Capture volatility in the risk asset when the relative value of either asset in the portfolio deviates significantly from the portfolio's target allocation.",
             rule: "",
             returns: "6.4x",
             timeframe: "From Jan 2019 to July 2022",
@@ -94,7 +94,7 @@ export const StrategyCarousel = () =>  {
         {
             name: "Trend Following",
             description: "A momentum strategy trading in the direction of the underlying trend",
-            goal: "Capture volatility in the risk asset when its price is moving in a sustained direction.",
+            goal: "Capture volatility in the risk asset when its price is moving in an uptrend and sell into stable assets when the trend reverses.",
             rule: "",
             returns: "18.9x",
             timeframe: "From Jan 2019 to July 2022",
@@ -115,6 +115,7 @@ export const StrategyCarousel = () =>  {
                 }} 
 
                 autoPlay={true}
+                stopAutoPlayOnHover={true}
                 navButtonsAlwaysVisible={true}
                 cycleNavigation={false}
                 swipe={true}

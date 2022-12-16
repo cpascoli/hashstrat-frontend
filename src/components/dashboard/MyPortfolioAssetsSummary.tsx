@@ -23,11 +23,13 @@ import { Modal } from "../Modal"
 import { StyledAlert } from "../shared/StyledAlert"
 
 import { SnackInfo } from "../SnackInfo"
-
+import { ConnectButton } from "../../main/ConnectButton"
+import { ConnectAccountHelper } from "./ConnectAccountHelper"
 
 
 interface MyPortfolioAssetsSummaryProps {
     chainId: number,
+    connectedChainId: number | undefined,
     account?: string,
     depositToken: Token,
     investTokens: Array<Token>,
@@ -61,7 +63,7 @@ const useStyles = makeStyles( theme => ({
 }))
 
 
-export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, account, onPortfolioLoad } : MyPortfolioAssetsSummaryProps) => {
+export const MyPortfolioAssetsSummary = ({ chainId, connectedChainId, depositToken, investTokens, account, onPortfolioLoad } : MyPortfolioAssetsSummaryProps) => {
     
     const classes = useStyles()
     const tokens = [depositToken, ...investTokens]
@@ -81,7 +83,7 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
 
     const hideModalPreseed = () => {
         setShowDepositModal(false)
-      }
+    }
 
     const tokensBalanceInfo = Object.values(portfolioInfo.tokenBalances).map( (item ) => {
         return {
@@ -165,13 +167,7 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                 </div>
             }
          
-            { didLoad && !account &&
-                <Box>
-                    <Typography variant="body2" align="center" style={{marginTop: 20, marginBottom: 20}}>
-                        Connect an account to the Polygon netowrk to access your Assets across all Pools &amp; Indexes
-                    </Typography>
-                </Box>
-            }
+
 
             { userHasDisabledPools && 
                 <Box pb={2} >
@@ -210,7 +206,7 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                             <Box>   
                                 <Typography variant="h4" align="center" > Portfolio Summary </Typography>
                                 <Typography variant="body1" align="center" style={{marginTop: 20, marginBottom: 10}}>
-                                    The total value of your assets
+                                    Total value of your assets
                                 </Typography>
                                 <Typography variant="h5" align="center" style={{marginTop: 0, marginBottom: 20}}>
                                 ${ utils.commify(totalValueFormatted) }
@@ -235,6 +231,15 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                                 </Box>
                             </Horizontal>
 
+
+                            { !showBuildPortfolio &&
+                                <Box mt={4} mb={2} >
+                                    <Horizontal align="center"> 
+                                        <Button variant="contained" onClick={depositButtonPressed} color="primary" size="large" > Deposit </Button>
+                                    </Horizontal>
+                                </Box>
+                            }
+
                             { totalValueFormatted  && Number(totalValueFormatted) > 0 &&
                                 <Box className={classes.portfolioCharts}>
                                     <Horizontal align="center" >
@@ -246,6 +251,8 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                         </div>
                         
                     }
+
+
 
                     { !showBuildPortfolio && poolsSummaryViews && poolsSummaryViews.length > 0 &&
                         <Box my={4} >
@@ -259,15 +266,12 @@ export const MyPortfolioAssetsSummary = ({ chainId, depositToken, investTokens, 
                         </Box>
                     }
 
-                    { !showBuildPortfolio &&
-                        <Horizontal align="center"> 
-                            <Button variant="contained" onClick={depositButtonPressed} color="primary" size="large" > Deposit </Button>
-                        </Horizontal>
-                    }
+
+    
 
                     { showDepositModal && 
                         <Modal onClose={(e) => hideModalPreseed()}>
-                            <Box m={0}>
+                            <Box pl={2} pr={2}>
                                 <DepositWorkflow  
                                     chainId={chainId} 
                                     depositToken={depositToken} 

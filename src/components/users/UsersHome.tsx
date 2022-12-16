@@ -83,7 +83,7 @@ export const UsersHome = ({ chainId } : UsersHomeProps) => {
             <Divider style={{marginTop:30, marginBottom: 30}}/>
 
             { account && 
-                <MyPortfolioAssetsSummary chainId={chainId} depositToken={depositToken!} investTokens={investTokens} account={account} />
+                <MyPortfolioAssetsSummary chainId={chainId} connectedChainId={undefined} depositToken={depositToken!} investTokens={investTokens} account={account} />
             }
         </div>
     )

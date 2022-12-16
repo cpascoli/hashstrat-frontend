@@ -12,12 +12,9 @@ import { BigNumber } from "ethers"
 import { TitleValueBox } from "../TitleValueBox"
 import { TokenInfo } from "../../types/TokenInfo"
 
-import { ExpandMore } from "@material-ui/icons"
-
 import usdc from "../img/usdc.png"
 import wbtc from "../img/wbtc.png"
 import weth from "../img/weth.png"
-import { Horizontal } from "../Layout"
 
 
 interface PoolSummaryProps {
@@ -97,7 +94,7 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken, account } :
                     <Box className={classes.pool}>
                         <Typography variant="h6" align="center"> {name} </Typography>
                         <Typography variant="body2"> {description} </Typography>
-                        <Box>{assetImages} </Box>
+                        <Box pt={2}>{assetImages} </Box>
                         <Divider variant="fullWidth" style={{marginTop: 20, marginBottom: 20}} />
                         <TitleValueBox title="TVL" value={`$ ${utils.commify(totalValueFormatted)}`} mode="small" />
                         <TitleValueBox title="My Share" value={myShareFormatted} mode="small" />

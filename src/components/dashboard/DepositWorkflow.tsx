@@ -352,7 +352,7 @@ export const DepositWorkflow = ({ chainId, depositToken, investTokens, isInitial
                             Deposit
                         </Typography>
                         <Typography variant="body1"  style={{marginTop: 5}} align="center">
-                            Select a combination of assets and management strategies to deposit.
+                            Select a combination of assets and management strategies for this deposit.
                         </Typography>
                     </Box>
 

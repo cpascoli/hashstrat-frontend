@@ -223,7 +223,6 @@ export const DaoOperationsContract = (chainId: number) => {
 
 // returns a map of { token_symbol => price_feed_contract }
 export const FeedContractsForTokens = (chainId: number) : { [x: string]: Contract } => {
-
     if (!chainId) return {}
 
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]

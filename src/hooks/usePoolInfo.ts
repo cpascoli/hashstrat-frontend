@@ -579,7 +579,6 @@ export const useTokensInfoForPools = (chainId: number, poolIds: string[], tokens
     // the the balance of all tokens in all pools
     const poolsBalancesResponse = useTokensPoolsBalances(chainId, tokens, poolsInfo)
 
-
     const poolsBalanceWithTokenValues = poolsBalancesResponse.map ( pool => {
        
         const lpBalance = lpBalances[pool.poolId].lpBalance 

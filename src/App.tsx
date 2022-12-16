@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { DAppProvider, Goerli, Polygon } from '@usedapp/core';
+import { DAppProvider, Goerli, Polygon, ChainId, Mainnet } from '@usedapp/core';
 
 import { Container } from '@material-ui/core'
 import { Main } from './components/Main'
@@ -13,6 +13,23 @@ const App = () => {
 
 	const darkMode = localStorage.getItem("darkMode") === "dark"
 	const [toggleDark, setToggleDark] = useState(darkMode);
+
+
+	const useDappConfig = {
+		defaultNetwork: Polygon.chainId,
+		// networks: [Goerli, Polygon],
+		readOnlyChainId: Polygon.chainId,
+		readOnlyUrls: {
+			[Goerli.chainId]: getDefaultProvider('goerli'),
+			[Polygon.chainId]: getDefaultProvider('matic'),
+		},
+		notifications: {
+			expirationPeriod: 1000,
+			checkInterval: 100,
+		},
+		// refresh: "everyBlock",
+	};
+	  
 
 	const appTheme = createTheme({
 		palette: {
@@ -39,6 +56,14 @@ const App = () => {
 
 	});
 
+	appTheme.typography.h3 = {
+		fontSize: '2.2rem',
+		fontWeight: 400,
+        [appTheme.breakpoints.down('sm')]: {
+			fontSize: '1.8rem',
+        },
+	};
+
 	appTheme.typography.h4 = {
 		fontSize: '1.9rem',
 		fontWeight: 400,
@@ -59,22 +84,7 @@ const App = () => {
 
 	return (
 		<ThemeProvider theme={{ ...appTheme }}>
-
-			<DAppProvider config={{
-				networks: [Goerli, Polygon],
-				readOnlyChainId: Polygon.chainId,
-				readOnlyUrls: {
-					[Goerli.chainId]: getDefaultProvider('goerli'),
-					[Polygon.chainId]: getDefaultProvider('matic'),
-				},
-				// pollingInterval
-				notifications: {
-					expirationPeriod: 1000,
-					checkInterval: 100,
-				},
-				refresh: "everyBlock", //"everyBlock", // "never"| "everyBlock"
-			}}>
-
+			<DAppProvider config={useDappConfig}>
 				<CssBaseline />
 				<Container maxWidth="xl" disableGutters>
 					<Main toggleDark={toggleDark} setToggleDark={setToggleDark} />

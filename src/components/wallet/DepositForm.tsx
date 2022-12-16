@@ -201,9 +201,6 @@ export const DepositForm = ({ chainId, poolId, token, balance, handleSuccess, ha
     const showApproveButton =  (isApproveMining || (!allowanceOk && !isDepositMining)) // !allowanceOk  &&  !isDepositMining
     const showDepositButton =  ( !(isApproveMining || (!allowanceOk && !isDepositMining)) && (allowanceOk || isDepositMining)) // (allowanceOk || isDepositMining) && !isApproveMining
 
-    console.log(">>> balance: ", balance)
-
-
     return (
         <Box p={3}>
             
@@ -234,7 +231,7 @@ export const DepositForm = ({ chainId, poolId, token, balance, handleSuccess, ha
                 { Number(balance) == 0  &&
                     <div >
                         <StyledAlert severity="warning">
-                            <AlertTitle> Your need {symbol} tokens to deposit</AlertTitle>
+                            <AlertTitle> Fund your account with USDC to deposit </AlertTitle>
                             You can get {token.symbol} tokens directly on Polygon using <Link href="https://quickswap.exchange/#/swap" target="_blank"> QuickSwap</Link>,
                             or transfer {token.symbol} from Ethereum to Polygon via the <Link href="https://wallet.polygon.technology/bridge" target="_blank">Polygon Bridge</Link>
                         </StyledAlert>

@@ -1,6 +1,9 @@
 
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
+
+import {  Polygon } from '@usedapp/core';
+
 
 import { Box, makeStyles, Tab, Link, Typography  } from "@material-ui/core"
 import { TabContext, TabList, TabPanel, AlertTitle } from "@material-ui/lab"
@@ -13,9 +16,12 @@ import { StyledAlert } from "../shared/StyledAlert"
 import { ConnectButton } from "../../main/ConnectButton"
 import { Horizontal } from '../Layout';
 
+import { ConnectAccountHelper } from "./ConnectAccountHelper"
+
 
 interface DashboardProps {
     chainId: number,
+    connectedChainId: number | undefined,
     account?: string,
     depositToken: Token,
     investTokens: Array<Token>,
@@ -49,11 +55,9 @@ const useStyles = makeStyles( theme => ({
 
 
 
-export const Dashboard = ({ chainId, depositToken, investTokens, account } : DashboardProps) => {
+export const Dashboard = ({ chainId, connectedChainId, depositToken, investTokens, account } : DashboardProps) => {
     
-    const [didLoad, setDidLoad]  = useState(false);
-
-
+    const wrongNetwork = connectedChainId !== Polygon.chainId
 
     const selIdx =  0 //account === undefined ? 1 : 0
     const classes = useStyles()
@@ -64,10 +68,8 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account } : Das
     }
 
     const handleDidLoad = (didLoad: boolean ) => {
-        console.log("handleDidLoad", didLoad)
-        setDidLoad(didLoad)
+        console.log("Dashboad - portfolio did load", didLoad)
     }
-
 
     return (
         <div className={classes.container} >
@@ -77,28 +79,14 @@ export const Dashboard = ({ chainId, depositToken, investTokens, account } : Das
                     <Tab label="HashStrat" value="1" key={1}  />
                 </TabList>
                 <TabPanel className={classes.tab} value="0" key={0}>
-                 { account  &&  
-                    <MyPortfolioAssetsSummary chainId={chainId}  depositToken={depositToken} investTokens={investTokens} account={account} onPortfolioLoad={handleDidLoad} /> 
-                }
-                 { !account &&  
-                    <Box style={{ paddingTop: 10, paddingBottom: 10 }}>
-                        <div style={{ textAlign: "center", maxWidth: 600, margin: 'auto', padding: 10 }}>
-                            <StyledAlert severity="info" >
-                                <Horizontal align='center' valign='center'>
-                                    <div>
-                                        <AlertTitle>No account connected</AlertTitle>
-                                        <Typography>
-                                             Connect an account to the <Link href="https://academy.binance.com/en/articles/how-to-add-polygon-to-metamask" target="_blank">Polygon</Link> network to use this dapp. <br/>
-                                        </Typography>
-                                    </div>
-                                    <div style={{ paddingLeft: 0, paddingRight: 0, marginTop: 10, marginBottom: 20 }} >
-                                        <ConnectButton />
-                                    </div>
-                                </Horizontal>
-                            </StyledAlert>
-                        </div>
 
-                </Box> }
+                { (account === undefined || wrongNetwork) &&
+                    <ConnectAccountHelper connectedChainId={connectedChainId} />
+                }
+
+                { account && !wrongNetwork &&
+                    <MyPortfolioAssetsSummary chainId={chainId} connectedChainId={connectedChainId} depositToken={depositToken} investTokens={investTokens} account={account} onPortfolioLoad={(handleDidLoad)} /> 
+                }
                 </TabPanel>
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <FundAssetsSummary chainId={chainId}  depositToken={depositToken} investTokens={investTokens} />

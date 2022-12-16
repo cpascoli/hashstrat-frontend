@@ -103,7 +103,6 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
     }, initValues )
 
  
-
     const didLoad : boolean = Object.values(tokenBalances).reduce( (loaded, token ) : boolean => {
         return (loaded && token.loaded === true)
     }, true )

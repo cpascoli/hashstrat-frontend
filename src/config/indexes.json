@@ -33,7 +33,7 @@
         {
             "poolId": "index04v3a",
             "name": "Rebalancing [BTC,ETH]",
-            "description": "Index over the Rebalancing strategy for BTC and ETH with equal weights",
+            "description": "Index over the BTC and ETH Rebalancing strategies with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WBTC", "WETH"],
             "strategy": "rebalance_01",
@@ -42,7 +42,7 @@
         {
             "poolId": "index05v3a",
             "name": "Mean Reversion [BTC,ETH]",
-            "description": "Index over the Mean Reversion strategy for BTC and ETH with equal weights",
+            "description": "Index over the BTC and ETH Mean Reversion strategies with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WBTC", "WETH"],
             "strategy": "meanrev_01",
@@ -52,7 +52,7 @@
         {
             "poolId": "index06v3a",
             "name": "Trend Following [BTC,ETH]",
-            "description": "Index over the Trend Following strategy for BTC and ETH with equal weights",
+            "description": "Index over the BTC and ETH Trend Following strategies with equal weights",
             "depositToken": "USDC",
             "investTokens": ["WBTC", "WETH"],
             "strategy": "trendfollow_01",

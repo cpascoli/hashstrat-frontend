@@ -4,7 +4,7 @@ import { useEthers, Polygon, shortenAddress } from "@usedapp/core";
 import { styled } from "@material-ui/core/styles"
 
 import { useTheme, Button, Link, Menu, MenuProps, MenuItem, Divider, Typography, makeStyles, Box, Switch } from "@material-ui/core"
-import { Menu as MenuIcon, KeyboardArrowDown, WbSunny, Brightness3 } from "@material-ui/icons"
+import { Menu as MenuIcon, KeyboardArrowDown, KeyboardArrowUp, WbSunny, Brightness3 } from "@material-ui/icons"
 
 
 import { Alert, AlertTitle } from "@material-ui/lab"
@@ -54,6 +54,11 @@ const useStyles = makeStyles(theme => ({
 		alignContent: "middle",
 	},
 
+	menu: {
+        // border: `2px solid ${theme.palette.secondary.main}`,
+		borderRadius: 10,
+	},
+
 	menuItems: {
 		display: "flex",
 		justifyContent: "space-around",
@@ -101,10 +106,12 @@ interface HeaderProps {
 
 	setAccount: React.Dispatch<React.SetStateAction<string | undefined>>,
 	setChainId: React.Dispatch<React.SetStateAction<number | undefined>>,
+
+	wrongNetworkHandler: (chainId: number) => void,
 }
 
 
-export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: HeaderProps) => {
+export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId, wrongNetworkHandler }: HeaderProps) => {
 
 	const classes = useStyles()
 	const theme = useTheme();
@@ -123,26 +130,29 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 	const { account, deactivate, chainId } = useEthers()
 
 	useEffect(() => {
+		setAccount(account)
 		if (chainId) {
 			const network = NetworkName(chainId) ?? "Unknown"
 			setNetworkName(network)
-
-			const supportedChain = chainId === Polygon.chainId  // || chainId === Goerli.chainId
-			setChainId(supportedChain ? chainId : undefined)
+			wrongNetworkHandler(chainId)
 		}
-
-		setAccount(account)
+	
 	}, [chainId, account])
 	
 
 	// manage menu
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
+
+	const [menuOpen, setMenuOpen] = useState(false)
+
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
+		setMenuOpen(true)
 	};
 	const handleClose = () => {
 		setAnchorEl(null);
+		setMenuOpen(false)
 	};
 
 	const disconnectPressed = () => {
@@ -162,43 +172,12 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 	return (
 
 		<header>
-			{chainId !== Polygon.chainId && account && isHome &&
-
-				<Alert severity="warning" style={{ marginBottom: 10 }} >
-					<AlertTitle>Wrong Network</AlertTitle>
-					Connect to the <strong>Polygon</strong> network to use the dapp
-				</Alert>
-
-			}
-
-			{/* {!isConnected && isHome &&
-				<div style={{ textAlign: "center", backgroundColor: theme.palette.type === 'light' ? '#e1eaeb' : '#384142', }}>
-					<StyledAlert severity="info" >
-						<Horizontal align='center' valign='center'>
-							<div>
-								<AlertTitle>No account connected</AlertTitle>
-								Connect an account to the <strong>Polygon</strong> network to use the dapp.
-								Follow <Link href="https://academy.binance.com/en/articles/how-to-add-polygon-to-metamask" target="_blank">
-									these instructions
-								</Link> if you need help with your digital wallet
-
-							</div>
-							<div style={{ paddingLeft: 0, paddingRight: 0 }} >
-								<ConnectButton />
-							</div>
-						</Horizontal>
-					</StyledAlert>
-				</div>
-
-			} */}
-
 
 			<Box className={classes.container}>
 
 				<Link component={RouterLink} to="/" >
 					<Button> <img src={logImg} style={{ width: 55, height: 55 }} className={classes.logoFilter} /> </Button>
 				</Link>
-
 				
 				<div className={classes.rightItmesContainer}>
 
@@ -209,21 +188,22 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 						</div>
 					}
 
-					
 					{ isConnected && !isRoot &&
 						<div>
 							
-							<Button
+							<Button className={classes.menu}
 								id="account-button"
-								aria-controls={open ? 'account-menu' : undefined}
-								aria-haspopup="true"
-								aria-expanded={open ? 'true' : undefined}
-								variant="contained"
+								// aria-controls={open ? 'account-menu' : undefined}
+								// aria-haspopup="true"
+								// aria-expanded={open ? 'true' : undefined}
+								variant="outlined"
+								color='secondary'
 								disableElevation
 								onClick={handleClick}
-								endIcon={<KeyboardArrowDown />}
+								endIcon={ menuOpen ? <KeyboardArrowUp /> : <KeyboardArrowDown /> }
 							>
-								{isConnected ? shortAccount :
+								
+								{ isConnected ? shortAccount :
 									<MenuIcon />}
 							</Button>
 
@@ -235,7 +215,6 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId }: He
 								onClose={handleClose}
 							>
 									
-
 								<nav>
 									
 									<Link component={RouterLink} to="/dao">

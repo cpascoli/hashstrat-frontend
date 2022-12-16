@@ -3,7 +3,7 @@
         {
             "poolId": "pool01v3a",
             "name": "Rebalancing [BTC]",
-            "description": "A self-balancing Pool targeting 60% BTC and 40% USDC allocation",
+            "description": "A self-balancing strategy targeting 60% BTC and 40% USDC allocation",
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
             "strategy": "rebalance_01",
@@ -13,7 +13,7 @@
         {
             "poolId": "pool02v3a",
             "name": "Rebalancing [ETH]",
-            "description": "A self-balancing Pool targeting 60% ETH and 40% USDC allocation",
+            "description": "A self-balancing strategy targeting 60% ETH and 40% USDC allocation",
             "depositToken": "USDC",
             "investTokens": ["WETH"],
             "strategy": "rebalance_01",
@@ -23,7 +23,7 @@
         {
             "poolId": "pool03v3a",
             "name": "Mean Reversion [BTC]",
-            "description": "Pool dollar-cost averaging in/out BTC using a 350D mean reversion strategy",
+            "description": "Strategy dollar-cost averaging in and out BTC according to its long-term trend",
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
             "strategy": "meanrev_01",
@@ -33,7 +33,7 @@
         {
             "poolId": "pool04v3a",
             "name": "Mean Reversion [ETH]",
-            "description": "Pool dollar-cost averaging in/out ETH using a 350D mean reversion strategy",
+            "description": "Strategy dollar-cost averaging in and out ETH according to its long-term trend",
             "depositToken": "USDC",
             "investTokens": ["WETH"],
             "strategy": "meanrev_01",
@@ -43,7 +43,7 @@
         {
             "poolId": "pool05v3a",
             "name": "Trend Following [BTC]",
-            "description": "Pool allocating to BTC with a trend following strategy",
+            "description": "Strategy allocating to BTC during an uptrend and to USDC otherwise",
             "depositToken": "USDC",
             "investTokens": ["WBTC"],
             "strategy": "trendfollow_01",
@@ -53,7 +53,7 @@
         {
             "poolId": "pool06v3a",
             "name": "Trend Following [ETH]",
-            "description": "Pool allocating to ETH with a trend following strategy",
+            "description": "Strategy allocating to ETH during an uptrend and to USDC otherwise",
             "depositToken": "USDC",
             "investTokens": ["WETH"],
             "strategy": "trendfollow_01",

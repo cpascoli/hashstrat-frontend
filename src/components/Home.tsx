@@ -79,6 +79,7 @@ const useStyle = makeStyles(theme => ({
         paddingRight: 5,
         paddingBottom: 40,
         color: theme.palette.type === 'light' ? theme.palette.grey[900] : theme.palette.grey[100],
+        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[100] : theme.palette.grey[900] 
     },
 
     midSection: {
@@ -94,8 +95,33 @@ const useStyle = makeStyles(theme => ({
             paddingLeft: 0,
             paddingRight: 0,
         },
-
     },
+
+    faqSection: {
+        // margin: "auto",
+        paddingTop: 30,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingBottom: 20,
+        // backgroundColor: theme.palette.type === 'light' ? 'white' : theme.palette.grey[900],
+        color: theme.palette.type === 'light' ? theme.palette.grey[900] : theme.palette.grey[100],
+        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
+
+        [theme.breakpoints.down('sm')]: {
+            paddingLeft: 0,
+            paddingRight: 0,
+        },
+    },
+
+    faqContent: {
+         maxWidth: 1024,
+         margin: "auto",
+
+         [theme.breakpoints.down('sm')]: {
+            maxWidth: 400,
+        },
+    },
+
     valuesSection: {
         backgroundColor: theme.palette.type === 'light' ? 'white' : theme.palette.grey[900],
 
@@ -208,7 +234,7 @@ export const Home = ({ chainId }: HomeProps) => {
                 <Divider style={{ marginTop: 0, marginBottom: 40 }} />
 
                 <Box pb={2}>
-                    <Typography variant="h4" align="center">Our Strategies</Typography>
+                    <Typography variant="h3" align="center">Our Strategies</Typography>
                 </Box>
                 <StrategyCarousel />
             </section>
@@ -216,7 +242,7 @@ export const Home = ({ chainId }: HomeProps) => {
             <section className={classes.midSection}>
 
                 <Box pb={2}>
-                    <Typography variant="h4" align="center">Our Values</Typography>
+                    <Typography variant="h3" align="center">Our Values</Typography>
                 </Box>
 
                 <Box  className={classes.valuesSection} >
@@ -232,7 +258,7 @@ export const Home = ({ chainId }: HomeProps) => {
                     <InfoBox title="DAO Governance" image={dao}>
                         <Typography variant="body2">
                             Users can participate in protocol governance and revenue sharing through
-                            the HashStrat DAO token (<Link component={LinkRouter} to="/dao">HST</Link>). <br />
+                            the HashStrat DAO token (<Link component={LinkRouter} to="/dao">HST</Link>).
                             HST has a fixed supply and fair distribution.
                             It can only be earned by using of the protocol.
                         </Typography>
@@ -256,21 +282,20 @@ export const Home = ({ chainId }: HomeProps) => {
 
                 </Box>
 
+                <Divider style={{ marginTop: 40, marginBottom: 0 }} />
+
             </section>
 
-            <section className={classes.midSection}  > 
-
-            <Divider style={{ marginTop: 0, marginBottom: 40 }} />
-
+            <section className={classes.faqSection}  > 
                 <Box>
                     <Box pb={3} >
-                        <Typography variant="h4" align="center"> Frequently Asked Questions </Typography>
+                        <Typography variant="h3" align="center"> Frequently Asked Questions </Typography>
                     </Box>
-                    <Horizontal align="center">
-                        <Box style={{ maxWidth: 1024 }}>
-                            <FaqContent />
-                        </Box>
-                    </Horizontal>
+                  
+                    <Box className={classes.faqContent}>
+                        <FaqContent />
+                    </Box>
+                  
                 </Box>
             </section>
         </Box>

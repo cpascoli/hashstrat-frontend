@@ -83,22 +83,22 @@ export const DepositToken = (chainId: number) : (Token | undefined) => {
 export const PoolIds = (chainId: number) : Array<string> => {
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
     const pools = poolsInfo[networkName as keyof typeof poolsInfo] as any
-    const poolIds = pools.map( (pool: { [x: string]: any }) => {
+    const poolIds = pools && pools.map( (pool: { [x: string]: any }) => {
         return pool["poolId"]
     })
 
-    return poolIds
+    return poolIds ?? []
 }
 
 
 export const IndexesIds = (chainId: number) : string[] => {
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]
     const indexes = indexesInfo[networkName as keyof typeof poolsInfo] as any
-    const indexesIds = indexes.map( (index: { [x: string]: any }) => {
+    const indexesIds = indexes && indexes.map( (index: { [x: string]: any }) => {
         return index["poolId"]
     })
 
-    return indexesIds
+    return indexesIds || []
 }
 
 

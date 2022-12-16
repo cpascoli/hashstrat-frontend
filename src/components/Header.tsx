@@ -5,13 +5,8 @@ import { styled } from "@material-ui/core/styles"
 
 import { useTheme, Button, Link, Menu, MenuProps, MenuItem, Divider, Typography, makeStyles, Box, Switch } from "@material-ui/core"
 import { Menu as MenuIcon, KeyboardArrowDown, KeyboardArrowUp, WbSunny, Brightness3 } from "@material-ui/icons"
-
-
-import { Alert, AlertTitle } from "@material-ui/lab"
 import { useLocation, Link as RouterLink } from "react-router-dom"
-import { StyledAlert } from "./shared/StyledAlert"
 import { NetworkName } from "../utils/network"
-import { Horizontal } from './Layout';
 
 import { ConnectButton } from "../main/ConnectButton"
 import homeLight from "./img/home-light.svg"

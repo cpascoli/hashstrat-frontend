@@ -94,10 +94,9 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
 
     return (
         <Box className={classes.container} >
-
             <BrowserRouter>
-
                 <Header toggleDark={toggleDark} setToggleDark={setToggleDark} setAccount={setAccount} setChainId={setChainId} wrongNetworkHandler={wrongNetworkHandler} />
+                
                 <MainWithTitle>
                     <Routes>
                         <Route path="/"  element={
@@ -149,11 +148,10 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                              })
                          }
                     </Routes>
-            </MainWithTitle>
+                </MainWithTitle>
             </BrowserRouter>
-
+            
             <Footer />
-        
         </Box>
     )
 

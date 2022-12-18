@@ -1,52 +1,52 @@
+import { useEffect, useState } from "react";
 
-import { useState, useEffect } from 'react';
-import { utils } from "ethers"
-
-
-import { useEthers, Polygon, shortenAddress } from "@usedapp/core";
-import { makeStyles, Box, Button, Typography, Link } from "@material-ui/core"
-import { Alert, AlertTitle } from "@material-ui/lab"
+import { useEthers, Polygon } from "@usedapp/core";
+import { makeStyles, Box, Button, Typography } from "@material-ui/core"
+import { AlertTitle } from "@material-ui/lab"
 
 import { ConnectButton } from "../../main/ConnectButton"
 import { StyledAlert } from "../shared/StyledAlert"
-import { Horizontal } from "../Layout"
-
-
 
 
 const useStyles = makeStyles( theme => ({
     container: {
-        padding: 10, 
-        textAlign: "center", 
-        maxWidth: 600,
-        margin: 'auto', 
-        height: "60vh",
-
-        // height: 100%;
         display: "flex",
-        flexCirection: "column"
-        
-    },
-
+        flexDirection: "column",
+        justifyContent: "center",
+        textAlign: "center", 
+        maxWidth: 650,
+        margin: 'auto', 
+        marginBottom: 40,
+        height: "100%",
+    }
 }))
 
 
 
 interface ConnectAccountHelperProps {
     connectedChainId: number | undefined
+    userMessage: string | undefined
 }
 
 
-export const ConnectAccountHelper = ( {connectedChainId} : ConnectAccountHelperProps ) => {
+export const ConnectAccountHelper = ( { connectedChainId, userMessage } : ConnectAccountHelperProps ) => {
 
     const classes = useStyles()
     const { switchNetwork, chainId, account } = useEthers()
     const isPolygon = connectedChainId === Polygon.chainId
-   
+
+    const [showError, setShowError]= useState(false)
+
+    const purposeMessage = userMessage ?? "interact with HashStrat"
+
+    useEffect(() => {
+        setTimeout( () => setShowError(true), 500)
+    }, [])
+
+
     return (
-    
-        <Box className={classes.container}>
-            
+        <Box>
+            { showError && <Box className={classes.container}>
                 <StyledAlert severity={ isPolygon ? "info" : "warning"} >
                     <Box>
                             <AlertTitle>
@@ -54,8 +54,8 @@ export const ConnectAccountHelper = ( {connectedChainId} : ConnectAccountHelperP
                                 { isPolygon && account === undefined &&  <Box> No Account connected</Box> }
                             </AlertTitle>
 
-                            { isPolygon &&  <Typography> Please connect an account to the Polygon network to interact with HashStrat.</Typography> }
-                            { !isPolygon && <Typography> Please connect to the Polygon network to interact with HashStrat.</Typography> }
+                            { isPolygon &&  <Typography> Please connect an account to the <strong>Polygon</strong> network to {purposeMessage}.</Typography> }
+                            { !isPolygon && <Typography> Please connect to the <strong>Polygon</strong> network to {purposeMessage}.</Typography> }
 
                             <div style={{ marginTop: 30, marginBottom: 20 }} >
                                 { !isPolygon && 
@@ -69,7 +69,8 @@ export const ConnectAccountHelper = ( {connectedChainId} : ConnectAccountHelperP
                             </div>
                     </Box>
                 </StyledAlert>
-
+            </Box>
+            }
         </Box> 
     )
 }

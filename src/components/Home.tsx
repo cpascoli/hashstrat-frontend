@@ -98,12 +98,10 @@ const useStyle = makeStyles(theme => ({
     },
 
     faqSection: {
-        // margin: "auto",
         paddingTop: 30,
         paddingLeft: 20,
         paddingRight: 20,
         paddingBottom: 20,
-        // backgroundColor: theme.palette.type === 'light' ? 'white' : theme.palette.grey[900],
         color: theme.palette.type === 'light' ? theme.palette.grey[900] : theme.palette.grey[100],
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
 
@@ -114,7 +112,7 @@ const useStyle = makeStyles(theme => ({
     },
 
     faqContent: {
-         maxWidth: 1024,
+         maxWidth: 1200,
          margin: "auto",
 
          [theme.breakpoints.down('sm')]: {

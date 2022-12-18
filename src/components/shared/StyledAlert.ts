@@ -5,5 +5,5 @@ import { Alert } from "@material-ui/lab";
 export const StyledAlert = styled(Alert)(({ theme }) => ({
     margin: "auto",
     border:   `1px solid ${theme.palette.primary.main}`,
-    borderRadius: 20,
+    borderRadius: 12,
 }));

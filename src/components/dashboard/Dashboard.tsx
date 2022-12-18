@@ -1,27 +1,22 @@
 
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useContext } from "react"
 
-import {  Polygon } from '@usedapp/core';
+import { AppContext } from "../../context/AppContext"
 
-
-import { Box, makeStyles, Tab, Link, Typography  } from "@material-ui/core"
-import { TabContext, TabList, TabPanel, AlertTitle } from "@material-ui/lab"
+import { makeStyles, Tab, Box  } from "@material-ui/core"
+import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 
 import { Token } from "../../types/Token"
 
 import { FundAssetsSummary } from "./FundAssetsSummary"
 import { MyPortfolioAssetsSummary } from "./MyPortfolioAssetsSummary"
-import { StyledAlert } from "../shared/StyledAlert"
-import { ConnectButton } from "../../main/ConnectButton"
-import { Horizontal } from '../Layout';
-
 import { ConnectAccountHelper } from "./ConnectAccountHelper"
+import { Vertical } from "../Layout"
 
 
 interface DashboardProps {
     chainId: number,
-    connectedChainId: number | undefined,
     account?: string,
     depositToken: Token,
     investTokens: Array<Token>,
@@ -55,9 +50,9 @@ const useStyles = makeStyles( theme => ({
 
 
 
-export const Dashboard = ({ chainId, connectedChainId, depositToken, investTokens, account } : DashboardProps) => {
+export const Dashboard = ({ chainId, depositToken, investTokens, account } : DashboardProps) => {
     
-    const wrongNetwork = connectedChainId !== Polygon.chainId
+    const { connectedChainId, wrongNetwork } = useContext(AppContext);
 
     const selIdx =  0 //account === undefined ? 1 : 0
     const classes = useStyles()
@@ -71,6 +66,8 @@ export const Dashboard = ({ chainId, connectedChainId, depositToken, investToken
         console.log("Dashboad - portfolio did load", didLoad)
     }
 
+    console.log("Dashboad - connectedChainId:", connectedChainId, "")
+
     return (
         <div className={classes.container} >
             <TabContext value={selectedTokenIndex.toString()}>
@@ -80,11 +77,15 @@ export const Dashboard = ({ chainId, connectedChainId, depositToken, investToken
                 </TabList>
                 <TabPanel className={classes.tab} value="0" key={0}>
 
-                { (account === undefined || wrongNetwork) &&
-                    <ConnectAccountHelper connectedChainId={connectedChainId} />
+                { (connectedChainId && (!account || wrongNetwork(connectedChainId))) &&
+                    <Box style={{height: 500}}>
+                        <Vertical >
+                            <ConnectAccountHelper connectedChainId={connectedChainId} userMessage="view your portfolio" />
+                        </Vertical>
+                    </Box>
                 }
 
-                { account && !wrongNetwork &&
+                { !(connectedChainId && (!account || wrongNetwork(connectedChainId))) &&
                     <MyPortfolioAssetsSummary chainId={chainId} connectedChainId={connectedChainId} depositToken={depositToken} investTokens={investTokens} account={account} onPortfolioLoad={(handleDidLoad)} /> 
                 }
                 </TabPanel>

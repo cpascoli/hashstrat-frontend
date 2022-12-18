@@ -1,12 +1,16 @@
-import React, { useState } from "react"
-import { Box, Tab, makeStyles, Divider, Typography } from "@material-ui/core"
-import { TabContext, TabList, TabPanel } from "@material-ui/lab"
+import React, { useState, useContext } from "react"
+import { Box, Tab, makeStyles } from "@material-ui/core"
+import { red } from "@material-ui/core/colors"
 
+import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 import { Token } from "../../../types/Token"
 import { MyStatsView } from "./MyStatsView"
 import { IndexStatsView } from "./IndexStatsView"
 import { WalletTabs } from "../../wallet/WalletTabs"
-import { red } from "@material-ui/core/colors"
+import { ConnectAccountHelper } from "../../dashboard/ConnectAccountHelper"
+import { Vertical } from "../../Layout"
+
+import { AppContext } from "../../../context/AppContext"
 
 
 interface IndexTabsProps {
@@ -29,17 +33,19 @@ const useStyle = makeStyles( theme => ({
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     },
     tab: { 
-          padding: 0,
           maxWidth: 800,
           margin: "auto",
           paddingTop: 20,
+          paddingBottom: 20,
           backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     },
 }))
 
 
 
-export const IndexTabs = ( { chainId, poolId, account, tokens, investTokens } : IndexTabsProps ) => {
+export const IndexTabs = ( { chainId, poolId, account, tokens } : IndexTabsProps ) => {
+
+    const { connectedChainId, wrongNetwork } = useContext(AppContext);
 
     const depositToken = tokens[0]
 
@@ -50,7 +56,6 @@ export const IndexTabs = ( { chainId, poolId, account, tokens, investTokens } : 
         setSelectedTokenIndex(parseInt(newValue))
     }
 
-  
     return (
         <Box className={classes.container}>
             <TabContext value={selectedTokenIndex.toString()}>
@@ -60,14 +65,17 @@ export const IndexTabs = ( { chainId, poolId, account, tokens, investTokens } : 
                 </TabList>
 
                 <TabPanel className={classes.tab} value="0" key={0}>
-                    { account &&
+                    { (connectedChainId && (!account || wrongNetwork(connectedChainId))) &&
+                        <Box style={{height: 400}} px={2}>
+                            <Vertical >
+                                <ConnectAccountHelper connectedChainId={connectedChainId} userMessage="view your assets" />
+                            </Vertical>
+                        </Box>
+                    }
+                    { connectedChainId && account && !wrongNetwork(connectedChainId) &&
                         <Box>
                             <MyStatsView chainId={chainId} poolId={poolId} account={account} depositToken={depositToken} />
                             <WalletTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens!} />
-                        </Box>
-                    || 
-                        <Box py={8}>
-                            <Typography align="center"> Connect an acount to view your assets</Typography>
                         </Box>
                     }
                 </TabPanel>

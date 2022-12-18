@@ -34,15 +34,15 @@ const useStyles = makeStyles( theme => ({
         flexFlow: "row wrap",
         alignItems: "center",
         gap: theme.spacing(2)
-      },
-      horizontalVerticallyCenteredLeftAligned: {
+    },
+    horizontalVerticallyCenteredLeftAligned: {
         display: "flex",
         flexDirection: "row",
         flexFlow: "row wrap",
         alignItems: "center",
         gap: theme.spacing(2),
-      },
-      horizontalVerticallyCenteredSpaceBetween: {
+    },
+    horizontalVerticallyCenteredSpaceBetween: {
         display: "flex",
         justifyContent: "space-between",
         flexDirection: "row",
@@ -50,7 +50,16 @@ const useStyles = makeStyles( theme => ({
         alignItems: "center",
         gap: theme.spacing(2),
         width: "100%"
-      },
+    },
+
+
+    verticalCenter: {
+        display: "flex",
+        // backgroundColor: 'purple',
+        height: "100%",
+        justifyContent: "space-around",
+    },
+
 }))
 
 export const Page = ({ children } : ChildrenProps) => {
@@ -78,3 +87,11 @@ export const Horizontal = ({ children, align = "left" , valign, spacing } : Chil
     )
 }
 
+export const Vertical = ({children } : ChildrenProps) => {
+    const classes = useStyles()
+    return (
+        <div className={ classes.verticalCenter} >
+            {children}
+        </div>
+    )
+}

@@ -4,7 +4,6 @@
 
 import { makeStyles,  Link, Box, Accordion, AccordionDetails, AccordionSummary, Typography, Breadcrumbs, Divider } from  "@material-ui/core"
 import { ExpandMore } from "@material-ui/icons"
-import { Alert, AlertTitle } from "@material-ui/lab"
 import { Link as RouterLink } from "react-router-dom"
 
 
@@ -22,9 +21,8 @@ const useStyles = makeStyles( theme => ({
             fontWeight: 500,
         },
     }
-
-
 }))
+
 
 export const FaqContent = () => {
 
@@ -43,10 +41,10 @@ export const FaqContent = () => {
                                 HashStrat is a new DeFi protocol to help you invest in digital assets with a long-term outlook.
                             </li>
                             <li>
-                                You select what assets you want to hold (e.g. BTC &amp; ETH), pick your favourite management strategies (e.g. Rebalancing, Mean Reversion, etc. ) and the protocol takes care of the rest. 
+                                You select which assets you want to hold (e.g. BTC &amp; ETH), pick your favourite management strategy (e.g. Rebalancing, Mean Reversion, etc. ) and the protocol takes care of the rest. 
                             </li>
                             <li>
-                                Your management strategies determine the initial allocation of your portfolio and automate risk management for you.
+                                Your management strategy will determine your initial portfolio allocation and will automate your risk management.
                             </li>
 
                             <li>

@@ -1,9 +1,9 @@
 import { Box, makeStyles, Typography } from "@material-ui/core"
-import { TitleValueBox } from "../TitleValueBox"
-import { Token } from "../../types/Token"
-import { fromDecimals, round} from "../../utils/formatter"
+import { TitleValueBox } from "../../TitleValueBox"
+import { Token } from "../../../types/Token"
+import { fromDecimals, round} from "../../../utils/formatter"
 import { BigNumber } from 'ethers'
-import { PoolInfo } from "../../utils/pools"
+import { PoolInfo } from "../../../utils/pools"
 import { RoiChart } from "./RoiChart"
 
 
@@ -11,7 +11,7 @@ import {
     useFeedDecimals,
     useFeedLatestPrice,
     useFeedLatestTimestamp,
-} from "../../hooks"
+} from "../../../hooks"
 
 import { 
     useStrategyName, 
@@ -22,7 +22,7 @@ import {
     useStrategyTargetPricePercDown,
     useStrategyTokensToSwapPerc
 
-} from "../../hooks/useTrendFollowStrategy"
+} from "../../../hooks/useTrendFollowStrategy"
 
 
 const useStyle = makeStyles( theme => ({

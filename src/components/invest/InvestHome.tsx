@@ -1,4 +1,4 @@
-import { makeStyles, Link, Typography, Breadcrumbs, Divider } from "@material-ui/core"
+import { makeStyles, Link, Typography, Breadcrumbs, Divider, Box} from "@material-ui/core"
 import { Token } from "../../types/Token"
 import { Link as RouterLink } from "react-router-dom"
 import { PoolExplorer } from "./PoolExprorer"
@@ -13,8 +13,13 @@ interface InvestHomeProps {
 
 const useStyles = makeStyles( theme => ({
     container: {
-        padding: theme.spacing(2),
-        // backgroundColor: theme.palette.type === 'light' ?  theme.palette.grey[100]: theme.palette.grey[900],
+        paddingTop: theme.spacing(2),
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        [theme.breakpoints.up('xs')]: {
+            paddingLeft: theme.spacing(0),
+            paddingRight: theme.spacing(0),
+        },
     }
 }))
 
@@ -27,13 +32,17 @@ export const InvestHome = ({ chainId, account, depositToken }: InvestHomeProps) 
 
     return (
         <div className={classes.container}>
-            <Breadcrumbs aria-label="breadcrumb">
-                <Link component={RouterLink} to="/home"> Home </Link>
-                <Typography>Invest</Typography>
-            </Breadcrumbs>
+
+            <Box px={2}>
+                <Breadcrumbs aria-label="breadcrumb">
+                    <Link component={RouterLink} to="/home"> Home </Link>
+                    <Typography>Invest</Typography>
+                </Breadcrumbs>
+            </Box>
 
             <Divider variant="middle" style={{marginTop: 20, marginBottom: 0}} />
             <PoolExplorer chainId={chainId} account={account} depositToken={depositToken} />
+            
         </div>
     )
 }

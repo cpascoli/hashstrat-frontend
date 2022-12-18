@@ -1,9 +1,8 @@
-import { Box, makeStyles, Typography } from "@material-ui/core"
-import { Token } from "../../types/Token"
-import { fromDecimals, round } from "../../utils/formatter"
+import { Box, makeStyles } from "@material-ui/core"
+import { Token } from "../../../types/Token"
+import { fromDecimals, round } from "../../../utils/formatter"
 import { DataGrid, GridColDef } from "@material-ui/data-grid"
-import { useSwapInfoArray } from "../../hooks"
-import { TimeSeriesLineChart } from "./TimeSeriesLineChart"
+import { useSwapInfoArray } from "../../../hooks"
 
 
 const useStyle = makeStyles( theme => ({
@@ -60,9 +59,6 @@ export const TradesView = ( { chainId, poolId, depositToken, investToken } : Poo
 
         let record : any = {}
         record['time'] = date
-
-        // const stableAssetPercValue = 100 * depositTokenBalance / (investTokenBalance * price + depositTokenBalance)
-        // const riskAssetPercValue = 100 * investTokenBalance / (investTokenBalance * price + depositTokenBalance)
 
 
         depositTonensPerc += (data.side === 'BUY') ? -round(100 * bought * price / depositTokenBalance) :  //  perc of deposit tokens sold (to buy invest tokens)
@@ -126,6 +122,8 @@ export const TradesView = ( { chainId, poolId, depositToken, investToken } : Poo
         // perc risk asset traded
         const riskAssetBalance = parseFloat(fromDecimals(data.investTokenBalance, investToken.decimals, 6))
         const riskAssetTradedPerc = round(100 * riskAssetAmountTraded  / ( riskAssetBalance + (data.side === 'BUY' ? 0 : riskAssetAmountTraded) ))
+
+        console.log("TradesView: riskAssetAmountTraded (bought)", riskAssetAmountTraded, "investTokenBalance: ", riskAssetBalance)
 
         // perc stable asset traded
         const stableAssetBalance = parseFloat(fromDecimals(data.depositTokenBalance, depositToken.decimals, 2))

@@ -1,18 +1,18 @@
 import { BigNumber, ethers } from 'ethers'
 
 import { Box, Typography, makeStyles } from "@material-ui/core"
-import { Token } from "../../types/Token"
-import { useSwapInfoArray } from "../../hooks/usePool"
-import { usePoolSwapsInfoForIndex } from "../../hooks/useIndex"
+import { Token } from "../../../types/Token"
+import { useSwapInfoArray } from "../../../hooks/usePool"
+import { usePoolSwapsInfoForIndex } from "../../../hooks/useIndex"
 
-import { useFeedLatestPrice, useFeedLatestTimestamp } from "../../hooks/useFeed"
-import { roiDataForSwaps as poolRoiDataForSwaps } from "../../utils/calculators/poolRoiCalculator"
-import { roiDataForSwaps as indexRoiDataForSwaps } from "../../utils/calculators/indexRoiCalculator"
+import { useFeedLatestPrice, useFeedLatestTimestamp } from "../../../hooks/useFeed"
+import { roiDataForSwaps as poolRoiDataForSwaps } from "../../../utils/calculators/poolRoiCalculator"
+import { roiDataForSwaps as indexRoiDataForSwaps } from "../../../utils/calculators/indexRoiCalculator"
 
-import { fromDecimals, round } from "../../utils/formatter"
+import { fromDecimals, round } from "../../../utils/formatter"
 import { TimeSeriesLineChart } from "./TimeSeriesLineChart"
-import { PoolTokensSwapsInfo } from "../../types/PoolTokensSwapsInfo"
-import { InvestTokens } from "../../utils/pools"
+import { PoolTokensSwapsInfo } from "../../../types/PoolTokensSwapsInfo"
+import { InvestTokens } from "../../../utils/pools"
 
 
 const useStyle = makeStyles( theme => ({

@@ -1,10 +1,10 @@
 import { utils } from "ethers"
 import { Box, makeStyles, Typography } from "@material-ui/core"
-import { TitleValueBox } from "../TitleValueBox"
-import { Token } from "../../types/Token"
-import { fromDecimals, round} from "../../utils/formatter"
+import { TitleValueBox } from "../../TitleValueBox"
+import { Token } from "../../../types/Token"
+import { fromDecimals, round} from "../../../utils/formatter"
 import { BigNumber } from 'ethers'
-import { PoolInfo } from "../../utils/pools"
+import { PoolInfo } from "../../../utils/pools"
 import { RoiChart } from "./RoiChart"
 
 import { 
@@ -12,7 +12,7 @@ import {
     useFeedLatestPrice,
     useFeedLatestTimestamp,
     useTokenBalance,
-} from "../../hooks"
+} from "../../../hooks"
 
 import { 
     useStrategyName, 
@@ -24,7 +24,7 @@ import {
     useStrategyTokensToSwapPerc,
     useStrategyMinAllocationPerc
 
-} from "../../hooks/useMeanRevStrategy"
+} from "../../../hooks/useMeanRevStrategy"
 
 
 const useStyle = makeStyles( theme => ({

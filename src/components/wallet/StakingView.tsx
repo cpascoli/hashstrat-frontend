@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useEthers, useTokenBalance } from "@usedapp/core"
 import { useStakedTokenBalance } from "../../hooks/useFarm"
 
-import { Box, Grid, Button, makeStyles } from  "@material-ui/core"
+import { Box, Grid, Button, makeStyles, Typography } from  "@material-ui/core"
 import { AlertTitle } from "@material-ui/lab"
 
 import { PoolInfo } from "../../utils/pools"
@@ -73,12 +73,20 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
   return (
       <Box className={classes.container}>
 
-            { formType === 'stake' && formattedTokenBalance === "0" &&
-                <StyledAlert severity="info" color="info" style={{textAlign: "center", marginBottom: 20 }} > 
-                    <AlertTitle>No {symbol} tokens to stake</AlertTitle>
-                    Deposit funds into any Pool or Index to get {symbol} tokens that you can stake to earn HashStrat DAO tokens (HST)
-                </StyledAlert>
-            }
+          { formType === 'stake' && Number(formattedTokenBalance) === 0 &&
+              <StyledAlert severity="info" color="info" style={{textAlign: "center", marginBottom: 20 }} > 
+                  <AlertTitle>No LP tokens to stake</AlertTitle>
+                  Deposit funds into any pool to get LP tokens that you can stake to earn HashStrat DAO tokens (HST).
+                  HST token holders can participate in governance and collect protocol "dividends".
+              </StyledAlert>
+          }
+          {formType === 'stake' && Number(formattedTokenBalance) > 0  &&
+            <Box mb={3}>
+                <Typography>
+                        Stake your LP tokens to earn DAO tokens (HST). HST token holders can participate in governance and collect protocol "dividends".
+                </Typography>
+            </Box>
+          }
 
 
           <div className={classes.balanceView} onClick={(e) => showModalPressed()} >

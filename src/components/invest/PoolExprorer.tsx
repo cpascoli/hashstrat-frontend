@@ -1,6 +1,6 @@
-import { makeStyles, Box, Link, Typography, FormControl, InputLabel, Select, MenuItem, Button, Popover, Paper } from "@material-ui/core"
-import { useState } from "react";
+import { useState, useContext } from "react";
 
+import { makeStyles, Box, Link, Typography, FormControl, InputLabel, Select, MenuItem, Button, Popover, Paper } from "@material-ui/core"
 import { Token } from "../../types/Token"
 import { Link as RouterLink } from "react-router-dom"
 import { Horizontal } from "../Layout"
@@ -17,6 +17,11 @@ import { PoolSummary } from "../shared/PoolSummary"
 import { InvestTokens, PoolInfo } from "../../utils/pools"
 import { IndexesIds } from "../../utils/pools";
 
+import { ConnectAccountHelper } from "../dashboard/ConnectAccountHelper"
+import { AppContext } from "../../context/AppContext"
+
+
+
 interface PoolExplorerProps {
     chainId: number,
     account?: string,
@@ -25,9 +30,15 @@ interface PoolExplorerProps {
 
 const useStyles = makeStyles( theme => ({
     container: {
-    
-        // backgroundColor: theme.palette.type === 'light' ?  theme.palette.grey[100]: theme.palette.grey[900],
-    }
+        paddingTop: theme.spacing(2),
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        [theme.breakpoints.up('xs')]: {
+            paddingLeft: theme.spacing(0),
+            paddingRight: theme.spacing(0),
+        },
+    },
+
 }))
 
 
@@ -116,6 +127,8 @@ const assetNames = {
 
 export const PoolExplorer = ({ chainId, account, depositToken } : PoolExplorerProps) => {
 
+    const { connectedChainId, wrongNetwork } = useContext(AppContext);
+
     const classes = useStyles()
 
     const [asset, setAsset] = useState(-1)
@@ -132,18 +145,13 @@ export const PoolExplorer = ({ chainId, account, depositToken } : PoolExplorerPr
 
     const handleStrategyChange = (event: React.ChangeEvent <{ name?: string | undefined; value: unknown; }>) => {
         setStrategy(Number(event.target.value))
-        console.log("handleStrategyChange", event.target.value, "strategy", strategy)
     }
     
     const handleAssetChange = (event: React.ChangeEvent <{ name?: string | undefined; value: unknown; }>) => {
         setAsset(Number(event.target.value))
-        console.log("handleAssetChange", event.target.value, "asset", asset)
     }
 
     const handleMyPoolsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        //const [isTrue, setIsTrue] = React.useState(false);
-
-        console.log("handleMyPoolsChange", event.target.checked)
         setMypools(event.target.checked)
     }
 
@@ -188,82 +196,78 @@ export const PoolExplorer = ({ chainId, account, depositToken } : PoolExplorerPr
 
     return (
         <Box className={classes.container}>
-            <Box my={4} >
-                <Paper>
+            <Box m={2} >
 
-                    <Box pt={2} >
+       
+                <Typography variant="body1" align="center">
+                    Here is the list of all HashStrat Pools &amp; Indexes with their associated strategies.  <Button onClick={handleClick0} style={{ height: 40, width: 40 }} ><Info /></Button>
+                </Typography>  
+                <Typography variant="body1" align="center">
+                    You can filter by a conbination of strategies and assets to find a pool to deposit into:
+                </Typography>  
+                <Popover style={{maxWidth: 400}} id={id0} open={open0} anchorEl={anchorEl0} onClose={handleClose0} anchorOrigin={{vertical: 'bottom', horizontal: 'center' }} >
+                    <Box style={{ width: '350px'}}>
+                        <Paper variant="elevation">
+                            <Typography style={{ padding: 10 }} variant="body2" > 
+                                <strong>Pools </strong> hold 2 digital assets, a stable asset (USDC) and a risk asset (wrapped BTC or ETH).<br/>
+                                Pools use a <Link component={RouterLink} to="/strategies" >strategy</Link> to trade between them.
+                                <br/><br/>
+                                <strong>Indexes </strong> are baskets of Pools and offer exposure to multiple strategies and multiple assets.
+                            </Typography>
+                        </Paper>
+                    </Box>
+                </Popover> 
+                    
+           
+                <Horizontal align="center" valign="center">
+                    <Box my={4}>
+                        <Horizontal align="center"  >
+                            <FormControl fullWidth={false} >
+                                <InputLabel id="strategy-select-label">Strategies</InputLabel>
+                                <Select style={{minWidth: 320}}
+                                    labelId="strategy-select-label"
+                                    id="strategy-select"
+                                    value={strategy}
+                                    label="Strategies"
+                                    onChange={ e => handleStrategyChange(e) }
+                                    placeholder="Select strategies"
+                                >
+                                    <MenuItem key={-1} value={-1}>All</MenuItem>
+                                    {strategyItems}
+                                </Select>
+                            </FormControl>
+                            
+                            <FormControl fullWidth={false}>
+                                <InputLabel id="assets-select-label">Assets</InputLabel>
+                                <Select style={{minWidth: 180}}
+                                    labelId="assets-select-label"
+                                    id="assets-select"
+                                    value={asset}
+                                    label="Assets"
+                                    onChange={ e => handleAssetChange(e) }
+                                    placeholder="Select assets"
+                                    
+                                >
+                                    <MenuItem key={-1} value={-1}>All</MenuItem>
+                                    {assetItems}
+                                </Select>
+                            </FormControl>
 
-                        <Horizontal align="center">
-                            <Typography variant="body1" align="center" >
-                                Select a strategy/asset combination to find a Pool or an Index to invest
-                                <Button onClick={handleClick0} style={{ height: 40, width: 40 }} ><Info /></Button>
-                            </Typography>   
-
-                        
-                            <Popover style={{maxWidth: 400}} id={id0} open={open0} anchorEl={anchorEl0} onClose={handleClose0} anchorOrigin={{vertical: 'bottom', horizontal: 'center' }} >
-                                <Box style={{ width: '250px'}}>
-                                    <Paper variant="elevation">
-                                            <Typography style={{ padding: 10 }} variant="body2" > 
-                                                Pools hold digital assets and use a <Link component={RouterLink} to="/strategies" >strategy</Link> to trade between them.
-                                                <br/>
-                                                Indexes are baskets of Pools and offer exposure to multiple strategies and assets.
-                                                </Typography>
-                                    </Paper>
-                                </Box>
-                            </Popover> 
                         </Horizontal>
-
                     </Box>
 
-                    <Horizontal  align="center" valign="center"> 
-                            <Box p={2}>
-                                <Horizontal align="center"  >
-                                    <FormControl fullWidth={false} >
-                                        <InputLabel id="strategy-select-label">Strategies</InputLabel>
-                                        <Select style={{minWidth: 320}}
-                                            labelId="strategy-select-label"
-                                            id="strategy-select"
-                                            value={strategy}
-                                            label="Strategies"
-                                            onChange={ e => handleStrategyChange(e) }
-                                            placeholder="Select strategies"
-                                        >
-                                            <MenuItem key={-1} value={-1}>All</MenuItem>
-                                            {strategyItems}
-                                        </Select>
-                                    </FormControl>
-                                    
-                                    <FormControl fullWidth={false}>
-                                        <InputLabel id="assets-select-label">Assets</InputLabel>
-                                        <Select style={{minWidth: 180}}
-                                            labelId="assets-select-label"
-                                            id="assets-select"
-                                            value={asset}
-                                            label="Assets"
-                                            onChange={ e => handleAssetChange(e) }
-                                            placeholder="Select assets"
-                                            
-                                        >
-                                            <MenuItem key={-1} value={-1}>All</MenuItem>
-                                            {assetItems}
-                                        </Select>
-                                    </FormControl>
+                </Horizontal>
 
-                                </Horizontal>
-                            </Box>
-
-                    </Horizontal>
-
-                    { poolsViews && poolsViews.length > 0 && 
-                        <Box py={3} >
-                            <Horizontal align="center"> { poolsViews } </Horizontal>
-                        </Box>
-                    }
-                    
-                </Paper>
 
             </Box>
 
+            <Paper style={{paddingTop: 30, paddingRight: 0, marginLeft: 0, marginRight: 0}}>
+                { poolsViews && poolsViews.length > 0 && 
+                    <Box py={0} >
+                        <Horizontal align="center"> { poolsViews } </Horizontal>
+                    </Box>
+                }
+            </Paper>
 
         </Box>
     )

@@ -114,7 +114,7 @@ export const StrategyCarousel = () =>  {
                     }
                 }} 
 
-                autoPlay={true}
+                autoPlay={false}
                 stopAutoPlayOnHover={true}
                 navButtonsAlwaysVisible={true}
                 cycleNavigation={false}

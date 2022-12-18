@@ -1,10 +1,10 @@
 import { Box, makeStyles, Typography } from "@material-ui/core"
-import { TitleValueBox } from "../TitleValueBox"
-import { Token } from "../../types/Token"
-import { fromDecimals, round} from "../../utils/formatter"
-import { PoolAddress } from "../../utils/network"
+import { TitleValueBox } from "../../TitleValueBox"
+import { Token } from "../../../types/Token"
+import { fromDecimals, round} from "../../../utils/formatter"
+import { PoolAddress } from "../../../utils/network"
 import { BigNumber } from 'ethers'
-import { PoolInfo } from "../../utils/pools"
+import { PoolInfo } from "../../../utils/pools"
 import { RoiChart } from "./RoiChart"
 
 
@@ -13,19 +13,19 @@ import {
     useFeedLatestPrice,
     useFeedLatestTimestamp,
     useTokenBalance,
-} from "../../hooks"
+} from "../../../hooks"
 
 import { 
     useStrategyName, 
     useStrategyDescription,
     useStrategyTargetInvestPerc, 
     useStrategyRebalancingThreshold,
-} from "../../hooks/useRebalancingStrategy"
+} from "../../../hooks/useRebalancingStrategy"
 
 import { 
     useInvestedTokenValue,
     useTotalPortfolioValue,
-} from "../../hooks/usePool"
+} from "../../../hooks/usePool"
 
 const useStyle = makeStyles( theme => ({
     portfolioInfo: {

@@ -3,12 +3,12 @@ import { utils } from "ethers"
 
 import { usePoolModel } from "./PoolModel"
 
-import { TitleValueBox } from "../TitleValueBox"
-import { Token } from  "../../types/Token"
-import { useGetDeposits, useGetWithdrawals } from "../../hooks/usePool"
-import { fromDecimals } from "../../utils/formatter"
+import { TitleValueBox } from "../../TitleValueBox"
+import { Token } from  "../../../types/Token"
+import { useGetDeposits, useGetWithdrawals } from "../../../hooks/usePool"
+import { fromDecimals } from "../../../utils/formatter"
 import { BigNumber } from "ethers"
-import { InvestTokens } from "../../utils/pools"
+import { InvestTokens } from "../../../utils/pools"
 import { ExpandMore } from "@material-ui/icons"
 
 

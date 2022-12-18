@@ -1,5 +1,5 @@
 
-import { makeStyles, Link, Box, Divider, Typography, Button, Breadcrumbs } from "@material-ui/core"
+import { makeStyles, Link, Box, Divider, Typography, Breadcrumbs } from "@material-ui/core"
 
 import { PoolInfo } from "../../../utils/pools"
 
@@ -18,17 +18,35 @@ interface IndexHomeProps {
 }
 
 
+const useStyles = makeStyles( theme => ({
+
+    container: {
+        paddingTop: theme.spacing(2),
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        [theme.breakpoints.up('xs')]: {
+            paddingLeft: theme.spacing(0),
+            paddingRight: theme.spacing(0),
+        },
+    }
+}))
+
+
 export const IndexHome = ({ chainId, poolId, account, tokens, investTokens } : IndexHomeProps) => {
     
     const { name, description } = PoolInfo(chainId, poolId)
+    const classes = useStyles()
 
     return (
-        <Box px={2} pt={2}>
-            <Breadcrumbs aria-label="breadcrumb" style={{paddingLeft: 10, paddingRight: 10}}>
-                <Link component={RouterLink} to="/home"> Home </Link>
-                <Link component={RouterLink} to="/invest"> Invest </Link>
-                <Typography>{name}</Typography>
-            </Breadcrumbs>
+        <Box className={classes.container}>
+            
+            <Box px={2}>
+                <Breadcrumbs aria-label="breadcrumb">
+                    <Link component={RouterLink} to="/home"> Home </Link>
+                    <Link component={RouterLink} to="/invest"> Invest </Link>
+                    <Typography>{name}</Typography>
+                </Breadcrumbs>
+            </Box>
 
             <Divider variant="middle" style={{marginTop: 20, marginBottom: 0}}/>
 

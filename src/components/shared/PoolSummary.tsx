@@ -97,9 +97,13 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken, account } :
                         <Box pt={2}>{assetImages} </Box>
                         <Divider variant="fullWidth" style={{marginTop: 20, marginBottom: 20}} />
                         <TitleValueBox title="TVL" value={`$ ${utils.commify(totalValueFormatted)}`} mode="small" />
-                        <TitleValueBox title="My Share" value={myShareFormatted} mode="small" />
-                        <Typography variant="body1" align="left" style={{marginTop: 20 }}> My Assets </Typography>
-                        { tokenViews }
+                        { account && 
+                            <>
+                                <TitleValueBox title="My Share" value={myShareFormatted} mode="small" />
+                                <Typography variant="body1" align="left" style={{marginTop: 20 }}> My Assets </Typography>
+                                {tokenViews}
+                            </>
+                        }
                     </Box>
                 </Button>
             </Link>

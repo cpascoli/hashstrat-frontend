@@ -1,17 +1,21 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { Box, Tab, makeStyles, Typography } from "@material-ui/core"
 import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 
-import { Token } from "../../types/Token"
+import { Token } from "../../../types/Token"
 import { MyStatsView } from "./MyStatsView"
 import { PoolStatsView } from "./PoolStatsView"
 import { TradesView } from "./TradesView"
-import { WalletTabs } from "../wallet/WalletTabs"
+import { WalletTabs } from "../../wallet/WalletTabs"
 import { RebalanceStrategyInfoView } from "./RebalanceStrategyInfoView"
 import { MeanRevStrategyInfoView } from "./MeanRevStrategyInfoView"
 import { TrendFollowtrategyInfoView } from "./TrendFollowtrategyInfoView"
 
-import { PoolInfo } from "../../utils/pools"
+import { PoolInfo } from "../../../utils/pools"
+import { ConnectAccountHelper } from "../../dashboard/ConnectAccountHelper"
+import { Vertical } from "../../Layout"
+
+import { AppContext } from "../../../context/AppContext"
 
 
 interface PoolTabsProps {
@@ -26,8 +30,6 @@ const useStyle = makeStyles( theme => ({
     container: {
         marginTop: 22,
         paddingBottom: 0,
-        maxWidth: 800,
-        margin: "auto",
     },
     tabList: { 
         padding: 0,
@@ -36,10 +38,10 @@ const useStyle = makeStyles( theme => ({
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     },
     tab: { 
-          padding: 0,
           maxWidth: 800,
           margin: "auto",
           paddingTop: 20,
+          paddingBottom: 20,
           backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     },
 }))
@@ -47,6 +49,8 @@ const useStyle = makeStyles( theme => ({
 
 
 export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : PoolTabsProps ) => {
+
+    const { connectedChainId, wrongNetwork } = useContext(AppContext);
 
     const depositToken = tokens[0]
 
@@ -76,17 +80,19 @@ export const PoolTabs = ( { chainId, poolId, account, tokens, investToken } : Po
 
                 </TabList>
                 <TabPanel className={classes.tab} value="0" key={0}>
-                    { account &&
+                    { (connectedChainId && (!account || wrongNetwork(connectedChainId))) &&
+                        <Box style={{height: 400}} px={2}>
+                            <Vertical >
+                                <ConnectAccountHelper connectedChainId={connectedChainId} userMessage="view your assets" />
+                            </Vertical>
+                        </Box>
+                    }
+                    { connectedChainId && account && !wrongNetwork(connectedChainId) &&
                         <Box>
                             <MyStatsView chainId={chainId} poolId={poolId} account={account} depositToken={depositToken} />
                             <WalletTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens!} />
                         </Box>
-                    || 
-                        <Box py={8}>
-                            <Typography align="center"> Connect an acount to view your assets</Typography>
-                        </Box>
                     }
-
                 </TabPanel>
                 <TabPanel className={classes.tab} value="1" key={1}>
                     <PoolStatsView chainId={chainId} poolId={poolId} depositToken={depositToken} investToken={investToken} />

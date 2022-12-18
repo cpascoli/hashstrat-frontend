@@ -2,17 +2,17 @@ import { utils } from "ethers"
 import { Box, Typography, makeStyles } from "@material-ui/core"
 import { BigNumber } from "ethers"
 import { usePoolModel } from "./PoolModel"
-import { TitleValueBox } from "../TitleValueBox"
-import { Token } from "../../types/Token"
-import { fromDecimals, round } from "../../utils/formatter"
-import { useSwapInfoArray } from "../../hooks"
+import { TitleValueBox } from "../../TitleValueBox"
+import { Token } from "../../../types/Token"
+import { fromDecimals, round } from "../../../utils/formatter"
+import { useSwapInfoArray } from "../../../hooks"
 import { TimeSeriesAreaChart } from "./TimeSeriesAreaChart"
-import { PoolInfo } from "../../utils/pools"
-import { VPieChart } from "../shared/VPieChart"
+import { PoolInfo } from "../../../utils/pools"
+import { VPieChart } from "../../shared/VPieChart"
 
-import { Horizontal } from "../Layout"
+import { Horizontal } from "../../Layout"
 
-import { useTotalDeposited, useTotalWithdrawn, useFeedLatestPrice, useFeedLatestTimestamp  } from "../../hooks"
+import { useTotalDeposited, useTotalWithdrawn, useFeedLatestPrice, useFeedLatestTimestamp  } from "../../../hooks"
 
 
 
@@ -94,7 +94,10 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
 
     //TODO use balance of assets in the pool rather than values from the last trade
     const priceTimestamp = latestTimestamp && BigNumber.from(latestTimestamp).toNumber()
-    const priceFormatted = parseFloat(fromDecimals(price, 8, 2))
+    // const priceFormatted = parseFloat(fromDecimals(price, 8, 2))
+    const priceFormatted = price && parseFloat(fromDecimals(BigNumber.from(price), 8, 2))
+
+
     const asset1 = swaps && swaps.length > 0 ? parseFloat(fromDecimals(swaps[swaps.length-1].depositTokenBalance, depositToken.decimals, 2)) : undefined
     const asset2 = swaps && swaps.length > 0 ? parseFloat(fromDecimals(swaps[swaps.length-1].investTokenBalance, investToken.decimals, 6)) : undefined
 

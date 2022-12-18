@@ -102,11 +102,11 @@ interface HeaderProps {
 	setAccount: React.Dispatch<React.SetStateAction<string | undefined>>,
 	setChainId: React.Dispatch<React.SetStateAction<number | undefined>>,
 
-	wrongNetworkHandler: (chainId: number) => void,
+	networkChangedHandler: (chainId: number) => void,
 }
 
 
-export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId, wrongNetworkHandler }: HeaderProps) => {
+export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId, networkChangedHandler }: HeaderProps) => {
 
 	const classes = useStyles()
 	const theme = useTheme();
@@ -129,7 +129,7 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId, wron
 		if (chainId) {
 			const network = NetworkName(chainId) ?? "Unknown"
 			setNetworkName(network)
-			wrongNetworkHandler(chainId)
+			networkChangedHandler(chainId)
 		}
 	
 	}, [chainId, account])
@@ -183,7 +183,7 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId, wron
 						</div>
 					}
 
-					{ isConnected && !isRoot &&
+					{ !isRoot &&
 						<div>
 							
 							<Button className={classes.menu}

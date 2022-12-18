@@ -4,6 +4,8 @@ import { BrowserRouter, Routes,Route } from "react-router-dom";
 import { useEthers, Polygon } from '@usedapp/core';
 import { Box, makeStyles } from "@material-ui/core"
 
+import { AppContext, initialContext } from "../context/AppContext"
+
 import { TokensForPool, PoolIds, IndexesIds, DepositToken } from "../utils/pools"
 import { InvestTokens } from "../utils/pools"
 import { Home } from "./Home"
@@ -11,8 +13,8 @@ import { Header } from './Header';
 import { Dashboard } from './dashboard/Dashboard'
 import { InvestHome } from "./invest/InvestHome"
 
-import { IndexHome } from "./indexes/index/IndexHome"
-import { PoolHome } from "./pool/PoolHome";
+import { IndexHome } from "./invest/index/IndexHome"
+import { PoolHome } from "./invest/pool/PoolHome";
 
 import { FaqHome } from "./faq/FaqHome";
 import { StrategiesHome } from "./strategies/StrategiesHome";
@@ -85,17 +87,24 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
     }, [chainId, account])
 
 
-    const wrongNetworkHandler = (chainId: number) => {
-        console.log("Main wrongNetworkHandler", chainId, "", account)
+    const networkChangedHandler = (chainId: number) => {
+        console.log(">>> Main networkChangedHandler:", chainId, account)
         setConnectedChainId(chainId)
         setChainId(defaultChainId)
+        // initialContext.connectedChainId = chainId
     }
 
 
     return (
+    <AppContext.Provider value={{
+        chainId: initialContext.chainId,
+        connectedChainId: connectedChainId,
+        wrongNetwork: initialContext.wrongNetwork
+    }}>  
+
         <Box className={classes.container} >
             <BrowserRouter>
-                <Header toggleDark={toggleDark} setToggleDark={setToggleDark} setAccount={setAccount} setChainId={setChainId} wrongNetworkHandler={wrongNetworkHandler} />
+                <Header toggleDark={toggleDark} setToggleDark={setToggleDark} setAccount={setAccount} setChainId={setChainId} networkChangedHandler={networkChangedHandler} />
                 
                 <MainWithTitle>
                     <Routes>
@@ -103,7 +112,7 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                             <Home chainId={chainId || defaultChainId}  /> 
                         } />
                         <Route path="/home"  element={
-                            <Dashboard chainId={chainId || defaultChainId} connectedChainId={connectedChainId} account={account} depositToken={depositToken!} investTokens={investTokens}  /> 
+                            <Dashboard chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} investTokens={investTokens}  /> 
                         } />
                         <Route path="/invest" element={
                             <InvestHome chainId={chainId || defaultChainId} account={account} depositToken={depositToken!} />
@@ -153,6 +162,8 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
             
             <Footer />
         </Box>
+
+    </AppContext.Provider>  
     )
 
 }

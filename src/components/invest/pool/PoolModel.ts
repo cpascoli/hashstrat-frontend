@@ -1,14 +1,14 @@
 
 
-import { useTokensInfoForPools } from "../../hooks/usePoolInfo"
-import { PoolInfo } from "../../utils/pools"
-import { Token } from "../../types/Token"
+import { useTokensInfoForPools } from "../../../hooks/usePoolInfo"
+import { PoolInfo } from "../../../utils/pools"
+import { Token } from "../../../types/Token"
 import { BigNumber } from "ethers"
-import { fromDecimals } from "../../utils/formatter"
+import { fromDecimals } from "../../../utils/formatter"
 
-import { PieChartsData, ChartData } from "../shared/PieChartWithLabels"
+import { PieChartsData, ChartData } from "../../shared/PieChartWithLabels"
 
-import { TokenInfo } from "../../types/TokenInfo"
+import { TokenInfo } from "../../../types/TokenInfo"
 
 type TokenBalances = {[ x: string] : { symbol: string, decimals: number, value: BigNumber, balance: BigNumber }}
 

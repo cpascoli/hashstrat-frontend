@@ -1,6 +1,9 @@
 {
+  "extends": "./paths.json",
   "compilerOptions": {
-    "target": "es5",
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "target": "es6",
     "lib": [
       "dom",
       "dom.iterable",
@@ -17,10 +20,13 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
+    "noEmit": true
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
   ]
 }

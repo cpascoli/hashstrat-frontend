@@ -1,12 +1,6 @@
-import { BigNumber, ethers } from 'ethers'
-
-
-
-import { fromDecimals, round } from "../formatter"
 import { Token } from "../../types/Token"
 import { PoolTokensSwapsInfo } from "../../types/PoolTokensSwapsInfo"
 import { roiDataForSwaps as poolRoiDataForSwaps} from "./poolRoiCalculator"
-import { PoolInfo } from '../pools'
 
 
 export type SwapInfo = {
@@ -62,7 +56,7 @@ export const roiDataForSwaps = (swapsInfo : PoolTokensSwapsInfo[],  depositToken
 
     while (swaps.length > 0) {
 
-        if (indexROI.length == 0) {
+        if (indexROI.length === 0) {
             // calculate first data point weighting contribution by each pool
             let first = {
                 date : 0,
@@ -144,7 +138,7 @@ const findNextROIInfo= (swaps: RoiInfo[][], timestamp: number) : RoiInfo[] => {
 
     swaps.forEach( (poolSwaps, idx) => {
         poolSwaps.forEach( it => {
-            if ( (nextSwaps.length == 0 && it.date > timestamp) || (found !== undefined && it.date === found) ) {
+            if ( (nextSwaps.length === 0 && it.date > timestamp) || (found !== undefined && it.date === found) ) {
                 nextSwaps.push({
                     ...it,
                     poolIndex: idx

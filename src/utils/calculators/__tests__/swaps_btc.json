@@ -1,0 +1,83 @@
+[
+    {
+        "timestamp": "1661789156",
+        "side": "BUY",
+        "feedPrice": "2034365180234",
+        "bought": "1632110",
+        "sold": "333333334",
+        "depositTokenBalance": "1333333332",
+        "investTokenBalance": "1632110"
+    },
+    {
+        "timestamp": "1662068452",
+        "side": "BUY",
+        "feedPrice": "2005631000000",
+        "bought": "1507042",
+        "sold": "303871944",
+        "depositTokenBalance": "5773566954",
+        "investTokenBalance": "8919910"
+    },
+    {
+        "timestamp": "1662500463",
+        "side": "BUY",
+        "feedPrice": "1902534000000",
+        "bought": "1511989",
+        "sold": "288678347",
+        "depositTokenBalance": "5484888607",
+        "investTokenBalance": "10431899"
+    },
+    {
+        "timestamp": "1662932475",
+        "side": "BUY",
+        "feedPrice": "2165108357128",
+        "bought": "1262905",
+        "sold": "274244430",
+        "depositTokenBalance": "5210644177",
+        "investTokenBalance": "11694804"
+    },
+    {
+        "timestamp": "1663364484",
+        "side": "BUY",
+        "feedPrice": "1978776000000",
+        "bought": "1314844",
+        "sold": "260532208",
+        "depositTokenBalance": "4950111969",
+        "investTokenBalance": "13009648"
+    },
+    {
+        "timestamp": "1663796491",
+        "side": "BUY",
+        "feedPrice": "1851181492224",
+        "bought": "1335934",
+        "sold": "247505598",
+        "depositTokenBalance": "4702606371",
+        "investTokenBalance": "14345582"
+    },
+    {
+        "timestamp": "1664228495",
+        "side": "BUY", 
+        "feedPrice": "1912652000000",
+        "bought": "1224261",
+        "sold": "235130318",
+        "depositTokenBalance": "4467476053",
+        "investTokenBalance": "15569843"
+    },
+    {
+        "timestamp": "1664660502",
+        "side": "BUY",
+        "feedPrice": "1929371000000",
+        "bought": "1155727",
+        "sold": "223373802",
+        "depositTokenBalance": "4244102251",
+        "investTokenBalance": "16725570"
+    },
+    {
+        "timestamp": "1665092506",
+        "side": "BUY",
+        "feedPrice": "1993288000000",
+        "bought": "1058180",
+        "sold": "212205112",
+        "depositTokenBalance": "4031897139",
+        "investTokenBalance": "17783750"
+    }
+]

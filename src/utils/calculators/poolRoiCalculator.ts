@@ -1,14 +1,14 @@
 
 
-import { BigNumber, ethers } from 'ethers'
+import { BigNumber } from 'ethers'
 import { fromDecimals, round } from "../formatter"
 import { Token } from "../../types/Token"
 import { SwapInfo } from "../../types/SwapInfo"
 
 
-export const roiDataForSwaps = (swaps: SwapInfo[], price: number, priceTimestamp: number, depositToken: Token, investToken: Token) => {
+export const roiDataForSwaps = (swaps: SwapInfo[], priceRaw: string , priceTimestamp: number, depositToken: Token, investToken: Token) => {
 
-    // console.log("PoolRoiDataForSwaps - swaps:", swaps)
+    const lastPrice = parseFloat(fromDecimals(BigNumber.from(priceRaw), 8, 2))
 
     // A model investment of $100
     const initialInvestment = 100 
@@ -19,11 +19,10 @@ export const roiDataForSwaps = (swaps: SwapInfo[], price: number, priceTimestamp
     const firstPrice = swaps.length > 0 ? parseFloat(fromDecimals(BigNumber.from(swaps[0].feedPrice), 8, 2)) : 0
     const buyAndHoldAmount = firstPrice ? (initialInvestment / firstPrice) : 0
 
-
+    // calculate ROI and value for 
     const roidData = swaps.map((data, idx) => {
 
         const date = Number(data.timestamp)
-
         const price = parseFloat(fromDecimals(BigNumber.from(data.feedPrice), 8, 2))
         const investTokenBalance = parseFloat(fromDecimals(BigNumber.from(data.investTokenBalance), investToken.decimals, 6))
         const depositTokenBalance = parseFloat(fromDecimals(BigNumber.from(data.depositTokenBalance), depositToken.decimals, 2))
@@ -34,10 +33,10 @@ export const roiDataForSwaps = (swaps: SwapInfo[], price: number, priceTimestamp
         const deltaDepositTokens = data.side === 'BUY' ? parseFloat(fromDecimals(BigNumber.from(data.sold), depositToken.decimals, 2)) :
             parseFloat(fromDecimals(BigNumber.from(data.bought), depositToken.decimals, 2))
 
-        // perc risk asset traded
+        // percent of the risk asset traded
         const riskAssetPercTraded = deltaInvestTokens / (investTokenBalance + (data.side === 'BUY' ? 0 : deltaInvestTokens))
 
-        // perc stable asset traded
+        // percent of the stable asset traded
         const stableAssetPercTraded = deltaDepositTokens / (depositTokenBalance + (data.side === 'BUY' ? deltaDepositTokens : 0))
 
         let tradedAmount = 0
@@ -70,9 +69,9 @@ export const roiDataForSwaps = (swaps: SwapInfo[], price: number, priceTimestamp
     })
 
 
-    const strategyValue = riskAssetAmount * price + stableAssetAmount
+    const strategyValue = riskAssetAmount * lastPrice + stableAssetAmount
     const strategyROI = 100 * (strategyValue - initialInvestment) / initialInvestment
-    const buyAndHoldValue = buyAndHoldAmount * price
+    const buyAndHoldValue = buyAndHoldAmount * lastPrice
     const buyAndHoldROI = 100 * (buyAndHoldValue - initialInvestment) / initialInvestment
 
     const latest = {

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 
 import { makeStyles, Box, Link, Typography, FormControl, InputLabel, Select, MenuItem, Button, Popover, Paper } from "@material-ui/core"
 import { Token } from "../../types/Token"
@@ -17,16 +17,13 @@ import { PoolSummary } from "../shared/PoolSummary"
 import { InvestTokens, PoolInfo } from "../../utils/pools"
 import { IndexesIds } from "../../utils/pools";
 
-import { ConnectAccountHelper } from "../dashboard/ConnectAccountHelper"
-import { AppContext } from "../../context/AppContext"
-
-
 
 interface PoolExplorerProps {
     chainId: number,
     account?: string,
     depositToken: Token
 }
+
 
 const useStyles = makeStyles( theme => ({
     container: {
@@ -102,7 +99,7 @@ const filterPools = (chainId: number, poolsInfo: PoolData[], strategy: string | 
         const includeStrategy = strategy === undefined || info.strategy === strategy
         const includeAsset = asset === undefined || info.investTokens.join(',') === asset
 
-        const includeMyPools = mypools == false || isMyPool(pool)
+        const includeMyPools = mypools === false || isMyPool(pool)
 
         return info.disabled === 'false' && includeStrategy && includeAsset && includeMyPools
     })
@@ -127,13 +124,11 @@ const assetNames = {
 
 export const PoolExplorer = ({ chainId, account, depositToken } : PoolExplorerProps) => {
 
-    const { connectedChainId, wrongNetwork } = useContext(AppContext);
-
     const classes = useStyles()
 
     const [asset, setAsset] = useState(-1)
     const [strategy, setStrategy] = useState(-1)
-    const [mypools, setMypools] = useState(false)
+    //const [mypools, setMypools] = useState(false)
 
     const strategies = allStrategies(chainId)
     const assets = allAssets(chainId)
@@ -151,10 +146,6 @@ export const PoolExplorer = ({ chainId, account, depositToken } : PoolExplorerPr
         setAsset(Number(event.target.value))
     }
 
-    const handleMyPoolsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setMypools(event.target.checked)
-    }
-
     const strategyItems = strategies.map( (item, idx) => {
         const name = strategyNames[item as keyof typeof strategyNames] || item
         return <MenuItem key={idx} value={idx}>{name}</MenuItem>
@@ -167,10 +158,10 @@ export const PoolExplorer = ({ chainId, account, depositToken } : PoolExplorerPr
         return <MenuItem key={idx} value={idx}>{name}</MenuItem>
     })
 
-    const selectedStrategy = strategy == -1 ? undefined : strategies[strategy]
-    const selectedAsset = asset == -1 ? undefined : assets[asset]
+    const selectedStrategy = strategy === -1 ? undefined : strategies[strategy]
+    const selectedAsset = asset === -1 ? undefined : assets[asset]
 
-    const poolsViews = filterPools(chainId, [...indexes, ...pools], selectedStrategy, selectedAsset, mypools).map( index => { 
+    const poolsViews = filterPools(chainId, [...indexes, ...pools], selectedStrategy, selectedAsset, false).map( index => { 
         return (
             <div key={index.poolId}>
                 <PoolSummary chainId={chainId} poolId={index.poolId} account={account} depositToken={depositToken} tokens={index.tokenInfoArray} />

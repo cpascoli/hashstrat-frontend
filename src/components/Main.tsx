@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { BrowserRouter, Routes,Route } from "react-router-dom";
 
-import { useEthers, Polygon } from '@usedapp/core';
+import { Polygon } from '@usedapp/core';
 import { Box, makeStyles } from "@material-ui/core"
 
 import { AppContext, initialContext } from "../context/AppContext"
@@ -65,7 +65,6 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
     // the chainId connected via the wallet (could be a wrong chain)
     const [connectedChainId, setConnectedChainId] = useState<number | undefined>(undefined); 
     
-    const [connected, setConnected] = useState(false);
     const [account, setAccount] = useState<string | undefined>();
 
     const poolIds = PoolIds(chainId || defaultChainId)
@@ -73,19 +72,8 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
     const depositToken = DepositToken(chainId || defaultChainId) 
     const investTokens = InvestTokens(chainId || defaultChainId)
 
-
     console.log("Main >> ", chainId, account)
     
-    useEffect(() => {
-        console.log("Main chainId", chainId, account)
-
-        if (account) {
-            setConnected(true)
-        } else {
-            setConnected(false)
-        }
-    }, [chainId, account])
-
 
     const networkChangedHandler = (chainId: number) => {
         console.log(">>> Main networkChangedHandler:", chainId, account)

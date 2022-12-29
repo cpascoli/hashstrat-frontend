@@ -3,14 +3,13 @@ import { constants } from "ethers"
 
 import { useContractFunction, useCall } from "@usedapp/core"
 import { DivsDistributorContract } from "../utils/network"
-import { useDebugValue } from "react"
 
 
 
 export const useGetDistributionIntervals = (chainId: number) => {
 
     const contract = DivsDistributorContract(chainId)
-    const { value, error } = useCall({
+    const { value } = useCall({
         contract: contract,
         method: 'getDistributionIntervals',
         args: [],
@@ -23,7 +22,7 @@ export const useGetDistributionIntervals = (chainId: number) => {
 export const useGetDistributiontIntervalsCount = (chainId: number) => {
 
     const contract = DivsDistributorContract(chainId)
-    const { value, error } = useCall({
+    const { value } = useCall({
         contract: contract,
         method: 'getDistributiontIntervalsCount',
         args: [],
@@ -33,12 +32,10 @@ export const useGetDistributiontIntervalsCount = (chainId: number) => {
 }
 
 
-
-
 export const useClaimableDivs = (chainId: number, account?: string) => {
 
     const contract = DivsDistributorContract(chainId)
-    const { value, error } = useCall({
+    const { value } = useCall({
         contract: contract,
         method: 'claimableDivs',
         args: account? [account] : [constants.AddressZero]
@@ -52,7 +49,7 @@ export const useClaimableDivs = (chainId: number, account?: string) => {
 export const useClaimedDivs = (chainId: number, distributionId: number, account?: string) => {
 
     const contract = DivsDistributorContract(chainId)
-    const { value, error } = useCall({
+    const { value } = useCall({
         contract: contract,
         method: 'claimedDivs',
         args: distributionId && account ? [distributionId, account] : [0, constants.AddressZero]

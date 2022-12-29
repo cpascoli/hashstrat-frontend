@@ -1,6 +1,6 @@
-import { BigNumber, ethers } from 'ethers'
+import { BigNumber } from 'ethers'
 
-import { Box, Typography, makeStyles } from "@material-ui/core"
+import { Box, makeStyles } from "@material-ui/core"
 import { Token } from "../../../types/Token"
 import { useSwapInfoArray } from "../../../hooks/usePool"
 import { usePoolSwapsInfoForIndex } from "../../../hooks/useIndex"
@@ -44,7 +44,6 @@ interface IndexRoiChartProps {
 export const IndexRoiChart = ( { chainId, indexId, depositToken } : IndexRoiChartProps ) => {
 
     const classes = useStyle()
-
 
     const swapsInfo = usePoolSwapsInfoForIndex(chainId, indexId)
     const investTokens = InvestTokens(chainId)
@@ -98,9 +97,10 @@ export const RoiChart = ( { chainId, poolId, depositToken, investToken } : RoiCh
    
     const price = useFeedLatestPrice(chainId, poolId)
     const latestTimestamp = useFeedLatestTimestamp(chainId, poolId)
-    const priceFormatted = price && parseFloat(fromDecimals(BigNumber.from(price), 8, 2))
     const priceTimestamp = latestTimestamp && BigNumber.from(latestTimestamp).toNumber()
-    const roiData = swaps && priceFormatted && latestTimestamp && poolRoiDataForSwaps(swaps, priceFormatted, priceTimestamp, depositToken, investToken)
+    const roiData = swaps && price && priceTimestamp && poolRoiDataForSwaps(swaps, price, priceTimestamp, depositToken, investToken)
+
+    console.log(">>>> RoiChart: ", swaps, price, priceTimestamp, depositToken, investToken)
 
     // chart labels & data
     const label1 = `Strategy ROI`

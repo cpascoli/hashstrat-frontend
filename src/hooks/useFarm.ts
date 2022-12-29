@@ -3,7 +3,7 @@ import { BigNumber, constants } from "ethers"
 
 import { useContractFunction, useCall, useCalls } from "@usedapp/core"
 import { FarmContract, PoolLPContract, PoolLPTokenAddress } from "../utils/network"
-import { PoolIds, IndexesIds, PoolInfo, PoolsInfo } from "../utils/pools"
+import { PoolIds, IndexesIds, PoolsInfo } from "../utils/pools"
 
 
 export const useStakedTokenBalance = (chainId: number, poolId: string, account?: string) => {
@@ -31,7 +31,7 @@ export type LPBalanceInfo = {
 // the sum of the balance of all LP tokens staked in the farm
 export const useStakedLP = (chainId: number, account?: string) => {
 
-    const { value, error } = useCall({
+    const { value } = useCall({
         contract: FarmContract(chainId),
         method: 'getLPTokens',
         args: [],

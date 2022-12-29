@@ -1,4 +1,4 @@
-import { Button, makeStyles } from "@material-ui/core"
+import { makeStyles } from "@material-ui/core"
 
 
 const useStyles = makeStyles( theme => ({
@@ -9,7 +9,7 @@ const useStyles = makeStyles( theme => ({
          top: "50%",
          transform: "translateX(-50%) translateY(-50%)",
          minWidth: "340px",
-         backgroundColor: theme.palette.type == 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
+         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
          boxShadow: "0 1px 27px 0 rgba(0,0,0,0.19)",
          borderRadius: "10px",
          padding: "0px",

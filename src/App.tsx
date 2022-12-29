@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { DAppProvider, Goerli, Polygon, ChainId, Mainnet } from '@usedapp/core';
+import { DAppProvider, Goerli, Polygon } from '@usedapp/core';
 
 import { Container } from '@material-ui/core'
 import { Main } from './components/Main'

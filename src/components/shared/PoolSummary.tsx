@@ -1,5 +1,5 @@
 
-import { makeStyles, Link, Box, Divider, Typography, Button, Accordion, AccordionDetails, AccordionSummary } from "@material-ui/core"
+import { makeStyles, Link, Box, Divider, Typography, Button } from "@material-ui/core"
 import { utils } from "ethers"
 import { useAccountLPBalanceForPool } from "../../hooks/usePoolInfo"
 
@@ -77,13 +77,13 @@ export const PoolSummary = ({ chainId, poolId, tokens, depositToken, account } :
     const link = poolId.startsWith("index") ? `/indexes/${poolId}` : `/pools/${poolId}`
 
 
-    if (totalAccountValueFormatted == '0' && disabled === 'true') {
+    if (totalAccountValueFormatted === '0' && disabled === 'true') {
         return <div></div>
     }
 
     const assetImages = [...investTokens, depositTokenSymbol].map( (item, idx) => {
        const imageSrc = item === 'WBTC' ? wbtc : item === 'WETH' ? weth : item === 'USDC' ? usdc : ''
-       return <img key={idx} src={imageSrc} style={{width: 25, height: 25, marginLeft: 5}} />
+       return <img key={idx} src={imageSrc} style={{width: 25, height: 25, marginLeft: 5}} alt="" />
     })
 
     const outlineColout = poolId.startsWith("index") ? "primary" : "secondary"

@@ -7,7 +7,7 @@ import { useDepositAndStartStake, useEndStakeAndWithdraw } from "../../hooks/use
 
 
 import { Box, Grid, Button, Input, CircularProgress, Divider, Typography, Link, makeStyles } from "@material-ui/core"
-import { Alert, AlertTitle } from "@material-ui/lab"
+import { AlertTitle } from "@material-ui/lab"
 import { StyledAlert } from "../shared/StyledAlert"
 
 import { SnackInfo } from "../SnackInfo"
@@ -72,9 +72,9 @@ const useStyle = makeStyles( theme => ({
 }))
 
 
-export const StakeForm = ({ formType, chainId, poolId, token, balance, account, handleSuccess, handleError, onClose } : StakeFormProps) => {
+export const StakeForm = ({ formType, chainId, poolId, token, balance, account, handleSuccess, onClose } : StakeFormProps) => {
 
-    const { symbol, image } = token
+    const { symbol } = token
 
     // PoolLP Token allowance 
     const allowance = useTokenAllowance(chainId, poolId, symbol, FarmAddress(chainId, poolId)) // in token decimals
@@ -102,7 +102,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
         if (allowance) {
             setFormattedAllowance( fromDecimals(allowance, token.decimals, 4) )
         }
-    }, [allowance])
+    }, [allowance, token.decimals])
 
 
 
@@ -117,7 +117,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
         updateAmount(newAmount)
     }
 
-    // validates the deposit/withdrawal amount and its decimal amount
+    // validates the stake amount and its decimal amount
     const updateAmount = (newAmount: string) => {
         setAmount(newAmount)
         const amounDec = Number(newAmount)
@@ -223,7 +223,7 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
                 message: "Now you can close the window",
             })
             handleSuccess(info)
-            updateAmount("")
+            setAmountDecimals("")
         }
 
         if (notifications.filter((notification) =>
@@ -244,9 +244,9 @@ export const StakeForm = ({ formType, chainId, poolId, token, balance, account, 
                 message: "Now you can close the window",
             })
             handleSuccess(info)
-            updateAmount("")
+            setAmountDecimals("")
         }
-    }, [notifications, chainId, approveLink, depositLink, withdrawLink])
+    }, [notifications, chainId, approveLink, depositLink, withdrawLink, formattedAllowance, handleSuccess])
 
     
     const showApproveButton =  (isApproveMining || (!allowanceOk && !isDepositMining)) // !allowanceOk  &&  !isDepositMining

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Box, Tab, Paper, Snackbar, Link, makeStyles } from "@material-ui/core"
 import { styled } from "@material-ui/core/styles"
-import { TabContext, TabList, TabPanel, Alert, AlertTitle, Color as Severity } from "@material-ui/lab"
+import { TabContext, TabList, TabPanel, AlertTitle } from "@material-ui/lab"
 import { StyledAlert } from "../shared/StyledAlert"
 
 
@@ -39,12 +39,6 @@ const useStyle = makeStyles( theme => ({
     },
 }))
 
-
-const TabContent = styled(Paper)(({ theme }) => ({
-    // padding: theme.spacing(2),
-    textAlign: 'center',
-    width: "100%",
-}));
 
 
 
@@ -95,7 +89,7 @@ export const WalletTabs = ( { chainId, poolId, account, tokens } : TabPanelProps
                             return (
                                 <TabPanel className={classes.tab} value={index.toString()} key={index}>
                                     <DepositWithdrawView 
-                                        formType={ token.symbol == 'POOL-LP' ? "withdraw" :  "deposit" }
+                                        formType={ token.symbol === 'POOL-LP' ? "withdraw" :  "deposit" }
                                         chainId={chainId}
                                         poolId={poolId}
                                         token={token}

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useEthers, useTokenBalance } from "@usedapp/core"
-import { Box, Grid, Button, Typography, Link, makeStyles } from  "@material-ui/core"
-import { Alert, AlertTitle } from "@material-ui/lab"
+import { Box, Grid, Button, Link, makeStyles } from  "@material-ui/core"
+import { AlertTitle } from "@material-ui/lab"
 
 import { useStakedTokenBalance } from "../../hooks/useFarm"
 
@@ -49,7 +49,7 @@ export const DepositWithdrawView = ( { formType, chainId, poolId, token, handleS
   const [showUDepositWithdrawModal, setShowUDepositWithdrawModal] = useState(false);
   const [formTypeValue, setFormTypeValue] = useState(formType);
 
-  const { symbol, image, address } = token
+  const { symbol, address } = token
   const { account } = useEthers()
   const tokenBalance = useTokenBalance(address, account)
   const formattedTokenBalance = tokenBalance ? fromDecimals(tokenBalance, token.decimals, 6) : ''

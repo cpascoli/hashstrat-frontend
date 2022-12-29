@@ -1,5 +1,5 @@
 
-import { makeStyles, Box, Backdrop } from "@material-ui/core"
+import { makeStyles, Box } from "@material-ui/core"
 
 interface ChildrenProps {
     children: React.ReactNode,
@@ -77,7 +77,7 @@ export const Page = ({ children } : ChildrenProps) => {
 export const Horizontal = ({ children, align = "left" , valign, spacing } : ChildrenProps) => {
     const classes = useStyles()
     return (
-        <div className={    spacing == 'between' ? classes.horizontalVerticallyCenteredSpaceBetween : 
+        <div className={    spacing === 'between' ? classes.horizontalVerticallyCenteredSpaceBetween : 
                             (valign === 'center' && align === "center") ? classes.horizontalVerticallyCentered :
                             (valign === 'center' && align === "left") ? classes.horizontalVerticallyCenteredLeftAligned :
                             align === "center" ? classes.horizontalCenter : classes.horizontalLeft 

@@ -3,7 +3,8 @@ import { useCall, useCalls } from "@usedapp/core"
 import { BigNumber } from 'ethers'
 
 import { FeedContract, FeedContractForAddress, FeedAddressForToken } from "../utils/network"
-import { fromDecimals, round } from "../utils/formatter"
+import { fromDecimals } from "../utils/formatter"
+import { gridColumnsTotalWidthSelector } from "@material-ui/data-grid"
 
 
 export const useFeedLatestPrice = (chainId: number, poolId: string) => {
@@ -77,14 +78,11 @@ export const useLastPriceForTokens = (chainId: number, tokens: string[]) => {
     return tokens.map( (symbol, idx) => {
         const price = priceResults.at(idx)?.value
         const timestamp = timestampResults.at(idx)?.value
-        const decimals = decimalsResults.at(idx)?.value
-
-        const formattedPrice = (price && decimals && price[0] && decimals[0]) ? fromDecimals( BigNumber.from( price[0] ), parseInt(decimals[0]), 2) : ''
+        // const decimals = decimalsResults.at(idx)?.value
         const formattedTimestamp = timestamp && timestamp[0] ? Number(timestamp[0].toString()) : 0
-
         return {
             symbol: symbol,
-            price: formattedPrice ? Number(formattedPrice) : 0,
+            price: price[0] as string,
             timestamp: formattedTimestamp, 
         }
     })

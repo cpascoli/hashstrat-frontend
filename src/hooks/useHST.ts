@@ -7,7 +7,7 @@ import { HstContract } from "../utils/network"
 
 export const useTotalSupply = (chainId: number)  => {
     const tokenContract = HstContract(chainId) 
-    const { value, error } = useCall({
+    const { value } = useCall({
             contract: tokenContract,
             method: 'totalSupply',
             args: [],
@@ -19,7 +19,7 @@ export const useTotalSupply = (chainId: number)  => {
 export const useMaxSupply = (chainId: number) => {
     const tokenContract = HstContract(chainId) 
 
-    const { value, error } = useCall({
+    const { value } = useCall({
             contract: tokenContract,
             method: 'maxSupply',
             args: [],
@@ -32,7 +32,7 @@ export const useMaxSupply = (chainId: number) => {
 export const useGetPastVotes = (chainId: number, block: number, account?: string) => {
     const tokenContract = HstContract(chainId) 
 
-    const { value, error } = useCall({
+    const { value } = useCall({
             contract: tokenContract,
             method: 'getPastVotes',
             args: account && block ? [account, block] : [constants.AddressZero, 0],
@@ -44,7 +44,7 @@ export const useGetPastVotes = (chainId: number, block: number, account?: string
 export const useGetPastTotalSupply = (chainId: number, block?: number) => {
     const tokenContract = HstContract(chainId) 
 
-    const { value, error } = useCall({
+    const { value } = useCall({
             contract: tokenContract,
             method: 'getPastTotalSupply',
             args: block ? [ block ] : [0],

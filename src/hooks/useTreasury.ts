@@ -1,7 +1,6 @@
 
 import { useCall } from "@usedapp/core"
 import { TreasuryContract } from "../utils/network"
-import { useDebugValue } from "react"
 
 export const useGetBalance = (chainId: number) => {
 

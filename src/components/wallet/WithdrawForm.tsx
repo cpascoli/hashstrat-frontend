@@ -2,19 +2,14 @@ import React, { useState, useEffect } from "react"
 import { useNotifications } from "@usedapp/core"
 import { BigNumber } from "ethers"
 
-
-import { Box, Grid, Button, Input, CircularProgress, Divider, Typography, Link, Paper, makeStyles } from "@material-ui/core"
-import { useTokenApprove, useTokenAllowance, useTokenBalance } from "../../hooks/useErc20Tokens"
-import { useLpTokensValue, useDeposit, useWithdraw, useFeesForWithdraw } from "../../hooks/usePool"
-
-
+import { Box, Grid, Button, Input, CircularProgress, Typography, Link, makeStyles } from "@material-ui/core"
+import { useTokenBalance } from "../../hooks/useErc20Tokens"
+import { useLpTokensValue, useWithdraw, useFeesForWithdraw } from "../../hooks/usePool"
 import { Token } from "../../types/Token"
 import { toDecimals, fromDecimals } from "../../utils/formatter"
-import { NetworkExplorerHost, NetworkExplorerName, PoolAddress} from "../../utils/network"
+import { NetworkExplorerHost, NetworkExplorerName } from "../../utils/network"
 import { SnackInfo } from "../SnackInfo"
 import { Horizontal } from "../Layout"
-import { Alert, AlertTitle } from "@material-ui/lab"
-import { StyledAlert } from "../shared/StyledAlert"
 import { DepositToken } from "../../utils/pools"
 
 
@@ -61,7 +56,7 @@ const useStyle = makeStyles( theme => ({
 export const WithdrawForm = ({ chainId, poolId, token, balance, handleSuccess, handleError, onClose, account} : WithdrawFormProps) => {
 
     const classes = useStyle()
-    const { symbol, image } = token
+    const { symbol } = token
 
     // Token stats 
     // const allowance = useTokenAllowance(chainId, poolId, symbol, PoolAddress(chainId, poolId)) // in token decimals
@@ -76,8 +71,6 @@ export const WithdrawForm = ({ chainId, poolId, token, balance, handleSuccess, h
     // withdraw only data (fees are only available for pools)
     const lpTokensValue =  useLpTokensValue(chainId, poolId, amountDecimals)
     const feesForWithdraw = useFeesForWithdraw(chainId, poolId, amountDecimals, account)
-
-    const { approveErc20, approveErc20State } = useTokenApprove(chainId, poolId, symbol, PoolAddress(chainId, poolId))
     const { notifications } = useNotifications()
 
     // formatted values
@@ -112,15 +105,6 @@ export const WithdrawForm = ({ chainId, poolId, token, balance, handleSuccess, h
         const amountDecimals = toDecimals( validAmount ? amounDec.toString() : "0", token.decimals)
         setAmountDecimals(amountDecimals)
         setIsValidAmount(validAmount)
-    }
-
-
-
-    // Approve Tokens
-    const isApproveMining = approveErc20State.status === "Mining"
-    const approveButtonPressed = () => {
-        console.log("approveButtonPressed - amount: ", amount, "amountDecimals", amountDecimals)
-        return approveErc20(amountDecimals)
     }
 
 
@@ -168,9 +152,9 @@ export const WithdrawForm = ({ chainId, poolId, token, balance, handleSuccess, h
                 message: "Now you can close the window",
             })
             handleSuccess(info)
-            updateAmount("")
+            setAmountDecimals("")
         }
-    }, [notifications, chainId, withdrawLink])
+    }, [notifications, chainId, withdrawLink, handleSuccess])
 
     
 

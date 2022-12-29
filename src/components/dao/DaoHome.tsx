@@ -12,6 +12,7 @@ import { Horizontal } from "../Layout"
 import { ConnectAccountHelper } from "../dashboard/ConnectAccountHelper"
 import { AppContext } from "../../context/AppContext"
 
+
 interface DaoHomeProps {
     chainId: number,
     account?: string,

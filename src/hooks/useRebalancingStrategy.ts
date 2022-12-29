@@ -1,7 +1,6 @@
 
 import { useCall } from "@usedapp/core"
 import { StrategyContract } from "../utils/network"
-import { useDebugValue } from "react"
 
 
 export const useStrategyName = (chainId: number, poolId: string) => {

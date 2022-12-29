@@ -99,7 +99,7 @@ export const useTokensInfoAndPoolsInfoForIndexes = (chainId: number,  indexIds: 
             return pool.name.toLowerCase()
         })
     }).filter((item, pos, self) => {  // remove dups
-        return self.indexOf(item) == pos;
+        return self.indexOf(item) === pos;
     }).filter( item => {
         return item !== undefined
     }).sort()
@@ -313,7 +313,7 @@ export const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string
         const indexesInfo = IndexesInfo(chainId,  indexIds)
 
         // Indexes addresses
-        const lpTokens1Requests = indexesInfo.filter(req => PoolInfo(chainId, req.poolId).disabled === 'false') .map( index =>  {
+        const lpTokens1Requests = indexesInfo.filter(req => PoolInfo(chainId, req.poolId).disabled === 'false').map( index =>  {
             return {
                 indexId: index.poolId,
                 indexAddress: index.pool,
@@ -321,7 +321,7 @@ export const useAccountLPBalancesForIndexes = (chainId: number, indexIds: string
             }
         })
 
-        const lpTokens2Requests = indexesInfo.filter(req => PoolInfo(chainId, req.poolId).disabled === 'true') .map( index =>  {
+        const lpTokens2Requests = indexesInfo.filter(req => PoolInfo(chainId, req.poolId).disabled === 'true').map( index =>  {
             return {
                 indexId: index.poolId,
                 indexAddress: index.pool,
@@ -584,7 +584,7 @@ export const useTokensInfoForPools = (chainId: number, poolIds: string[], tokens
         const lpBalance = lpBalances[pool.poolId].lpBalance 
         const lpSupply = lpBalances[pool.poolId].lpTotalSupply
 
-        const isDepositToken = (pool.tokenSymbol == pool.depositToken?.symbol)
+        const isDepositToken = (pool.tokenSymbol === pool.depositToken?.symbol)
         const feedPrice = isDepositToken ? 1 : tokenPriceMap[pool.tokenSymbol]
 
         const canHaveTokenValue = pool.balance && feedPrice
@@ -659,7 +659,7 @@ export const useUsersForPools = (chainId: number, poolIds: string[], account?: s
         return { req, res } 
     }).forEach( el => {
         if (el.res && el.res[0]) {
-            el.res[0].filter( (el : any) => !indexeAddresses.includes(el) ) .forEach(addresses.add, addresses)
+            el.res[0].filter( (el : any) => !indexeAddresses.includes(el) ).forEach(addresses.add, addresses)
         }
     })
 

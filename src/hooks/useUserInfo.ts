@@ -1,10 +1,8 @@
 import { constants, BigNumber } from "ethers"
 
 import {  useCalls } from "@usedapp/core"
-
-import { PoolContract, PoolLPContract } from "../utils/network"
-import { PoolIds, IndexesIds,  PoolInfo, PoolsInfo } from "../utils/pools"
-
+import { PoolContract } from "../utils/network"
+import { PoolIds, IndexesIds} from "../utils/pools"
 
 
 export const useTotalDeposited = (chainId: number, account: string | undefined) => {

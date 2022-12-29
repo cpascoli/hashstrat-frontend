@@ -23,8 +23,6 @@ import { Modal } from "../Modal"
 import { StyledAlert } from "../shared/StyledAlert"
 
 import { SnackInfo } from "../SnackInfo"
-import { ConnectButton } from "../../main/ConnectButton"
-import { ConnectAccountHelper } from "./ConnectAccountHelper"
 
 
 interface MyPortfolioAssetsSummaryProps {
@@ -127,7 +125,7 @@ export const MyPortfolioAssetsSummary = ({ chainId, connectedChainId, depositTok
             onPortfolioLoad(didLoad)
         }
 
-	}, [didLoad, totalValueFormatted])
+	}, [didLoad, totalValueFormatted, onPortfolioLoad])
 
     
     /// DepositWorkflow Callbacks

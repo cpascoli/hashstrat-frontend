@@ -1,9 +1,6 @@
 
 import { useContractFunction, useCall, useCalls } from "@usedapp/core"
 import { PoolContract } from "../utils/network"
-import { useDebugValue } from "react"
-import { constants } from "ethers"
-import { PoolTokensSwapsInfo } from "../types/PoolTokensSwapsInfo"
 import { PoolInfo } from "../utils/pools"
 import { useLastPriceForTokens } from "./useFeed"
 import { InvestTokens } from "../utils/pools"
@@ -138,7 +135,7 @@ export const usePoolInfo = (chainId: number, poolId: string, index: number) : Po
 export const usePoolInfoArray = (chainId: number, poolId: string) => {
     const poolContract = PoolContract(chainId, poolId)
 
-    const { value, error } = useCall({
+    const { value } = useCall({
         contract: poolContract,
         method: 'getPoolsInfo',
         args: [],
@@ -243,7 +240,7 @@ export const usePoolSwapsInfoForIndex = (chainId: number, indexId: string) => {
 
         // filter prices only for tokens in the index
         const poolTokens = (investTokens as string[]).map( it => it.toLowerCase() )
-        const priceInfo = tokenPrices.filter( item => poolTokens.includes(item.symbol.toLowerCase()) && item.price && item.price > 0)
+        const priceInfo = tokenPrices.filter( item => poolTokens.includes(item.symbol.toLowerCase()) && item.price && item.price !== undefined)
         
        // console.log("usePoolSwapsInfoForIndex. pool: ", pool.poolId, "tokenPrices: ", tokenPrices, "filtered: ", prices, "indexTokens:",indexTokens)
 

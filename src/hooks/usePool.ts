@@ -1,9 +1,6 @@
-
 import { constants, BigNumber } from "ethers"
-
 import { useContractFunction, useCall } from "@usedapp/core"
 import { PoolContract, PoolLPContract } from "../utils/network"
-import { useDebugValue } from "react"
 
 
 //// User Actions ////
@@ -204,7 +201,7 @@ export const useDepositTokenValue = (chainId: number, poolId: string) => {
 
 export const useSwapInfo = (chainId: number, index: number, poolId: string) => {
     const poolContract = PoolContract(chainId, poolId)
-    const { value, error } = useCall({
+    const { value } = useCall({
             contract: poolContract,
             method: 'swaps',
             args: [index],

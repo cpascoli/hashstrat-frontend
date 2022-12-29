@@ -50,10 +50,10 @@ export const StakingView = ( { chainId, poolId, token, formType, handleSuccess, 
   const { symbol, address } = token
   const { account } = useEthers()
   const tokenBalance = useTokenBalance(address, account)
-  const formattedTokenBalance = tokenBalance && fromDecimals(tokenBalance, token.decimals, 2) || "0.0"
+  const formattedTokenBalance = (tokenBalance && fromDecimals(tokenBalance, token.decimals, 2)) || "0.0"
 
   const tokenStakedBalance = useStakedTokenBalance(chainId, poolId, account)
-  const formattedTokenStakedBalance = tokenStakedBalance && fromDecimals(tokenStakedBalance, token.decimals, 2) || "0.0"
+  const formattedTokenStakedBalance = (tokenStakedBalance && fromDecimals(tokenStakedBalance, token.decimals, 2)) || "0.0"
 
   const showModalPressed = () => {
     if (formType === 'stake' ? Number(formattedTokenBalance) > 0: Number(formattedTokenStakedBalance) > 0) {

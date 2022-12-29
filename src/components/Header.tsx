@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { useEthers, Polygon, shortenAddress } from "@usedapp/core";
+import { useEthers, shortenAddress } from "@usedapp/core";
 import { styled } from "@material-ui/core/styles"
 
 import { useTheme, Button, Link, Menu, MenuProps, MenuItem, Divider, Typography, makeStyles, Box, Switch } from "@material-ui/core"
@@ -132,7 +132,7 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId, netw
 			networkChangedHandler(chainId)
 		}
 	
-	}, [chainId, account])
+	}, [chainId, account, networkChangedHandler, setAccount])
 	
 
 	// manage menu
@@ -171,7 +171,7 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId, netw
 			<Box className={classes.container}>
 
 				<Link component={RouterLink} to="/" >
-					<Button> <img src={logImg} style={{ width: 55, height: 55 }} className={classes.logoFilter} /> </Button>
+					<Button> <img src={logImg} style={{ width: 55, height: 55 }} className={classes.logoFilter} alt="logo" /> </Button>
 				</Link>
 				
 				<div className={classes.rightItmesContainer}>

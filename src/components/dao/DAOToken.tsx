@@ -1,25 +1,25 @@
 import { useState, useEffect } from "react"
-import { BigNumber, utils , ethers } from "ethers"
+import { utils } from "ethers"
 import { useNotifications } from "@usedapp/core";
 
 import { Box, Accordion, AccordionDetails, AccordionSummary, makeStyles, 
         Typography, Button, CircularProgress, Card, CardContent, CardActions
      } from "@material-ui/core"
-import { Alert, AlertTitle } from "@material-ui/lab"
+import { AlertTitle } from "@material-ui/lab"
 import { ExpandMore } from "@material-ui/icons"
 
 import { useMaxSupply, useTotalSupply } from "../../hooks/useHST"
 import { useTokenBalance  } from "../../hooks/useErc20Tokens"
 import { useGetRewardPeriods, useStakedLP, useClaimableRewards, useClaimReward  } from "../../hooks/useFarm"
 
-import { fromDecimals, round } from "../../utils/formatter"
+import { fromDecimals } from "../../utils/formatter"
 import { TitleValueBox } from "../TitleValueBox"
 
 import { Horizontal } from "../Layout"
 import { Token } from "../../types/Token"
 
 import { SnackInfo } from "../SnackInfo"
-import { NetworkExplorerHost, NetworkExplorerName } from "../../utils/network"
+import { NetworkExplorerHost } from "../../utils/network"
 import { StyledAlert } from "../shared/StyledAlert"
 
 import { HstToken } from "../../utils/Tokens"
@@ -60,8 +60,6 @@ const useStyles = makeStyles( theme => ({
 export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) => {
 
     const classes = useStyles()
-    
-    const rewardPeriods = useGetRewardPeriods(chainId)
     const hstBalance = useTokenBalance(chainId, "", "HST", account)
 
     const hstMaxSupply  = useMaxSupply(chainId)
@@ -117,14 +115,6 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
                 notification.type === "transactionSucceed" &&
                 notification.transactionName === "Claim Rewards"
         ).length > 0) {
-            const info : SnackInfo = {
-                type: "info",
-                title: "Success",
-                message: "HST tokens claimed",
-                linkUrl: claimedLink,
-                linkText: `View on ${NetworkExplorerName(chainId)}`,
-                snackDuration: 15000
-            }
             setUserMessage({
                 type: "info",
                 title: "HST tokens claimed",
@@ -137,13 +127,7 @@ export const DAOToken = ({ chainId, account, depositToken } : DAOTokenProps ) =>
     const formattedTokenStakedBalance = tokenStakedBalance? fromDecimals(tokenStakedBalance, depositToken.decimals, 2) : ""
     const formattedClaimableRewards = claimableRewards? fromDecimals(claimableRewards, 18, 2) : ""
     const formattedHstBalance = hstBalance? fromDecimals(hstBalance, 18, 2) : ""
-    
     const formattedHstMaxSupply = hstMaxSupply? fromDecimals(hstMaxSupply, 18, 2) : ""
-
-    const totalRewardPaid = rewardPeriods && rewardPeriods.reduce( (acc : BigNumber, val : { [ x:string ] : BigNumber } ) => {
-        return acc.add(val.totalRewardsPaid)
-    }, BigNumber.from(0))
-
     const formattedHstTotalSupply = hstTotalSupply? fromDecimals(hstTotalSupply, 18, 2) : ""
 
     const circulatingPerc = (formattedHstTotalSupply && formattedHstMaxSupply ) ? 

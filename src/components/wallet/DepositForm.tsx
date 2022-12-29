@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from "react"
 import { useNotifications } from "@usedapp/core"
-import { BigNumber } from "ethers"
 
-
-import { Box, Grid, Button, Input, CircularProgress, Divider, Typography, Link, Paper, makeStyles } from "@material-ui/core"
-import { useTokenApprove, useTokenAllowance, useTokenBalance } from "../../hooks/useErc20Tokens"
-import { useLpTokensValue, useDeposit } from "../../hooks/usePool"
-
+import { Box, Grid, Button, Input, CircularProgress, Typography, Link, makeStyles } from "@material-ui/core"
+import { useTokenApprove, useTokenAllowance } from "../../hooks/useErc20Tokens"
+import { useDeposit } from "../../hooks/usePool"
 
 import { Token } from "../../types/Token"
 import { toDecimals, fromDecimals } from "../../utils/formatter"
 import { NetworkExplorerHost, NetworkExplorerName, PoolAddress} from "../../utils/network"
 import { SnackInfo } from "../SnackInfo"
 import { Horizontal } from "../Layout"
-import { Alert, AlertTitle } from "@material-ui/lab"
+import { AlertTitle } from "@material-ui/lab"
 import { StyledAlert } from "../shared/StyledAlert"
-import { DepositToken } from "../../utils/pools"
 
 
 export interface DepositFormProps {
@@ -61,11 +57,10 @@ const useStyle = makeStyles( theme => ({
 export const DepositForm = ({ chainId, poolId, token, balance, handleSuccess, handleError, onClose, account} : DepositFormProps ) => {
 
     const classes = useStyle()
-    const { symbol, image } = token
+    const { symbol } = token
 
     // Token stats 
     const allowance = useTokenAllowance(chainId, poolId, symbol, PoolAddress(chainId, poolId)) // in token decimals
-    const tokenBalance = useTokenBalance(chainId, poolId, "pool-lp", account);
 
     // form state management
     const [amount, setAmount] = useState<number | string>("")
@@ -78,12 +73,9 @@ export const DepositForm = ({ chainId, poolId, token, balance, handleSuccess, ha
     const { notifications } = useNotifications()
 
     // formatted values
-    const depositToken = DepositToken(chainId)
     const formattedAllowance = allowance && fromDecimals(allowance, token.decimals, 4)
 
-
     // Form Handlers
-
     const handleClose = () => {
         console.log("handleClose")
         setUserMessage(undefined)
@@ -155,7 +147,6 @@ export const DepositForm = ({ chainId, poolId, token, balance, handleSuccess, ha
                 notification.type === "transactionSucceed" &&
                 notification.transactionName === "Approve Token Transfer"
         ).length > 0) {
-
             //TODO update UI
             console.log("Token transfer approved. New allowance: ", formattedAllowance)
 
@@ -192,10 +183,10 @@ export const DepositForm = ({ chainId, poolId, token, balance, handleSuccess, ha
                 message: "Now you can close the window",
             })
             handleSuccess(info)
-            updateAmount("")
+            setAmountDecimals("")
         }
 
-    }, [notifications, chainId, approveLink, depositLink])
+    }, [notifications, chainId, approveLink, depositLink, formattedAllowance, handleSuccess])
 
     
     const showApproveButton =  (isApproveMining || (!allowanceOk && !isDepositMining)) // !allowanceOk  &&  !isDepositMining
@@ -228,7 +219,7 @@ export const DepositForm = ({ chainId, poolId, token, balance, handleSuccess, ha
                 }
        
 
-                { Number(balance) == 0  &&
+                { Number(balance) === 0  &&
                     <div >
                         <StyledAlert severity="warning">
                             <AlertTitle> Fund your account with USDC to deposit </AlertTitle>

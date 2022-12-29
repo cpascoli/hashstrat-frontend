@@ -1,5 +1,5 @@
 
-import { makeStyles, Box, Typography, Divider } from "@material-ui/core"
+import { makeStyles, Box, Typography } from "@material-ui/core"
 
 interface InfoBoxProps {
     children: React.ReactNode,
@@ -36,13 +36,13 @@ const useStyles = makeStyles( theme => ({
 }))
 
 
-export const InfoBox = ({ children, title, image,  } : InfoBoxProps) => {
+export const InfoBox = ({ children, title, image  } : InfoBoxProps) => {
     const classes = useStyles()
     return (
         <div className={classes.container}>
             { image &&
                 <div style={{textAlign: "center", alignItems: "center" }}>
-                    <img src={image} className={classes.image} ></img> 
+                    <img src={image} className={classes.image} alt=""></img> 
                 </div>
             }
             <Box px={2} >

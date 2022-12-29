@@ -117,7 +117,7 @@ const assetNames = {
 
 const assetImages = ['WBTC','WETH'].map( (item, idx) => {
     const imageSrc = item === 'WBTC' ? wbtc : item === 'WETH' ? weth : ''
-    return <img key={idx} src={imageSrc} style={{width: 35, height: 35}} />
+    return <img key={idx} src={imageSrc} style={{width: 35, height: 35}} alt={`${item}`} />
 })
 
 
@@ -138,7 +138,7 @@ const filterPools = (chainId: number, poolsInfo: PoolData[], poolId: string | un
         const info = PoolInfo(chainId, pool.poolId)
         const includePool = poolId === undefined || pool.poolId === poolId
         const includeAsset = asset === undefined || info.investTokens.map( (it: string) => it.toLowerCase()).join(',') === asset.toLowerCase()
-        const includeMyPools = mypools == false || isMyPool(pool)
+        const includeMyPools = mypools === false || isMyPool(pool)
 
         return info.disabled === 'false' && includeAsset && includeMyPools
     })
@@ -199,7 +199,7 @@ export const DepositWorkflow = ({ chainId, depositToken, investTokens, isInitial
 
 
     const poolsViews = poolsForAssets?.map( (poolId, idx) => {
-        const { name, description, investTokens, depositToken : depositTokenSymbol, disabled } = PoolInfo(chainId, poolId)
+        const { description, depositToken : depositTokenSymbol } = PoolInfo(chainId, poolId)
 
         const info = PoolInfo(chainId, poolId)
         const strategyName =  strategyNames[info.strategy as keyof typeof strategyNames] || info.strategy
@@ -289,12 +289,12 @@ export const DepositWorkflow = ({ chainId, depositToken, investTokens, isInitial
 
     
     const handleGoBackToStep = (step: number) => {
-        if (step == 0) {
+        if (step === 0) {
             setSelectedAsset(undefined)
             setSelectedPool(undefined)
             setDepositCompleted(false)
         }
-        if (step == 1) {
+        if (step === 1) {
             setSelectedPool(undefined)
             setDepositCompleted(false)
         }
@@ -397,7 +397,7 @@ export const DepositWorkflow = ({ chainId, depositToken, investTokens, isInitial
                             <Box>
                                 { (!stepCompleted || idx === steps.length -1) && <Typography>{label}</Typography> }
                                 <Link onClick={ e => handleGoBackToStep(idx) } >
-                                    <Typography variant="body2">{ idx == 0 ? assetSelectionStep : idx == 1 ? strategySelectionStep : '' }</Typography>
+                                    <Typography variant="body2">{ idx === 0 ? assetSelectionStep : idx === 1 ? strategySelectionStep : '' }</Typography>
                                 </Link>
                             </Box>
                         } />

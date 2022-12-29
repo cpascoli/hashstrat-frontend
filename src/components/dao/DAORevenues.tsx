@@ -8,7 +8,7 @@ import { Info } from "@material-ui/icons"
 import { AlertTitle } from "@material-ui/lab"
 
 import { useGetDistributionIntervals, useClaimableDivs, useClaimedDivs, useClaimDivs } from "../../hooks/useDivsDistributor"
-import { useGetPastVotes, useGetPastTotalSupply } from "../../hooks/useHST"
+import { useGetPastVotes } from "../../hooks/useHST"
 
 
 import { fromDecimals } from "../../utils/formatter"
@@ -16,7 +16,7 @@ import { fromDecimals } from "../../utils/formatter"
 import { SnackInfo } from "../SnackInfo"
 import { Token } from "../../types/Token"
 import { Horizontal } from "../Layout"
-import { NetworkExplorerHost, NetworkExplorerName } from "../../utils/network"
+import { NetworkExplorerHost } from "../../utils/network"
 import { StyledAlert } from "../shared/StyledAlert"
 
 
@@ -85,14 +85,6 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
                 notification.type === "transactionSucceed" &&
                 notification.transactionName === "Claim Dividends"
         ).length > 0) {
-            const info : SnackInfo = {
-                type: "info",
-                title: "Success",
-                message: "Dividends claimed",
-                linkUrl: claimedLink,
-                linkText: `View on ${NetworkExplorerName(chainId)}`,
-                snackDuration: 15000
-            }
             setUserMessage({
                 type: "info",
                 title: "Dividends claimed",
@@ -137,7 +129,6 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
     const distributionInfo = activeDistribution !== undefined && timeFormatted ? `Current distribution started at block ${lastPeriod?.from} and will end at block ${lastPeriod?.to}, in approximately ${timeFormatted}`  : ''
 
     const pastTokens = useGetPastVotes(chainId, lastPeriod?.from, account)
-    const pastTotalSupply = useGetPastTotalSupply(chainId, lastPeriod?.from)
     const pastTokensFormatted = pastTokens ? fromDecimals(pastTokens, 18, 2) : ''
     const divsInfo = lastPeriod?.from ? `Your dividends are based on your balance of ${pastTokensFormatted} HST at block ${lastPeriod.from}` : ''
 
@@ -264,7 +255,7 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
 
                 { loading && <CircularProgress color="secondary" /> } 
 
-                { activeDistribution == false && 
+                { (activeDistribution === false) && 
     
                     <StyledAlert severity={userMessage?.type}>
                         <AlertTitle> No dividends distribution in progress</AlertTitle>
@@ -272,7 +263,7 @@ export const DAORevenues = ({ chainId, account, depositToken } : DAORevenuesProp
                     </StyledAlert>
                 }
 
-                { activeDistribution == true && 
+                { (activeDistribution === true) && 
                     <>
                     <Card style={{ width: 270, height: 200 }} variant="outlined"  >
                         <CardContent>

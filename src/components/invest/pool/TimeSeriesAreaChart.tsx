@@ -53,7 +53,9 @@ export const TimeSeriesAreaChart = ( chartData  : ChartData ) => {
 
       <Legend verticalAlign="top" height={30}/>
       <CartesianGrid strokeDasharray="1 1" />
-      <Tooltip />
+      <Tooltip
+        labelFormatter={(unixTime) => moment(unixTime).format('yyyy-MM-DD')}
+      />
 
       <Area
         type="linear"

@@ -52,7 +52,10 @@ export const TimeSeriesLineChart = ( chartData  : ChartData ) => {
       <YAxis name = "Asset % Chg" type="number"  yAxisId="right-axis" orientation="right" />
 
       <Legend verticalAlign="top" height={30}/>
-      <Tooltip />
+      <Tooltip 
+        labelFormatter={(unixTime) => moment(unixTime).format('yyyy-MM-DD')}
+        // formatter={numberFormatter}
+      />
 
       <Line
         type="linear"

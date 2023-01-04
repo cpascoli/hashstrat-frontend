@@ -6,7 +6,7 @@ import { Token } from "../../types/Token"
 import { BigNumber } from "ethers"
 import { fromDecimals } from "../../utils/formatter"
 
-import { PieChartsData, ChartData } from "../shared/PieChartWithLabels"
+import { PieChartsData, ChartData } from "../shared/VPieChart"
 import { TokenInfo } from "../../types/TokenInfo"
 
 type TokenBalances = {[ x: string] : { symbol: string, decimals: number, value: BigNumber, balance: BigNumber, loaded: boolean }}
@@ -131,8 +131,8 @@ export const useDashboardModel = (chainId: number, tokens: Token[], depositToken
 
     return  {
         portfolioInfo: { tokenBalances: tokenBalances, totalValue: totalValue },
-        chartValueByAsset: { title: "Asset Allocation", data: valueByAsset, width: 300, height: 250, includePercent: true},
-        chartValueByPool: { title: "Pool Allocation", data: valueByPool, width: 300, height: 250, includePercent: false},
+        chartValueByAsset: { title: "Asset Allocation", data: valueByAsset, width: 300, height: 300 },
+        chartValueByPool: { title: "Pool Allocation", data: valueByPool, width: 300, height: 300 },
         poolsInfo,
         indexesInfo,
         didLoad,
@@ -176,6 +176,8 @@ const valueByPoolChartData = (
         
     ): PieChartsData[] => {
  
+
+  
     const tokenBalancesByPool = Object.keys(poolsBalances).map ( poolId => {
         return { 
             poolId, 
@@ -190,6 +192,9 @@ const valueByPoolChartData = (
         }
     })
     
+    console.log("poolsBalances", poolsBalances, tokenBalancesByPool)
+    console.log("indexesBalances", indexesBalances, tokenBalancesForIndexes)
+
 
     // if don't have account don't return indexes because their value in already accounted in the pools
     const allPools = account ? [...tokenBalancesForIndexes, ...tokenBalancesByPool] : [...tokenBalancesByPool]
@@ -204,7 +209,6 @@ const valueByPoolChartData = (
             acc = value ? acc.add(value) : acc
             return acc
         }, BigNumber.from(0)) : BigNumber.from(0)
-
 
         return {
             name: name,

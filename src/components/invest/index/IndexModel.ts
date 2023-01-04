@@ -9,7 +9,7 @@ import { Token } from "../../../types/Token"
 import { BigNumber } from "ethers"
 import { fromDecimals } from "../../../utils/formatter"
 
-import { PieChartsData, ChartData } from "../../shared/PieChartWithLabels"
+import { PieChartsData, ChartData } from "../../shared/VPieChart"
 
 
 type TokenBalances = { [x: string]: { symbol: string, decimals: number, value: BigNumber, balance: BigNumber } }
@@ -120,8 +120,8 @@ export const useIndexModel = (chainId: number, indexId: string, tokens: Token[],
 
     return {
         portfolioInfo: { tokenBalances: valueByTokenMap, totalValue: totalValue },
-        chartValueByAsset: { title: "Asset Allocation", data: chartValues, width: 250, height: 250, includePercent: true },
-        chartValueByPool: { title: "Pool Allocation", data: valueByPool, width: 250, height: 250, includePercent: false},
+        chartValueByAsset: { title: "Asset Allocation", data: chartValues, width: 250, height: 300 },
+        chartValueByPool: { title: "Pool Allocation", data: valueByPool, width: 250, height: 300 },
         indexInfo,
         poolsInfo,
     }

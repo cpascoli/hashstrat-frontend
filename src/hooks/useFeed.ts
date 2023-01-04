@@ -82,10 +82,9 @@ export const useLastPriceForTokens = (chainId: number, tokens: string[]) => {
         const formattedTimestamp = timestamp && timestamp[0] ? Number(timestamp[0].toString()) : 0
         return {
             symbol: symbol,
-            price: price[0] as string,
+            price: price && price[0] as string,
             timestamp: formattedTimestamp, 
         }
     })
-
 
 }

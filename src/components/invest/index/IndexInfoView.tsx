@@ -1,6 +1,6 @@
 import { Box, makeStyles, Typography } from "@material-ui/core"
 import { Token } from "../../../types/Token"
-import { IndexRoiChart } from "../pool/RoiChart"
+import { IndexRoiChart } from "./IndexRoiChart"
 
 
 interface IndexInfoViewProps {

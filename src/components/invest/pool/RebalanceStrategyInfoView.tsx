@@ -5,7 +5,7 @@ import { fromDecimals, round} from "../../../utils/formatter"
 import { PoolAddress } from "../../../utils/network"
 import { BigNumber } from 'ethers'
 import { PoolInfo } from "../../../utils/pools"
-import { RoiChart } from "./RoiChart"
+import { RoiChart } from "./PoolRoiChart"
 
 
 import { 

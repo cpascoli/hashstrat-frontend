@@ -6,7 +6,7 @@ import { Token } from "../../../types/Token"
 import { BigNumber } from "ethers"
 import { fromDecimals } from "../../../utils/formatter"
 
-import { PieChartsData, ChartData } from "../../shared/PieChartWithLabels"
+import { PieChartsData, ChartData } from "../../shared/VPieChart"
 
 import { TokenInfo } from "../../../types/TokenInfo"
 

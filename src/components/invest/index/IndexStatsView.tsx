@@ -3,11 +3,13 @@ import { makeStyles, Box, Typography } from  "@material-ui/core"
 import { TitleValueBox } from "../../TitleValueBox"
 import { Token } from  "../../../types/Token"
 import { useIndexModel, PoolSummary } from "./IndexModel"
-import { fromDecimals, round } from "../../../utils/formatter"
+import { fromDecimals } from "../../../utils/formatter"
 import { BigNumber } from "ethers"
 import { PoolInfo, InvestTokens } from "../../../utils/pools"
 import { VPieChart } from "../../shared/VPieChart"
 import { Horizontal } from "../../Layout"
+import { IndexInfoView } from "./IndexInfoView"
+
 
 const useStyle = makeStyles( theme => ({
     container: {
@@ -66,8 +68,11 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
     const poolsInIndex = poolsInfo?.map( ( pool : PoolSummary) => {
         const valueFormatted = pool.value ? fromDecimals(pool.value, depositToken.decimals, 2) : ''
         return <TitleValueBox mode="small" key={pool.poolId} 
-                        title={`${pool.weight}/${totalWeights } ${pool.name}`}
-                        value={`$ ${ utils.commify(valueFormatted) }`}  />
+                    title={`${pool.weight}/${totalWeights } ${pool.name}`}
+                    value={`$ ${ utils.commify(valueFormatted) }`}  
+                    url={`/pools/${pool.poolId}`}
+                    linkMode="title"
+                />
     })
 
     
@@ -101,9 +106,9 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
 
             </Horizontal>
 
-            {/* <Box p={0}>
-                    <IndexInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} />
-            </Box> */}
+            <Box p={0}>
+                <IndexInfoView chainId={chainId} poolId={poolId} depositToken={depositToken} />
+            </Box>
 
         </Box>
        

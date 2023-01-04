@@ -1,6 +1,6 @@
 
 import { Box, Divider, Link, makeStyles } from "@material-ui/core"
-
+import { Link as RouterLink } from "react-router-dom"
 
 interface TitleValueBoxProps {
     title: string,
@@ -9,10 +9,11 @@ interface TitleValueBoxProps {
     border?: boolean,
     mode?: "small" | "regular",
     url?: string,
+    linkMode?:  "title" | "value",
 }
 
 
-export const TitleValueBox = ({ title, value, suffix="", border=false, mode="regular", url } : TitleValueBoxProps ) => {
+export const TitleValueBox = ({ title, value, suffix="", border=false, mode="regular", linkMode="value", url } : TitleValueBoxProps ) => {
 
     const useStyles = makeStyles( theme => ({
         container: {
@@ -50,11 +51,19 @@ export const TitleValueBox = ({ title, value, suffix="", border=false, mode="reg
     return (
         <>
             <Box className={border? classes.container : classes.containerNoBorder}>
-                <div className={classes.label}> {title} </div>
                 {
-                    url && url.startsWith("https://") ? 
-                        <Link href={url} target="_blank"> {value} </Link> :                        
-                        <div  className={classes.value}> {value} {suffix} </div>
+                    linkMode === 'title' && url?.startsWith("https://") ? 
+                        <Link href={url} target="_blank"> {title} </Link> :     
+                    linkMode === 'title' && url?.startsWith("/") ?
+                        <Link component={RouterLink} to={url}> {title} </Link>  :   
+                    <div className={classes.label}> {title} </div>
+                }
+                {
+                    linkMode === 'value' && url?.startsWith("https://") ? 
+                        <Link href={url} target="_blank"> {value} </Link> :     
+                    linkMode === 'value' && url?.startsWith("/") ?
+                        <Link component={RouterLink} to={url}> {value} </Link>   :              
+                    <div className={classes.value}> {value} {suffix} </div>
                 }
                
             </Box>

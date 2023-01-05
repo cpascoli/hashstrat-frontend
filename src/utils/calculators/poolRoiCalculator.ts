@@ -4,9 +4,93 @@ import { BigNumber } from 'ethers'
 import { fromDecimals, round } from "../formatter"
 import { Token } from "../../types/Token"
 import { SwapInfo } from "../../types/SwapInfo"
+import { RoiInfo } from "../../types/RoiInfo"
+
+import btc_feed  from "./feeds/BTC_weekly.json"
+import eth_feed  from "./feeds/ETH_weekly.json"
 
 
-export const roiDataForSwaps = (swaps: SwapInfo[], priceRaw: string , priceTimestamp: number, depositToken: Token, investToken: Token) => {
+export const roiDataForPrices = (
+    swaps: SwapInfo[], 
+    priceRaw: string , 
+    priceTimestamp: number, 
+    depositToken: Token, 
+    investToken: Token
+
+) : RoiInfo[] => {
+
+    const feed = investToken.symbol === 'WETH' ? eth_feed :  investToken.symbol === 'WBTC'?  btc_feed : undefined
+    if (swaps.length == 0 || !feed) return []
+
+    let swapsForFeed : SwapInfo[] = []
+    swaps.forEach( (it, idx) => {
+        
+        if (feed && idx > 0) {
+            // add SwapInfo items between current and previous SwapInfo
+            const from = swaps[idx-1]
+            const swapsResp = findRoiItems(feed, 8, from, it)
+            swapsForFeed.push(...swapsResp)
+        }
+
+        swapsForFeed.push(it)
+
+        if (feed && idx === swaps.length-1) {
+            // add SwapInfo items after last swap
+            const swapsResp = findRoiItems(feed, 8, it)
+            swapsForFeed.push(...swapsResp)
+        }
+    })
+
+    return roiDataForSwaps(swapsForFeed, priceRaw, priceTimestamp, depositToken, investToken)
+}
+
+// Returns the array of RoiInfo items from the datafeed 
+const findRoiItems = (feed: { [x : string] : any } [], feedDecimals: number, from: SwapInfo, to?: SwapInfo) : SwapInfo[] => {
+
+
+        // [ts0, ..., ts1] the time interval to use to filter the pricefeed
+        // use the last feed price if to SwapInfo is not provided
+        const ts0 =  Number(from.timestamp)
+        const ts1 = to ? Number(to.timestamp) : Date.parse( feed[feed.length-1].date ) / 1000
+
+        let response : SwapInfo[] = []
+
+        for (const item of feed) {
+            const date = Date.parse(item.date) / 1000;
+
+            if (date > ts0 && date < ts1) {
+                const priceInt = BigNumber.from( round( item.open * 100 ) )
+                const price = BigNumber.from(10).pow(feedDecimals - 2).mul( priceInt )
+
+                response.push(
+                    {
+                        timestamp: `${date}`,
+                        side: from.side,
+                        feedPrice: price.toString(),
+                        bought: "0",
+                        sold: "0",
+                        depositTokenBalance: from.depositTokenBalance,
+                        investTokenBalance: from.investTokenBalance
+                    }
+                )
+            }
+        }
+
+        return response
+}
+
+
+
+
+export const roiDataForSwaps = (
+        swaps: SwapInfo[], 
+        priceRaw: string , 
+        priceTimestamp: number, 
+        depositToken: Token, 
+        investToken: Token
+
+    ) : RoiInfo[] => {
+
 
     const lastPrice = parseFloat(fromDecimals(BigNumber.from(priceRaw), 8, 2))
 
@@ -34,19 +118,21 @@ export const roiDataForSwaps = (swaps: SwapInfo[], priceRaw: string , priceTimes
             parseFloat(fromDecimals(BigNumber.from(data.bought), depositToken.decimals, 2))
 
         // percent of the risk asset traded
-        const riskAssetPercTraded = deltaInvestTokens / (investTokenBalance + (data.side === 'BUY' ? 0 : deltaInvestTokens))
+        const investTokens = investTokenBalance + (data.side === 'BUY' ? 0 : deltaInvestTokens)
+        const riskAssetPercTraded = investTokens === 0 ? 0 : deltaInvestTokens / investTokens
 
         // percent of the stable asset traded
-        const stableAssetPercTraded = deltaDepositTokens / (depositTokenBalance + (data.side === 'BUY' ? deltaDepositTokens : 0))
+        const depositTokens =  depositTokenBalance + (data.side === 'BUY' ? deltaDepositTokens : 0)
+        const stableAssetPercTraded = depositTokens === 0 ? 0 : deltaDepositTokens / depositTokens
 
-        let tradedAmount = 0
+     
         if (data.side === 'BUY') {
-            tradedAmount = stableAssetAmount * stableAssetPercTraded
+            const tradedAmount = stableAssetAmount * stableAssetPercTraded
             stableAssetAmount -= tradedAmount
             riskAssetAmount += (tradedAmount / price)
         }
         if (data.side === 'SELL') {
-            tradedAmount = riskAssetAmount * riskAssetPercTraded
+            const tradedAmount = riskAssetAmount * riskAssetPercTraded
             stableAssetAmount += (tradedAmount * price)
             riskAssetAmount -= tradedAmount
         }
@@ -82,5 +168,5 @@ export const roiDataForSwaps = (swaps: SwapInfo[], priceRaw: string , priceTimes
         buyAndHoldValue: round(buyAndHoldValue),
     }
 
-    return  [ ...roidData, latest ]
+    return [ ...roidData, latest ]
 }

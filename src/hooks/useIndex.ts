@@ -235,24 +235,32 @@ export const usePoolSwapsInfoForIndex = (chainId: number, indexId: string) => {
     const alltokens = InvestTokens(chainId).map( t => t.symbol.toLowerCase() )
     const tokenPrices = useLastPriceForTokens(chainId, alltokens)
 
-    const swapsWithTokens = swapsInfo?.map( pool => {
-        const { investTokens } = PoolInfo(chainId, pool.poolId)
+    // use current timestamp for all last token prices
+    const ts = Math.round(new Date().getTime() / 1000)
 
+    const swapsWithTokens = swapsInfo?.map( pool => {
+
+        const { investTokens } = PoolInfo(chainId, pool.poolId)
         // filter prices only for tokens in the index
         const poolTokens = (investTokens as string[]).map( it => it.toLowerCase() )
-        const priceInfo = tokenPrices.filter( item => poolTokens.includes(item.symbol.toLowerCase()) && item.price && item.price !== undefined)
-        
-       // console.log("usePoolSwapsInfoForIndex. pool: ", pool.poolId, "tokenPrices: ", tokenPrices, "filtered: ", prices, "indexTokens:",indexTokens)
+        const priceInfoArray = tokenPrices.filter( item => poolTokens.includes(item.symbol.toLowerCase()) && item.price && item.price !== undefined)
+
+        let priceInfo = undefined
+        if (priceInfoArray.length > 0 && priceInfoArray[0]) {
+            priceInfo = {
+                symbol: priceInfoArray[0].symbol,
+                price: priceInfoArray[0].price,
+                timestamp: ts
+            }
+        }
 
         return {
             poolId: pool.poolId,
             weight: pool.weight,
-            priceInfo: priceInfo && priceInfo.length > 0 ? priceInfo[0] : undefined ,
+            priceInfo: priceInfo,
             swaps: pool.swaps
         }
-    
     })
 
-  
     return swapsWithTokens
 }

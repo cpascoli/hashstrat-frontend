@@ -5,5 +5,12 @@ export type SwapInfo = {
     bought: string,
     sold: string,
     depositTokenBalance: string,
-    investTokenBalance: string
+    investTokenBalance: string,
+    portfolioValue?: string
+}
+
+export type PoolSwapInfo = {
+    poolId: string, 
+    weight: number, 
+    swaps: SwapInfo[]
 }

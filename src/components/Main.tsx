@@ -6,8 +6,7 @@ import { Box, makeStyles } from "@material-ui/core"
 
 import { AppContext, initialContext } from "../context/AppContext"
 
-import { TokensForPool, PoolIds, IndexesIds, DepositToken } from "../utils/pools"
-import { InvestTokens } from "../utils/pools"
+import { TokensForPool, PoolIds, IndexesIds, DepositToken, InvestTokens } from "../utils/pools"
 import { Home } from "./Home"
 import { Header } from './Header';
 import { Dashboard } from './dashboard/Dashboard'
@@ -21,6 +20,8 @@ import { StrategiesHome } from "./strategies/StrategiesHome";
 import { DaoHome } from './dao/DaoHome'
 import { MainWithTitle } from "./MainWithTitle"
 import { UsersHome } from "./users//UsersHome"
+import { SimHome } from "./simulator/SimHome"
+
 import { Footer } from "./Footer"
 
 import background from "./img/homepage-bg.jpg"
@@ -118,6 +119,11 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
                         <Route path="/users" element={
                              <UsersHome chainId={chainId || defaultChainId}  />
                         } />
+
+                        <Route path="/sim" element={
+                             <SimHome chainId={chainId || defaultChainId} />
+                        } />
+
 
                         {
                             poolIds && poolIds.map( (poolId: string) => {

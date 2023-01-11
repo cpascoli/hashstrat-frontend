@@ -4,7 +4,8 @@ export type RoiInfo = {
     strategyValue: number;
     buyAndHoldROI: number;
     buyAndHoldValue: number;
-   
+    investTokenPerc: number,
+    depositTokenPerc: number,
 }
 
 type PoolId = {

@@ -7,6 +7,6 @@ export type PoolTokensSwapsInfo = {
         symbol: string,
         price: string,
         timestamp: number,
-    },
+    } | undefined,
     swaps: SwapInfo[]
 }

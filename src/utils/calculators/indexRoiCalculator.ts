@@ -4,36 +4,25 @@ import { roiDataForPrices } from "./poolRoiCalculator"
 import { RoiInfo, RoiInfoForPool } from "../../types/RoiInfo"
 
 
-export type SwapInfo = {
-    timestamp: string,
-    side: "BUY" | "SELL",
-    feedPrice: string,
-    bought: string,
-    sold: string,
-    depositTokenBalance: string,
-    investTokenBalance: string
-}
-
-
 export const roiDataForSwaps = (
         swapsInfo : PoolTokensSwapsInfo[], 
         depositToken: Token, 
-        investTokens: Token[] 
+        investTokens: Token[],
+        initialInvestment: number = 100 
     ) : RoiInfo[] => {
 
-    // A model investment of $100
-    const initialInvestment = 100 
-
-    // swaps: SwapInfo[], price: number, priceTimestamp: number, depositToken: Token, investToken: Token) => {
+    
 
     const poolsROI : RoiInfoForPool[][] = swapsInfo.map( (item : PoolTokensSwapsInfo) => {
-        const investToken = investTokens.find( it => it.symbol.toLowerCase() === item.priceInfo.symbol.toLowerCase())
-        const poolROI = investToken && roiDataForPrices(item.swaps, item.priceInfo.price, item.priceInfo.timestamp, depositToken, investToken )
+        const investToken = investTokens.find( it => it.symbol.toLowerCase() === item.priceInfo?.symbol.toLowerCase())
+        
+        const poolROI = investToken && roiDataForPrices(item.swaps, item.priceInfo?.price ?? "0", item.priceInfo?.timestamp ?? 0, depositToken, investToken, initialInvestment)
         const respone = poolROI?.map( it => { 
             return { ...it, poolId: item.poolId } as RoiInfoForPool
         }) ?? []
         return respone
     })
+
 
     let indexROI : RoiInfo[] = []
 
@@ -52,11 +41,13 @@ export const roiDataForSwaps = (
         if (indexROI.length === 0) {
             // calculate first data point weighting contribution by each pool
             let first : RoiInfo = {
-                date : 0,
+                date: 0,
                 buyAndHoldValue: 0,
                 buyAndHoldROI: 0,
                 strategyROI: 0,
-                strategyValue: 0
+                strategyValue: 0,
+                investTokenPerc: 0,
+                depositTokenPerc: 0
             }
 
             let tot = 0
@@ -71,6 +62,9 @@ export const roiDataForSwaps = (
                first.strategyROI += (it.strategyROI * poolWeight)
                first.strategyValue += (it.strategyValue * poolWeight)
 
+               first.investTokenPerc += it.investTokenPerc * poolWeight
+               first.depositTokenPerc += it.depositTokenPerc * poolWeight
+
                // remember the ROI info for pool of idx poolIndex
                poolIdToSwapInfoMap[ it.poolId ] = it
             })
@@ -79,6 +73,8 @@ export const roiDataForSwaps = (
                 const initialValueLeft = initialInvestment * (1 - tot)
                 first.buyAndHoldValue += initialValueLeft
                 first.strategyValue += initialValueLeft
+
+                first.depositTokenPerc = 1 - first.investTokenPerc 
             }
             indexROI.push(first)
 
@@ -94,6 +90,9 @@ export const roiDataForSwaps = (
                 buyAndHoldValue: indexROI[indexROI.length-1].buyAndHoldValue,
                 strategyROI: indexROI[indexROI.length-1].strategyROI,
                 strategyValue: indexROI[indexROI.length-1].strategyValue,
+
+                investTokenPerc: indexROI[indexROI.length-1].investTokenPerc,
+                depositTokenPerc: indexROI[indexROI.length-1].depositTokenPerc,
             }
 
             // process all roi data points for the next timestamp and update the roi info
@@ -109,6 +108,9 @@ export const roiDataForSwaps = (
                     next.buyAndHoldValue -= (prevSwaps.buyAndHoldValue * poolWeight)
                     next.strategyROI -= (prevSwaps.strategyROI * poolWeight)
                     next.strategyValue -= (prevSwaps.strategyValue * poolWeight)
+
+                    next.investTokenPerc -= (prevSwaps.investTokenPerc * poolWeight)
+                    next.depositTokenPerc -= (prevSwaps.depositTokenPerc * poolWeight)
                 }
 
                 // add the contribution of the current pool
@@ -117,6 +119,9 @@ export const roiDataForSwaps = (
                 next.buyAndHoldValue += (it.buyAndHoldValue * poolWeight)
                 next.strategyROI += (it.strategyROI  * poolWeight)
                 next.strategyValue += (it.strategyValue  * poolWeight)
+
+                next.investTokenPerc += (it.investTokenPerc  * poolWeight)
+                next.depositTokenPerc += (it.depositTokenPerc  * poolWeight)
 
                 // remember the ROI info for pool of idx poolIndex
                 poolIdToSwapInfoMap[ it.poolId ] = it
@@ -131,6 +136,7 @@ export const roiDataForSwaps = (
         roiInfos = findNextROIInfo(poolsROI, ts)
     }
 
+    console.log(">>>  roiDataForSwaps - Rebalancing ROI ", indexROI)
     return indexROI
 }
 

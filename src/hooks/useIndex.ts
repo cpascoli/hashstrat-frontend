@@ -4,6 +4,7 @@ import { PoolContract } from "../utils/network"
 import { PoolInfo } from "../utils/pools"
 import { useLastPriceForTokens } from "./useFeed"
 import { InvestTokens } from "../utils/pools"
+import { SwapInfo, PoolSwapInfo } from "../types/SwapInfo"
 
 // Actions
 
@@ -152,24 +153,6 @@ export const usePoolInfoArray = (chainId: number, poolId: string) => {
     return info
 }
 
-
-
-
-export type SwapInfo = {
-    timestamp: string,
-    side: string,
-    feedPrice: string,
-    bought:string,
-    sold: string,
-    depositTokenBalance: string,
-    investTokenBalance: string,
-}
-
-export type PoolSwapInfo = {
-    poolId: string, 
-    weight: number, 
-    swaps: SwapInfo[]
-}
 
 
 export const useSwapInfoForIndex = (chainId: number, indexId: string) : PoolSwapInfo[] | undefined => {

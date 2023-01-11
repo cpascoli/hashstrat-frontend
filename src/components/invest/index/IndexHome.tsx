@@ -50,11 +50,8 @@ export const IndexHome = ({ chainId, poolId, account, tokens, investTokens } : I
 
             <Divider variant="middle" style={{marginTop: 20, marginBottom: 0}}/>
 
-            <Box mt={2}>
-                <Typography align="center">{description}</Typography>
-            </Box>
-
             <IndexTabs chainId={chainId!} poolId={poolId} account={account} tokens={tokens} investTokens={investTokens} />
+            
             <Contracts chainId={chainId} poolId={poolId} />
         </Box>
     )

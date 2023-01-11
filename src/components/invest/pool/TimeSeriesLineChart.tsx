@@ -53,7 +53,7 @@ export const TimeSeriesLineChart = ( chartData  : ChartData ) => {
 
       <Legend verticalAlign="top" height={30}/>
       <Tooltip 
-        labelFormatter={(unixTime) => moment(unixTime).format('yyyy-MM-DD')}
+        labelFormatter={(unixTime) => moment(unixTime).format('yyyy-MM-DD hh:mm:ss')}
         // formatter={numberFormatter}
       />
 

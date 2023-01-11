@@ -33,8 +33,6 @@ export const VPieChart = ( chartData : ChartData ) => {
     }
   }))
   
-  console.log(">>> chartData", chartData.width , chartData.height)
-  
   const categories = chartData.data.map( it => it.name )
   const series = chartData.data.map( it => it.value )
 

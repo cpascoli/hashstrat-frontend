@@ -1,10 +1,14 @@
 
 import { useContractFunction, useCall, useCalls } from "@usedapp/core"
+import { BigNumber } from "ethers"
+
 import { PoolContract } from "../utils/network"
 import { PoolInfo } from "../utils/pools"
 import { useLastPriceForTokens } from "./useFeed"
 import { InvestTokens } from "../utils/pools"
 import { SwapInfo, PoolSwapInfo } from "../types/SwapInfo"
+
+import { PoolTokensSwapsInfo } from "../types/PoolTokensSwapsInfo"
 
 // Actions
 
@@ -209,7 +213,7 @@ export const useSwapInfoForIndex = (chainId: number, indexId: string) : PoolSwap
 }
 
 
-export const usePoolSwapsInfoForIndex = (chainId: number, indexId: string) => {
+export const usePoolSwapsInfoForIndex = (chainId: number, indexId: string) : PoolTokensSwapsInfo[] | undefined => {
 
     // get swaps for all pools in the index
     const swapsInfo = useSwapInfoForIndex(chainId, indexId)
@@ -232,7 +236,7 @@ export const usePoolSwapsInfoForIndex = (chainId: number, indexId: string) => {
         if (priceInfoArray.length > 0 && priceInfoArray[0]) {
             priceInfo = {
                 symbol: priceInfoArray[0].symbol,
-                price: priceInfoArray[0].price,
+                price: BigNumber.from(priceInfoArray[0].price as string),
                 timestamp: ts
             }
         }

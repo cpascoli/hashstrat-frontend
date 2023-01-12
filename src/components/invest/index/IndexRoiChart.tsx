@@ -7,7 +7,7 @@ import { usePoolSwapsInfoForIndex } from "../../../hooks/useIndex"
 import { roiDataForSwaps as indexRoiDataForSwaps } from "../../../utils/calculators/indexRoiCalculator"
 
 import { round } from "../../../utils/formatter"
-import { TimeSeriesLineChart, TimeSeriesData } from "../pool/TimeSeriesLineChart"
+import { TimeSeriesLineChart, TimeSeriesData } from "../../shared/TimeSeriesLineChart"
 import { PoolTokensSwapsInfo } from "../../../types/PoolTokensSwapsInfo"
 import { InvestTokens } from "../../../utils/pools"
 
@@ -58,7 +58,7 @@ export const IndexRoiChart = ( { chainId, indexId, depositToken } : IndexRoiChar
         }
 	}, [swaps])
 
-    
+
     return (
         <Box className={classes.container}>
 

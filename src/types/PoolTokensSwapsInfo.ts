@@ -1,11 +1,12 @@
 import { SwapInfo } from "./SwapInfo"
+import { BigNumber } from "ethers"
 
 export type PoolTokensSwapsInfo = {
     poolId: string,
     weight: number,
     priceInfo: {
         symbol: string,
-        price: string,
+        price: BigNumber,
         timestamp: number,
     } | undefined,
     swaps: SwapInfo[]

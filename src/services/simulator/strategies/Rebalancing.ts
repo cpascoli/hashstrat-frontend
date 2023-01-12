@@ -18,25 +18,28 @@ export class Rebalancing implements Strategy {
     // strategy parameters
     readonly rebalancingTarget = 0.6
     readonly rebalancingThreshold = 0.1
+    readonly executionInterval = 7 * 86400
+    readonly priceFeedDecimals = 8
 
-    priceFeedDecimals = 8
+    private lastEvalTime = 0
+    
 
-    constructor(depositToken : Token, investToken : Token) {
+    constructor(feed: Feed, depositToken : Token, investToken : Token) {
         this.depositToken = depositToken
         this.investToken = investToken
-
-        this.feed = FeedInastance(investToken.symbol)
+        this.feed = feed
     }
 
     simulate(from: Date, to: Date, amount: number): PoolTokensSwapsInfo | undefined {
 
-        const price = this.feed.getPrice(to)
+        this.lastEvalTime = ( from.getTime() / 1000 )
 
         const swaps : SwapInfo[] | undefined = this.getSwaps(from, to, amount)
+        const lastPrice = this.feed.getPrice(to)
 
-        if (price && swaps) {
+        if (lastPrice && swaps) {
             const timestamp = round( to.getTime() / 1000, 0);
-            const priceFormatted = `${price * 10**this.priceFeedDecimals}`
+            const priceFormatted =  BigNumber.from(`${ round(lastPrice * 10**this.priceFeedDecimals, 0) }`)
 
             const response = {
                 poolId: "pool01",
@@ -81,6 +84,10 @@ export class Rebalancing implements Strategy {
 
         prices.forEach( (it, idx) => {
 
+            if ( (it.date.getTime() / 1000) < this.lastEvalTime + this.executionInterval) {
+                return
+            }
+            
             // first swap
             if (idx === 0) {
                 const timestamp = round( it.date.getTime() / 1000, 0);
@@ -128,8 +135,6 @@ export class Rebalancing implements Strategy {
                     this.depositTokenBalance += valueToSell
                     this.investTokenBalance -= sellAmount
 
-                    console.log("Rebalancing SELL BTC", it.date.toISOString().split('T')[0], "investPerc: ", round(investPerc), ">", this.rebalancingTarget + this.rebalancingThreshold)
-
                     response.push({
                         timestamp: `${timestamp}`,
                         side: "SELL",
@@ -153,8 +158,6 @@ export class Rebalancing implements Strategy {
                     this.depositTokenBalance -= valueToBuy
                     this.investTokenBalance += buyAmount
 
-                    console.log("Rebalancing BUY BTC", it.date.toISOString().split('T')[0], "investPerc: ", round(investPerc), "<", this.rebalancingTarget - this.rebalancingThreshold)
-
                     response.push({
                         timestamp: `${timestamp}`,
                         side: "BUY",
@@ -169,6 +172,8 @@ export class Rebalancing implements Strategy {
 
 
             }
+
+            this.lastEvalTime = it.date.getTime() / 1000
         })
 
         console.log("Rebalancing; swaps: ", response)

@@ -2,21 +2,37 @@ import { Token } from "../../types/Token"
 import { PoolTokensSwapsInfo } from "../../types/PoolTokensSwapsInfo"
 import { roiDataForPrices } from "./poolRoiCalculator"
 import { RoiInfo, RoiInfoForPool } from "../../types/RoiInfo"
+import { BigNumber } from "ethers"
 
+/**
+ * Given the PoolTokensSwapsInfo[] array containing info about all the trades for all the Pool in an Index,
+ * returns the array RoiInfo[] containing aggregated data about the assets in the of the Index and its performance (e.g ROI)
+ * at different point in time .
+ * This allows to produce charts about the Index status and performance over time.
+ * 
+ * @param swapsInfo an array with the info about the trades for each Pool in the Index
+ * @param depositToken 
+ * @param investTokens 
+ * @param initialInvestment 
+ * @param maxItems 
+ * 
+ * @returns the array of RoiInfo[] with the Index information chronologically ordered 
+ */
 
 export const roiDataForSwaps = (
         swapsInfo : PoolTokensSwapsInfo[], 
         depositToken: Token, 
         investTokens: Token[],
-        initialInvestment: number = 100 
+        initialInvestment: number = 100,
+        maxItems?: number
     ) : RoiInfo[] => {
 
     
-
+    // the the roi data for each pool
     const poolsROI : RoiInfoForPool[][] = swapsInfo.map( (item : PoolTokensSwapsInfo) => {
         const investToken = investTokens.find( it => it.symbol.toLowerCase() === item.priceInfo?.symbol.toLowerCase())
         
-        const poolROI = investToken && roiDataForPrices(item.swaps, item.priceInfo?.price ?? "0", item.priceInfo?.timestamp ?? 0, depositToken, investToken, initialInvestment)
+        const poolROI = investToken && roiDataForPrices(item.swaps, item.priceInfo?.price ?? BigNumber.from("0"), item.priceInfo?.timestamp ?? 0, depositToken, investToken, initialInvestment)
         const respone = poolROI?.map( it => { 
             return { ...it, poolId: item.poolId } as RoiInfoForPool
         }) ?? []
@@ -81,7 +97,7 @@ export const roiDataForSwaps = (
         } else {
 
             // calculate subsequent data points weighting contribution by each pool
-            // stating from the prior data point
+            // starting from the prior data point
 
             // initialize next data point with the prior data point
             let next =  {
@@ -130,14 +146,30 @@ export const roiDataForSwaps = (
              indexROI.push(next)
         }
 
-
         // get next swaps
         const ts = roiInfos[0].date
         roiInfos = findNextROIInfo(poolsROI, ts)
     }
 
-    console.log(">>>  roiDataForSwaps - Rebalancing ROI ", indexROI)
-    return indexROI
+
+    let response : RoiInfo[] = []
+
+    if (maxItems && indexROI.length > maxItems) {
+        const skip = Math.round(indexROI.length / maxItems)
+        indexROI.forEach((it, idx) => {
+            if (idx % skip == 0) {
+                response.push(it)
+            }
+        })
+        // ensure the last ROI item is always included in the reposne
+        if (indexROI.length % skip > 0) {
+            response.push(indexROI[indexROI.length-1])
+        }
+    } else {
+        response = [...indexROI]
+    }
+    
+    return response
 }
 
 

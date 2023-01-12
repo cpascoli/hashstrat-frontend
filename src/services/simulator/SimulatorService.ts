@@ -37,9 +37,9 @@ class Simulator {
         this.investtTokens = investTokens
 
         //TODO resolve strategy (or strategies) from constructor parameter 
-        this.strategy = ( strategyName === StrategyName.Rebalancing ) ? new Rebalancing(depositToken, investTokens[0]) :
-                        ( strategyName === StrategyName.MeanReversion ) ? new MeanReversion(depositToken, investTokens[0]) : 
-                        ( strategyName === StrategyName.TrendFollowing ) ? new TrendFollowing(depositToken, investTokens[0]) : undefined
+        this.strategy = ( strategyName === StrategyName.Rebalancing ) ? new Rebalancing(feed, depositToken, investTokens[0]) :
+                        ( strategyName === StrategyName.MeanReversion ) ? new MeanReversion(feed, depositToken, investTokens[0]) : 
+                        ( strategyName === StrategyName.TrendFollowing ) ? new TrendFollowing(feed, depositToken, investTokens[0]) : undefined
     }
 
     getSwapsInfo (from: Date, to: Date = new Date()) : PoolTokensSwapsInfo[] | undefined {
@@ -51,5 +51,5 @@ class Simulator {
 
 
 export const SimulatorInastance = (symbol: string, strategy: StrategyName, amount: number, depositToken : Token, investTokens : [Token] ) => {
-    return new Simulator(FeedInastance(symbol), strategy, amount, depositToken, investTokens)
+    return new Simulator(FeedInastance(symbol, "daily"), strategy, amount, depositToken, investTokens)
 }

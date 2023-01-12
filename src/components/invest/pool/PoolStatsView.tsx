@@ -6,7 +6,7 @@ import { TitleValueBox } from "../../TitleValueBox"
 import { Token } from "../../../types/Token"
 import { fromDecimals, round } from "../../../utils/formatter"
 import { useSwapInfoArray } from "../../../hooks"
-import { TimeSeriesAreaChart } from "./TimeSeriesAreaChart"
+import { TimeSeriesAreaChart } from "../../shared/TimeSeriesAreaChart"
 import { PoolInfo } from "../../../utils/pools"
 import { VPieChart } from "../../shared/VPieChart"
 

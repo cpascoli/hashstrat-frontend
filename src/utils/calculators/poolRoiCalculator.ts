@@ -6,9 +6,7 @@ import { Token } from "../../types/Token"
 import { SwapInfo } from "../../types/SwapInfo"
 import { RoiInfo } from "../../types/RoiInfo"
 
-import btc_feed from "../../services/pricefeed/feeds/BTC_weekly.json"
-import eth_feed  from "../../services/pricefeed/feeds/ETH_weekly.json"
-import { time } from 'console'
+import { FeedInastance, Feed } from "../../services/pricefeed/PricefeedService"
 
 
 /** 
@@ -24,20 +22,23 @@ import { time } from 'console'
 
 export const roiDataForPrices = (
     swaps: SwapInfo[], 
-    priceRaw: string , 
+    priceRaw: BigNumber , 
     priceTimestamp: number, 
     depositToken: Token, 
     investToken: Token,
     initialInvestment: number = 100
 ) : RoiInfo[] => {
 
-    const feed = investToken.symbol === 'WETH' ? eth_feed :  investToken.symbol === 'WBTC'?  btc_feed : undefined
+    // const feed = investToken.symbol === 'WETH' ? eth_feed : investToken.symbol === 'WBTC'?  btc_feed : undefined
+
+    const feed = FeedInastance(investToken.symbol, "daily")
+
     if (swaps.length == 0 || !feed) return []
 
     let swapsForFeed : SwapInfo[] = []
     swaps.forEach( (it, idx) => {
         
-        if (feed && idx > 0) {
+        if (idx > 0) {
             // add SwapInfo items between current and previous SwapInfo
             const from = swaps[idx-1]
             const swapsResp = findSwapInfoItems(feed, 8, from, Number(it.timestamp)) // priceFeed dacimals is 8
@@ -46,7 +47,7 @@ export const roiDataForPrices = (
 
         swapsForFeed.push(it)
 
-        if (feed && idx === swaps.length-1) {
+        if (idx === swaps.length-1) {
             // add SwapInfo items after last swap
             const swapsResp = findSwapInfoItems(feed, 8, it, priceTimestamp)
             swapsForFeed.push(...swapsResp)
@@ -59,34 +60,32 @@ export const roiDataForPrices = (
 
 // Returns the array of SwapInfo items between the 'from' SwapInfo and 'lastTimestamp', 
 // including prices from the datafeed 
-const findSwapInfoItems = (feed: { [x : string] : any } [], feedDecimals: number, from: SwapInfo, lastTimestamp? : number) : SwapInfo[] => {
+const findSwapInfoItems = (feed : Feed, feedDecimals: number, from: SwapInfo, lastTimestamp? : number) : SwapInfo[] => {
 
         // [ts0, ..., ts1] the time interval to use to filter the pricefeed
         // use the last feed price if to SwapInfo is not provided
-        const ts0 =  Number(from.timestamp)
-        const ts1 = lastTimestamp ? lastTimestamp : Date.parse( feed[feed.length-1].date ) / 1000
+        const fromDate =  new Date( Number(from.timestamp) * 1000)
+        const toDate = lastTimestamp ? new Date(lastTimestamp * 1000) : new Date()
 
         let response : SwapInfo[] = []
 
-        for (const item of feed) {
-            const date = Date.parse(item.date) / 1000;
+        for (const priceData of feed.getPrices(fromDate, toDate)) {
 
-            if (date > ts0 && date < ts1) {
-                const priceInt = BigNumber.from( round( item.open * 100 ) )
-                const price = BigNumber.from(10).pow(feedDecimals - 2).mul( priceInt )
+            const dateTs = round(priceData.date.getTime() / 1000)
+            const priceInt = BigNumber.from( round( priceData.price * 100 ) )
+            const price = BigNumber.from(10).pow(feedDecimals - 2).mul( priceInt )
 
-                response.push(
-                    {
-                        timestamp: `${date}`,
-                        side: from.side,
-                        feedPrice: price.toString(),
-                        bought: "0",
-                        sold: "0",
-                        depositTokenBalance: from.depositTokenBalance,
-                        investTokenBalance: from.investTokenBalance
-                    }
-                )
-            }
+            response.push(
+                {
+                    timestamp: `${dateTs}`,
+                    side: from.side,
+                    feedPrice: price.toString(),
+                    bought: "0",
+                    sold: "0",
+                    depositTokenBalance: from.depositTokenBalance,
+                    investTokenBalance: from.investTokenBalance
+                }
+            )
         }
 
         return response
@@ -97,16 +96,15 @@ const findSwapInfoItems = (feed: { [x : string] : any } [], feedDecimals: number
 
 const roiInfoForSwaps = (
         swaps: SwapInfo[], 
-        tokepPrice: string , 
+        tokenPrice: BigNumber, 
         priceTimestamp: number, 
         depositToken: Token, 
         investToken: Token,
         initialInvestment: number = 100
     ) : RoiInfo[] => {
     
-    console.log(">>> roiInfoForSwaps - tokepPrice:", tokepPrice)
 
-    const lastPrice = parseFloat(fromDecimals(BigNumber.from(tokepPrice), 8, 2))
+    const lastPrice = parseFloat(fromDecimals(tokenPrice, 8, 2))
 
     // A model investment of $100
     let riskAssetAmount = 0;
@@ -141,8 +139,8 @@ const roiInfoForSwaps = (
         const depositTokens =  depositTokenBalance + (data.side === 'BUY' ? deltaDepositTokens : 0)
         const stableAssetPercTraded = depositTokens === 0 ? 0 : deltaDepositTokens / depositTokens
 
-        // if there was a swap record ROI info before 
-        if (deltaInvestTokens > 0 && deltaDepositTokens > 0) {
+        // if there was a swap also record roi info (e.g token percentages) before the swap happened
+        if (stableAssetPercTraded > 0 || riskAssetPercTraded > 0) {
             const strategyValueBefore = riskAssetAmount * price + stableAssetAmount
             const strategyROIBefore = 100 * (strategyValueBefore - initialInvestment) / initialInvestment
     
@@ -163,12 +161,6 @@ const roiInfoForSwaps = (
                     depositTokenPerc: round(depositTokenPercBefore),
                 }
             )
-
-            console.log("Rebalancing - ROI before ", idx, new Date(timestamp * 1000).toISOString().split('T')[0],
-            "price:", price,
-            " investTokenPerc: ", round(investTokenPercBefore), 
-            " depositTokenPerc:",  round(depositTokenPercBefore), "data: ", data)
-   
         }
      
         //// update token balances according to the swap performed 
@@ -194,10 +186,17 @@ const roiInfoForSwaps = (
         const investTokenPerc = 100 * riskAssetAmount * price / strategyValue
         const depositTokenPerc = 100 * stableAssetAmount / strategyValue
 
-        console.log("Rebalancing - ROI after ", idx, new Date(timestamp * 1000).toISOString().split('T')[0],
-         "price:", price,
-         " investTokenPerc: ", round(investTokenPerc), 
-         " depositTokenPerc:", round(depositTokenPerc), "data: ", data)
+        if (stableAssetPercTraded > 0 || riskAssetPercTraded > 0) {
+            console.log("ROI calc - ", idx, new Date(timestamp * 1000).toISOString().split('T')[0],
+            "price:", price,
+            " investTokenPerc: ", round(investTokenPerc), 
+            " depositTokenPerc:", round(depositTokenPerc), "data: ", data)
+        }
+
+        // console.log("Rebalancing - ROI before ", idx, new Date(timestamp * 1000).toISOString().split('T')[0],
+        // "price:", price,
+        // " investTokenPerc: ", round(investTokenPercBefore), 
+        // " depositTokenPerc:",  round(depositTokenPercBefore), "data: ", data)
 
         roidData.push(
             {

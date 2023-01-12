@@ -36,22 +36,30 @@ const useStyle = makeStyles( theme => ({
     },
     form: {
         width: "100%",
-    },
-
-    formField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        width: 200,
         [theme.breakpoints.down('xs')]: {
-            marginBottom: 20,
-            width: 140,
+            width: 200,
 		},
     },
 
     chart: {
         paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2),
+        paddingBottom: theme.spacing(4)
     },
+    dateField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: 200,
+    },
+    amountField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: 200,
+    },
+    selectField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: 200,
+    }
 
 }))
 
@@ -91,8 +99,9 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
     const label1 = `Strategy ROI`
     const label2 = `Buy & Hold ROI`
 
-    const labelValue1 = `${investToken.symbol} Value %`
-    const labelValue2 = `${depositToken.symbol} Value %`
+    const labelValue1 = `${depositToken.symbol} Value %`
+    const labelValue2 = `${investToken.symbol} Value %`
+
     
 
     useEffect(() => {
@@ -116,8 +125,8 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
             const valueData = roi.map( (data: RoiInfo) => {
                 let record : any = {}
                 record['time'] = data.date * 1000
-                record[labelValue1] = round(data.investTokenPerc)
-                record[labelValue2] = round(data.depositTokenPerc)
+                record[labelValue1] = round(data.depositTokenPerc)
+                record[labelValue2] = round(data.investTokenPerc)
                 return record
             })
             setChartValueData(valueData)
@@ -217,11 +226,10 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
 
                 <Box px={2} >
                     <Horizontal align='center'>
-
                         <form  noValidate className={classes.form}>
 
                             <Select 
-                                className={classes.formField}
+                                className={classes.selectField}
                                 id="asset-select"
                                 value={asset}
                                 label="Asset"
@@ -235,7 +243,7 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                             </Select>
 
                             <Select 
-                                className={classes.formField}
+                                className={classes.selectField}
                                 id="strategy-select"
                                 value={strategy}
                                 label="Strategy"
@@ -257,7 +265,7 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                                 label="From"
                                 type="date"
                                 defaultValue={ moment(fromDate.getTime()).format('yyyy-MM-DD') }
-                                className={classes.formField}
+                                className={classes.dateField}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -273,7 +281,7 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                                 label="To"
                                 type="date"
                                 defaultValue={ moment(toDate.getTime()).format('yyyy-MM-DD') }
-                                className={classes.formField}
+                                className={classes.dateField}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -289,7 +297,7 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                                 label="Investment"
                                 type="number"
                                 defaultValue="1000"
-                                className={classes.formField}
+                                className={classes.amountField}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}

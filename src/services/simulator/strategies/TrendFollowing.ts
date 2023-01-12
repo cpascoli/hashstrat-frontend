@@ -1,7 +1,7 @@
 
 import { BigNumber } from 'ethers'
 
-import { Feed, FeedInastance } from "../../pricefeed/PricefeedService"
+import { Feed, PriceData } from "../../pricefeed/PricefeedService"
 import { PoolTokensSwapsInfo } from "../../../types/PoolTokensSwapsInfo";
 import { SwapInfo } from '../../../types/SwapInfo'
 import { round } from '../../../utils/formatter'
@@ -19,8 +19,8 @@ export class TrendFollowing implements Strategy {
     readonly tokensToSwapPerc = 1        // 100% of the value of the asset sold
     readonly targetPricePercDown = 0
     readonly targetPricePercUp = 0
-    readonly movingAveragePeriod = 40   // 40 day Moving Average
-    readonly dcaInterval = 5 * 86400  // buy/sell every 5 days
+    readonly movingAveragePeriod = 50   // 40 day Moving Average
+    readonly executionInterval = 5 * 86400  // buy/sell every 5 days
     
     readonly priceFeedDecimals = 8
 
@@ -34,22 +34,28 @@ export class TrendFollowing implements Strategy {
     private depositTokenBalance = 0
 
 
-    constructor(depositToken : Token, investToken : Token) {
+    constructor(feed: Feed, depositToken : Token, investToken : Token) {
         this.depositToken = depositToken
         this.investToken = investToken
-
-        this.feed = FeedInastance(investToken.symbol)
+        this.feed = feed
     }
 
 
     simulate(from: Date, to: Date, amount: number): PoolTokensSwapsInfo | undefined {
 
+        // set moving average
+        this.movingAverage = this.averagePrice(from, this.movingAveragePeriod)
+        this.lastEvalTime = ( from.getTime() / 1000 )
+
+        console.log("movingAverage: ", this.movingAverage , this.feed.getPrice(from))
+
+                
         const price = this.feed.getPrice(to)
         const swaps : SwapInfo[] | undefined = this.getSwaps(from, to, amount)
 
         if (price && swaps) {
             const timestamp = round( to.getTime() / 1000, 0);
-            const priceFormatted = `${price * 10**this.priceFeedDecimals}`
+            const priceFormatted =  BigNumber.from(`${ round(price * 10**this.priceFeedDecimals, 0) }`)
 
             const response = {
                 poolId: "0",
@@ -79,6 +85,11 @@ export class TrendFollowing implements Strategy {
 
         prices.forEach( it => {
 
+            if ((it.date.getTime() / 1000) < this.lastEvalTime + this.executionInterval) {
+                return
+            }
+
+
             // update current price, moving average and lastEvalTimestamp
             this.updateMovingAverage(it.price, it.date)
          
@@ -105,6 +116,8 @@ export class TrendFollowing implements Strategy {
                         
 
             if (shouldSell || shouldBuy) {
+
+                console.log("eval: ", it.date.toISOString().split('T')[0], it.price, action )
 
                 const depositTokenDelta = shouldSell ? amountIn * this.latestPrice : shouldBuy ? -amountIn : 0
                 const investTokenDelta = shouldSell ? -amountIn  : shouldBuy ? amountIn / this.latestPrice : 0
@@ -137,8 +150,7 @@ export class TrendFollowing implements Strategy {
         let amountIn: number = 0
 
         const poolValue = this.portfolioValue()
-        const deltaPrice = this.latestPrice - this.movingAverage  
-        const deltaPricePerc = deltaPrice / this.movingAverage    // the % of price above/below the moving average
+        const deltaPricePerc = (this.latestPrice - this.movingAverage) / this.movingAverage    // the % of price above/below the moving average
 
         const investPerc = this.investPercent()
         const depositPerc = poolValue > 0 ? 1 - investPerc : 0
@@ -161,9 +173,12 @@ export class TrendFollowing implements Strategy {
             amountIn = this.depositTokenBalance * this.tokensToSwapPerc
         }
 
-        console.log("evaluateTrade() - " , new Date(this.lastEvalTime * 1000).toISOString().split('T')[0], action,
-         " - price: ", round(this.latestPrice), "", round(this.movingAverage), 
-         "  delta %:", round(deltaPricePerc * 100)+"%")
+        if (shouldSell || shouldBuy) {
+            console.log("eval() - " , new Date(this.lastEvalTime * 1000).toISOString().split('T')[0], action,
+            " - price: ", round(this.latestPrice), "ma: ", round(this.movingAverage), 
+            "  delta %:", round(deltaPricePerc * 100)+"%")
+        }
+
 
         return { action, amountIn };
     }
@@ -214,13 +229,27 @@ export class TrendFollowing implements Strategy {
     }
 
 
+    // Returns the simple moving average up to the date 'to' and for the number of days 'period'
+    averagePrice(to: Date, period: number) : number {
+
+        const from = new Date( ( (to.getTime() / 1000) - (period * 86400)) * 1000 )
+        const prices = this.feed.getPrices(from, to)
+
+        const sum = prices.reduce( (acc: number, val: PriceData) => {
+            return acc + val.price
+        }, 0)
+
+        return round(sum / prices.length)
+    }
+    
+
     updateMovingAverage(price: number, date: Date) {
 
         const dateTImeSecs = round(date.getTime() / 1000, 0) 
         const secondSinceLastUpdate: number = dateTImeSecs - this.lastEvalTime
         const daysSinceLasUpdate = round(secondSinceLastUpdate / 86400, 0)
 
-        if (daysSinceLasUpdate == 0) return;
+        if (daysSinceLasUpdate === 0) return;
 
         if (daysSinceLasUpdate >= this.movingAveragePeriod) {
             this.movingAverage = price

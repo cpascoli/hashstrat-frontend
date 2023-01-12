@@ -1,16 +1,21 @@
-import btc_feed  from "./feeds/BTC_weekly.json"
-import eth_feed  from "./feeds/ETH_weekly.json"
+import btc_dayly  from "./feeds/BTC_daily.json"
+import eth_dayly  from "./feeds/ETH_daily.json"
 
-type PriceData = {
+import btc_weekly  from "./feeds/BTC_weekly.json"
+import eth_weekly  from "./feeds/ETH_weekly.json"
+
+export type PriceData = {
     date: Date,
     price: number
 }
+
+type FeedPeriod = "daily" | "weekly"
 
 export class Feed {
 
     prices: PriceData[];
 
-    constructor( symbol: string ) {
+    constructor( symbol: string, period : FeedPeriod = "daily" ) {
 
         const priceMap = ( it : {date: string, open: number} ) => {
             return {
@@ -21,10 +26,10 @@ export class Feed {
 
         switch(symbol) {
             case "WBTC": 
-                this.prices = btc_feed.map( it => priceMap(it) )
+                this.prices = period === "daily" ? btc_dayly.map( it => priceMap(it) ) : btc_weekly.map( it => priceMap(it) ) 
                 break;
             case "WETH":
-                this.prices = eth_feed.map( it => priceMap(it) )
+                this.prices = period === "daily" ? eth_dayly.map( it => priceMap(it) ) : eth_weekly.map( it => priceMap(it) ) 
                 break;
             default:
                 this.prices = []
@@ -48,7 +53,7 @@ export class Feed {
 }
 
 
-export const FeedInastance = (symbol: string) : Feed => {
-    const feed = new Feed(symbol)
+export const FeedInastance = (symbol: string, period : FeedPeriod = "daily") : Feed => {
+    const feed = new Feed(symbol, period)
     return feed
 }

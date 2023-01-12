@@ -7,7 +7,7 @@ import { useSwapInfoArray } from "../../../hooks/usePool"
 import { useFeedLatestPrice, useFeedLatestTimestamp } from "../../../hooks/useFeed"
 import { roiDataForSwaps } from "../../../utils/calculators/indexRoiCalculator"
 import { round } from "../../../utils/formatter"
-import { TimeSeriesLineChart, TimeSeriesData } from "./TimeSeriesLineChart"
+import { TimeSeriesLineChart, TimeSeriesData } from "../../shared/TimeSeriesLineChart"
 import { RoiInfo } from '../../../types/RoiInfo'
 import { PoolTokensSwapsInfo } from "../../../types/PoolTokensSwapsInfo"
 

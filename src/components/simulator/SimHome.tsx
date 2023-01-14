@@ -14,6 +14,9 @@ import { ROIChart } from "./ROIChart"
 import { AssetAllocationChart } from "./AssetAllocationChart"
 import { DrawdownChart } from './DrawdownChart'
 
+import { useSearchParams } from "react-router-dom"
+
+
 const useStyle = makeStyles( theme => ({
  
     container: {
@@ -79,20 +82,48 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
         investment: "sim.investment",
     }
 
+    const [searchParams] = useSearchParams();
+
+    const fromParam = searchParams.get("from") &&  moment(searchParams.get("from"), 'YYYY-MM-DD').isValid() ?
+            moment(searchParams.get("from")).toDate().toISOString() :
+            localStorage.getItem(params.fromDate) ?? '2019-01-07T00:00:00'
+           
+
+    const toParam = searchParams.get("to") &&  moment(searchParams.get("to"), 'YYYY-MM-DD').isValid() ?
+            moment(searchParams.get("to")).toDate().toISOString() :
+            localStorage.getItem(params.toDate) ?? new Date().toISOString()
+           
+    const assetParam =  ['BTC', 'ETH'].includes( searchParams.get("symbol") ?? '') ?
+            `W${searchParams.get("symbol")}` :
+            localStorage.getItem(params.asset) ?? 'WETH'
+           
+    const strategyParam = ['MeanReversion', 'Rebalancing', 'TrendFollowing'].includes(searchParams.get("strategy") ?? '') ?
+            searchParams.get("strategy") ?? StrategyName[StrategyName.TrendFollowing] :
+            localStorage.getItem(params.strategy) ?? StrategyName[StrategyName.TrendFollowing]       
+
+
+    const investmentParam = searchParams.get("investment") && Number(searchParams.get("investment")) > 0 ?
+                            searchParams.get("investment") ?? '1000' :
+                            localStorage.getItem(params.investment) ?? '1000'    
+
+
+    console.log(">>> AAAA ===>", fromParam, toParam , "assetParam", assetParam, "strategyParam", strategyParam, "investmentParam", investmentParam)
+
+   
+
     // get sim params from local storage or defaults
-    const fromDateStorage = localStorage.getItem(params.fromDate) ?? '2019-01-15T00:00:00'
-    const toDateStorage = localStorage.getItem(params.toDate) ?? '2022-06-18T00:00:00'
-    const assetStorage = localStorage.getItem(params.asset) ?? 'WETH'
-    const strategyStorage = localStorage.getItem(params.strategy) ?? StrategyName[StrategyName.TrendFollowing]
-    const investmentStorage = localStorage.getItem(params.investment) ?? '1000'
+    // const fromDateStorage = localStorage.getItem(params.fromDate) ?? '2019-01-15T00:00:00'
+    // const toDateStorage = localStorage.getItem(params.toDate) ?? '2022-06-18T00:00:00'
+    // const assetStorage = localStorage.getItem(params.asset) ?? 'WETH'
+    // const strategyStorage = localStorage.getItem(params.strategy) ?? StrategyName[StrategyName.MeanReversion]
+    // const investmentStorage = localStorage.getItem(params.investment) ?? '1000'
 
     // initialize form values
-    const [investment, setInvestment] = useState<number>(Number(investmentStorage))
-    const [fromDate, setFromDate] = useState<Date>(new Date(fromDateStorage)) // 2018-12-15 //'2018-01-01T00:00:00'
-    const [toDate, setToDate] = useState<Date>(new Date(toDateStorage))       // new Date())
-    const [asset, setAsset] = useState<string>(assetStorage)
-    const [strategy, setStrategy] = useState<string>(strategyStorage)
-    
+    const [fromDate, setFromDate] = useState<Date>(new Date(fromParam)) // 2018-12-15 //'2018-01-01T00:00:00'
+    const [toDate, setToDate] = useState<Date>(new Date(toParam))       // new Date())
+    const [asset, setAsset] = useState<string>(assetParam)
+    const [strategy, setStrategy] = useState<string>(strategyParam)
+    const [investment, setInvestment] = useState<number>(Number(investmentParam))
 
     // ROI items
     const [roiInfos, setRoiInfos] = useState<RoiInfo[]|undefined>(undefined)

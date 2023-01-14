@@ -90,8 +90,15 @@ export const StraetegyTrades = ({ swaps, depositToken, investToken }: StraetegyT
     return (
         <> 
             { rows && 
-                <Box style={{ height: rows.length * 56 + 110, width: '100%', marginTop: 20 }}>
-                    <DataGrid rows={rows}  columns={columns} />
+                <Box style={{ width: '100%', marginTop: 20 }}>
+                    <DataGrid 
+                        rows={rows} 
+                        columns={columns} 
+                        autoPageSize={true} 
+                        // disableColumnMenu={true}
+                        rowsPerPageOptions={[100, 200]}
+                        autoHeight
+                    />
                 </Box>
             }
         </> 

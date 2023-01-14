@@ -45,7 +45,7 @@ export class MeanReversion implements Strategy {
     simulate(from: Date, to: Date, amount: number): PoolTokensSwapsInfo | undefined {
 
         // set moving average
-        this.movingAverage = this.averagePrice(from, this.movingAveragePeriod)
+        this.movingAverage = this.averagePrice(from, this.movingAveragePeriod) /// 47,957 (350D)
         this.lastEvalTime = ( from.getTime() / 1000 )
 
         // console.log("movingAverage: ", this.movingAverage , this.feed.getPrice(from))
@@ -84,94 +84,86 @@ export class MeanReversion implements Strategy {
 
         prices.forEach( (it, idx) => {
 
-            if ((it.date.getTime() / 1000) < this.lastEvalTime + this.executionInterval) {
+            if (idx > 0 && (it.date.getTime() / 1000) < this.lastEvalTime + this.executionInterval) {
                 return
             }
 
             // update current price, moving average and lastEvalTimestamp
             this.updateMovingAverage(it.price, it.date)
          
-            // first swap to enfornce min allocation
-            if (idx === 0) {
-                const timestamp = round( it.date.getTime() / 1000, 0);
-                const soldAmount = this.depositTokenBalance * this.minAllocationPerc
-                const boughtAmount = soldAmount / it.price
 
-                // update balances
-                this.depositTokenBalance -= soldAmount 
-                this.investTokenBalance += boughtAmount
-                
-                const investTokenValue = this.investTokenBalance * it.price
-                const depositTokenValue = this.depositTokenBalance
-                const portfolioValue = depositTokenValue + investTokenValue
+            // evaluate strategy
+            const { action, amountIn } = this.evaluateTrade()
+
+            let shouldBuy : boolean = action === 'BUY'
+            let shouldSell: boolean = action === 'SELL'
+            let amount : number = amountIn
+
+            // 3. handle rebalancing situations when either token balance is too low
+            const depositTokensToSell = this.rebalanceDepositTokensAmount()
+            if (depositTokensToSell > 0) {
+                const maxAmount = (action === 'BUY') && (amountIn > depositTokensToSell) ? amountIn : depositTokensToSell;
+                shouldBuy = true
+                amount = maxAmount
+            }
+
+            const investTokensToSell = this.rebalanceInvestTokensAmount();
+            if (investTokensToSell > 0) {
+                const maxAmount = (action === 'SELL') && (amountIn > investTokensToSell) ? amountIn : investTokensToSell;
+                shouldSell = true
+                amount = maxAmount
+            }
+
+            console.log("this.latestPrice", this.latestPrice)
+            
+            const bought = shouldSell ? this.formatAmount(amount * this.latestPrice, this.depositToken.decimals) :
+                            shouldBuy ? this.formatAmount(amount / this.latestPrice, this.investToken.decimals) : ''
+
+
+            const sold = shouldSell ? this.formatAmount(amount, this.investToken.decimals) : 
+                            shouldBuy ? this.formatAmount(amount, this.depositToken.decimals) : ''
+                        
+            if (shouldSell || shouldBuy) {
+
+                // console.log("eval: ", it.date.toISOString().split('T')[0], it.price, action )
+
+                const depositTokenDelta = shouldSell ? amount * this.latestPrice : shouldBuy ? -amount : 0
+                const investTokenDelta = shouldSell ? -amount  : shouldBuy ? amount / this.latestPrice : 0
+
+                this.depositTokenBalance += depositTokenDelta
+                this.investTokenBalance += investTokenDelta
 
                 response.push({
-                    timestamp: `${timestamp}`,
-                    side: "BUY",
-                    feedPrice: this.formatAmount(it.price, this.priceFeedDecimals),
-                    bought: this.formatAmount(boughtAmount, this.investToken.decimals),
-                    sold: this.formatAmount(soldAmount, this.depositToken.decimals),
+                    timestamp: `${this.lastEvalTime}`,
+                    side: shouldBuy ? 'BUY' : 'SELL',
+                    feedPrice: this.formatAmount(this.latestPrice, this.priceFeedDecimals),
+                    bought: bought,
+                    sold: sold,
                     depositTokenBalance: this.formatAmount(this.depositTokenBalance, this.depositToken.decimals),
                     investTokenBalance: this.formatAmount(this.investTokenBalance, this.investToken.decimals),
-                    portfolioValue: this.formatAmount(portfolioValue, this.depositToken.decimals),
+                    portfolioValue: this.formatAmount(this.portfolioValue(), this.depositToken.decimals),
                 })
-            
-            } else {
-
-                // evaluate strategy
-                const { action, amountIn } = this.evaluateTrade()
-
-                // ensure min token percentage 
-                const depositTokensToSell = this.rebalanceDepositTokensAmount()
-                const investTokensToSell = this.rebalanceInvestTokensAmount();
-
-                // deposit tokens to sell
-                const amount = ( action === "BUY" ) ? Math.max(depositTokensToSell, amountIn) :    // amount of deposit tokens
-                               ( action === "SELL" ) ? Math.max(investTokensToSell, amountIn) : 0  // amount of invest tokens
-           
-                const shouldSell = action === "SELL" && amount > 0
-                const shouldBuy = action === "BUY" && amount > 0
-                
-                const bought = shouldSell ? this.formatAmount(amount * this.latestPrice, this.depositToken.decimals) :
-                               shouldBuy ? this.formatAmount(amount / this.latestPrice, this.investToken.decimals) : ''
-
-
-                const sold = shouldSell ? this.formatAmount(amount, this.investToken.decimals) : 
-                             shouldBuy ? this.formatAmount(amount, this.depositToken.decimals) : ''
-                           
-
-                if (shouldSell || shouldBuy) {
-
-                    // console.log("eval: ", it.date.toISOString().split('T')[0], it.price, action )
-
-                    const depositTokenDelta = shouldSell ? amount * this.latestPrice : shouldBuy ? -amount : 0
-                    const investTokenDelta = shouldSell ? -amount  : shouldBuy ? amount / this.latestPrice : 0
-
-                    this.depositTokenBalance += depositTokenDelta
-                    this.investTokenBalance += investTokenDelta
-
-                    response.push({
-                        timestamp: `${this.lastEvalTime}`,
-                        side: action,
-                        feedPrice: this.formatAmount(this.latestPrice, this.priceFeedDecimals),
-                        bought: bought,
-                        sold: sold,
-                        depositTokenBalance: this.formatAmount(this.depositTokenBalance, this.depositToken.decimals),
-                        investTokenBalance: this.formatAmount(this.investTokenBalance, this.investToken.decimals),
-                        portfolioValue: this.formatAmount(this.portfolioValue(), this.depositToken.decimals),
-                    })
-                }
             }
-           
+            
         })
 
-
-      
 
         return response
     }
 
 
+    formatSwap(action: string, bought: string, sold: string)  {
+        return {
+            timestamp: `${this.lastEvalTime}`,
+            side: action,
+            feedPrice: this.formatAmount(this.latestPrice, this.priceFeedDecimals),
+            bought: bought,
+            sold: sold,
+            depositTokenBalance: this.formatAmount(this.depositTokenBalance, this.depositToken.decimals),
+            investTokenBalance: this.formatAmount(this.investTokenBalance, this.investToken.decimals),
+            portfolioValue: this.formatAmount(this.portfolioValue(), this.depositToken.decimals),
+        }
+    }
     
 
 
@@ -272,6 +264,10 @@ export class MeanReversion implements Strategy {
         const secondSinceLastUpdate: number = dateTImeSecs - this.lastEvalTime
         const daysSinceLasUpdate = round(secondSinceLastUpdate / 86400, 0)
 
+        // remember when the moving average was updated
+        this.latestPrice = price
+        this.lastEvalTime = dateTImeSecs
+        
         if (daysSinceLasUpdate === 0) return;
 
         if (daysSinceLasUpdate >= this.movingAveragePeriod) {
@@ -283,10 +279,6 @@ export class MeanReversion implements Strategy {
             const newPriceWeight = daysSinceLasUpdate * price;
             this.movingAverage = (oldPricesWeight + newPriceWeight ) / this.movingAveragePeriod;
         }
-
-        // remember when the moving average was updated
-        this.latestPrice = price
-        this.lastEvalTime = dateTImeSecs
     }
 
 
@@ -313,6 +305,8 @@ export class MeanReversion implements Strategy {
 
     // Format the numeric amount into a BigNumber with the required decimals and return its string representation
     formatAmount(amount: number, decimals: number) : string {
+
+        console.log("formatAmount - amount", amount)
 
         if (decimals < 8) {
             const amountInt = round(amount * 10 ** decimals, 0)

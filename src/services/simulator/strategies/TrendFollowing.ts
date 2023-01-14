@@ -72,7 +72,6 @@ export class TrendFollowing implements Strategy {
 
 
 
-
     getSwaps(from: Date, to: Date, initialDepositTokenBalance: number) : SwapInfo[] | undefined {
 
         this.depositTokenBalance = initialDepositTokenBalance
@@ -82,12 +81,11 @@ export class TrendFollowing implements Strategy {
 
         let response : SwapInfo[] = []
 
-        prices.forEach( it => {
+        prices.forEach( (it, idx) => {
 
-            if ((it.date.getTime() / 1000) < this.lastEvalTime + this.executionInterval) {
+            if (idx > 0 && (it.date.getTime() / 1000) < this.lastEvalTime + this.executionInterval) {
                 return
             }
-
 
             // update current price, moving average and lastEvalTimestamp
             this.updateMovingAverage(it.price, it.date)
@@ -95,14 +93,6 @@ export class TrendFollowing implements Strategy {
             // evaluate strategy
             const { action, amountIn } = this.evaluateTrade()
 
-            // ensure min token percentage 
-            // const depositTokensToSell = this.rebalanceDepositTokensAmount()
-            // const investTokensToSell = this.rebalanceInvestTokensAmount();
-
-            // deposit tokens to sell
-            // const amount = ( action === "BUY" ) ? Math.max(depositTokensToSell, amountIn) :    // amount of deposit tokens
-            //                 ( action === "SELL" ) ? Math.max(investTokensToSell, amountIn) : 0  // amount of invest tokens
-        
             const shouldSell = action === "SELL" && amountIn > 0
             const shouldBuy = action === "BUY" && amountIn > 0
             
@@ -142,7 +132,6 @@ export class TrendFollowing implements Strategy {
     }
 
 
-
     evaluateTrade() : { action: string | undefined, amountIn: number} {
         
         let action : string | undefined = undefined
@@ -155,7 +144,7 @@ export class TrendFollowing implements Strategy {
         const depositPerc = poolValue > 0 ? 1 - investPerc : 0
 
         const shouldSell = deltaPricePerc < this.targetPricePercDown &&
-                          investPerc > this.minAllocationPerc
+                           investPerc > this.minAllocationPerc
 
         if (shouldSell) {
             // need to SELL invest tokens buying deposit tokens
@@ -164,20 +153,13 @@ export class TrendFollowing implements Strategy {
         }
 
         const shouldBuy = deltaPricePerc > this.targetPricePercUp &&
-                        depositPerc > this.minAllocationPerc
+                          depositPerc > this.minAllocationPerc
 
         if (shouldBuy) {
             // need to BUY invest tokens spending depositTokens
             action = "BUY"
             amountIn = this.depositTokenBalance * this.tokensToSwapPerc
         }
-
-        // if (shouldSell || shouldBuy) {
-        //     console.log("eval() - " , new Date(this.lastEvalTime * 1000).toISOString().split('T')[0], action,
-        //     " - price: ", round(this.latestPrice), "ma: ", round(this.movingAverage), 
-        //     "  delta %:", round(deltaPricePerc * 100)+"%")
-        // }
-
 
         return { action, amountIn };
     }
@@ -248,6 +230,10 @@ export class TrendFollowing implements Strategy {
         const secondSinceLastUpdate: number = dateTImeSecs - this.lastEvalTime
         const daysSinceLasUpdate = round(secondSinceLastUpdate / 86400, 0)
 
+        // remember when the moving average was updated
+        this.latestPrice = price
+        this.lastEvalTime = dateTImeSecs
+        
         if (daysSinceLasUpdate === 0) return;
 
         if (daysSinceLasUpdate >= this.movingAveragePeriod) {
@@ -259,10 +245,6 @@ export class TrendFollowing implements Strategy {
             const newPriceWeight = daysSinceLasUpdate * price;
             this.movingAverage = (oldPricesWeight + newPriceWeight ) / this.movingAveragePeriod;
         }
-
-        // remember when the moving average was updated
-        this.latestPrice = price
-        this.lastEvalTime = dateTImeSecs
     }
 
 

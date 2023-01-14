@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react"
-import { Box, Tab, makeStyles, Typography } from "@material-ui/core"
+import { Box, Tab, makeStyles } from "@material-ui/core"
 import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 
 import { Token } from "../../../types/Token"

@@ -1,22 +1,16 @@
 
 import { useState } from "react";
-
-import { makeStyles, Link, Typography, Breadcrumbs, Box , Button, Divider} from "@material-ui/core"
-import {  InvestTokens, DepositToken } from "../../utils/pools"
-import { shortenAccount } from "../../utils/formatter"
-
-import { useLocation } from "react-router-dom"
-
-import { Token } from "../../types/Token"
 import { Link as RouterLink } from "react-router-dom"
 
-import { useUsersForPools, useUsersForIndexes } from '../../hooks/usePoolInfo'
-import { IndexesIds, PoolIds } from "../../utils/pools"
+import { makeStyles, Link, Typography, Breadcrumbs, Box , Button, Divider} from "@material-ui/core"
+import { Launch } from "@material-ui/icons"
 
+import { useUsersForPools, useUsersForIndexes } from '../../hooks/usePoolInfo'
+import { InvestTokens, DepositToken } from "../../utils/pools"
+import { shortenAccount } from "../../utils/formatter"
+import { IndexesIds, PoolIds } from "../../utils/pools"
 import { MyPortfolioAssetsSummary } from "../dashboard/MyPortfolioAssetsSummary"
 import { Horizontal } from "../Layout";
-
-import { Launch } from "@material-ui/icons"
 
 
 

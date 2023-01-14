@@ -1,9 +1,8 @@
-import { makeStyles, Link, Typography, Breadcrumbs, Divider, Box} from "@material-ui/core"
+import { makeStyles, Link, Typography, Breadcrumbs, Divider, Box } from "@material-ui/core"
 import { Token } from "../../types/Token"
 import { Link as RouterLink } from "react-router-dom"
 import { PoolExplorer } from "./PoolExprorer"
 
-import { InvestTokens } from "../../utils/pools"
 
 interface InvestHomeProps {
     chainId: number,
@@ -27,8 +26,6 @@ const useStyles = makeStyles( theme => ({
 export const InvestHome = ({ chainId, account, depositToken }: InvestHomeProps) => {
 
     const classes = useStyles()
-    const investTokens = InvestTokens(chainId)
-    const tokens = [depositToken, ...investTokens]
 
     return (
         <div className={classes.container}>

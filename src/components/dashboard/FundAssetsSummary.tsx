@@ -6,7 +6,6 @@ import { useEthers } from "@usedapp/core";
 
 
 import { Token } from "../../types/Token"
-import { PoolSummary } from "../shared/PoolSummary"
 import { Horizontal } from "../Layout"
 import { TitleValueBox } from "../TitleValueBox"
 import { VPieChart } from "../shared/VPieChart"
@@ -51,7 +50,7 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
     const tokens = [depositToken, ...investTokens]
 	const { account } = useEthers()
 
-    const { poolsInfo, indexesInfo, portfolioInfo, chartValueByAsset, chartValueByPool } = useDashboardModel(chainId, tokens, depositToken)
+    const { portfolioInfo, chartValueByAsset, chartValueByPool } = useDashboardModel(chainId, tokens, depositToken)
 
     const tokenBalancesoFormatted = Object.values(portfolioInfo.tokenBalances).map( (item ) => {
         return {
@@ -64,16 +63,6 @@ export const FundAssetsSummary = ({ chainId, depositToken, investTokens } : Fund
 
     })
  
-    const poolsSummaryViews = [...indexesInfo, ...poolsInfo].filter( pool => pool.totalValue.isZero() === false ).map ( pool => {
-        return <PoolSummary key={pool.poolId} 
-                    chainId={chainId} 
-                    poolId={pool.poolId} 
-                    tokens={pool.tokenInfoArray} 
-                    depositToken={depositToken
-                 }/>
-   
-    })
-  
 
     const totalValueFormatted = portfolioInfo.totalValue && fromDecimals( portfolioInfo.totalValue, depositToken.decimals, 2)
     

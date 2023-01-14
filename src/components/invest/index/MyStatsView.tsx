@@ -37,7 +37,7 @@ export const MyStatsView = ( { chainId, poolId, account, depositToken } : MyStat
 
     const classes = useStyle()
 
-    const tokens =  [depositToken, ... InvestTokens(chainId)]
+    const tokens =  [depositToken, ...InvestTokens(chainId)]
     const { indexInfo, portfolioInfo } = useIndexModel(chainId, poolId, tokens, depositToken, account)
     const deposits = useGetDeposits(chainId, poolId, account)
     const withdrawals = useGetWithdrawals(chainId, poolId, account)

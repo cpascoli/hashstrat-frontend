@@ -222,7 +222,7 @@ export const useSwapInfo = (chainId: number, index: number, poolId: string) => {
 export const useSwapInfoArray = (chainId: number, poolId: string) => {
     const poolContract = PoolContract(chainId, poolId)
 
-    const { value, error } = useCall({
+    const { value } = useCall({
         contract: poolContract,
         method: 'getSwapsInfo',
         args: [],
@@ -264,7 +264,7 @@ export const useFeesForWithdraw = (chainId: number, poolId: string, lpTokensAmou
 
 export const useGetUsers = (chainId: number, poolId: string) => {
     const poolContract = PoolContract(chainId, poolId)
-    const { value, error } = useCall({
+    const { value } = useCall({
             contract: poolContract,
             method: 'getUsers',
             args: [0],

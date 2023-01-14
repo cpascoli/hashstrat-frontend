@@ -1,7 +1,6 @@
-import React from 'react';
 import Carousel from 'react-material-ui-carousel'
 
-import { makeStyles, Card, CardContent, CardActions, Button, Paper, Box, Typography, Link } from  "@material-ui/core"
+import { makeStyles, Card, CardContent, CardActions, Box, Typography, Link } from  "@material-ui/core"
 import { Horizontal } from '../Layout';
 
 type StrategyInfo = {

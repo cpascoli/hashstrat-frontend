@@ -136,7 +136,7 @@ const isMyPool = (pool: PoolData) : boolean => {
 const filterPools = (chainId: number, poolsInfo: PoolData[], poolId: string | undefined, asset: string | undefined, mypools: boolean) => {
     const filtered = poolsInfo.filter( pool => { 
         const info = PoolInfo(chainId, pool.poolId)
-        const includePool = poolId === undefined || pool.poolId === poolId
+        //const includePool = poolId === undefined || pool.poolId === poolId
         const includeAsset = asset === undefined || info.investTokens.map( (it: string) => it.toLowerCase()).join(',') === asset.toLowerCase()
         const includeMyPools = mypools === false || isMyPool(pool)
 
@@ -199,7 +199,7 @@ export const DepositWorkflow = ({ chainId, depositToken, investTokens, isInitial
 
 
     const poolsViews = poolsForAssets?.map( (poolId, idx) => {
-        const { description, depositToken : depositTokenSymbol } = PoolInfo(chainId, poolId)
+        const { description  } = PoolInfo(chainId, poolId)
 
         const info = PoolInfo(chainId, poolId)
         const strategyName =  strategyNames[info.strategy as keyof typeof strategyNames] || info.strategy

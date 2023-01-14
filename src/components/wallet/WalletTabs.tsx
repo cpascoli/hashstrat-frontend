@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import { Box, Tab, Paper, Snackbar, Link, makeStyles } from "@material-ui/core"
-import { styled } from "@material-ui/core/styles"
+import { Box, Tab, Snackbar, Link, makeStyles } from "@material-ui/core"
 import { TabContext, TabList, TabPanel, AlertTitle } from "@material-ui/lab"
 import { StyledAlert } from "../shared/StyledAlert"
 

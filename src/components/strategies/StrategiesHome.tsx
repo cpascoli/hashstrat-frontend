@@ -1,7 +1,7 @@
 
 
 
-import { makeStyles, useTheme, Box, Typography, Link, Accordion, AccordionDetails, AccordionSummary, Breadcrumbs, Divider } from  "@material-ui/core"
+import { makeStyles, Box, Typography, Link, Accordion, AccordionDetails, AccordionSummary, Breadcrumbs, Divider } from  "@material-ui/core"
 import { Horizontal } from "../Layout";
 import { ExpandMore } from "@material-ui/icons"
 import { Link as RouterLink } from "react-router-dom"
@@ -49,7 +49,6 @@ const useStyle = makeStyles( theme => ({
 
 export const StrategiesHome = () => {
     const classes = useStyle()
-    const theme = useTheme();
 
     return (
         <Box className={classes.container} >

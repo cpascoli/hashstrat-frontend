@@ -34,7 +34,7 @@ const useStyles = makeStyles( theme => ({
 
 export const IndexHome = ({ chainId, poolId, account, tokens, investTokens } : IndexHomeProps) => {
     
-    const { name, description } = PoolInfo(chainId, poolId)
+    const { name } = PoolInfo(chainId, poolId)
     const classes = useStyles()
 
     return (

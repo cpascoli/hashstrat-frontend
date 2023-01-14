@@ -47,9 +47,8 @@ export class TrendFollowing implements Strategy {
         this.movingAverage = this.averagePrice(from, this.movingAveragePeriod)
         this.lastEvalTime = ( from.getTime() / 1000 )
 
-        console.log("movingAverage: ", this.movingAverage , this.feed.getPrice(from))
+        // console.log("movingAverage: ", this.movingAverage , this.feed.getPrice(from))
 
-                
         const price = this.feed.getPrice(to)
         const swaps : SwapInfo[] | undefined = this.getSwaps(from, to, amount)
 
@@ -117,7 +116,7 @@ export class TrendFollowing implements Strategy {
 
             if (shouldSell || shouldBuy) {
 
-                console.log("eval: ", it.date.toISOString().split('T')[0], it.price, action )
+                // console.log("eval: ", it.date.toISOString().split('T')[0], it.price, action )
 
                 const depositTokenDelta = shouldSell ? amountIn * this.latestPrice : shouldBuy ? -amountIn : 0
                 const investTokenDelta = shouldSell ? -amountIn  : shouldBuy ? amountIn / this.latestPrice : 0
@@ -173,11 +172,11 @@ export class TrendFollowing implements Strategy {
             amountIn = this.depositTokenBalance * this.tokensToSwapPerc
         }
 
-        if (shouldSell || shouldBuy) {
-            console.log("eval() - " , new Date(this.lastEvalTime * 1000).toISOString().split('T')[0], action,
-            " - price: ", round(this.latestPrice), "ma: ", round(this.movingAverage), 
-            "  delta %:", round(deltaPricePerc * 100)+"%")
-        }
+        // if (shouldSell || shouldBuy) {
+        //     console.log("eval() - " , new Date(this.lastEvalTime * 1000).toISOString().split('T')[0], action,
+        //     " - price: ", round(this.latestPrice), "ma: ", round(this.movingAverage), 
+        //     "  delta %:", round(deltaPricePerc * 100)+"%")
+        // }
 
 
         return { action, amountIn };

@@ -34,44 +34,6 @@ export const TradesView = ( { chainId, poolId, depositToken, investToken } : Poo
     const swaps = useSwapInfoArray(chainId, poolId)
 
 
-    // chart labels & data
-    const label1 = `${depositToken.symbol} % Traded`
-    const label2 = `${investToken.symbol} % Traded`
-
-    // cumulative % of tokens traded
-    let depositTonensPerc = 0
-    let investTokensPerc = 0
-
-    const chartData = swaps?.map( (data: any) => {
-        const date = data.timestamp * 1000
-        const price = parseFloat(fromDecimals(data.feedPrice, 8, 2))
-
-        const depositTokenBalance = parseFloat(fromDecimals(data.depositTokenBalance, depositToken.decimals, 2))
-        const investTokenBalance = parseFloat(fromDecimals(data.investTokenBalance, investToken.decimals, 6))
-
-        const bought = (data.side === 'BUY')? 
-              parseFloat(fromDecimals(data.bought, investToken.decimals, 6)) : 
-              parseFloat(fromDecimals(data.bought, depositToken.decimals, 2))
-
-        const sold = (data.side === 'SELL')? 
-              parseFloat(fromDecimals(data.sold, investToken.decimals, 6)) : 
-              parseFloat(fromDecimals(data.sold, depositToken.decimals, 2))
-
-        let record : any = {}
-        record['time'] = date
-
-
-        depositTonensPerc += (data.side === 'BUY') ? -round(100 * bought * price / depositTokenBalance) :  //  perc of deposit tokens sold (to buy invest tokens)
-                                                      round(100 * sold * price / depositTokenBalance)      //  perc of deposit tokens bought (by selling invest tokens)
-        investTokensPerc += (data.side === 'BUY') ?   round(100 * bought / investTokenBalance) :           //  perc of invest tokens bought (by selling deposit tokens)
-                                                     -round(100 * sold / investTokenBalance)               //  perc of invest tokens sold (by buying deposit tokens)
-        
-        record[label1] = round(depositTonensPerc)
-        record[label2] = round(investTokensPerc)
-        return record
-    })
-
-
     // Trades table headers
     const columns: GridColDef[] = [
         { field: 'date', headerName: 'Date', type: 'date', width: 130, sortable: true },
@@ -141,19 +103,6 @@ export const TradesView = ( { chainId, poolId, depositToken, investToken } : Poo
 
     return (
         <Box className={classes.container}>
-
-            {/* <Typography align="center">Assets Traded (Cumulative % Chg)</Typography>
-            <Box className={classes.chart} >
-                <TimeSeriesLineChart title="Assets Traded (Cumulative % Chg)" 
-                    label1={label1} 
-                    label2={label2} 
-                    data={chartData}  
-                /> 
-            </Box>   <br/>
-            */}
-
-          
-
             { rows && 
                 <Box> 
                     <div style={{ height: rows.length * 56 + 110, width: '100%', marginTop: 20 }}>
@@ -166,7 +115,6 @@ export const TradesView = ( { chainId, poolId, depositToken, investToken } : Poo
                     </div>
                 </Box> 
             }
-
         </Box>
     )
 }

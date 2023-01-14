@@ -1,7 +1,7 @@
 
 import { BigNumber } from 'ethers'
 
-import { Feed, FeedInastance } from "../../pricefeed/PricefeedService"
+import { Feed } from "../../pricefeed/PricefeedService"
 import { PoolTokensSwapsInfo } from "../../../types/PoolTokensSwapsInfo";
 import { SwapInfo } from '../../../types/SwapInfo'
 import { round } from '../../../utils/formatter'

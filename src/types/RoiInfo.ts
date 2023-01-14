@@ -1,9 +1,14 @@
 export type RoiInfo = {
     date: number;
     strategyROI: number;
-    strategyValue: number;
     buyAndHoldROI: number;
+    strategyValue: number;
     buyAndHoldValue: number;
+    strategyDrawdownPerc: number;
+    buyAndHoldDrawdownPerc: number;
+    maxStrategyDrawdownPerc: number;
+    maxBuyAndHoldDrawdownPerc: number;
+
     investTokenPerc: number,
     depositTokenPerc: number,
 }

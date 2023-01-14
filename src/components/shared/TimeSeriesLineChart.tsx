@@ -22,7 +22,8 @@ export interface ChartData {
     title: string;
     data: TimeSeriesData[];
     label1: string,
-    label2: string
+    label2: string,
+    yAxisRange: any
 }
 
 
@@ -50,11 +51,14 @@ export const TimeSeriesLineChart = ( chartData  : ChartData ) => {
       />
 
       {/* <YAxis name = "Asset 1" type="number" domain={[0, 100]} yAxisId="left-axis" /> */}
-      <YAxis name = "Y Axis" type="number"  yAxisId="right-axis" orientation="right" />
+      <YAxis name = "Y Axis" type="number" 
+        yAxisId="right-axis" orientation="right" 
+        domain={ chartData.yAxisRange ? chartData.yAxisRange  : ['auto', 'auto'] } 
+      />
 
       <Legend verticalAlign="top" height={30}/>
       <Tooltip 
-        labelFormatter={(unixTime) => moment(unixTime).format('yyyy-MM-DD hh:mm')}
+        labelFormatter={(unixTime) => moment(unixTime).format('yyyy-MM-DD')}
         // formatter={numberFormatter}
       />
 

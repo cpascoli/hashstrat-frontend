@@ -6,7 +6,7 @@ import { DaoOperationsContract } from "../utils/network"
 export const useCollectableFees = (chainId: number) => {
 
     const contract = DaoOperationsContract(chainId)
-    const { value, error } = useCall({
+    const { value } = useCall({
         contract: contract,
         method: 'collectableFees',
         args: [],

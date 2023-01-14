@@ -1,7 +1,7 @@
 
 import { BigNumber } from 'ethers'
 
-import { Feed, FeedInastance, PriceData } from "../../pricefeed/PricefeedService"
+import { Feed, PriceData } from "../../pricefeed/PricefeedService"
 import { PoolTokensSwapsInfo } from "../../../types/PoolTokensSwapsInfo";
 import { SwapInfo } from '../../../types/SwapInfo'
 import { round } from '../../../utils/formatter'
@@ -48,7 +48,7 @@ export class MeanReversion implements Strategy {
         this.movingAverage = this.averagePrice(from, this.movingAveragePeriod)
         this.lastEvalTime = ( from.getTime() / 1000 )
 
-        console.log("movingAverage: ", this.movingAverage , this.feed.getPrice(from))
+        // console.log("movingAverage: ", this.movingAverage , this.feed.getPrice(from))
 
 
         const lastPrice = this.feed.getPrice(to)
@@ -142,7 +142,7 @@ export class MeanReversion implements Strategy {
 
                 if (shouldSell || shouldBuy) {
 
-                    console.log("eval: ", it.date.toISOString().split('T')[0], it.price, action )
+                    // console.log("eval: ", it.date.toISOString().split('T')[0], it.price, action )
 
                     const depositTokenDelta = shouldSell ? amount * this.latestPrice : shouldBuy ? -amount : 0
                     const investTokenDelta = shouldSell ? -amount  : shouldBuy ? amount / this.latestPrice : 0
@@ -200,12 +200,6 @@ export class MeanReversion implements Strategy {
             // need to BUY invest tokens spending depositTokens
             action = "BUY"
             amountIn = this.depositTokenBalance * this.tokensToSwapPerc
-        }
-
-        if (shouldSell || shouldSell) {
-            
-            console.log("!!! evaluateTrade - ", new Date(this.lastEvalTime * 1000).toISOString().split('T')[0],
-                 "ma:", round(this.movingAverage), "price: ", round(this.latestPrice), "diff: ", round(deltaPricePerc) )
         }
 
 

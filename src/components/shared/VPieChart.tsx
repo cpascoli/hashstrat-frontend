@@ -1,6 +1,6 @@
 
 // import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { makeStyles, Box, Typography, useTheme } from  "@material-ui/core"
+import { makeStyles, Box, Typography } from  "@material-ui/core"
 
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
@@ -63,9 +63,7 @@ export const VPieChart = ( chartData : ChartData ) => {
   };
   
 
-
   const classes = useStyle()
-  const theme = useTheme()
 
   return (
       <Box className={classes.chart}>

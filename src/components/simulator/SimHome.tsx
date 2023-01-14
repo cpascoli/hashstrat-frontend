@@ -1,41 +1,39 @@
 import { useEffect, useState } from 'react'
-import { BigNumber, utils } from 'ethers'
 import moment from 'moment'
+import { makeStyles, Box, Paper, TextField, Typography, Select, MenuItem } from  "@material-ui/core"
 
-import { makeStyles, Box, Paper, TextField, Typography, Select, MenuItem, Card, CardContent } from  "@material-ui/core"
-import { DataGrid, GridColDef } from "@material-ui/data-grid"
-
-import { TimeSeriesAreaChart } from "../shared/TimeSeriesAreaChart"
-
-
+import { SimulatorInastance, StrategyName } from "../../services/simulator/SimulatorService"
 import { DepositToken, InvestTokens } from "../../utils/pools"
-import { TimeSeriesLineChart, TimeSeriesData } from "../shared/TimeSeriesLineChart"
+import { roiDataForSwaps  } from "../../utils/calculators/roiCalculator"
 import { RoiInfo } from '../../types/RoiInfo'
 import { PoolTokensSwapsInfo } from "../../types/PoolTokensSwapsInfo"
-import { round } from "../../utils/formatter"
-import { roiDataForSwaps  } from "../../utils/calculators/indexRoiCalculator"
-import { SimulatorInastance, StrategyName } from "../../services/simulator/SimulatorService"
-
-import { fromDecimals } from "../../utils/formatter"
-import { SwapInfo } from "../../types/SwapInfo"
 import { Horizontal } from '../Layout'
-
+import { InfoCard } from './InfoCard'
+import { StraetegyTrades } from "./StraetegyTrades"
+import { ROIChart } from "./ROIChart"
+import { AssetAllocationChart } from "./AssetAllocationChart"
+import { DrawdownChart } from './DrawdownChart'
 
 const useStyle = makeStyles( theme => ({
  
     container: {
-        paddingTop: 2,
+        marginTop: 2,
         paddingLeft: 20,
         paddingRight: 20,
-        maxWidth: 900,
+        maxWidth: 1200,
         margin: "auto",
         [theme.breakpoints.down('xs')]: {
             paddingLeft: 0,
             paddingRight: 0,
 		},
     },
+
     form: {
         width: "100%",
+    },
+
+    metrics: {
+        maxWidth: 900
     },
 
     formField: {
@@ -53,6 +51,13 @@ const useStyle = makeStyles( theme => ({
         paddingBottom: theme.spacing(2),
     },
 
+    trades: {
+        minWidth: 900,
+        [theme.breakpoints.down('xs')]: {
+            minWidth: '100%'
+		},
+    }
+
 }))
 
 
@@ -63,23 +68,37 @@ export interface SimHomeProps {
 
 export const SimHome = ({ chainId } : SimHomeProps) => {
 
+
     const classes = useStyle()
 
-    const [investment, setInvestment] = useState<number>(1000)
-    const [fromDate, setFromDate] = useState<Date>(new Date('2019-01-15T00:00:00')) // 2018-12-15 //'2018-01-01T00:00:00'
-    const [toDate, setToDate] = useState<Date>(new Date('2022-06-18T00:00:00'))  // new Date())
-    const [asset, setAsset] = useState<string>("WETH")
-    const [strategy, setStrategy] = useState<string>(StrategyName[StrategyName.TrendFollowing])
-    
-    const [chartData, setChartData] = useState<TimeSeriesData[]|undefined>(undefined)
-    const [chartValueData, setChartValueData] = useState<TimeSeriesData[]|undefined>(undefined)
+    const params = {
+        fromDate: "sim.fromDate",
+        toDate: "sim.toDate",
+        asset: "sim.asset",
+        strategy: "sim.strategy",
+        investment: "sim.investment",
+    }
+
+    // get sim params from local storage or defaults
+    const fromDateStorage = localStorage.getItem(params.fromDate) ?? '2019-01-15T00:00:00'
+    const toDateStorage = localStorage.getItem(params.toDate) ?? '2022-06-18T00:00:00'
+    const assetStorage = localStorage.getItem(params.asset) ?? 'WETH'
+    const strategyStorage = localStorage.getItem(params.strategy) ?? StrategyName[StrategyName.TrendFollowing]
+    const investmentStorage = localStorage.getItem(params.investment) ?? '1000'
+
+    // initialize form values
+    const [investment, setInvestment] = useState<number>(Number(investmentStorage))
+    const [fromDate, setFromDate] = useState<Date>(new Date(fromDateStorage)) // 2018-12-15 //'2018-01-01T00:00:00'
+    const [toDate, setToDate] = useState<Date>(new Date(toDateStorage))       // new Date())
+    const [asset, setAsset] = useState<string>(assetStorage)
+    const [strategy, setStrategy] = useState<string>(strategyStorage)
     
 
-    const [roiInfo, setRoiInfo] = useState<RoiInfo|undefined>(undefined)
+    // ROI items
+    const [roiInfos, setRoiInfos] = useState<RoiInfo[]|undefined>(undefined)
 
     const depositToken = DepositToken(chainId)!
     const investTokens = InvestTokens(chainId)
-
     const investToken = investTokens.find( it => it.symbol === asset)!
 
     // Run simulator
@@ -88,138 +107,37 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
     const swaps = swapsInfos?.map( (it : PoolTokensSwapsInfo) => it.swaps ).flat()
 
 
-    const label1 = `Strategy ROI`
-    const label2 = `Buy & Hold ROI`
-
-    const labelValue1 = `${investToken.symbol} Value %`
-    const labelValue2 = `${depositToken.symbol} Value %`
-    
-
     useEffect(() => {
-
-        if (swapsInfos && depositToken && investToken && !chartData && investment > 0 ) {
-            const roi = roiDataForSwaps(swapsInfos, depositToken, [investToken], investment)
-            const lastRoi = roi[roi.length-1]
-            setRoiInfo(lastRoi)
-
-            // strategy roi data
-            const data = roi.map( (data: RoiInfo) => {
-                let record : any = {}
-                record['time'] = data.date * 1000
-                record[label1] = round(data.strategyROI)
-                record[label2] = round(data.buyAndHoldROI)
-                return record
-            })
-            setChartData(data)
-
-            // asset value chart data
-            const valueData = roi.map( (data: RoiInfo) => {
-                let record : any = {}
-                record['time'] = data.date * 1000
-                record[labelValue1] = round(data.investTokenPerc)
-                record[labelValue2] = round(data.depositTokenPerc)
-                return record
-            })
-            setChartValueData(valueData)
+        if (swapsInfos && depositToken && investToken && validate(investment, fromDate, toDate) ) {
+            const roiInfos = roiDataForSwaps(swapsInfos, depositToken, [investToken], investment)
+            setRoiInfos(roiInfos)
         }
 
-	}, [swapsInfos, depositToken, investToken])
+	}, [fromDate, toDate, asset, strategy, investment])
 
 
+    const validate = (amount: number, from: Date, to: Date) => {
+        const validAmount = amount > 0
+        const validDates = from.getTime() > new Date('2009-01-01T00:00:00').getTime() &&
+            from.getTime() < (to.getTime() + 86400 * 1000)
 
-    // Trades table headers
-    const columns: GridColDef[] = [
-        { field: 'date', headerName: 'Date', type: 'date', width: 130, sortable: true },
-        { field: 'side', headerName: 'Side', width: 90, sortable: false },
-        {
-            field: 'riskAssetTradedAmount',
-            headerName: `${investToken.symbol} Traded`,
-            description: 'The amount of the risk asset bought or sold',
-            type: 'string',
-            sortable: false,
-            width: 150,
-            // valueFormatter: (params) => {
-            //     return params.value;
-            // },
-        },
-        {
-            field: 'stableAssetTradedAmount',
-            headerName: `${depositToken.symbol} Traded`,
-            description: 'The amount of the stable asset sold or bought',
-            type: 'string',
-            sortable: false,
-            width: 150,
-            // valueFormatter: (params) => {
-            //     return params.value;
-            // },
-        },
-        {
-            field: 'feedPrice',
-            headerName: 'Price',
-            type: 'number',
-            width: 120,
-            sortable: false,
-        },
-        {
-            field: 'portfolioValue',
-            headerName: 'Portfolio Value',
-            type: 'number',
-            width: 150,
-            sortable: false,
-        },
-    ]
+        return validAmount && validDates
+    }
 
 
-
-    // Trades table rows
-    const rows = swaps?.slice().sort( (a, b) => Number(b.timestamp) - Number(a.timestamp)  )?.map( (data : SwapInfo, index: number) => {
-
-        const date = new Date( Number(data.timestamp) * 1000)
-        const feedPrice = parseFloat(fromDecimals(BigNumber.from(data.feedPrice), 8, 2))
-
-        const tradeSideFactor = data.side === 'BUY' ? 1.0 : -1.0
-        const amount1 = data.side === 'BUY' ? BigNumber.from(data.bought) : BigNumber.from(data.sold)
-        const amount2 = data.side === 'BUY' ? BigNumber.from(data.sold) : BigNumber.from(data.bought)
-        const riskAssetAmountTraded = parseFloat(fromDecimals(amount1, investToken.decimals, 6))
-        const stableAssetAmountTraded = parseFloat(fromDecimals(amount2, depositToken.decimals, 2))
-
-        // perc risk asset traded
-        const riskAssetBalance = parseFloat(fromDecimals(BigNumber.from(data.investTokenBalance), investToken.decimals, 6))
-        const riskAssetTradedPerc = round(100 * riskAssetAmountTraded  / ( riskAssetBalance + (data.side === 'BUY' ? 0 : riskAssetAmountTraded) ))
-
-        // perc stable asset traded
-        const stableAssetBalance = parseFloat(fromDecimals(BigNumber.from(data.depositTokenBalance), depositToken.decimals, 2))
-        const stableAssetTradedPerc = round(100 * stableAssetAmountTraded / (stableAssetBalance + (data.side === 'BUY' ? stableAssetAmountTraded : 0) ))
-
-        const portfolioValueFormatted = data.portfolioValue && fromDecimals(BigNumber.from(data.portfolioValue), depositToken.decimals, 2)
-
-        return {
-            id: index,
-            date: date,
-            side: data.side,
-            feedPrice: feedPrice,
-            riskAssetTradedAmount: `${tradeSideFactor * riskAssetAmountTraded} (${riskAssetTradedPerc}%)`,
-            stableAssetTradedAmount: `${-tradeSideFactor * stableAssetAmountTraded} (${stableAssetTradedPerc}%)`,
-            portfolioValue: portfolioValueFormatted && utils.commify( portfolioValueFormatted )
-        }
-    })
-
+    const lastRoi = roiInfos && roiInfos.length > 0 ? roiInfos[roiInfos.length-1] : undefined
 
 
     return (
-        <Box className={classes.container}>
+        <Paper className={classes.container}>
 
-            <Paper>
-                
                 <Box py={4}>
                     <Typography variant='h3' align="center">Strategy Simulator</Typography>
                 </Box>
 
                 <Box px={2} >
                     <Horizontal align='center'>
-
                         <form  noValidate className={classes.form}>
-
                             <Select 
                                 className={classes.formField}
                                 id="asset-select"
@@ -227,7 +145,7 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                                 label="Asset"
                                 onChange={ (e) => { 
                                     setAsset(e.target.value as string) 
-                                    setChartData(undefined)
+                                    localStorage.setItem(params.asset, e.target.value as string)
                                 }}
                             >
                                 <MenuItem key={0} value={'WBTC'}>BTC</MenuItem>
@@ -241,7 +159,7 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                                 label="Strategy"
                                 onChange={ (e) => { 
                                     setStrategy( e.target.value as string) 
-                                    setChartData(undefined)
+                                    localStorage.setItem(params.strategy, e.target.value as string)
                                 }}
                                 placeholder="Select strategy"
                             >
@@ -262,9 +180,13 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                                     shrink: true,
                                 }}
                                 onChange={(e) => { 
-                                    console.log("From changed: ", e.target.value)
-                                    setFromDate( new Date(Date.parse(e.target.value )) )
-                                    setChartData(undefined)
+                                    console.log("e.target.value", e.target.value)
+                                    if (e.target.value.length > 0) {
+                                        const date = Date.parse(e.target.value) > new Date().getTime() ? new Date() : new Date(Date.parse(e.target.value))
+                                        setFromDate(date)
+                                        localStorage.setItem(params.fromDate, date.toISOString())
+                                    }
+                
                                 }}
                             />
 
@@ -278,9 +200,12 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                                     shrink: true,
                                 }}
                                 onChange={(e) => {
-                                    console.log("To changed: ", e.target.value)
-                                    setToDate( new Date(Date.parse(e.target.value )) )
-                                    setChartData(undefined)
+                                    console.log("e.target.value", e.target.value)
+                                    if (e.target.value.length > 0) {
+                                        const date = Date.parse(e.target.value) > new Date().getTime() ? new Date() : new Date(Date.parse(e.target.value))
+                                        setToDate(date)
+                                        localStorage.setItem(params.toDate, date.toISOString())
+                                    }
                                 }}
                             />
 
@@ -288,7 +213,7 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                                 id="investment"
                                 label="Investment"
                                 type="number"
-                                defaultValue="1000"
+                                defaultValue={investment}
                                 className={classes.formField}
                                 InputLabelProps={{
                                     shrink: true,
@@ -296,97 +221,56 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                                 inputProps={{min: 0, style: { textAlign: 'right' }}} 
                                 placeholder='USDC'
                                 onChange={(e) => {
-                                    console.log("Amount changed: ", e.target.value)
                                     setInvestment(Number(e.target.value))
-                                    setChartData(undefined)
+                                    localStorage.setItem(params.investment, e.target.value)
                                 }}
                             />
-
                         </form>
                     </Horizontal>
                 </Box>
 
-                <Box py={4} >
-                    <Horizontal align="center">
+                <Horizontal align="center" >
+                    <Box py={4} className={classes.metrics}>
+                        <Horizontal align="center" >
+                            <InfoCard 
+                                type="amount"
+                                title="Portfolio Value" value={lastRoi?.strategyValue} 
+                                detailTitle="Buy-and-hold" detailValue={lastRoi?.buyAndHoldValue} 
+                            /> 
+                            <InfoCard 
+                                type="percentage"
+                                title="Strategy ROI" value={lastRoi?.strategyROI} 
+                                detailTitle="Buy-and-hold" detailValue={lastRoi?.buyAndHoldROI} 
+                            /> 
+                            <InfoCard 
+                                type="percentage"
+                                title="Max Drawdown" value={lastRoi?.maxStrategyDrawdownPerc} 
+                                detailTitle="Buy-and-hold" detailValue={lastRoi?.maxBuyAndHoldDrawdownPerc} 
+                            /> 
+                        </Horizontal>
+                    </Box>
+                </Horizontal>
 
-                        <Card style={{ minWidth: 240, height: 150 }} variant="outlined" >
-                            <CardContent>
-                                <div style={{ display:'flex', justifyContent:'center' }}> 
-                                    <Typography variant="body1" style={{ marginBottom: 20 }}> Portfolio Value </Typography>
-                                </div>
-                                <div style={{ display:'flex', justifyContent:'center' }}> 
-                                    { roiInfo &&
-                                        <>
-                                            <Typography variant="h5" style={{ marginBottom: 20 }} color='primary'>
-                                                ${ utils.commify( roiInfo.strategyValue ) }
-                                            </Typography>
-                                        </>
-                                    }
-                                </div>
-                                { roiInfo &&
-                                    <Typography variant="body2" style={{ paddingBottom: 0, paddingTop:0 }} align="center" >
-                                        Buy &amp; Hold value: ${ utils.commify( roiInfo.buyAndHoldValue ) }
-                                    </Typography>
-                                }
-                            </CardContent>
-                        </Card>
 
-                        <Card style={{ minWidth: 240, height: 150 }} variant="outlined" >
-                            <CardContent>
-                                <div style={{ display:'flex', justifyContent:'center' }}> 
-                                    <Typography variant="body1" style={{ marginBottom: 20 }}> Strategy ROI </Typography>
-                                </div>
-                                <div style={{ display:'flex', justifyContent:'center' }}> 
-                                    { roiInfo &&
-                                        <>
-                                            <Typography variant="h5" style={{ marginBottom: 20 }} color='primary'>
-                                                { utils.commify( roiInfo.strategyROI ) }%
-                                            </Typography>
-                                        </>
-                                    }
-                                </div>
-                                { roiInfo &&
-                                    <Typography variant="body2" style={{ paddingBottom: 0, paddingTop:0 }} align="center" >
-                                        Buy &amp; Hold ROI: { utils.commify( roiInfo.buyAndHoldROI ) }%
-                                    </Typography>
-                                }
-                            </CardContent>
-                        </Card>
-                    </Horizontal>
-                </Box>
-
-                <Box className={classes.chart} >
-                    <TimeSeriesLineChart 
-                        title="Strategy ROI vs Benchmark" 
-                        label1={label1} 
-                        label2={label2} 
-                        data={chartData!}  
+                { roiInfos &&
+                    <ROIChart roiInfos={roiInfos} /> 
+                }
+                { roiInfos &&
+                    <DrawdownChart roiInfos={roiInfos} /> 
+                }
+                { roiInfos &&
+                    <AssetAllocationChart roiInfos={roiInfos} 
+                        asset1={investToken.symbol} 
+                        asset2={depositToken.symbol}
                     /> 
-                </Box>
-
-                <Box className={classes.chart} >
-                    <TimeSeriesAreaChart title="Asset Value %" 
-                        label1={labelValue1} 
-                        label2={labelValue2} 
-                        data={chartValueData!}  
-                    /> 
-                </Box>
-
-
-
-                { rows && 
-                    <Box> 
-                        <div style={{ height: rows.length * 56 + 110, width: '100%', marginTop: 20 }}>
-                            <DataGrid
-                                rows={rows}
-                                columns={columns}
-                                
-                        />
-                        </div>
-                    </Box> 
                 }
 
+                <Horizontal align='center'>
+                    <Box className={classes.trades}>
+                        <StraetegyTrades swaps={swaps} depositToken={depositToken} investToken={investToken} />
+                    </Box>
+                </Horizontal>
+
             </Paper>
-        </Box>
     )
 }

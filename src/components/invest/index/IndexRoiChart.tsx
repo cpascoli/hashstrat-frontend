@@ -4,7 +4,7 @@ import { Box, makeStyles } from "@material-ui/core"
 import { Token } from "../../../types/Token"
 import { usePoolSwapsInfoForIndex } from "../../../hooks/useIndex"
 
-import { roiDataForSwaps as indexRoiDataForSwaps } from "../../../utils/calculators/indexRoiCalculator"
+import { roiDataForSwaps as indexRoiDataForSwaps } from "../../../utils/calculators/roiCalculator"
 
 import { round } from "../../../utils/formatter"
 import { TimeSeriesLineChart, TimeSeriesData } from "../../shared/TimeSeriesLineChart"
@@ -67,7 +67,8 @@ export const IndexRoiChart = ( { chainId, indexId, depositToken } : IndexRoiChar
                     chartData && 
                     <TimeSeriesLineChart title="Index ROI vs Benchmark" 
                         label1={label1} 
-                        label2={label2} 
+                        label2={label2}
+                        yAxisRange={['auto', 'auto']}
                         data={chartData}  
                     /> 
                 }

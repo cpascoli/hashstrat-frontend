@@ -43,9 +43,9 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
 
     const classes = useStyle()
 
-    const { name, description, investTokens } = PoolInfo(chainId, poolId)
+    const { name, description } = PoolInfo(chainId, poolId)
  
-    const tokens =  [depositToken, ... InvestTokens(chainId)]
+    const tokens = [depositToken, ...InvestTokens(chainId)]
     const { indexInfo, poolsInfo, portfolioInfo, chartValueByAsset, chartValueByPool } = useIndexModel(chainId, poolId, tokens, depositToken)
   
     const formattedPortfolioValue = portfolioInfo.totalValue ? fromDecimals(portfolioInfo.totalValue, depositToken.decimals, 2) : ""
@@ -81,8 +81,8 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
         <Box className={classes.container}>
 
             <Box mb={2}>
-                <Typography variant="h6" align="center"> {name}</Typography> 
-                <Typography variant="body2" align="center"> {description}</Typography> 
+                <Typography variant="h6" align="center"> {name} </Typography> 
+                <Typography variant="body2" align="center"> {description} </Typography> 
             </Box>
 
             <Box mb={4}>
@@ -91,8 +91,8 @@ export const IndexStatsView = ( { chainId, poolId, depositToken, account } : Ind
             </Box>
 
             <Horizontal align="center">
-                { chartValueByAsset.data.length > 0 &&   <VPieChart { ...chartValueByAsset } />  }
-                { chartValueByPool.data.length > 0 &&   <VPieChart { ...chartValueByPool } />  }
+                { chartValueByAsset.data.length > 0 &&  <VPieChart { ...chartValueByAsset } />  }
+                { chartValueByPool.data.length > 0 &&  <VPieChart { ...chartValueByPool } />  }
 
                 <Box className={classes.portfolioInfo} >
                     <Typography>Index composition by Asset</Typography>

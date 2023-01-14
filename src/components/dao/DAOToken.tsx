@@ -10,7 +10,7 @@ import { ExpandMore } from "@material-ui/icons"
 
 import { useMaxSupply, useTotalSupply } from "../../hooks/useHST"
 import { useTokenBalance  } from "../../hooks/useErc20Tokens"
-import { useGetRewardPeriods, useStakedLP, useClaimableRewards, useClaimReward  } from "../../hooks/useFarm"
+import { useStakedLP, useClaimableRewards, useClaimReward  } from "../../hooks/useFarm"
 
 import { fromDecimals } from "../../utils/formatter"
 import { TitleValueBox } from "../TitleValueBox"

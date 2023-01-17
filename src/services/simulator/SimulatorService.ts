@@ -1,5 +1,5 @@
 
-import { FeedInastance, Feed } from "../pricefeed/PricefeedService"
+import { Feed, BTCFeed, ETHFeed } from "../pricefeed/PricefeedService"
 import { PoolTokensSwapsInfo } from "../../types/PoolTokensSwapsInfo"
 import { Token } from "../../types/Token"
 
@@ -12,6 +12,7 @@ import { TrendFollowing } from "./strategies/TrendFollowing"
 export enum StrategyName  {
     Rebalancing, MeanReversion, TrendFollowing
 }
+
 
 /**
  * A simulator for HashStrat Strategies. 
@@ -47,9 +48,16 @@ class Simulator {
         
         return  trades ? [trades] : undefined
     }
+
+    getPrices (from: Date, to: Date = new Date()) : { date: Date, price: number, ma?: number }[] | undefined {
+        return this.strategy?.getPrices(from, to)
+    }
+
 }
 
 
-export const SimulatorInastance = (symbol: string, strategy: StrategyName, amount: number, depositToken : Token, investTokens : [Token] ) => {
-    return new Simulator(FeedInastance(symbol, "daily"), strategy, amount, depositToken, investTokens)
+export const SimulatorInastance = (symbol: 'BTC' | 'ETH', strategy: StrategyName, amount: number, depositToken : Token, investTokens : [Token] ) => {
+    const feed = symbol === 'BTC' ? BTCFeed : ETHFeed
+
+    return new Simulator(feed, strategy, amount, depositToken, investTokens)
 }

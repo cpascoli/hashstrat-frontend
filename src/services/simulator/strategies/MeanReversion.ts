@@ -5,7 +5,7 @@ import { Feed, PriceData } from "../../pricefeed/PricefeedService"
 import { PoolTokensSwapsInfo } from "../../../types/PoolTokensSwapsInfo";
 import { SwapInfo } from '../../../types/SwapInfo'
 import { round } from '../../../utils/formatter'
-import { Strategy } from "./Strategy"
+import { Strategy, StrategyPrices} from "./Strategy"
 import { Token } from "../../../types/Token"
 
 
@@ -48,7 +48,6 @@ export class MeanReversion implements Strategy {
         this.movingAverage = this.averagePrice(from, this.movingAveragePeriod) /// 47,957 (350D)
         this.lastEvalTime = ( from.getTime() / 1000 )
 
-        // console.log("movingAverage: ", this.movingAverage , this.feed.getPrice(from))
 
 
         const lastPrice = this.feed.getPrice(to)
@@ -71,6 +70,41 @@ export class MeanReversion implements Strategy {
             return response
         }
     }
+
+
+    
+    /**
+     * @returns price information fot this trategy, including moving averages
+     * and other relevant indicators
+     */
+    getPrices(from: Date, to: Date) : StrategyPrices []  {
+
+        // set initialvalue of moving average
+        this.movingAverage = this.averagePrice(from, this.movingAveragePeriod)
+        this.lastEvalTime = ( from.getTime() / 1000 )
+
+        let response : StrategyPrices[] = []
+        
+        this.feed.getPrices(from, to).forEach( (it, idx) => {
+            
+            // update MA only when the strategy is supposed to execute
+            if ((it.date.getTime() / 1000) > this.lastEvalTime + this.executionInterval) {
+                this.updateMovingAverage(it.price, it.date)
+                // console.log("updateMA: ", it.date.toISOString().split('T')[0], it.price, this.movingAverage)
+            }
+            
+            response.push({
+                date: it.date,
+                price: it.price,
+                ma: this.movingAverage,
+                upper: this.movingAverage * (1 + this.targetPricePercUp),
+                lower: this.movingAverage * (1 + this.targetPricePercDown),
+            })
+        })
+
+        return response
+    }
+
 
 
     getSwaps(from: Date, to: Date, initialDepositTokenBalance: number) : SwapInfo[] | undefined {
@@ -114,7 +148,7 @@ export class MeanReversion implements Strategy {
                 amount = maxAmount
             }
 
-            console.log("this.latestPrice", this.latestPrice)
+            // console.log("this.latestPrice", this.latestPrice)
             
             const bought = shouldSell ? this.formatAmount(amount * this.latestPrice, this.depositToken.decimals) :
                             shouldBuy ? this.formatAmount(amount / this.latestPrice, this.investToken.decimals) : ''
@@ -306,7 +340,7 @@ export class MeanReversion implements Strategy {
     // Format the numeric amount into a BigNumber with the required decimals and return its string representation
     formatAmount(amount: number, decimals: number) : string {
 
-        console.log("formatAmount - amount", amount)
+        // console.log("formatAmount - amount", amount)
 
         if (decimals < 8) {
             const amountInt = round(amount * 10 ** decimals, 0)

@@ -15,6 +15,8 @@ import { AssetAllocationChart } from "./AssetAllocationChart"
 import { DrawdownChart } from './DrawdownChart'
 
 import { useSearchParams } from "react-router-dom"
+import { PriceChart } from './PriceChart'
+
 
 
 const useStyle = makeStyles( theme => ({
@@ -71,7 +73,6 @@ export interface SimHomeProps {
 
 export const SimHome = ({ chainId } : SimHomeProps) => {
 
-
     const classes = useStyle()
 
     const params = {
@@ -84,6 +85,8 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
 
     const [searchParams] = useSearchParams();
 
+
+    // Ger params from URL, otherwise from Local storage, othewrwise some defaults
     const fromParam = searchParams.get("from") &&  moment(searchParams.get("from"), 'YYYY-MM-DD').isValid() ?
             moment(searchParams.get("from")).toDate().toISOString() :
             localStorage.getItem(params.fromDate) ?? '2019-01-07T00:00:00'
@@ -93,9 +96,9 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
             moment(searchParams.get("to")).toDate().toISOString() :
             localStorage.getItem(params.toDate) ?? new Date().toISOString()
            
-    const assetParam =  ['BTC', 'ETH'].includes( searchParams.get("symbol") ?? '') ?
-            `W${searchParams.get("symbol")}` :
-            localStorage.getItem(params.asset) ?? 'WETH'
+    const assetParam : 'BTC' | 'ETH' = ['BTC', 'ETH'].includes( searchParams.get("symbol") ?? '') ?
+             (searchParams.get("symbol") === 'BTC' ? 'BTC' : 'ETH') :
+             localStorage.getItem(params.asset) === 'BTC' ? 'BTC' : 'ETH' 
            
     const strategyParam = ['MeanReversion', 'Rebalancing', 'TrendFollowing'].includes(searchParams.get("strategy") ?? '') ?
             searchParams.get("strategy") ?? StrategyName[StrategyName.TrendFollowing] :
@@ -107,21 +110,11 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                             localStorage.getItem(params.investment) ?? '1000'    
 
 
-    console.log(">>> AAAA ===>", fromParam, toParam , "assetParam", assetParam, "strategyParam", strategyParam, "investmentParam", investmentParam)
-
    
 
-    // get sim params from local storage or defaults
-    // const fromDateStorage = localStorage.getItem(params.fromDate) ?? '2019-01-15T00:00:00'
-    // const toDateStorage = localStorage.getItem(params.toDate) ?? '2022-06-18T00:00:00'
-    // const assetStorage = localStorage.getItem(params.asset) ?? 'WETH'
-    // const strategyStorage = localStorage.getItem(params.strategy) ?? StrategyName[StrategyName.MeanReversion]
-    // const investmentStorage = localStorage.getItem(params.investment) ?? '1000'
-
-    // initialize form values
     const [fromDate, setFromDate] = useState<Date>(new Date(fromParam)) // 2018-12-15 //'2018-01-01T00:00:00'
     const [toDate, setToDate] = useState<Date>(new Date(toParam))       // new Date())
-    const [asset, setAsset] = useState<string>(assetParam)
+    const [asset, setAsset] = useState<'BTC' | 'ETH'>(assetParam)
     const [strategy, setStrategy] = useState<string>(strategyParam)
     const [investment, setInvestment] = useState<number>(Number(investmentParam))
 
@@ -130,17 +123,31 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
 
     const depositToken = DepositToken(chainId)!
     const investTokens = InvestTokens(chainId)
-    const investToken = investTokens.find( it => it.symbol === asset)!
+
+    const investToken = asset === 'BTC' ?  investTokens.find( it => it.symbol === 'WBTC')! :
+                        investTokens.find( it => it.symbol === 'WETH')!
 
     // Run simulator
-    const simulator = depositToken && investToken && SimulatorInastance(asset, StrategyName[strategy as keyof typeof StrategyName], investment, depositToken, [investToken])
-    const swapsInfos = simulator?.getSwapsInfo(fromDate, toDate)
+    const swapsInfos = depositToken && investToken && SimulatorInastance(asset,
+         StrategyName[strategy as keyof typeof StrategyName], 
+         investment, depositToken, [investToken]
+    ).getSwapsInfo(fromDate, toDate)
+
     const swaps = swapsInfos?.map( (it : PoolTokensSwapsInfo) => it.swaps ).flat()
+
+
+    const prices : { date: Date, price: number, ma?: number }[] | undefined = depositToken && investToken && SimulatorInastance(asset,
+        StrategyName[strategy as keyof typeof StrategyName], 
+        investment, depositToken, [investToken]
+   ).getPrices(fromDate, toDate)
+
+
 
 
     useEffect(() => {
         if (swapsInfos && depositToken && investToken && validate(investment, fromDate, toDate) ) {
             const roiInfos = roiDataForSwaps(swapsInfos, depositToken, [investToken], investment)
+            console.log("roiInfos:", roiInfos.length)
             setRoiInfos(roiInfos)
         }
 
@@ -175,12 +182,12 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                                 value={asset}
                                 label="Asset"
                                 onChange={ (e) => { 
-                                    setAsset(e.target.value as string) 
-                                    localStorage.setItem(params.asset, e.target.value as string)
+                                    setAsset(e.target.value as 'BTC' | 'ETH') 
+                                    localStorage.setItem(params.asset, e.target.value as 'BTC' | 'ETH')
                                 }}
                             >
-                                <MenuItem key={0} value={'WBTC'}>BTC</MenuItem>
-                                <MenuItem key={1} value={'WETH'}>ETH</MenuItem>
+                                <MenuItem key={0} value={'BTC'}>BTC</MenuItem>
+                                <MenuItem key={1} value={'ETH'}>ETH</MenuItem>
                             </Select>
 
                             <Select 
@@ -282,6 +289,12 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                     </Box>
                 </Horizontal>
 
+                { prices &&
+                    <PriceChart 
+                        symbol={investToken.symbol.substring(1)} 
+                        prices={prices} 
+                    /> 
+                }
 
                 { roiInfos &&
                     <ROIChart roiInfos={roiInfos} /> 

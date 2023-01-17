@@ -6,7 +6,7 @@ import { Token } from "../../types/Token"
 import { SwapInfo } from "../../types/SwapInfo"
 import { RoiInfo } from "../../types/RoiInfo"
 
-import { FeedInastance, Feed } from "../../services/pricefeed/PricefeedService"
+import { Feed, BTCFeed, ETHFeed } from "../../services/pricefeed/PricefeedService"
 
 
 /** 
@@ -31,9 +31,11 @@ export const roiDataForPrices = (
 
     // const feed = investToken.symbol === 'WETH' ? eth_feed : investToken.symbol === 'WBTC'?  btc_feed : undefined
 
-    const feed = FeedInastance(investToken.symbol, "daily")
+    const feed = investToken.symbol === 'WBTC' ? BTCFeed :  
+                        investToken.symbol === 'WETH' ? ETHFeed : undefined
+                  
 
-    if (swaps.length === 0 || !feed) return []
+    if (!feed || swaps.length === 0 || !feed) return []
 
     let swapsForFeed : SwapInfo[] = []
     swaps.forEach( (it, idx) => {
@@ -253,8 +255,8 @@ const findSwapInfoItems = (feed : Feed, feedDecimals: number, from: SwapInfo, la
 
     for (const priceData of feed.getPrices(fromDate, toDate)) {
 
-        const dateTs = round(priceData.date.getTime() / 1000)
-        const priceInt = BigNumber.from( round( priceData.price * 100 ) )
+        const dateTs = round(priceData.date.getTime() / 1000, 0)
+        const priceInt = BigNumber.from( round( priceData.price * 100, 0) )
         const price = BigNumber.from(10).pow(feedDecimals - 2).mul( priceInt )
 
         response.push(

@@ -5,7 +5,7 @@ import { Feed } from "../../pricefeed/PricefeedService"
 import { PoolTokensSwapsInfo } from "../../../types/PoolTokensSwapsInfo";
 import { SwapInfo } from '../../../types/SwapInfo'
 import { round } from '../../../utils/formatter'
-import { Strategy } from "./Strategy"
+import { Strategy, StrategyPrices } from "./Strategy"
 import { Token } from "../../../types/Token"
 
 
@@ -177,6 +177,25 @@ export class Rebalancing implements Strategy {
         })
 
         console.log("Rebalancing; swaps: ", response)
+        return response
+    }
+
+
+    /**
+     * @returns price information fot this trategy, including moving averages
+     * and other relevant indicators
+     */
+    getPrices(from: Date, to: Date) : StrategyPrices[]  {
+
+        let response : StrategyPrices[] = []
+        
+        this.feed.getPrices(from, to).forEach( (it, idx) => {
+            response.push({
+                date: it.date,
+                price: it.price,
+            })
+        })
+
         return response
     }
 

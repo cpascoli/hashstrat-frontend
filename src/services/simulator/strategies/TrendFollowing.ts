@@ -5,7 +5,7 @@ import { Feed, PriceData } from "../../pricefeed/PricefeedService"
 import { PoolTokensSwapsInfo } from "../../../types/PoolTokensSwapsInfo";
 import { SwapInfo } from '../../../types/SwapInfo'
 import { round } from '../../../utils/formatter'
-import { Strategy } from "./Strategy"
+import { Strategy, StrategyPrices } from "./Strategy"
 import { Token } from "../../../types/Token"
 
 
@@ -68,6 +68,37 @@ export class TrendFollowing implements Strategy {
             }
             return response
         }
+    }
+
+
+    /**
+     * @returns price information fot this trategy, including moving averages
+     * and other relevant indicators
+     */
+    getPrices(from: Date, to: Date) : StrategyPrices[]  {
+
+        // set initialvalue of moving average
+        this.movingAverage = this.averagePrice(from, this.movingAveragePeriod)
+        this.lastEvalTime = ( from.getTime() / 1000 )
+        
+        let response : StrategyPrices[] = []
+        
+        this.feed.getPrices(from, to).forEach( (it, idx) => {
+            
+            // update MA only when the strategy is supposed to execute
+            if ((it.date.getTime() / 1000) > this.lastEvalTime + this.executionInterval) {
+                this.updateMovingAverage(it.price, it.date)
+                // console.log("updateMA: ", it.date.toISOString().split('T')[0], it.price, this.movingAverage)
+            }
+            
+            response.push({
+                date: it.date,
+                price: it.price,
+                ma: this.movingAverage
+            })
+        })
+
+        return response
     }
 
 

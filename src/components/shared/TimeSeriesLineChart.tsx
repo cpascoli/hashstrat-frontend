@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { scaleLog } from 'd3-scale';
 
 import {
   CartesianGrid,
@@ -24,7 +25,13 @@ export interface ChartData {
     label1: string,
     label2: string,
     yAxisRange: any
+    scale: 'linear' | 'log'
+    width?: number,
+    height?: number
 }
+
+
+
 
 
 export const TimeSeriesLineChart = ( chartData  : ChartData ) => {
@@ -32,12 +39,14 @@ export const TimeSeriesLineChart = ( chartData  : ChartData ) => {
   const start = (chartData.data && chartData.data.length > 1) ? chartData.data[0].time : (new Date()).getTime() - 604800 * 1000
   const end =   (chartData.data && chartData.data.length > 1) ? chartData.data[chartData.data.length-1].time : (new Date()).getTime()
 
+  const scale = scaleLog().base(Math.E);
+
   return (
-  <ResponsiveContainer width = '100%' height = {400} >
+  <ResponsiveContainer width = '100%' height = { chartData.height ?? 300 } >
  
     <LineChart 
           margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
-          width={500}  height={300}
+          width={chartData.width ?? 500} height={chartData.height ?? 300}
           data={chartData.data}
     >
       <CartesianGrid strokeDasharray="1 1" />
@@ -50,16 +59,18 @@ export const TimeSeriesLineChart = ( chartData  : ChartData ) => {
         type = 'number'
       />
 
-      {/* <YAxis name = "Asset 1" type="number" domain={[0, 100]} yAxisId="left-axis" /> */}
-      <YAxis name = "Y Axis" type="number" 
-        yAxisId="right-axis" orientation="right" 
+      <YAxis
+        name = "Y Axis" 
+        type="number" 
+        yAxisId="right-axis" 
+        orientation="right" 
+        scale={chartData.scale}
         domain={ chartData.yAxisRange ? chartData.yAxisRange  : ['auto', 'auto'] } 
       />
 
       <Legend verticalAlign="top" height={30}/>
       <Tooltip 
         labelFormatter={(unixTime) => moment(unixTime).format('yyyy-MM-DD')}
-        // formatter={numberFormatter}
       />
 
       <Line

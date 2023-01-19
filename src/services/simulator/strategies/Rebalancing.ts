@@ -176,7 +176,6 @@ export class Rebalancing implements Strategy {
             this.lastEvalTime = it.date.getTime() / 1000
         })
 
-        console.log("Rebalancing; swaps: ", response)
         return response
     }
 

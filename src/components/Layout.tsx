@@ -55,7 +55,6 @@ const useStyles = makeStyles( theme => ({
 
     verticalCenter: {
         display: "flex",
-        // backgroundColor: 'purple',
         height: "100%",
         justifyContent: "space-around",
     },

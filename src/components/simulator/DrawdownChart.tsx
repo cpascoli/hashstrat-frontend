@@ -15,10 +15,12 @@ const useStyle = makeStyles( theme => ({
 
 export interface DrawdownChartProps {
     roiInfos: RoiInfo[]
+    width? : number
+    height? : number
 }
 
 
-export const DrawdownChart = ({ roiInfos } : DrawdownChartProps) => {
+export const DrawdownChart = ({ roiInfos, width, height } : DrawdownChartProps) => {
     
     const classes = useStyle()
     const [chartData, setChartData] = useState<TimeSeriesData[]|undefined>(undefined)
@@ -46,6 +48,9 @@ export const DrawdownChart = ({ roiInfos } : DrawdownChartProps) => {
                 label2="Buy-and-hold Drawdowns"
                 data={chartData!}  
                 yAxisRange={[-100, 0]}
+                scale="linear"
+                width={width}
+                height={height}
             /> 
         </Box>
     )

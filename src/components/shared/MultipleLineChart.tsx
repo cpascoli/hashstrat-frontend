@@ -11,7 +11,6 @@ import {
   YAxis,
 } from 'recharts'
 
-import { scaleLog } from 'd3-scale';
 
 export interface TimeSeriesData {
     value: number;
@@ -41,7 +40,7 @@ export const MultipleLineChart = ( chartData  : ChartData ) => {
  
     <LineChart 
           margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
-          width={500}  height={300}
+          // width={500}  height={300}
           data={chartData.data}
     >
 

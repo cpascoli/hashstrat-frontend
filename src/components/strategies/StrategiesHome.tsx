@@ -1,24 +1,48 @@
 
 
 
+import { useEffect, useState } from 'react'
+
 import { makeStyles, Box, Typography, Link, Accordion, AccordionDetails, AccordionSummary, Breadcrumbs, Divider } from  "@material-ui/core"
 import { Horizontal } from "../Layout";
 import { ExpandMore } from "@material-ui/icons"
 import { Link as RouterLink } from "react-router-dom"
 
-import strategy1 from "../img/strategy_reb01_chart_v2.png"
-import strategy2 from "../img/strategy_meanrev01_chart_v2.png"
-import strategy3 from "../img/strategy_trendfollow01_chart_v2.png"
+
+import { useSearchParams } from "react-router-dom"
+
+import { SimulatorInastance, StrategyName } from "../../services/simulator/SimulatorService"
+
+import { StrategyPlayground } from "../home/StrategyPlayground"
+
+import { RebalancingSummary, RebalancingDetails } from "./Rebalancing"
+import { TrendFollowingSummary, TrendFollowingDetails } from "./TrendFollowing"
+import { MeanReversionSummary, MeanReversionDetails } from "./MeanReversion"
+
 
 const useStyle = makeStyles( theme => ({
 
     container: {
         paddingTop: theme.spacing(2),
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
+        maxWidth: 1200,
+        margin: 'auto',
+    },
+
+    playground: {
+        // minWidth: 1000,
+        // backgroundColor: 'orange',
         [theme.breakpoints.up('xs')]: {
-            paddingLeft: theme.spacing(0),
-            paddingRight: theme.spacing(0),
+            // minWidth: 390,
+            // minWidth: 200,
+        },
+    },
+
+    accordionDetails: {
+        minWidth: 1200,
+        [theme.breakpoints.up('xs')]: {
+            minWidth: 400,
+            margin: 0,
+            padding: 0,
         },
     },
 
@@ -31,24 +55,30 @@ const useStyle = makeStyles( theme => ({
         },
     },
 
-    chart: {
-        width: "100%",
-        margin: "auto",
-        paddingTop: theme.spacing(2),
-        paddingLeft: theme.spacing(8),
-        paddingRight: theme.spacing(8),
-        [theme.breakpoints.down('sm')]: {
-            width: "100%",
-            paddingLeft: theme.spacing(0),
-            paddingRight: theme.spacing(0),
-        },
-    }
 
 }))
 
 
+const simulatrParams = {
+    fromDate: "sim.fromDate",
+    toDate: "sim.toDate",
+    asset: "sim.asset",
+    strategy: "sim.strategy",
+    investment: "sim.investment",
+}
+
+
 export const StrategiesHome = () => {
     const classes = useStyle()
+
+    const [searchParams] = useSearchParams();
+
+    const strategyParam = ['MeanReversion', 'Rebalancing', 'TrendFollowing'].includes(searchParams.get("s") ?? '') ?
+                searchParams.get("s") : ''    
+
+     const [strategy, setStrategy] = useState<string | null>(strategyParam)
+
+
 
     return (
         <Box className={classes.container} >
@@ -64,158 +94,75 @@ export const StrategiesHome = () => {
 
 
             <Box my={3} px={2}>
-                <Typography>Strategies are set of rules, encoded into smart contracts, that can trade the assets held into HashStrat Pools.</Typography>
-                <Typography>All strategies are designed to grow the Pools' value over the long term. </Typography>
-                <br/>
-                <Typography>As new strategies are developed they'll be added to this list:</Typography>
+                <Typography>Strategies are set of rules, encoded into smart contracts, that can trade the assets held into HashStrat pools.</Typography>
+                <Typography>Pools are smart contracts holding a risk asset (WBTC or WETH) and a stable asset (USDC) and are configured with a strategy to trade between them.</Typography>
             </Box>
 
-            <Box className={classes.strategies} >
+            <Box  >
 
-                <Accordion>
+                <Accordion defaultExpanded={ strategy === 'Rebalancing' }>
                     <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
-                        <div>
-
-                            <Typography variant="h5">
-                                <strong> Rebalancing </strong>
-                            </Typography>
-                            <Typography>A rebalancing strategy over a 2 asset portfolio</Typography>
-                            
-                            <div>
-                                <Link href="https://medium.com/@hashstrat/hashstrat-rebalancing-strategy-f0bb6cf3152f" target="_blank"> Medium article </Link> &nbsp;&nbsp;&nbsp;&nbsp;
-                                <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/RebalancingStrategyV1.sol">GitHub</Link>
-                            </div>
-            
-                        </div>
+                        <RebalancingSummary />
                     </AccordionSummary>
-                    <AccordionDetails >
+                    <AccordionDetails className={classes.accordionDetails} >
                         <div>
-                            <div>
-                                <strong>Goal</strong> <br/>
-                                Capture volatility in the risk asset by rebalancing the Pool whenever the value of either assets
-                                deviates significantly from the Pool's target allocation.
-                            </div>
-                            <br />
-                            <div>     
-                                <strong>Rule</strong> <br/>
-                                Given a ETH/USD Pool with 60%/40% target allocation and 10% rebalance trigger, <br />
-                                When the value of ETH rises above 70% (drops below 50%) of the overall value in the Pool<br />
-                                Then the Pool is rebalanced by selling ETH (buying ETH) to restore the original 60%/40% allocation.
-                            </div>
-                            <br />
-                            <div>     
-                                <strong>Pools</strong> <br/>
-                                <Horizontal>
-                                    <Link component={RouterLink} to="/pools/pool01v3a">BTC-USDC REB01</Link>
-                                    <Link component={RouterLink} to="/pools/pool02v3a">ETH-USDC REB01</Link>
-                                </Horizontal>
-                            </div>
-                            <br />
-                            <div>     
-                                <strong>Returns</strong> <br/>
-                                From Jan 2019 to July 2022 this strategy would have returned 6.4x your investment.
-                            </div>
-                            <div>   
-                                <img src={strategy1} className={classes.chart} alt="RebalancingStrategyV1 strategy stats"/>
-                            </div>
-                        </div>
+                            <RebalancingDetails />
+ 
+                            <Box pt={2} className={classes.playground} >
+                                <StrategyPlayground 
+                                    strategy='Rebalancing'
+                                    symbol="ETH"
+                                    from="2019-01-01"
+                                    to="2023-01-16"
+                                    chartHeight={340}
+                                    chainId={137} //FIXME
+                                /> 
+                            </Box>
+                        </div>    
                     </AccordionDetails>
                 </Accordion>
  
-                <Accordion>
+                <Accordion defaultExpanded={ strategy === 'MeanReversion' }>
                     <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
-
-                        <div>
-                            <Typography variant="h5">
-                                <strong> Mean Reversion</strong>
-                            </Typography>
-                            <Typography>A strategy for dollar-cost averaging in and out a risk asset when its price diverges substantially from its long term trend</Typography>
-                            
-                            <div>
-                                <Link href="https://medium.com/@hashstrat/hashstrat-mean-reversion-strategy-b1a576b05d5f" target="_blank"> Medium article </Link> &nbsp;&nbsp;&nbsp;&nbsp;
-                                <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/MeanReversionV1.sol">GitHub</Link>
-                            </div>
-
-                        </div>
+                       <MeanReversionSummary />
 
                     </AccordionSummary>
-                    <AccordionDetails >
+                    <AccordionDetails className={classes.accordionDetails} >
                         <div>
-                            <div>
-                                <strong>Gaol</strong> <br/>
-                                Accumulate the risk asset when its price is significantly below its long term trend and divest when it's significantly above.
-                            </div>
-                            <br />
-                            <div>     
-                                <strong>Rule</strong> <br/>
-                                Given a Pool containing ETH/USD and a dollar-cost average configuration of 5% every 5 days <br />
-                                When ETH price is 33% below its 350D moving average, then every 5 days, buy ETH with 5% of the USD in the Pool.  <br />
-                                When ETH price is 66% above its 350D moving average, then every 5 days, sell 5% of the ETH in the Pool. 
-                            </div>
-                            <br />
-                            <div>     
-                                <strong>Pools</strong> <br/>
-                                <Horizontal>
-                                    <Link component={RouterLink} to="/pools/pool03v3a">BTC-USDC MEANREV01</Link>
-                                    <Link component={RouterLink} to="/pools/pool04v3a">ETH-USDC MEANREV01</Link>
-                                </Horizontal>
-                            </div>
-                            <br />
-                            <div>     
-                                <strong>Returns</strong> <br/>
-                                From Jan 2019 to July 2022 this strategy would have returned 8.5x your investment.
-                            </div>
-                            <div>   
-                                <img src={strategy2} className={classes.chart} alt="MeanReversionV1 strategy stats"/>
-                            </div>
+                            <MeanReversionDetails />
 
+                            <Box pt={2} className={classes.playground} >
+                                <StrategyPlayground 
+                                    strategy='MeanReversion'
+                                    symbol="ETH"
+                                    from="2019-01-01"
+                                    to="2023-01-16"
+                                    chartHeight={340}
+                                    chainId={137} //FIXME
+                                /> 
+                            </Box>
                         </div>
                     </AccordionDetails>
                 </Accordion>
                 
-                <Accordion>
+                <Accordion defaultExpanded={ strategy === 'TrendFollowing' }>
                     <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1bh-content" >
-                        <div>
-                            <Typography variant="h5">
-                                <strong> Trend Following </strong>
-                            </Typography>
-                            <Typography>A momentum strategy trading in the direction of the underlying trend</Typography>
-                            
-                            <div>
-                                <Link href="https://medium.com/@hashstrat/trend-following-strategy-7dce9756eaa" target="_blank">Medium article</Link> &nbsp;&nbsp;&nbsp;&nbsp;
-                                <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/TrendFollowV1.sol">GitHub</Link>
-                            </div>
-                        </div>
+                        <TrendFollowingSummary />
                     </AccordionSummary>
-                    <AccordionDetails >
+                    <AccordionDetails className={classes.accordionDetails} >
                         <div>
-                            <div>
-                                <strong>Goal</strong> <br/>
-                                Capture volatility in the risk asset when its price is moving in a sustained direction. 
-                            </div>
-                            <br />
-                            <div>     
-                                <strong>Rule</strong> <br/>
-                                Given a Pool containing ETH/USD <br />
-                                When ETH price is above its 50D moving average, then buy ETH with all USDC available in the Pool <br />
-                                When ETH price is below its 50D moving average, then sell all ETH into USDC. 
-                            </div>
-                            <br />
-                            <div>     
-                                <strong>Pools</strong> <br/>
-                                <Horizontal>
-                                    <Link component={RouterLink} to="/pools/pool05v3a">BTC-USDC TRDFLW01</Link>
-                                    <Link component={RouterLink} to="/pools/pool06v3a">ETH-USDC TRDFLW01</Link>
-                                </Horizontal>
-                            </div>
-                            <br />
-                            <div>     
-                                <strong>Returns</strong> <br/>
-                                From Jan 2019 to July 2022 this strategy would have returned 18.9x your investment.
-                            </div>
-                            <div>   
-                                <img src={strategy3} className={classes.chart} alt="TrendFollowV1 strategy stats"/>
-                            </div>
+                            <TrendFollowingDetails />
+
+                            <Box pt={2} className={classes.playground} >
+                                <StrategyPlayground 
+                                    strategy='TrendFollowing'
+                                    symbol="ETH"
+                                    from="2019-01-01"
+                                    to="2023-01-16"
+                                    chartHeight={340}
+                                    chainId={137} //FIXME
+                                /> 
+                            </Box>
                         </div>
                     </AccordionDetails>
                 </Accordion>

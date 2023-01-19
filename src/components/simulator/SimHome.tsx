@@ -17,7 +17,9 @@ import { DrawdownChart } from './DrawdownChart'
 import { useSearchParams } from "react-router-dom"
 import { PriceChart } from './PriceChart'
 
-
+import { MeanReversionSummary, MeanReversionDetails  } from "../strategies/MeanReversion"
+import { TrendFollowingSummary, TrendFollowingDetails  } from "../strategies/TrendFollowing"
+import { RebalancingSummary, RebalancingDetails  } from "../strategies/Rebalancing"
 
 const useStyle = makeStyles( theme => ({
  
@@ -33,8 +35,17 @@ const useStyle = makeStyles( theme => ({
 		},
     },
 
+    header: {
+        display: "flex",
+        // justifyContent: "left",
+        alignItems: "top",
+        flexDirection: "row",
+        flexFlow: "row wrap",
+        gap: theme.spacing(3),
+    },
+
     form: {
-        width: "100%",
+        // width: "100%",
     },
 
     metrics: {
@@ -44,6 +55,7 @@ const useStyle = makeStyles( theme => ({
     formField: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
+        marginBottom: 20,
         width: 200,
         [theme.breakpoints.down('xs')]: {
             marginBottom: 20,
@@ -147,7 +159,6 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
     useEffect(() => {
         if (swapsInfos && depositToken && investToken && validate(investment, fromDate, toDate) ) {
             const roiInfos = roiDataForSwaps(swapsInfos, depositToken, [investToken], investment)
-            console.log("roiInfos:", roiInfos.length)
             setRoiInfos(roiInfos)
         }
 
@@ -173,24 +184,34 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                     <Typography variant='h3' align="center">Strategy Simulator</Typography>
                 </Box>
 
-                <Box px={2} >
-                    <Horizontal align='center'>
-                        <form  noValidate className={classes.form}>
-                            <Select 
-                                className={classes.formField}
-                                id="asset-select"
-                                value={asset}
-                                label="Asset"
-                                onChange={ (e) => { 
-                                    setAsset(e.target.value as 'BTC' | 'ETH') 
-                                    localStorage.setItem(params.asset, e.target.value as 'BTC' | 'ETH')
-                                }}
-                            >
-                                <MenuItem key={0} value={'BTC'}>BTC</MenuItem>
-                                <MenuItem key={1} value={'ETH'}>ETH</MenuItem>
-                            </Select>
 
-                            <Select 
+                <Box px={2} >
+                    <Box className={classes.header}>
+                
+                    { strategy === 'MeanReversion' && 
+                        <Box style={{ width: 400 }} >
+                            <MeanReversionSummary />
+                            {/* <MeanReversionDetails /> */}
+                        </Box>
+                    }
+
+                    { strategy === 'Rebalancing' && 
+                        <Box style={{ width: 400 }} >
+                            <RebalancingSummary />
+                            {/* <RebalancingDetails /> */}
+                        </Box>
+                    }
+
+                    { strategy === 'TrendFollowing' && 
+                        <Box style={{ width: 400 }} >
+                            <TrendFollowingSummary />
+                            {/* <TrendFollowingDetails /> */}
+                        </Box>
+                    }
+
+                        <form  noValidate className={classes.form}>
+
+                            <TextField 
                                 className={classes.formField}
                                 id="strategy-select"
                                 value={strategy}
@@ -199,12 +220,45 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                                     setStrategy( e.target.value as string) 
                                     localStorage.setItem(params.strategy, e.target.value as string)
                                 }}
-                                placeholder="Select strategy"
+                                select
                             >
                                 <MenuItem key={0} value={ StrategyName[StrategyName.Rebalancing]}>Rebalancing</MenuItem>
                                 <MenuItem key={1} value={ StrategyName[StrategyName.MeanReversion]}>Mean Reversion</MenuItem>
                                 <MenuItem key={2} value={ StrategyName[StrategyName.TrendFollowing]}>Trend Following</MenuItem>
-                            </Select>
+                            </TextField>
+
+
+                            <TextField 
+                                className={classes.formField}
+                                id="asset-select"
+                                value={asset}
+                                label="Assets Traded"
+                                onChange={ (e) => { 
+                                    setAsset(e.target.value as 'BTC' | 'ETH') 
+                                    localStorage.setItem(params.asset, e.target.value as 'BTC' | 'ETH')
+                                }}
+                                select
+                            >
+                                <MenuItem key={0} value={'BTC'}>BTC, USDC</MenuItem>
+                                <MenuItem key={1} value={'ETH'}>ETH, USDC</MenuItem>
+                            </TextField>
+
+                            <TextField
+                                id="investment"
+                                label="Initial Investment"
+                                type="number"
+                                defaultValue={investment}
+                                className={classes.formField}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                inputProps={{min: 0, style: { textAlign: 'right' }}} 
+                                placeholder='USDC'
+                                onChange={(e) => {
+                                    setInvestment(Number(e.target.value))
+                                    localStorage.setItem(params.investment, e.target.value)
+                                }}
+                            />
 
                             <br/>
                         
@@ -247,24 +301,11 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                                 }}
                             />
 
-                            <TextField
-                                id="investment"
-                                label="Investment"
-                                type="number"
-                                defaultValue={investment}
-                                className={classes.formField}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                inputProps={{min: 0, style: { textAlign: 'right' }}} 
-                                placeholder='USDC'
-                                onChange={(e) => {
-                                    setInvestment(Number(e.target.value))
-                                    localStorage.setItem(params.investment, e.target.value)
-                                }}
-                            />
+
                         </form>
-                    </Horizontal>
+
+                    </Box>
+
                 </Box>
 
                 <Horizontal align="center" >

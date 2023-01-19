@@ -19,7 +19,7 @@ export class TrendFollowing implements Strategy {
     readonly tokensToSwapPerc = 1        // 100% of the value of the asset sold
     readonly targetPricePercDown = 0
     readonly targetPricePercUp = 0
-    readonly movingAveragePeriod = 50   // 40 day Moving Average
+    readonly movingAveragePeriod = 40   // 40 day Moving Average
     readonly executionInterval = 5 * 86400  // buy/sell every 5 days
     
     readonly priceFeedDecimals = 8
@@ -137,7 +137,6 @@ export class TrendFollowing implements Strategy {
 
             if (shouldSell || shouldBuy) {
 
-                // console.log("eval: ", it.date.toISOString().split('T')[0], it.price, action )
 
                 const depositTokenDelta = shouldSell ? amountIn * this.latestPrice : shouldBuy ? -amountIn : 0
                 const investTokenDelta = shouldSell ? -amountIn  : shouldBuy ? amountIn / this.latestPrice : 0

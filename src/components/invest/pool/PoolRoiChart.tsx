@@ -84,6 +84,7 @@ export const RoiChart = ( { chainId, poolId, depositToken, investToken } : RoiCh
                     label1={label1} 
                     label2={label2}
                     yAxisRange={['auto', 'auto']}
+                    scale="linear"
                     data={chartData!}  
                 /> 
             </Box>

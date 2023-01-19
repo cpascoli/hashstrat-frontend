@@ -14,11 +14,13 @@ const useStyle = makeStyles( theme => ({
 
 
 export interface StrategyChartsProps {
-    roiInfos: RoiInfo[]
+    roiInfos: RoiInfo[],
+    width? : number
+    height? : number
 }
 
 
-export const ROIChart = ({ roiInfos } : StrategyChartsProps) => {
+export const ROIChart = ({ roiInfos, width, height} : StrategyChartsProps) => {
 
     const classes = useStyle()
     const [chartData, setChartData] = useState<TimeSeriesData[]|undefined>(undefined)
@@ -47,6 +49,9 @@ export const ROIChart = ({ roiInfos } : StrategyChartsProps) => {
                 label2="Buy-and-hold ROI"
                 yAxisRange={['auto', 'auto']}
                 data={chartData!}
+                scale="linear"
+                width={width}
+                height={height}
             /> 
         </Box>
     )

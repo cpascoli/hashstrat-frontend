@@ -3,7 +3,14 @@ import Carousel from 'react-material-ui-carousel'
 import { makeStyles, Card, CardContent, CardActions, Box, Typography, Link } from  "@material-ui/core"
 import { Horizontal } from '../Layout';
 
+import { StrategyPlayground } from "./StrategyPlayground"
+import { Link as RouterLink } from "react-router-dom"
+
+import { Launch } from "@material-ui/icons"
+
+
 type StrategyInfo = {
+    id: string,
     name: string,
     description: string,
     goal: string,
@@ -15,12 +22,12 @@ type StrategyInfo = {
 
 const useStyle = makeStyles( theme => ({
     container: {
-        maxWidth: 900,
+        maxWidth: 1100,
         margin: "auto",
         [theme.breakpoints.down('sm')]: {
             width: "100%",
-            paddingLeft: theme.spacing(0),
-            paddingRight: theme.spacing(0),
+            paddingLeft: 0,
+            paddingRight: 0,
         },
     },
     card: {
@@ -29,7 +36,10 @@ const useStyle = makeStyles( theme => ({
         color: theme.palette.type === 'light' ? theme.palette.grey[900] : theme.palette.grey[100],
         borderRadius: 10,
     },
-
+    cardContent: {
+       paddingLeft: 0,
+       paddingRight: 0,
+    },
     item: {
         marginLeft: 50,
         marginRight: 50,
@@ -62,6 +72,9 @@ const useStyle = makeStyles( theme => ({
         border: "1px solid #aaa",
         alignItems: "center",
         borderRadius: 12,
+        [theme.breakpoints.down('sm')]: {
+            display: "none"
+        },
     }
 
 }))
@@ -72,32 +85,35 @@ export const StrategyCarousel = () =>  {
 
     var items : StrategyInfo[] = [
         {
+            id: "TrendFollowing",
+            name: "Trend Following",
+            description: "A momentum strategy trading in the direction of the underlying trend",
+            goal: "Capture volatility in the risk asset during uptrends and sell into stable assets during downtrends.",
+            rule: "",
+            returns: "13.2x",
+            timeframe: "From Jan 2019 to Jan 2023",
+            link: "https://medium.com/@hashstrat/trend-following-strategy-7dce9756eaa"
+
+        },
+        {
+            id: "MeanReversion",
             name: "Mean Reversion",
             description: "A strategy to dollar-cost average in and out a risk asset according to its long term trend",
             goal: "Accumulate the risk asset when its price is significantly below its long term trend and progressively divest when it's significantly above.",
             rule: "",
-            returns: "8.5x",
-            timeframe: "From Jan 2019 to July 2022",
+            returns: "7.7x",
+            timeframe: "From Jan 2019 to Jan 2023",
             link: "https://medium.com/@hashstrat/hashstrat-mean-reversion-strategy-b1a576b05d5f"
         },
         {
+            id: "Rebalancing",
             name: "Rebalancing",
             description: "A strategy to rebalance a 2 asset portfolio",
             goal: "Capture volatility in the risk asset when the relative value of either asset in the portfolio deviates significantly from the portfolio's target allocation.",
             rule: "",
-            returns: "6.4x",
-            timeframe: "From Jan 2019 to July 2022",
+            returns: "6.6x",
+            timeframe: "From Jan 2019 to Jan 2023",
             link: "https://medium.com/@hashstrat/hashstrat-rebalancing-strategy-f0bb6cf3152f"
-
-        },
-        {
-            name: "Trend Following",
-            description: "A momentum strategy trading in the direction of the underlying trend",
-            goal: "Capture volatility in the risk asset when its price is moving in an uptrend and sell into stable assets when the trend reverses.",
-            rule: "",
-            returns: "18.9x",
-            timeframe: "From Jan 2019 to July 2022",
-            link: "https://medium.com/@hashstrat/trend-following-strategy-7dce9756eaa"
 
         }
     ]
@@ -117,7 +133,7 @@ export const StrategyCarousel = () =>  {
                 stopAutoPlayOnHover={true}
                 navButtonsAlwaysVisible={true}
                 cycleNavigation={false}
-                swipe={true}
+                swipe={false}
                 indicators={true}
             >
 
@@ -135,12 +151,12 @@ export const Item = (props: {data: StrategyInfo}) =>  {
 
     return (
         <Card variant="elevation" className={classes.card}>
-            <CardContent>
+            <CardContent  className={classes.cardContent}>
                 <div className={classes.item}>
                     <Box>
                         <Typography variant="h5" align="center"> <strong> {props.data.name} </strong> </Typography>
                         <Box py={1}>  
-                            <Typography variant="body2" align="center"> {props.data.description} </Typography>
+                            <Typography variant="body1" align="center"> {props.data.description} </Typography>
                         </Box>
                         <Box className={classes.itemDetail}>
                             <Typography variant="body2" align="left"><strong>Goal:</strong> {props.data.goal} </Typography>
@@ -157,10 +173,21 @@ export const Item = (props: {data: StrategyInfo}) =>  {
                     </Box>
                 </div>
 
-                <Horizontal align='center'> 
-                    <Link href={props.data.link} target="_blank" style={{ paddingTop: 20 }} > Learn More </Link>
-                </Horizontal>
+                <StrategyPlayground 
+                    strategy={props.data.id as string} 
+                    symbol="ETH"
+                    from="2019-01-01"
+                    to="2023-01-17"
+                    chartHeight={250}
+                    chainId={137} //FIXME
+                /> 
 
+                <Horizontal align='center' valign='center'> 
+                    <Box pt={2}>
+                        <Link component={RouterLink} to={`/sim?strategy=${props.data.id}&from=2019-01-01`} style={{ paddingRight: 30 }} > Strategy Simulator </Link>
+                        <Link href={props.data.link} target="_blank" > Learn More <Launch style={{ height: 15, transform: "translateY(2px)" }} />  </Link>
+                    </Box>
+                </Horizontal>
             </CardContent>
             <CardActions >
             </CardActions>

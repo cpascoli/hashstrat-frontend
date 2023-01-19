@@ -44,11 +44,11 @@ export const FaqContent = () => {
                                 You select which assets you want to hold (e.g. BTC &amp; ETH), pick your favourite management strategy (e.g. Rebalancing, Mean Reversion, etc. ) and the protocol takes care of the rest. 
                             </li>
                             <li>
-                                Your management strategy will determine your initial portfolio allocation and will automate your risk management.
+                                Your management strategy will determine your initial portfolio allocation and will automate risk management.
                             </li>
 
                             <li>
-                                Your strategies decide when to spend USDC to buy more of your favourite assets and when to sell into USDC to offload some risk.
+                                Your strategies decide when to buy more of your favourite assets and when to sell into USDC to offload some risk.
                             </li>
                             <li>
                                 HashStrat is a trustless, self-custodial protocol, which means you stay in control of your assets at all times.

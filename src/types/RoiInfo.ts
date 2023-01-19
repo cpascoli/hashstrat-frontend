@@ -8,7 +8,8 @@ export type RoiInfo = {
     buyAndHoldDrawdownPerc: number;
     maxStrategyDrawdownPerc: number;
     maxBuyAndHoldDrawdownPerc: number;
-
+    depositTokenAmount: number,
+    investTokenAmount: number,
     investTokenPerc: number,
     depositTokenPerc: number,
 }

@@ -146,17 +146,6 @@ const roiInfoForSwaps = (
         const investTokenPerc = 100 * riskAssetAmount * price / strategyValue
         const depositTokenPerc = 100 * stableAssetAmount / strategyValue
 
-        // if (stableAssetPercTraded > 0 || riskAssetPercTraded > 0) {
-        //     console.log("ROI calc - ", idx, new Date(timestamp * 1000).toISOString().split('T')[0],
-        //     "price:", price,
-        //     " investTokenPerc: ", round(investTokenPerc), 
-        //     " depositTokenPerc:", round(depositTokenPerc), "data: ", data)
-        // }
-
-        // console.log("Rebalancing - ROI before ", idx, new Date(timestamp * 1000).toISOString().split('T')[0],
-        // "price:", price,
-        // " investTokenPerc: ", round(investTokenPercBefore), 
-        // " depositTokenPerc:",  round(depositTokenPercBefore), "data: ", data)
 
         stratPeakValue = Math.max(strategyValue, stratPeakValue)
         buyAndHoldPeakValue = Math.max(buyAndHoldValue, buyAndHoldPeakValue)
@@ -169,8 +158,7 @@ const roiInfoForSwaps = (
         maxStrategyDrawdownPerc = Math.min(strategyDrawdownPerc, maxStrategyDrawdownPerc)
         maxBuyAndHoldDrawdownPerc = Math.min(buyAndHoldDrawdownPerc, maxBuyAndHoldDrawdownPerc)
 
-
-        const item = {
+        const item : RoiInfo = {
             date: timestamp,
             strategyROI: round(strategyROI),
             strategyValue: round(strategyValue),
@@ -184,17 +172,21 @@ const roiInfoForSwaps = (
 
             investTokenPerc: round(investTokenPerc),
             depositTokenPerc: round(depositTokenPerc),
+
+            depositTokenAmount: round(stableAssetAmount, 8),
+            investTokenAmount: round(riskAssetAmount, 2),
         }
 
-        const pre = stableAssetPercTraded > 0 || riskAssetPercTraded > 0 ? { ...item } : undefined
-        if (pre) {
-            pre.date = item.date - 1
-        
-            // token percentages before swap happened
-            pre.depositTokenPerc = 100 * stableAssetAmountBefore / strategyValue
-            pre.investTokenPerc = 100 * riskAssetAmountBefore * price / strategyValue
+        // if thre was a trade, include data before swap happened
+        const preStapInfo = stableAssetPercTraded > 0 || riskAssetPercTraded > 0 ? { ...item } : undefined
+        if (preStapInfo) {
+            preStapInfo.date = item.date - 1
+            preStapInfo.depositTokenAmount = round(stableAssetAmountBefore, 2)
+            preStapInfo.investTokenAmount = round(riskAssetAmountBefore, 8)
+            preStapInfo.depositTokenPerc = round(100 * stableAssetAmountBefore / strategyValue)
+            preStapInfo.investTokenPerc = round(100 * riskAssetAmountBefore * price / strategyValue)
 
-            roidData.push(pre)
+            roidData.push(preStapInfo)
         }
 
 
@@ -221,7 +213,7 @@ const roiInfoForSwaps = (
     const investTokenPerc = 100 * riskAssetAmount * lastPrice / strategyValue
     const depositTokenPerc = 100 * stableAssetAmount / strategyValue
 
-    const latest = {
+    const latest : RoiInfo = {
         date: priceTimestamp,
         strategyROI: round(strategyROI),
         strategyValue: round(strategyValue),
@@ -235,6 +227,9 @@ const roiInfoForSwaps = (
 
         investTokenPerc: round(investTokenPerc),
         depositTokenPerc: round(depositTokenPerc),
+
+        investTokenAmount: round(riskAssetAmount, 8),
+        depositTokenAmount: round(stableAssetAmount, 2),
     }
 
     return [ ...roidData, latest ]

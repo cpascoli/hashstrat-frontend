@@ -69,6 +69,8 @@ export const roiDataForSwaps = (
                 buyAndHoldDrawdownPerc: 0,
                 maxStrategyDrawdownPerc: 0,
                 maxBuyAndHoldDrawdownPerc: 0,
+                depositTokenAmount: 0,
+                investTokenAmount: 0,
             }
 
             let indexWeightPerc = 0
@@ -78,10 +80,10 @@ export const roiDataForSwaps = (
                indexWeightPerc += poolWeight
                
                first.date = it.date
-               first.buyAndHoldValue += (it.buyAndHoldValue * poolWeight)
-               first.buyAndHoldROI += (it.buyAndHoldROI * poolWeight)
-               first.strategyValue += (it.strategyValue * poolWeight)
-               first.strategyROI += (it.strategyROI * poolWeight)
+               first.buyAndHoldValue += it.buyAndHoldValue * poolWeight
+               first.buyAndHoldROI += it.buyAndHoldROI * poolWeight
+               first.strategyValue += it.strategyValue * poolWeight
+               first.strategyROI += it.strategyROI * poolWeight
 
                first.investTokenPerc += it.investTokenPerc * poolWeight
                first.depositTokenPerc += it.depositTokenPerc * poolWeight
@@ -90,6 +92,9 @@ export const roiDataForSwaps = (
                first.buyAndHoldDrawdownPerc += it.buyAndHoldDrawdownPerc * poolWeight
                first.maxStrategyDrawdownPerc += it.maxStrategyDrawdownPerc * poolWeight
                first.maxBuyAndHoldDrawdownPerc += it.maxBuyAndHoldDrawdownPerc * poolWeight
+
+               first.depositTokenAmount += it.depositTokenAmount * poolWeight
+               first.investTokenAmount += it.investTokenAmount * poolWeight
 
                // remember the ROI info for pool of idx poolIndex
                poolIdToSwapInfoMap[ it.poolId ] = it
@@ -124,6 +129,9 @@ export const roiDataForSwaps = (
                 buyAndHoldDrawdownPerc: indexROI[indexROI.length-1].buyAndHoldDrawdownPerc,
                 maxStrategyDrawdownPerc: indexROI[indexROI.length-1].maxStrategyDrawdownPerc,
                 maxBuyAndHoldDrawdownPerc: indexROI[indexROI.length-1].maxBuyAndHoldDrawdownPerc,
+
+                depositTokenAmount: indexROI[indexROI.length-1].depositTokenAmount,
+                investTokenAmount: indexROI[indexROI.length-1].investTokenAmount,
             }
 
             // process all roi data points for the next timestamp and update the roi info
@@ -147,6 +155,9 @@ export const roiDataForSwaps = (
                     next.buyAndHoldDrawdownPerc -= (prevSwaps.buyAndHoldDrawdownPerc * poolWeight)
                     next.maxStrategyDrawdownPerc -= (prevSwaps.maxStrategyDrawdownPerc * poolWeight)
                     next.maxBuyAndHoldDrawdownPerc -= (prevSwaps.maxBuyAndHoldDrawdownPerc * poolWeight)
+
+                    next.depositTokenAmount -= (prevSwaps.depositTokenAmount * poolWeight)
+                    next.investTokenAmount -= (prevSwaps.investTokenAmount * poolWeight)
                 }
 
                 // add the contribution of the current pool
@@ -163,6 +174,9 @@ export const roiDataForSwaps = (
                 next.buyAndHoldDrawdownPerc += (it.buyAndHoldDrawdownPerc * poolWeight)
                 next.maxStrategyDrawdownPerc += (it.maxStrategyDrawdownPerc * poolWeight)
                 next.maxBuyAndHoldDrawdownPerc += (it.maxBuyAndHoldDrawdownPerc * poolWeight)
+
+                next.depositTokenAmount += (it.depositTokenAmount * poolWeight)
+                next.investTokenAmount += (it.investTokenAmount * poolWeight)
 
                 // remember the ROI info for pool of idx poolIndex
                 poolIdToSwapInfoMap[ it.poolId ] = it

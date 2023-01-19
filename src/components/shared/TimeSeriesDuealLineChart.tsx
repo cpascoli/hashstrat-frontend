@@ -34,7 +34,7 @@ export interface ChartData {
 
 
 
-export const TimeSeriesLineChart = ( chartData  : ChartData ) => {
+export const TimeSeriesDuealLineChart = ( chartData  : ChartData ) => {
 
   const start = (chartData.data && chartData.data.length > 1) ? chartData.data[0].time : (new Date()).getTime() - 604800 * 1000
   const end =   (chartData.data && chartData.data.length > 1) ? chartData.data[chartData.data.length-1].time : (new Date()).getTime()
@@ -59,12 +59,21 @@ export const TimeSeriesLineChart = ( chartData  : ChartData ) => {
       />
 
       <YAxis
-        name = "Y Axis" 
+        name = "Y1 Axis" 
         type="number" 
         yAxisId="right-axis" 
         orientation="right" 
         scale={chartData.scale}
-        domain={ chartData.yAxisRange ? chartData.yAxisRange  : ['auto', 'auto'] } 
+        domain={['auto', 'auto'] } 
+      />
+
+      <YAxis
+        name = "Y2 Axis" 
+        type="number" 
+        yAxisId="left-axis" 
+        orientation="left" 
+        scale={chartData.scale}
+        domain={['auto', 'auto'] } 
       />
 
       <Legend verticalAlign="top" height={30}/>
@@ -85,7 +94,7 @@ export const TimeSeriesLineChart = ( chartData  : ChartData ) => {
     <Line
         type="linear"
         dataKey={chartData.label2}
-        yAxisId="right-axis"
+        yAxisId="left-axis"
         stroke="#82ca9d"
         fill="#82ca9d"
         isAnimationActive={false}

@@ -46,7 +46,9 @@ export class Feed {
         fetch(url)
             .then((response) => response.json())
             .then((data : {date: string, open: number}[]) => { 
-                
+
+                //console.log("PricefeedService >>> loading data:", BASE_URL,  data)
+
                 data.forEach( (it, idx) => {
                     if (idx > 0) {
                         this.prices.push({

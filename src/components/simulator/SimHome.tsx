@@ -17,9 +17,10 @@ import { DrawdownChart } from './DrawdownChart'
 import { useSearchParams } from "react-router-dom"
 import { PriceChart } from './PriceChart'
 
-import { MeanReversionSummary, MeanReversionDetails  } from "../strategies/MeanReversion"
-import { TrendFollowingSummary, TrendFollowingDetails  } from "../strategies/TrendFollowing"
-import { RebalancingSummary, RebalancingDetails  } from "../strategies/Rebalancing"
+import { MeanReversionSummary  } from "../strategies/MeanReversion"
+import { TrendFollowingSummary  } from "../strategies/TrendFollowing"
+import { RebalancingSummary  } from "../strategies/Rebalancing"
+import { AssetsChart } from './AssetsChart'
 
 const useStyle = makeStyles( theme => ({
  
@@ -331,30 +332,74 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                 </Horizontal>
 
                 { prices &&
+                  <Box>
+                    <Box px={1}>
+                        <Typography variant='h4'>Price Chart</Typography>
+                    </Box>
                     <PriceChart 
                         symbol={investToken.symbol.substring(1)} 
                         prices={prices} 
-                    /> 
+                    />
+                  </Box>
+
                 }
 
                 { roiInfos &&
-                    <ROIChart roiInfos={roiInfos} /> 
-                }
-                { roiInfos &&
-                    <DrawdownChart roiInfos={roiInfos} /> 
-                }
-                { roiInfos &&
-                    <AssetAllocationChart roiInfos={roiInfos} 
-                        asset1={investToken.symbol} 
-                        asset2={depositToken.symbol}
-                    /> 
-                }
-
-                <Horizontal align='center'>
-                    <Box className={classes.trades}>
-                        <StraetegyTrades swaps={swaps} depositToken={depositToken} investToken={investToken} />
+                    <Box>
+                        <Box px={1}>
+                            <Typography variant='h4'>Strategy ROI</Typography>
+                            <Typography variant='body1'>The returns of the investment determined by the value of the assets held</Typography>
+                        </Box>
+                        <ROIChart roiInfos={roiInfos} /> 
                     </Box>
-                </Horizontal>
+                }
+                { roiInfos &&
+                    <Box>
+                        <Box px={1}>
+                            <Typography variant='h4'>Strategy Drawdowns</Typography>
+                            <Typography variant='body1'>The decline in value of the assets from the past peak</Typography>
+                        </Box>
+                        <DrawdownChart roiInfos={roiInfos} /> 
+                    </Box>
+                }
+                { roiInfos &&
+                    <Box>
+                        <Box px={1}>
+                            <Typography variant='h4'>Assets</Typography>
+                            <Typography variant='body1'>The amount of assets held at any point in time</Typography>
+                        </Box>
+                        <AssetsChart roiInfos={roiInfos} 
+                            asset1={investToken.symbol} 
+                            asset2={depositToken.symbol}
+                        /> 
+                    </Box>
+                }
+                { roiInfos &&
+                    <Box>
+                        <Box px={1}>
+                            <Typography variant='h4'>Asset Value (%)</Typography>
+                            <Typography variant='body1'>The value in USD of the assets held as a percentage of the overall portfolio</Typography>
+                        </Box>
+                        <AssetAllocationChart roiInfos={roiInfos} 
+                            asset1={investToken.symbol} 
+                            asset2={depositToken.symbol}
+                        />
+                    </Box>
+                }
+
+                <Box>
+                    <Box px={1}>
+                        <Typography variant='h4'>Trades</Typography>
+                        <Typography variant='body1'>The trades performed by the strategy </Typography>
+                    </Box>
+                    <Horizontal align='center'>
+                        <Box className={classes.trades}>
+             
+                            <StraetegyTrades swaps={swaps} depositToken={depositToken} investToken={investToken} />
+                        </Box>
+                    </Horizontal>
+                </Box>
+
 
             </Paper>
     )

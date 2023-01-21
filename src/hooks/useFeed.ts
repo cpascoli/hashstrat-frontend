@@ -3,7 +3,7 @@ import { useCall, useCalls } from "@usedapp/core"
 import { FeedContract, FeedContractForAddress, FeedAddressForToken } from "../utils/network"
 
 
-export const useFeedLatestPrice = (chainId: number, poolId: string) => {
+export const useFeedLatestPrice = (chainId: number, poolId: string) : string | undefined => {
     const contract = FeedContract(chainId, poolId)
     const { value, error } = useCall({
             contract: contract,
@@ -11,7 +11,7 @@ export const useFeedLatestPrice = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -27,11 +27,11 @@ export const useFeedDecimals = (chainId: number, poolId: string) => {
         console.warn("useFeedDecimals - feed decimals is: ", value, " feed contract: ", contract.address)
     }
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString() ?? 8
 }
 
-export const useFeedLatestTimestamp = (chainId: number, poolId: string) => {
+export const useFeedLatestTimestamp = (chainId: number, poolId: string) : number | undefined => {
     const contract = FeedContract(chainId, poolId)
     const { value, error } = useCall({
             contract: contract,
@@ -39,8 +39,8 @@ export const useFeedLatestTimestamp = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
-    return value?.[0].toString()
+    error && console.error("error in custom hook: ", error)
+    return value && Number(value[0].toString())
 }
 
 

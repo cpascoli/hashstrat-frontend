@@ -50,7 +50,7 @@ export const useGetDeposits = (chainId: number, poolId: string, account: string)
             args: [account],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -63,7 +63,7 @@ export const useGetWithdrawals = (chainId: number, poolId: string, account: stri
             args: [account],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -79,7 +79,7 @@ export const useMultiPoolValue = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -93,7 +93,7 @@ export const useTotalDeposited = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -105,7 +105,7 @@ export const useTotalWithdrawn = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -125,7 +125,7 @@ export const usePoolInfo = (chainId: number, poolId: string, index: number) : Po
             args: [index],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
 
     return { 
         name:  value?.['name'],

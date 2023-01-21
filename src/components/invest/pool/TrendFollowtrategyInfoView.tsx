@@ -58,7 +58,7 @@ export const TrendFollowtrategyInfoView = ( { chainId, poolId, depositToken, inv
     const tokensToSwapPerc = useStrategyTokensToSwapPerc(chainId, poolId)
 
 
-    const formattedPriceTimestant = new Date(feedLatestTimestamp * 1000).toLocaleTimeString()
+    const formattedPriceTimestant = feedLatestTimestamp ? new Date(feedLatestTimestamp * 1000).toLocaleTimeString() : ''
     const formattedPrice = latestFeedPrice ? fromDecimals( BigNumber.from(latestFeedPrice), parseInt(feedDecimals), 2) : ''
     const feedPriceText = `${formattedPrice} ${depositToken.symbol} at ${formattedPriceTimestant}`
 
@@ -67,7 +67,11 @@ export const TrendFollowtrategyInfoView = ( { chainId, poolId, depositToken, inv
     const movingAverageText = `${formattedMovingAverage} ${depositToken.symbol}`
 
     // strategy parameters
-    const deltaPricePerc = round((latestFeedPrice - movingAverage) / movingAverage, 4)
+    // const deltaPricePerc = round((latestFeedPrice - movingAverage) / movingAverage, 4)
+    const deltaPricePerc = formattedPrice && formattedMovingAverage ? round( (Number(formattedPrice) - Number(formattedMovingAverage) ) / Number(formattedMovingAverage), 4 ) : undefined
+    const deltaPricePercText = deltaPricePerc ? `${round(deltaPricePerc * 100)}` : ''
+
+
     const targetPricePercUp = useStrategyTargetPricePercUp(chainId, poolId)
     const targetPricePercDown = useStrategyTargetPricePercDown(chainId, poolId)
   
@@ -90,7 +94,7 @@ export const TrendFollowtrategyInfoView = ( { chainId, poolId, depositToken, inv
 
             <TitleValueBox title={`${investToken.symbol} price`} value={feedPriceText} mode="small"  />
             <TitleValueBox title={`Trend (${movingAveragePeriod}D MA)`} value={movingAverageText} mode="small"  />
-            <TitleValueBox title="Deviation From Trend" value={`${round(deltaPricePerc * 100)}`} mode="small"  suffix="%" />
+            <TitleValueBox title="Deviation From Trend" value={deltaPricePercText} mode="small"  suffix="%" />
             <TitleValueBox title="Buy Trigger" value={`${buyTargetText}`} mode="small"  />
             <TitleValueBox title="Sell Trigger" value={`${sellTargetText}`} mode="small" />
             <TitleValueBox title="Trade Size" value={`${tokensToSwapPerc}`} mode="small"  suffix="%" />

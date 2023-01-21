@@ -149,10 +149,8 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
     const swaps = swapsInfos?.map( (it : PoolTokensSwapsInfo) => it.swaps ).flat()
 
 
-    const prices : { date: Date, price: number, ma?: number }[] | undefined = depositToken && investToken && SimulatorInastance(asset,
-        StrategyName[strategy as keyof typeof StrategyName], 
-        investment, depositToken, [investToken]
-   ).getPrices(fromDate, toDate)
+    const prices : { date: Date, price: number, ma?: number }[] | undefined = depositToken && investToken && 
+        SimulatorInastance(asset, StrategyName[strategy as keyof typeof StrategyName], investment, depositToken, [investToken]).getPrices(fromDate, toDate)
 
 
 
@@ -273,7 +271,6 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                                     shrink: true,
                                 }}
                                 onChange={(e) => { 
-                                    console.log("e.target.value", e.target.value)
                                     if (e.target.value.length > 0) {
                                         const date = Date.parse(e.target.value) > new Date().getTime() ? new Date() : new Date(Date.parse(e.target.value))
                                         setFromDate(date)
@@ -331,17 +328,18 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                     </Box>
                 </Horizontal>
 
-                { prices &&
+                { prices && swapsInfos && swapsInfos?.length > 0 &&
                   <Box>
                     <Box px={1}>
                         <Typography variant='h4'>Price Chart</Typography>
+                        <Typography variant='body1'>Price chart with trade annotations</Typography>
                     </Box>
                     <PriceChart 
                         symbol={investToken.symbol.substring(1)} 
                         prices={prices} 
+                        swaps={swapsInfos}
                     />
                   </Box>
-
                 }
 
                 { roiInfos &&
@@ -394,7 +392,6 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
                     </Box>
                     <Horizontal align='center'>
                         <Box className={classes.trades}>
-             
                             <StraetegyTrades swaps={swaps} depositToken={depositToken} investToken={investToken} />
                         </Box>
                     </Horizontal>

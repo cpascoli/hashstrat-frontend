@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import { makeStyles, Box } from  "@material-ui/core"
 import { MultipleLineChart, TimeSeriesData } from "../shared/MultipleLineChart"
-// import { TimeSeriesLineChart, TimeSeriesData } from "../shared/TimeSeriesLineChart"
 import { round } from "../../utils/formatter"
 
 import { StrategyPrices } from "../../services/simulator/strategies/Strategy"
+import { PoolTokensSwapsInfo } from "../../types/PoolTokensSwapsInfo"
 
 import moment from "moment"
 
 
 const useStyle = makeStyles( theme => ({
     chart: {
-        paddingTop: theme.spacing(2),
+        paddingTop: theme.spacing(0),
         paddingBottom: theme.spacing(2),
     },
 }))
@@ -20,10 +20,12 @@ const useStyle = makeStyles( theme => ({
 export interface PriceChartProps {
     symbol: string,
     prices: StrategyPrices[]
+    swaps?: PoolTokensSwapsInfo[]
 }
 
+// type PriceChartData = { [x : string] : number | string }
 
-export const PriceChart = ({ symbol, prices } : PriceChartProps ) => {
+export const PriceChart = ({ symbol, prices, swaps } : PriceChartProps ) => {
 
     const classes = useStyle()
     const [chartData, setChartData] = useState<TimeSeriesData[]|undefined>(undefined)
@@ -37,11 +39,31 @@ export const PriceChart = ({ symbol, prices } : PriceChartProps ) => {
 
     const days = to?.diff(from, 'days')
 
+
+    // build BUY/SELL annotations
+    let annotations : any  = {}
+    swaps?.forEach( it => {
+        it.swaps.forEach( (el, idx) => {
+            annotations[ el.timestamp ] = el.side
+        })
+    })
+
+    // console.log("annotations: ", annotations, "swaps", swaps)
+
     useEffect(() => {
         if (prices) {
-            const data = prices.map( (data ) => {
-                let record : any = {}
-                record['time'] = data.date.getTime()
+            const data = prices.map( (data) => {
+
+                let record : TimeSeriesData = {
+                    time: data.date.getTime()
+                }
+
+                const timestamp = Math.floor(data.date.getTime() / 1000).toString()
+                const annotation : string | undefined = annotations[timestamp]
+                if ( annotation !== undefined ) {
+                    record["Annotation"] = annotation
+                }
+               
                 record[`${symbol} Price`] = round(data.price, 2)
                 if (hasMa) {
                     record["Moving Average"] = round(data.ma ?? 0)

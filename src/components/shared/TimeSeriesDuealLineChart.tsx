@@ -34,7 +34,7 @@ export interface ChartData {
 
 
 
-export const TimeSeriesDuealLineChart = ( chartData  : ChartData ) => {
+export const TimeSeriesDualLineChart = ( chartData  : ChartData ) => {
 
   const start = (chartData.data && chartData.data.length > 1) ? chartData.data[0].time : (new Date()).getTime() - 604800 * 1000
   const end =   (chartData.data && chartData.data.length > 1) ? chartData.data[chartData.data.length-1].time : (new Date()).getTime()

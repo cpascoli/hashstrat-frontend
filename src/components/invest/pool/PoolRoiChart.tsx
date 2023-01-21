@@ -55,7 +55,7 @@ export const RoiChart = ( { chainId, poolId, depositToken, investToken } : RoiCh
                     weight: 1,
                     priceInfo: {
                         symbol: investToken.symbol,
-                        price: price,
+                        price: BigNumber.from(price),
                         timestamp: priceTimestamp,
                     },
                     swaps: swaps

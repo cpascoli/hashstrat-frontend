@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { makeStyles, Box } from  "@material-ui/core"
-import { TimeSeriesDuealLineChart, TimeSeriesData } from "../shared/TimeSeriesDuealLineChart"
+import { TimeSeriesDualLineChart, TimeSeriesData } from "../shared/TimeSeriesDuealLineChart"
 import { round } from "../../utils/formatter"
 import { RoiInfo } from '../../types/RoiInfo'
 
@@ -33,7 +33,7 @@ export const AssetsChart = ({ roiInfos, width, height, asset1, asset2} : AssetsC
             const data = roiInfos.map( (data: RoiInfo) => {
                 let record : any = {}
                 record['time'] = data.date * 1000
-                record[asset1] = round(data.investTokenAmount)
+                record[asset1] = round(data.investTokenAmount, 6)
                 record[asset2] = round(data.depositTokenAmount)
                 return record
             })
@@ -45,7 +45,7 @@ export const AssetsChart = ({ roiInfos, width, height, asset1, asset2} : AssetsC
 
     return (
         <Box className={classes.chart} >
-            <TimeSeriesDuealLineChart 
+            <TimeSeriesDualLineChart 
                 title={`${asset1} & ${asset2} `}
                 label1={asset1}
                 label2={asset2}

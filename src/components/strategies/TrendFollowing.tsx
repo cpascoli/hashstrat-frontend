@@ -36,9 +36,14 @@ export const TrendFollowingDetails = () => {
             <br />
             <div>     
                 <strong>Rule</strong> <br/>
-                Given a Pool containing ETH/USD <br />
-                When ETH price is above its 40D moving average, then buy ETH with all USDC available in the Pool <br />
-                When ETH price is below its 40D moving average, then sell all ETH into USDC. 
+                Given a Pool containing BTC (or ETH) and USDC, <br />
+                When BTC (ETH) price is above its 40D moving average, then buy BTC (ETH) with all USDC in the Pool <br />
+                When BTC (ETH) price is below its 40D moving average, then sell all BTC (ETH) into USDC. 
+            </div>
+            <br />
+            <div>     
+                <strong>Execution Frequency</strong> <br/>
+                Once every 5 days
             </div>
             <br />
             <div>     
@@ -47,11 +52,6 @@ export const TrendFollowingDetails = () => {
                     <Link component={RouterLink} to="/pools/pool05v3a">BTC-USDC TRDFLW01</Link>
                     <Link component={RouterLink} to="/pools/pool06v3a">ETH-USDC TRDFLW01</Link>
                 </Horizontal>
-            </div>
-            <br />
-            <div>     
-                <strong>Returns</strong> <br/>
-                From Jan 2019 to July 2022 this strategy would have returned 18.9x your investment.
             </div>
         </Box>
     )

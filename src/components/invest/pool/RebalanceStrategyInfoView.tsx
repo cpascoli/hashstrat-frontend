@@ -3,7 +3,7 @@ import { TitleValueBox } from "../../TitleValueBox"
 import { Token } from "../../../types/Token"
 import { fromDecimals, round} from "../../../utils/formatter"
 import { PoolAddress } from "../../../utils/network"
-import { BigNumber } from 'ethers'
+import { BigNumber, utils } from 'ethers'
 import { PoolInfo } from "../../../utils/pools"
 import { RoiChart } from "./PoolRoiChart"
 
@@ -71,12 +71,12 @@ export const RebalanceStrategyInfoView = ( { chainId, poolId, depositToken, inve
 
     const rebalancingUpperBandPrice = (depositTokens && investTokens) ? round( targetPercUp  * depositTokens / (investTokens - targetPercUp  * investTokens)) : undefined
     const rebalancingLowerBandPrice = (depositTokens && investTokens) ? round( targetPercDown  * depositTokens / (investTokens - targetPercDown  * investTokens)) : undefined
-    const rebalancingText = (rebalancingUpperBandPrice && rebalancingLowerBandPrice) ? `${investToken.symbol} ≤ ${rebalancingLowerBandPrice} ; ${investToken.symbol} ≥ ${rebalancingUpperBandPrice} ` : ''
+    const rebalancingText = (rebalancingUpperBandPrice && rebalancingLowerBandPrice) ? `${investToken.symbol} ≤ ${utils.commify(rebalancingLowerBandPrice)} ; ${investToken.symbol} ≥ ${utils.commify(rebalancingUpperBandPrice)} ` : ''
 
-    const formattedPriceTimestant = new Date(feedLatestTimestamp * 1000).toLocaleTimeString()
+    const formattedPriceTimestant = feedLatestTimestamp ? new Date(feedLatestTimestamp * 1000).toLocaleTimeString() : ''
 
     const formattedPrice = latestFeedPrice ? fromDecimals( BigNumber.from(latestFeedPrice), parseInt(feedDecimals), 2) : ''
-    const feedPriceText = `${formattedPrice} ${depositToken.symbol} at ${formattedPriceTimestant}`
+    const feedPriceText = `${utils.commify(formattedPrice)} ${depositToken.symbol} at ${formattedPriceTimestant}`
 
     const investedTokenValue = useInvestedTokenValue(chainId, poolId)
     const totalPortfolioValue = useTotalPortfolioValue(chainId, poolId)

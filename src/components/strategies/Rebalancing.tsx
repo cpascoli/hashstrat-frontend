@@ -16,11 +16,8 @@ export const RebalancingSummary = () => {
             </Typography>
             <Typography>
                 A strategy to automatically rebalance a 2 asset portfolio using a 60/40% rebalancing target and a 10% rebalancing band
-
             </Typography>
             
-
-
             <div style={{marginTop: 10}}>
                 <Link href="https://medium.com/@hashstrat/hashstrat-rebalancing-strategy-f0bb6cf3152f" target="_blank" > Learn More <Launch style={{ height: 15, transform: "translateY(2px)" }} />  </Link>
                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -44,9 +41,14 @@ export const RebalancingDetails = () => {
         <br />
         <div>     
             <strong>Rule</strong> <br/>
-            Given a ETH/USD Pool with 60%/40% target allocation and 10% rebalance trigger, <br />
-            When the value of ETH rises above 70% (drops below 50%) of the overall value in the Pool<br />
-            Then the Pool is rebalanced by selling ETH (buying ETH) to restore the original 60%/40% allocation.
+            Given a Pool holding BTC (or ETH) and USDC with 60%/40% target allocation and 10% rebalance trigger, <br />
+            When the value of BTC (ETH) rises above 70% (drops below 50%) of the overall value in the Pool<br />
+            Then the Pool get rebalanced by selling or buying BTC (ETH) to restore the original 60%/40% allocation.
+        </div>
+        <br />
+        <div>     
+            <strong>Execution Frequency</strong> <br/>
+            Once every 7 days
         </div>
         <br />
         <div>     
@@ -55,11 +57,6 @@ export const RebalancingDetails = () => {
                 <Link component={RouterLink} to="/pools/pool01v3a">BTC-USDC REB01</Link>
                 <Link component={RouterLink} to="/pools/pool02v3a">ETH-USDC REB01</Link>
             </Horizontal>
-        </div>
-        <br />
-        <div>     
-            <strong>Returns</strong> <br/>
-            From Jan 2019 to July 2022 this strategy would have returned 6.4x your investment.
         </div>
     </Box>
     )

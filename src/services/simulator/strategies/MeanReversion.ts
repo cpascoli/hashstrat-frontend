@@ -15,7 +15,7 @@ export class MeanReversion implements Strategy {
     depositToken: Token
     investToken: Token
 
-    readonly minAllocationPerc = 0.2     // 20% min allocation to both assets
+    readonly minAllocationPerc = 0.20     // 20% min allocation to both assets
     readonly tokensToSwapPerc = 0.05        // 5% of the value of the asset sold
     readonly targetPricePercDown = -0.33 // 33% below long term trend
     readonly targetPricePercUp = 0.66 // 66% above long term trend

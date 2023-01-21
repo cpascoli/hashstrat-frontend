@@ -37,9 +37,15 @@ export const MeanReversionDetails = () => {
             <br />
             <div>     
                 <strong>Rule</strong> <br/>
-                Given a Pool containing ETH/USD and a dollar-cost average configuration of 5% every 5 days <br />
-                When ETH price is 33% below its 350D moving average, then every 5 days, buy ETH with 5% of the USD in the Pool.  <br />
-                When ETH price is 66% above its 350D moving average, then every 5 days, sell 5% of the ETH in the Pool. 
+                Given a Pool holding BTC (or ETH) and USDC, <br />
+                When BTC (ETH) price is 33% below its 350D moving average then buy BTC (ETH) with 5% of the USDC in the Pool.  <br />
+                When BTC (ETH) price is 66% above its 350D moving average then sell 5% of the BTC (ETH) in the Pool. 
+                Also ensure the pool has at least 20% of its value in both BTC (ETH) and USDC
+            </div>
+            <br />
+            <div>     
+                <strong>Execution Frequency</strong> <br/>
+                Once every 5 days
             </div>
             <br />
             <div>     
@@ -48,11 +54,6 @@ export const MeanReversionDetails = () => {
                     <Link component={RouterLink} to="/pools/pool03v3a">BTC-USDC MEANREV01</Link>
                     <Link component={RouterLink} to="/pools/pool04v3a">ETH-USDC MEANREV01</Link>
                 </Horizontal>
-            </div>
-            <br />
-            <div>     
-                <strong>Returns</strong> <br/>
-                From Jan 2019 to July 2022 this strategy would have returned 8.5x your investment.
             </div>
         </Box>
     )

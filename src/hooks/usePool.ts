@@ -1,7 +1,7 @@
 import { constants, BigNumber } from "ethers"
 import { useContractFunction, useCall } from "@usedapp/core"
 import { PoolContract, PoolLPContract } from "../utils/network"
-
+import { SwapInfo } from "../types/SwapInfo"
 
 //// User Actions ////
 
@@ -44,7 +44,7 @@ export const usePortfolioValue = (chainId: number, poolId: string, account: stri
             args: [account],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -64,7 +64,7 @@ export const useLpTokensValue = (chainId: number, poolId: string, amount: string
         args: [],
     }) ?? {}
 
-    error0 && console.error("error in custom hoock: ", error0)
+    error0 && console.error("error in custom hook: ", error0)
 
     const { value : multiPoolValue, error : error1 } = useCall({
         contract: poolContract,
@@ -72,7 +72,7 @@ export const useLpTokensValue = (chainId: number, poolId: string, amount: string
         args: [],
     }) ?? {}
 
-    error1 && console.error("error in custom hoock: ", error1)
+    error1 && console.error("error in custom hook: ", error1)
 
 
     const totValue0 = portfolioValue?.[0]
@@ -85,7 +85,7 @@ export const useLpTokensValue = (chainId: number, poolId: string, amount: string
             args: [],
     }) ?? {}
 
-    error2 && console.error("error in custom hoock: ", error2)
+    error2 && console.error("error in custom hook: ", error2)
 
 
     const totSupply = totalSupply?.[0]
@@ -116,7 +116,7 @@ export const useGetDeposits = (chainId: number, poolId: string, account: string)
             args: [account],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -129,7 +129,7 @@ export const useGetWithdrawals = (chainId: number, poolId: string, account: stri
             args: [account],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -142,7 +142,7 @@ export const useTotalPortfolioValue = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -155,7 +155,7 @@ export const useTotalDeposited = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -167,7 +167,7 @@ export const useTotalWithdrawn = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -180,7 +180,7 @@ export const useInvestedTokenValue = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -192,7 +192,7 @@ export const useDepositTokenValue = (chainId: number, poolId: string) => {
             args: [],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -228,7 +228,7 @@ export const useSwapInfoArray = (chainId: number, poolId: string) => {
         args: [],
     }) ?? {}
 
-    const info = value?.[0].map( (data: any, idx: number) => {
+    const info : SwapInfo[] | undefined = value?.[0].map( (data: any, idx: number) => {
         return {
             timestamp: data['timestamp'].toString(),
             side: data['side'],
@@ -237,7 +237,7 @@ export const useSwapInfoArray = (chainId: number, poolId: string) => {
             sold: data['sold'].toString(),
             depositTokenBalance: data['depositTokenBalance'].toString(),
             investTokenBalance: data['investTokenBalance'].toString(),
-          }
+        }
 
     })
 
@@ -257,7 +257,7 @@ export const useFeesForWithdraw = (chainId: number, poolId: string, lpTokensAmou
             args: account ? [amount, account] : [amount, constants.AddressZero],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 

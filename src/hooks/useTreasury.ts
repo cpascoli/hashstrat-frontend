@@ -10,7 +10,7 @@ export const useGetBalance = (chainId: number) => {
         args:  [],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0]
 }
 
@@ -23,7 +23,7 @@ export const useGetPayments = (chainId: number) => {
         args: [],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0]
 }
 

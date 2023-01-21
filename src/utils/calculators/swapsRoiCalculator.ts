@@ -12,7 +12,7 @@ import { Feed, BTCFeed, ETHFeed } from "../../services/pricefeed/PricefeedServic
 /** 
  * Calculates the RoiInfo data for a chronologically ordered array of timestamps.
  * 
- * These timestamps include those in the SwapInfo[] provided and the 'priceTimestamp' of the latest priceRaw
+ * These timestamps include those in SwapInfo[] and the 'priceTimestamp' of the latest priceRaw
  * as well as the timestamp of the opening prices of the weekly price feed assocaited to the 'investToken' provided.
  *  
  */ 
@@ -121,19 +121,24 @@ const roiInfoForSwaps = (
         // if there was a swap also record roi info (e.g token percentages) before the swap happened
         let riskAssetAmountBefore = riskAssetAmount
         let stableAssetAmountBefore = stableAssetAmount
-        
      
+        //// FIXME
         //// update token balances according to the swap performed 
         if (data.side === 'BUY') {
             const stableAssetSold = stableAssetAmount * stableAssetPercTraded
             stableAssetAmount -= stableAssetSold
             riskAssetAmount += (stableAssetSold / price)
+            // stableAssetAmount = depositTokenBalance
+            // riskAssetAmount = investTokenBalance
         }
         if (data.side === 'SELL') {
             const riskAssetSold = riskAssetAmount * riskAssetPercTraded
             stableAssetAmount += (riskAssetSold * price)
             riskAssetAmount -= riskAssetSold
+            // stableAssetAmount = depositTokenBalance
+            // riskAssetAmount = investTokenBalance
         }
+
 
         // Strategy value and ROI at current price
         const strategyValue = riskAssetAmount * price + stableAssetAmount
@@ -173,16 +178,16 @@ const roiInfoForSwaps = (
             investTokenPerc: round(investTokenPerc),
             depositTokenPerc: round(depositTokenPerc),
 
-            depositTokenAmount: round(stableAssetAmount, 8),
-            investTokenAmount: round(riskAssetAmount, 2),
+            depositTokenAmount: round(stableAssetAmount),
+            investTokenAmount: round(riskAssetAmount, 6),
         }
 
         // if thre was a trade, include data before swap happened
         const preStapInfo = stableAssetPercTraded > 0 || riskAssetPercTraded > 0 ? { ...item } : undefined
         if (preStapInfo) {
             preStapInfo.date = item.date - 1
-            preStapInfo.depositTokenAmount = round(stableAssetAmountBefore, 2)
-            preStapInfo.investTokenAmount = round(riskAssetAmountBefore, 8)
+            preStapInfo.depositTokenAmount = round(stableAssetAmountBefore)
+            preStapInfo.investTokenAmount = round(riskAssetAmountBefore, 6)
             preStapInfo.depositTokenPerc = round(100 * stableAssetAmountBefore / strategyValue)
             preStapInfo.investTokenPerc = round(100 * riskAssetAmountBefore * price / strategyValue)
 
@@ -228,8 +233,8 @@ const roiInfoForSwaps = (
         investTokenPerc: round(investTokenPerc),
         depositTokenPerc: round(depositTokenPerc),
 
-        investTokenAmount: round(riskAssetAmount, 8),
         depositTokenAmount: round(stableAssetAmount, 2),
+        investTokenAmount: round(riskAssetAmount, 6),
     }
 
     return [ ...roidData, latest ]

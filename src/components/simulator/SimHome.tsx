@@ -50,7 +50,17 @@ const useStyle = makeStyles( theme => ({
     },
 
     metrics: {
-        maxWidth: 900
+        // maxHeight: 250,
+        marginBottom: 20,
+        overflowX: 'auto',
+        overflowY: 'hidden',
+        whiteSpace: 'nowrap',
+    },
+
+    banner: {
+        marginTop: 10,
+        width: 600,
+        margin: 'auto',
     },
 
     formField: {
@@ -149,10 +159,16 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
     const swaps = swapsInfos?.map( (it : PoolTokensSwapsInfo) => it.swaps ).flat()
 
 
-    const prices : { date: Date, price: number, ma?: number }[] | undefined = depositToken && investToken && 
-        SimulatorInastance(asset, StrategyName[strategy as keyof typeof StrategyName], investment, depositToken, [investToken]).getPrices(fromDate, toDate)
+    const prices = depositToken && investToken &&  SimulatorInastance(
+            asset, 
+            StrategyName[strategy as keyof typeof StrategyName], 
+            investment, 
+            depositToken, 
+            [investToken]
+        ).getPrices(fromDate, toDate)
 
 
+    console.log("prices >>> ", prices && prices[0], prices && prices[prices.length-1] )
 
 
     useEffect(() => {
@@ -306,27 +322,33 @@ export const SimHome = ({ chainId } : SimHomeProps) => {
 
                 </Box>
 
-                <Horizontal align="center" >
-                    <Box py={4} className={classes.metrics}>
-                        <Horizontal align="center" >
-                            <InfoCard 
-                                type="amount"
-                                title="Portfolio Value" value={lastRoi?.strategyValue} 
-                                detailTitle="Buy-and-hold" detailValue={lastRoi?.buyAndHoldValue} 
-                            /> 
-                            <InfoCard 
-                                type="percentage"
-                                title="Strategy ROI" value={lastRoi?.strategyROI} 
-                                detailTitle="Buy-and-hold" detailValue={lastRoi?.buyAndHoldROI} 
-                            /> 
-                            <InfoCard 
-                                type="percentage"
-                                title="Max Drawdown" value={lastRoi?.maxStrategyDrawdownPerc} 
-                                detailTitle="Buy-and-hold" detailValue={lastRoi?.maxBuyAndHoldDrawdownPerc} 
-                            /> 
-                        </Horizontal>
+                <Box mt={4}>
+                    <Box px={1}>
+                        <Typography variant='h4'>Performance </Typography>
                     </Box>
-                </Horizontal>
+                    <Box py={0} className={classes.metrics}>
+
+                        <div className={classes.banner}>
+                            <Horizontal valign="center" align="center">
+                                <InfoCard 
+                                    type="amount"
+                                    title="Portfolio Value" value={Math.round(lastRoi?.strategyValue ?? 0)} 
+                                    detailTitle="Buy-and-hold" detailValue={Math.round(lastRoi?.buyAndHoldValue ?? 0)} 
+                                /> 
+                                <InfoCard 
+                                    type="percentage"
+                                    title="Strategy ROI" value={Math.round(lastRoi?.strategyROI ?? 0)} 
+                                    detailTitle="Buy-and-hold" detailValue={Math.round(lastRoi?.buyAndHoldROI ?? 0)} 
+                                /> 
+                                <InfoCard 
+                                    type="percentage"
+                                    title="Max Drawdown" value={Math.round(lastRoi?.maxStrategyDrawdownPerc ?? 0)} 
+                                    detailTitle="Buy-and-hold" detailValue={Math.round(lastRoi?.maxBuyAndHoldDrawdownPerc ?? 0)} 
+                                /> 
+                            </Horizontal>
+                        </div>
+                    </Box>
+                </Box>
 
                 { prices && swapsInfos && swapsInfos?.length > 0 &&
                   <Box>

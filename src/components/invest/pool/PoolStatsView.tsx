@@ -94,27 +94,20 @@ export const PoolStatsView = ( { chainId, poolId, depositToken, investToken } : 
 
     //TODO use balance of assets in the pool rather than values from the last trade
     const priceTimestamp = latestTimestamp && BigNumber.from(latestTimestamp).toNumber()
-    // const priceFormatted = parseFloat(fromDecimals(price, 8, 2))
-    const priceFormatted = price && parseFloat(fromDecimals(BigNumber.from(price), 8, 2))
+    const priceFormatted = price ? parseFloat(fromDecimals(BigNumber.from(price), 8, 2)) : 0
 
 
-    const asset1 = swaps && swaps.length > 0 ? parseFloat(fromDecimals(swaps[swaps.length-1].depositTokenBalance, depositToken.decimals, 2)) : undefined
-    const asset2 = swaps && swaps.length > 0 ? parseFloat(fromDecimals(swaps[swaps.length-1].investTokenBalance, investToken.decimals, 6)) : undefined
+    const asset1 = swaps && swaps.length > 0 ? parseFloat(fromDecimals( BigNumber.from(swaps[swaps.length-1].depositTokenBalance), depositToken.decimals, 2)) : undefined
+    const asset2 = swaps && swaps.length > 0 ? parseFloat(fromDecimals( BigNumber.from(swaps[swaps.length-1].investTokenBalance), investToken.decimals, 6)) : undefined
 
     let last : any = {}
     if (asset1 !== undefined && asset2 !== undefined && price !== undefined && priceTimestamp !== undefined) {
-        console.log("assetValuePercChartData: ", asset1, asset2, "price: ", priceFormatted)
-
         last['time'] = priceTimestamp * 1000
         last[label1] = round( 100 * asset1 / (asset1 + asset2 * priceFormatted ))
         last[label2] = round( 100 * asset2 * priceFormatted / (asset1 + asset2 * priceFormatted ))
     }
 
     const assetValuePercChartData = swapsData && last ? [...swapsData, last] : []
-
-    // console.log("assetValuePercChartData: ", assetValuePercChartData)
-
-    ///
 
 
     return (

@@ -48,9 +48,10 @@ export const PriceChart = ({ symbol, prices, swaps } : PriceChartProps ) => {
         })
     })
 
-    // console.log("annotations: ", annotations, "swaps", swaps)
 
     useEffect(() => {
+        // console.log("PriceChart - start: ", new Date().toISOString().split('T')[1])
+
         if (prices) {
             const data = prices.map( (data) => {
 
@@ -76,6 +77,9 @@ export const PriceChart = ({ symbol, prices, swaps } : PriceChartProps ) => {
                 }
                 return record
             })
+
+            //console.log("PriceChart - end: ", new Date().toISOString().split('T')[1])
+
             setChartData(data)
         }
 

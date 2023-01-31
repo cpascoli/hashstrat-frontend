@@ -192,9 +192,6 @@ const valueByPoolChartData = (
         }
     })
     
-    console.log("poolsBalances", poolsBalances, tokenBalancesByPool)
-    console.log("indexesBalances", indexesBalances, tokenBalancesForIndexes)
-
 
     // if don't have account don't return indexes because their value in already accounted in the pools
     const allPools = account ? [...tokenBalancesForIndexes, ...tokenBalancesByPool] : [...tokenBalancesByPool]

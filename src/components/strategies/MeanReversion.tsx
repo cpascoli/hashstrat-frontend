@@ -13,7 +13,9 @@ export const MeanReversionSummary = () => {
             <Typography variant="h5">
                 <strong> Mean Reversion</strong>
             </Typography>
-            <Typography>A strategy for dollar-cost averaging in and out a risk asset when its price diverges substantially from its long term trend</Typography>
+            <Typography>
+                A strategy for dollar-cost averaging in and out a risk asset when its price diverges substantially from its long term trend
+            </Typography>
 
             <div style={{marginTop: 10}}>
                 <Link href="https://medium.com/@hashstrat/hashstrat-mean-reversion-strategy-b1a576b05d5f" target="_blank" > Learn More <Launch style={{ height: 15, transform: "translateY(2px)" }} />  </Link>

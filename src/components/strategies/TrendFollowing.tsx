@@ -13,7 +13,9 @@ export const TrendFollowingSummary = () => {
             <Typography variant="h5">
                 <strong> Trend Following </strong>
             </Typography>
-            <Typography>A momentum strategy trading in the direction of the underlying trend as determined by its 50D moving average</Typography>
+            <Typography>
+                A momentum strategy trading in the direction of the underlying trend as determined by its 40D moving average
+            </Typography>
             
             <div style={{marginTop: 10}}>
                 <Link href="https://medium.com/@hashstrat/trend-following-strategy-7dce9756eaa" target="_blank" > Learn More <Launch style={{ height: 15, transform: "translateY(2px)" }} />  </Link>

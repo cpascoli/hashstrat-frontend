@@ -33,6 +33,9 @@ export const ConnectAccountHelper = ( { connectedChainId, userMessage } : Connec
 
     const classes = useStyles()
     const { switchNetwork, chainId, account } = useEthers()
+
+    console.log("ConnectAccountHelper - chainId: ", chainId, account)
+
     const isPolygon = connectedChainId === Polygon.chainId
 
     const [showError, setShowError]= useState(false)
@@ -40,7 +43,12 @@ export const ConnectAccountHelper = ( { connectedChainId, userMessage } : Connec
     const purposeMessage = userMessage ?? "interact with HashStrat"
 
     useEffect(() => {
-        setTimeout( () => setShowError(true), 500)
+        let timer = setTimeout( () => setShowError(true), 1000 )
+
+        return () => {
+            clearTimeout(timer)
+        }
+
     }, [])
 
 

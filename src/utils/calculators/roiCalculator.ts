@@ -28,10 +28,17 @@ export const roiDataForSwaps = (
         maxItems?: number
     ) : RoiInfo[] => {
 
-    
+
+    // map[symbol] => Token
+    const investTokensMap = investTokens.reduce( (acc , val ) => {
+        acc[val.symbol.toLowerCase()] = val
+        return acc
+    }, {} as {[x : string] : Token})
+
     // the the roi data for each pool
+  
     const poolsROI : RoiInfoForPool[][] = swapsInfo.map( (item : PoolTokensSwapsInfo) => {
-        const investToken = investTokens.find( it => it.symbol.toLowerCase() === item.priceInfo?.symbol.toLowerCase())
+        const investToken = item.priceInfo ? investTokensMap[item.priceInfo?.symbol.toLowerCase()] : undefined //investTokens.find( it => it.symbol.toLowerCase() === item.priceInfo?.symbol.toLowerCase())
         
         const poolROI = investToken && roiDataForPrices(item.swaps, item.priceInfo?.price ?? BigNumber.from("0"), item.priceInfo?.timestamp ?? 0, depositToken, investToken, initialInvestment)
         const respone = poolROI?.map( it => { 
@@ -40,6 +47,7 @@ export const roiDataForSwaps = (
         return respone
     })
 
+   
 
     let indexROI : RoiInfo[] = []
 
@@ -48,10 +56,19 @@ export const roiDataForSwaps = (
                                  .reduce( (acc, val) => { return  acc + val } , 0)
 
     // list of swaps for the first timestamp (after ts 0) to use to calculate ROI
+    
     let roiInfos = findNextROIInfo(poolsROI, 0)
 
     // a map of the last swap applied for each pool in the Index, identified by the idx in the swapsInfo array
     let poolIdToSwapInfoMap : { [poolId: string]: RoiInfoForPool } = {} 
+
+    // console.log("roiDataForSwaps - start: ", new Date().toISOString().split('T')[1])
+
+    // map[poolId] => pool_weight
+    const poolWeights = swapsInfo.reduce( (acc , val ) => {
+        acc[val.poolId] = val.weight
+        return acc
+    }, {} as {[x : string] : number})
 
     while (roiInfos.length > 0) {
 
@@ -76,7 +93,7 @@ export const roiDataForSwaps = (
             let indexWeightPerc = 0
 
             roiInfos.forEach( it => {  
-               const poolWeight = (swapsInfo.find( el =>  el.poolId === it.poolId )?.weight ?? 0) / totalWeight
+               const poolWeight = poolWeights[it.poolId] / totalWeight
                indexWeightPerc += poolWeight
                
                first.date = it.date
@@ -136,9 +153,9 @@ export const roiDataForSwaps = (
 
             // process all roi data points for the next timestamp and update the roi info
             // replacing the previous roi values for a pool with the latest ones
-            roiInfos.forEach( (it, idx) => {
+            roiInfos.forEach( it => {
 
-                const poolWeight = (swapsInfo.find( el =>  el.poolId === it.poolId )?.weight ?? 0) / totalWeight
+                const poolWeight = poolWeights[it.poolId] / totalWeight
 
                 // subtract the contribution of the current pool
                 const prevSwaps = poolIdToSwapInfoMap[it.poolId]
@@ -187,9 +204,10 @@ export const roiDataForSwaps = (
 
         // get next swaps
         const ts = roiInfos[0].date
-        roiInfos = findNextROIInfo(poolsROI, ts)
+        roiInfos = findNextROIInfo(poolsROI, ts, true)
     }
 
+    // console.log("roiDataForSwaps - end: ", new Date().toISOString().split('T')[1], "indexROI:", indexROI.length)
 
     let response : RoiInfo[] = []
 
@@ -232,12 +250,17 @@ const joinRoiInfoArrays = (infoArrays: RoiInfoForPool[][])  => {
 }
 
 
+// cache RoiInfoForPool itmes and ROI timestamps
+let roiMap : { [ x : number] : RoiInfoForPool[] } | undefined
+let timestamps : number[] | undefined
 
 // Returns an array of RoiInfo for the trades happend after the provided 'timestamp'. 
-const findNextROIInfo = (roiInfoArray: RoiInfoForPool[][], timestamp: number) : RoiInfoForPool[] => {
-    const roiMap = joinRoiInfoArrays(roiInfoArray)
-    const timestamps = Object.keys(roiMap).map(it => Number(it)).sort()
+const findNextROIInfo = (roiInfoArray: RoiInfoForPool[][], timestamp: number, useCashe : boolean = false) : RoiInfoForPool[] => {
+    if (useCashe === false || roiMap === undefined || timestamps === undefined) {
+        roiMap = joinRoiInfoArrays(roiInfoArray) 
+        timestamps = Object.keys(roiMap).map(it => Number(it)).sort()
+    }
+
     const nextTimestamp = timestamps.find( it => (it > timestamp) )
-   
     return nextTimestamp ? roiMap[nextTimestamp] : []
 }

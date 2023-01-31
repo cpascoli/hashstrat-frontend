@@ -8,7 +8,7 @@ export const fromDecimals = (amount: BigNumber, decimals: Number, precision: Num
     const decimalsFactor =  BigNumber.from('10').pow( BigNumber.from(decimals) ); 
     const precisionFactor =  BigNumber.from('10').pow(BigNumber.from(precision)); 
     const number = BigNumber.from(amount).mul(precisionFactor).div(decimalsFactor)
-    const decimal =  number.toNumber() / precisionFactor.toNumber()//number.div(precisionFactor)
+    const decimal =  number.toNumber() / precisionFactor.toNumber()
     return decimal.toString()
 }
 

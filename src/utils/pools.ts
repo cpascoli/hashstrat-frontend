@@ -1,8 +1,10 @@
 import { Kovan, Polygon } from '@usedapp/core';
 
+import networksConfig from "../config/networks.json"
+
 import poolsInfo from "../config/pools.json"
 import indexesInfo from "../config/indexes.json"
-import networksConfig from "../config/networks.json"
+import { Token } from "../types/Token"
 
 import { PoolAddress, PoolLPTokenAddress, UsdcTokenAddress, DaiTokenAddress } from "./network"
 import { Tokens } from "./Tokens"
@@ -10,8 +12,6 @@ import { Tokens } from "./Tokens"
 import usdc from "../components/img/usdc.png"
 import dai from "../components/img/dai.png"
 
-
-import { Token } from "../types/Token"
 
 export const PoolInfo = (chainId: number, poolId: string) => {
     const networkName = networksConfig[chainId.toString() as keyof typeof networksConfig]

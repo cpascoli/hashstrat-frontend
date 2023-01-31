@@ -3,7 +3,7 @@ import { Feed, BTCFeed, ETHFeed } from "../pricefeed/PricefeedService"
 import { PoolTokensSwapsInfo } from "../../types/PoolTokensSwapsInfo"
 import { Token } from "../../types/Token"
 
-import { Strategy } from "./strategies/Strategy"
+import { Strategy, StrategyPrices } from "./strategies/Strategy"
 import { Rebalancing } from "./strategies/Rebalancing"
 import { MeanReversion } from "./strategies/MeanReversion"
 import { TrendFollowing } from "./strategies/TrendFollowing"
@@ -27,7 +27,7 @@ class Simulator {
     depositToken : Token
     investtTokens : [Token]
 
-    //TODO support an Index over multiple stategies
+    //TODO add support for an Index over multiple stategies
     strategy: Strategy | undefined
 
     constructor(feed: Feed, strategyName: StrategyName, amount: number, depositToken : Token, investTokens : [Token]) {
@@ -36,8 +36,6 @@ class Simulator {
         this.amount = amount
         this.depositToken = depositToken
         this.investtTokens = investTokens
-
-        //TODO resolve strategy (or strategies) from constructor parameter 
         this.strategy = ( strategyName === StrategyName.Rebalancing ) ? new Rebalancing(feed, depositToken, investTokens[0]) :
                         ( strategyName === StrategyName.MeanReversion ) ? new MeanReversion(feed, depositToken, investTokens[0]) : 
                         ( strategyName === StrategyName.TrendFollowing ) ? new TrendFollowing(feed, depositToken, investTokens[0]) : undefined
@@ -45,11 +43,10 @@ class Simulator {
 
     getSwapsInfo (from: Date, to: Date = new Date()) : PoolTokensSwapsInfo[] | undefined {
         const trades = this.strategy?.simulate(from, to, this.amount)
-        
         return  trades ? [trades] : undefined
     }
 
-    getPrices (from: Date, to: Date = new Date()) : { date: Date, price: number, ma?: number }[] | undefined {
+    getPrices (from: Date, to: Date = new Date()) : StrategyPrices[] | undefined {
         return this.strategy?.getPrices(from, to)
     }
 

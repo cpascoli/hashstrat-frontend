@@ -16,7 +16,6 @@
             "depositToken": "USDC",
             "investTokens": ["WETH"],
             "strategy": "rebalance_01,meanrev_01,trendfollow_01",
-
             "disabled": "false"
         },
         {

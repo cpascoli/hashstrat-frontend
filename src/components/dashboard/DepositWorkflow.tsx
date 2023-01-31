@@ -1,11 +1,11 @@
-import { useTokenBalance } from "@usedapp/core"
+import { useState, useEffect } from "react";
+import { Link as RouterLink } from "react-router-dom"
+import { useTokenBalance, Velas } from "@usedapp/core"
 
 import { makeStyles, Box, Link, Typography, Button, Paper,  Stepper, StepLabel, Step, Popover    } from "@material-ui/core"
 import { Info } from "@material-ui/icons"
-
 import Carousel from 'react-material-ui-carousel'
 
-import { useState, useEffect } from "react";
 
 import { SnackInfo } from "../SnackInfo"
 
@@ -13,7 +13,7 @@ import { Token } from "../../types/Token"
 import { DepositForm } from "../wallet/DepositForm"
 
 import { usePoolsInfo, useIndexesInfo, PoolData } from "../dashboard/DashboadModel"
-import { Horizontal } from "../Layout";
+import { Horizontal, Vertical } from "../Layout";
 import { StyledAlert } from "../shared/StyledAlert"
 
 
@@ -25,6 +25,9 @@ import { fromDecimals } from "../../utils/formatter"
 import wbtc from "../img/wbtc.png"
 import weth from "../img/weth.png"
 
+import { Launch } from "@material-ui/icons"
+
+import { strategyItems } from "../home/StrategyCarousel"
 
 
 interface DespositWorkflowProps {
@@ -46,7 +49,7 @@ const useStyles = makeStyles( theme => ({
 
     assetsList: {
         marginTop: 50,
-        maxWidth: 500,
+        maxWidth: 900,
         margin: 'auto',
         [theme.breakpoints.down('xs')]: {
             display: "none"
@@ -59,37 +62,37 @@ const useStyles = makeStyles( theme => ({
     },
 
     assetContainer: {
+        margin: "auto",
+        padding: theme.spacing(2),
+        minWidth: 150,
+        border: `1px solid ${theme.palette.secondary.main}`,
+        borderRadius: 12,
+        paddingBottom: 10,
+
         [theme.breakpoints.down('xs')]: {
-            marginLeft: 80,
-            marginRight: 80,
+            minWidth: 280,
+            marginLeft: 30,
+            marginRight: 30
         },
     },
     asset: {
-        margin: theme.spacing(0),
-        padding: theme.spacing(1),
-        // border: `1px solid ${theme.palette.primary.main}`,
-        borderRadius: 12,
-        minWidth: 90,
-        height: 80,
-        color: theme.palette.text.primary,
+        margin: "auto",
+        // padding: theme.spacing(1),
+        minWidth: 170,
     },
 
     strategy: {
-        margin: theme.spacing(0),
-        padding: theme.spacing(1),
-        // border: `1px solid ${theme.palette.primary.main}`,
+        marginLeft: 70,
+        marginRight: 70,
+        padding: theme.spacing(2),
+        minWidth: 350,
+        border: `1px solid ${theme.palette.secondary.main}`,
         borderRadius: 12,
-        maxWidth: 300,
-        minHeight: 120,
-        color: theme.palette.text.primary
-    },
-
-    carouselItemContainer: {
-        marginLeft: 80,
-        marginRight: 80,
+        paddingBottom: 10,
         [theme.breakpoints.down('xs')]: {
-            marginLeft: 60,
-            marginRight: 60
+            minWidth: 280,
+            marginLeft: 30,
+            marginRight: 30
         },
     }
 
@@ -117,7 +120,7 @@ const assetNames = {
 
 const assetImages = ['WBTC','WETH'].map( (item, idx) => {
     const imageSrc = item === 'WBTC' ? wbtc : item === 'WETH' ? weth : ''
-    return <img key={idx} src={imageSrc} style={{width: 35, height: 35}} alt={`${item}`} />
+    return <img key={idx} src={imageSrc} style={{width: 45, height: 45}} alt={`${item}`} />
 })
 
 
@@ -145,8 +148,6 @@ const filterPools = (chainId: number, poolsInfo: PoolData[], poolId: string | un
 
     return filtered
 }
-
-
 
 
 
@@ -193,9 +194,7 @@ export const DepositWorkflow = ({ chainId, depositToken, investTokens, isInitial
 
     // const selectedStrategy = strategy == -1 ? undefined : strategies[strategy]
 
-    const poolsForAssets = filterPools(chainId, [...indexes, ...pools], selectedPool, selectedAsset, false).map( pool => { 
-        return pool.poolId
-    })
+    const poolsForAssets = filterPools(chainId, [ ...pools, ...indexes], selectedPool, selectedAsset, false).map( pool => pool.poolId  )
 
 
     const poolsViews = poolsForAssets?.map( (poolId, idx) => {
@@ -204,64 +203,94 @@ export const DepositWorkflow = ({ chainId, depositToken, investTokens, isInitial
         const info = PoolInfo(chainId, poolId)
         const strategyName =  strategyNames[info.strategy as keyof typeof strategyNames] || info.strategy
 
+        const strategyInfo = strategyItems.find( it => it.name === strategyName)
+
         return (
-            <Box px={1} key={idx}>
+            <Box key={idx} className={classes.strategy}>
 
-                <div className={classes.carouselItemContainer}>
+                <Typography align="center" variant="h6" style={{ marginTop: 0 }}>{strategyName}</Typography>
+                <Typography align="center" variant="body2" style={{ marginTop: 0 }}>{description}</Typography>
 
-                <Button color="secondary" onClick={() => didSelectPool(poolId)} variant={selectedPool === poolId? 'contained' : 'outlined'} style={{ textTransform:'none'}} >
-                    <Box className={classes.strategy} >
-                        <Typography variant="h6">{strategyName}</Typography>
-                        <Typography variant="body2" style={{ marginTop: 10 }}>{description}</Typography>
+                { strategyInfo && 
+                    <Horizontal align='center' valign='center'> 
+                        <Box pt={2}>
+                            <Link component={RouterLink}  to={`/sim?strategy=${strategyInfo.id}&from=2019-01-01`} target="_blank" style={{ paddingRight: 30 }} > Strategy Simulator <Launch style={{ height: 15, transform: "translateY(2px)" }} /> </Link>
+                            <Link href={strategyInfo.link} target="_blank" > Learn More <Launch style={{ height: 15, transform: "translateY(2px)" }} />  </Link>
+                        </Box>
+                    </Horizontal>
+                
+                }
+             
+                <Horizontal align="center">
+                    <Box mt={3} mb={1}>
+                        <Button variant="outlined" color="primary" onClick={() => didSelectPool(poolId)} style={{ textTransform:'none'}} >
+                            Select
+                        </Button>  
                     </Box>
-                </Button>
-
-                </div>
+                </Horizontal> 
             </Box>
         )
     })
 
     const assetViews = [
         <Box p={1} key={0} className={classes.assetContainer} >
-            <Button color="secondary" onClick={() => didSelectAsset('wbtc')} variant={selectedAsset === 'wbtc' ? 'contained' : 'outlined'} >
                 <div className={classes.asset} >
-                    <Box>BTC</Box>
-                    {assetImages[0]}
+                    <Vertical align="center">
+                        <Box py={1}>BTC</Box>
+                        {assetImages[0]}
+                    </Vertical>
                 </div>
-            </Button>
+                <Box mt={2} mb={1}>
+                    <Horizontal align="center">
+                        <Button variant="outlined" color="primary" onClick={() => didSelectAsset('wbtc')}  style={{ textTransform:'none'}} >
+                            Select
+                        </Button>  
+                    </Horizontal> 
+                </Box>
         </Box>,
         
         <Box p={1} key={1} className={classes.assetContainer}>
-            <Button color="secondary" onClick={() => didSelectAsset('weth')} variant={selectedAsset === 'weth' ? 'contained' : 'outlined'}>
-                <div className={classes.asset} >
-                    <Box>ETH</Box>
+            <div className={classes.asset} >
+                <Vertical align="center">
+                    <Box py={1}>ETH</Box>
                     {assetImages[1]}
-                </div>
-            </Button>
+                </Vertical>
+            </div>
+            <Box mt={2} mb={1}>
+                <Horizontal align="center">
+                    <Button variant="outlined" color="primary" onClick={() => didSelectAsset('weth')}  style={{ textTransform:'none'}} >
+                        Select
+                    </Button>  
+                </Horizontal> 
+            </Box>
         </Box>,
 
         <Box p={1} key={2} className={classes.assetContainer}>
-            <Button color="secondary" onClick={() => didSelectAsset('wbtc,weth')} variant={selectedAsset === 'wbtc,weth' ? 'contained' : 'outlined'}>
-                <div className={classes.asset} >
-                    <Box>BTC + ETH </Box>
+            <div className={classes.asset} >
+                <Vertical align="center">
+                    <Box py={1}>BTC + ETH </Box>
                     <Horizontal align="center">
                         {assetImages[0]}
                         {assetImages[1]}
                     </Horizontal>
-                </div>
-            </Button>
+                </Vertical>
+            </div>
+            <Box mt={2} mb={1}>
+                <Horizontal align="center">
+                    <Button variant="outlined" color="primary" onClick={() => didSelectAsset('wbtc,weth')} style={{ textTransform:'none'}} >
+                        Select
+                    </Button>  
+                </Horizontal> 
+            </Box>
         </Box>
     ]
 
 
     const hideModalPreseed = () => {
-        console.log("hideModalPreseed")
         reset()
     }
 
-    const handleAllowanceUpdated = () => {
-        console.log("handleAllowanceUpdated")
-    }
+    const handleAllowanceUpdated = () => {}
 
 
     ////// STEPPER
@@ -352,7 +381,7 @@ export const DepositWorkflow = ({ chainId, depositToken, investTokens, isInitial
                             Deposit
                         </Typography>
                         <Typography variant="body1"  style={{marginTop: 5}} align="center">
-                            Select a combination of assets and management strategies for this deposit.
+                            Select a combination of risk assets and portfolio management strategies for this deposit.
                         </Typography>
                     </Box>
 
@@ -381,7 +410,7 @@ export const DepositWorkflow = ({ chainId, depositToken, investTokens, isInitial
                         </Popover> 
 
                         <Typography variant="body1" style={{marginTop: 10}}>
-                            Select a combination of assets and management strategies, deposit {depositToken.symbol} tokens, and HashStrat will build a portfolio for you. <br/>
+                            Select a combination of risk assets, select your portfolio management strategy, deposit {depositToken.symbol}, and HashStrat will build your portfolio. <br/>
                         </Typography>
 
                     </Box>

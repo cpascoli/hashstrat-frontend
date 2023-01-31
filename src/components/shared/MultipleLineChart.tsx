@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { useState, useEffect } from "react"
-import { Box, Button, Typography } from  "@material-ui/core"
+import { Box, Button, Typography, Switch } from  "@material-ui/core"
+
 
 import {
 	CartesianGrid,
@@ -37,9 +38,13 @@ export interface ChartData {
 
 export const MultipleLineChart = (chartData: ChartData) => {
 
+	// console.log("MultipleLineChart - enter", new Date().toISOString().split('T')[1])
+
 	const start = (chartData.data && chartData.data.length > 1) ? chartData.data[0].time : undefined
 	const end = (chartData.data && chartData.data.length > 1) ? chartData.data[chartData.data.length - 1].time : undefined
-	// 1618099200000  1674172800000
+
+	let [scale, setScale] = useState<"log" | "linear">(chartData.scale);
+
 
 	let [domain, setDomain] = useState({
 		left: start,
@@ -55,7 +60,7 @@ export const MultipleLineChart = (chartData: ChartData) => {
 	});
 
 
-	let [data, setData] = useState<TimeSeriesData[]>();
+	let [data, setData] = useState<TimeSeriesData[]>(chartData.data);
 
 
 	useEffect(() => {
@@ -64,10 +69,10 @@ export const MultipleLineChart = (chartData: ChartData) => {
 				left: start,
 				right: end
 			})
-	
+			// console.log("MultipleLineChart - reset chart data", new Date().toISOString().split('T')[1])
 			setData( chartData.data )
 		}
-	}, [start, end])
+	}, [start, end, chartData])
 
 
 	// react to zoom changes and upate chart data and doamin
@@ -116,6 +121,10 @@ export const MultipleLineChart = (chartData: ChartData) => {
 		})
 	}
 
+	const toggleScale = () => {
+		setScale( (scale === 'log') ? 'linear' : 'log')
+	}
+
 
 	if ( data === undefined || domain.left === undefined || domain.right === undefined) {
 		return (
@@ -128,13 +137,21 @@ export const MultipleLineChart = (chartData: ChartData) => {
 	return (
 		<>
 			<Box style={{ minHeight: 30 }}>
-				{ domain.left !== start && domain.right !== end && <Box style={{ display: "flex", alignItems: "center", justifyContent: "right" }} >
-					<Typography> zoom out </Typography>
-					<Button style={{width: 30, height: 30}} onClick={resetZoom}> <ZoomOutMap /> </Button>
-					{/* [{ new Date(domain.left).toISOString().split('T')[0] }, { new Date(domain.right).toISOString().split('T')[0] }] */}
+			
+				<Box style={{ display: "flex", alignItems: "center", justifyContent: "right" }} >
+					Log scale <Switch
+						checked={scale === 'log'}
+						onChange={toggleScale}
+						name="toggleScale"
+						color="primary"
+					/> 
+					{ domain.left !== start && domain.right !== end && 
+						<Button style={{width: 30, height: 30}} onClick={resetZoom}> <ZoomOutMap /> </Button> 
+					}
 				</Box>
-				}
+			
 			</Box>
+
 		
 			<ResponsiveContainer width='100%' height={400} >
 				
@@ -169,6 +186,21 @@ export const MultipleLineChart = (chartData: ChartData) => {
 
 					onMouseUp={(e) => {
 							if (e !== null) {
+								
+								const min = Math.min(zoom.left!, Number(e.activeLabel))
+								const max = Math.max(zoom.left!, Number(e.activeLabel))
+
+								console.log("onMouseUp", (max - min) / 1000 )
+
+								if ( (max - min) / 1000 < 7 * 86400) {
+									setZoom(({ 
+										left: undefined, 
+										drag: undefined,
+										right: undefined
+									}))
+									return
+								}
+
 								setDomain((oldDomain) => ({ 
 									left: Math.min(zoom.left!, Number(e.activeLabel)), 
 									right: Math.max(zoom.left!, Number(e.activeLabel))
@@ -187,34 +219,33 @@ export const MultipleLineChart = (chartData: ChartData) => {
 
 					<XAxis
 						dataKey='time'
+						name='Time'
 						domain={[domain.left, domain.right]}
 						allowDataOverflow={true}
-
-						name='Time'
 						tickFormatter={(unixTime) => moment(unixTime).format('yyyy-MM-DD')}
 						type='number'
+						scale="auto"
 					/>
 
 					{zoom.left && zoom.drag ? (
-					<ReferenceArea
+						<ReferenceArea
 							yAxisId="right-axis"
 							x1={zoom.left}
 							x2={zoom.drag}
 							strokeOpacity={0.3}
-					/>
+						/>
 					) : null}
 
-					<YAxis name="Y Axis"
+					<YAxis 
+						name="Y Axis"
 						type="number"
 						yAxisId="right-axis"
 						orientation="right"
-						// domain={[0, 'auto']}
-						// scale={ scaleLog().base(Math.E) }
-						scale={chartData.scale === 'log' ? 'log' : 'linear'}
+						scale={scale} //   chartData.scale === 'log' ? 'log' : 'linear'
 						domain={chartData.yAxisRange ? chartData.yAxisRange : ['auto', 'auto']}
 					/>
 
-					<Legend verticalAlign="top" height={30} />
+					<Legend verticalAlign="bottom" height={30} />
 					<Tooltip
 						labelFormatter={(unixTime) => moment(unixTime).format('yyyy-MM-DD')}
 				
@@ -224,8 +255,8 @@ export const MultipleLineChart = (chartData: ChartData) => {
 						type="linear"
 						dataKey={chartData.label1}
 						yAxisId="right-axis"
-						stroke="#2364aa"
-						fill="#2364aa"
+						stroke="#64b5f6"
+						fill="#64b5f6"
 						isAnimationActive={false}
 						dot={false}
 						label={renderCustomizedLabel}
@@ -273,4 +304,5 @@ export const MultipleLineChart = (chartData: ChartData) => {
 		</>
 	)
 }
+
 

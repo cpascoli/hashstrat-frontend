@@ -57,8 +57,6 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
 
     const classes = useStyle()
 
-    // const { chainId  : initialChainId }  = useEthers()
-
     // chainId can be undefined when the user is connected to a non supported network 
     // when no account is connected it defaults to Polygon
     const [chainId, setChainId] = useState<number | undefined>(defaultChainId); 

@@ -1,6 +1,6 @@
 import { constants, BigNumber } from "ethers"
 import { useContractFunction, useCall } from "@usedapp/core"
-import { PoolContract, PoolLPContract } from "../utils/network"
+import { PoolContract } from "../utils/network"
 import { SwapInfo } from "../types/SwapInfo"
 
 //// User Actions ////
@@ -49,63 +49,21 @@ export const usePortfolioValue = (chainId: number, poolId: string, account: stri
 }
 
 
-
-//TODO 
-// When the MultiPool contract will support lpTokensValue(), we should use that for both Pools & Indexes
-// For now we need to calculate LP value on the client using pool/index value and from LP supply
 export const useLpTokensValue = (chainId: number, poolId: string, amount: string) => {
 
+    console.log("useLpTokensValue: amount: ", chainId, poolId, `amount: '${amount}'`)
+
     const poolContract = PoolContract(chainId, poolId)
-    const poolLPPontract = PoolLPContract(chainId, poolId)
-
-    const { value : portfolioValue, error : error0 } = useCall({
-        contract: poolContract,
-        method: /v3.?$/.test(poolId) ? 'totalValue' : 'totalPortfolioValue',
-        args: [],
+    const { value, error } = useCall({
+            contract: poolContract,
+            method: 'lpTokensValue',
+            args: amount === '' ? [0] : [amount],
     }) ?? {}
 
-    error0 && console.error("error in custom hook: ", error0)
 
-    const { value : multiPoolValue, error : error1 } = useCall({
-        contract: poolContract,
-        method: /v3.?$/.test(poolId) ? 'totalValue' : 'multiPoolValue',
-        args: [],
-    }) ?? {}
-
-    error1 && console.error("error in custom hook: ", error1)
-
-
-    const totValue0 = portfolioValue?.[0]
-    const totValue1 = multiPoolValue?.[0]
-    const totValue = totValue0 ?  totValue0: totValue1
-
-    const { value : totalSupply, error : error2 } = useCall({
-            contract: poolLPPontract,
-            method: 'totalSupply',
-            args: [],
-    }) ?? {}
-
-    error2 && console.error("error in custom hook: ", error2)
-
-
-    const totSupply = totalSupply?.[0]
-
-    const lpValue = ( amount !== '' && totValue && totSupply && !totSupply.isZero()) ?  totValue.mul(BigNumber.from(amount)).div(totSupply) : undefined
-
-    return lpValue?.toString()
+    error && console.error("useLpTokensValue: error in custom hook: ", error)
+    return value?.[0].toString()
 }
-
-// export const useLpTokensValue = (chainId: number, poolId: string, amount: string) => {
-//     const poolContract = PoolContract(chainId, poolId)
-//     const { value, error } = useCall({
-//             contract: poolContract,
-//             method: 'lpTokensValue',
-//             args: amount !== '' ? [amount] : [],
-//     }) ?? {}
-
-//     useDebugValue(value?.[0].toString())
-//     return value?.[0].toString()
-// }
 
 
 export const useGetDeposits = (chainId: number, poolId: string, account: string) => {

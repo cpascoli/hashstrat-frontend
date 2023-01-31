@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import moment from 'moment'
-import { makeStyles, Box, Paper, TextField, MenuItem, Tab } from  "@material-ui/core"
+import { makeStyles, Box, Paper, TextField, MenuItem, Tab, Typography } from  "@material-ui/core"
 import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 
 import { SimulatorInastance, StrategyName } from "../../services/simulator/SimulatorService"
@@ -68,6 +68,14 @@ const useStyle = makeStyles( theme => ({
         width: 120,
         [theme.breakpoints.down('xs')]: {
             width: 90,
+		},
+    },
+    infoCard: {
+        paddingTop: 40,
+        marginRight: 30,
+        [theme.breakpoints.down('xs')]: {
+            paddingTop: 0,
+            marginRight: 0,
 		},
     },
     chart: {
@@ -158,50 +166,52 @@ export const StrategyPlayground = ({ chainId, strategy, from, to, symbol, chartH
 
                 <TabContext value={selectedTokenIndex.toString()}>
                     <TabList onChange={handleChange} >
-                        <Tab label="Returns" value="0" key={0} />
+                        <Tab label="ROI" value="0" key={0} />
                         <Tab label="Drawdowns" value="1" key={1}  />
                     </TabList>
 
                     <TabPanel value="0" key={0} className={classes.tabs} >
-                        <Horizontal align="center" >
-                            <Box py={0} >
-                                    {/* <InfoCard 
-                                        type="amount"
-                                        title="Portfolio Value" value={lastRoi?.strategyValue} 
-                                        detailTitle="Buy-and-hold" detailValue={lastRoi?.buyAndHoldValue} 
-                                    /> */}
+                        <Box py={0} >
+                            { roiInfos &&
+                                <Box className={classes.infoTab}>
+                                    <Horizontal align="center" valign='top'>
+                                        <Box className={classes.infoCard}>
+                                            <InfoCard 
+                                                type="percentage"
+                                                title="Strategy ROI" value={ Math.round(lastRoi?.strategyROI ?? 0) } 
+                                                detailTitle="Buy-and-hold" detailValue={ Math.round(lastRoi?.buyAndHoldROI ?? 0) } 
+                                            /> 
+                                        </Box>
 
-                                { roiInfos &&
-                                    <Box className={classes.infoTab}>
-                                        <InfoCard 
-                                            type="percentage"
-                                            title="Strategy ROI" value={lastRoi?.strategyROI} 
-                                            detailTitle="Buy-and-hold" detailValue={lastRoi?.buyAndHoldROI} 
-                                        /> 
                                         <Box className={classes.chart} >
                                             <ROIChart roiInfos={roiInfos} height={chartHeight} /> 
                                         </Box>
-                                    </Box>
-                                }
-    
-                            </Box>
-                        </Horizontal>
+                                    </Horizontal>
+                                </Box>
+                            }
 
+                        </Box>
                     </TabPanel>
 
                     <TabPanel value="1" key={1} className={classes.tabs} >
-                        { roiInfos &&
-                            <Box className={classes.infoTab}>
-                                <InfoCard 
-                                    type="percentage"
-                                    title="Max Drawdown" value={lastRoi?.maxStrategyDrawdownPerc} 
-                                    detailTitle="Buy-and-hold" detailValue={lastRoi?.maxBuyAndHoldDrawdownPerc} 
-                                /> 
-                                <Box className={classes.chart}>
-                                    <DrawdownChart roiInfos={roiInfos} height={chartHeight} /> 
+                        <Box py={0} >
+                            { roiInfos &&
+                                <Box className={classes.infoTab}>
+                                    <Horizontal align="center" valign='top'>
+                                        <Box className={classes.infoCard}>
+                                            <InfoCard 
+                                                type="percentage"
+                                                title="Max Drawdown" value={ Math.round(lastRoi?.maxStrategyDrawdownPerc ?? 0) } 
+                                                detailTitle="Buy-and-hold" detailValue={ Math.round(lastRoi?.maxBuyAndHoldDrawdownPerc ?? 0) } 
+                                            /> 
+                                        </Box>
+                                        <Box className={classes.chart}>
+                                            <DrawdownChart roiInfos={roiInfos} height={chartHeight} /> 
+                                        </Box>
+                                    </Horizontal>
                                 </Box>
-                            </Box>
-                        }
+                            }
+                        </Box>
                     </TabPanel>
 
                 </TabContext>

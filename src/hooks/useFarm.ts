@@ -17,7 +17,7 @@ export const useStakedTokenBalance = (chainId: number, poolId: string, account?:
         args:  account ? [account, lptokenAddress] : [constants.AddressZero, lptokenAddress],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -70,7 +70,7 @@ export const useClaimableRewards = (chainId: number, account?: string) => {
         args: account ? [account] : [constants.AddressZero],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0].toString()
 }
 
@@ -83,7 +83,7 @@ export const useGetRewardPeriods = (chainId: number, account?: string) => {
         args: [],
     }) ?? {}
 
-    error && console.error("error in custom hoock: ", error)
+    error && console.error("error in custom hook: ", error)
     return value?.[0]
 }
 

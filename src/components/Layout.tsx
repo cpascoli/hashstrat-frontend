@@ -51,14 +51,12 @@ const useStyles = makeStyles( theme => ({
         gap: theme.spacing(2),
         width: "100%"
     },
-
-
     verticalCenter: {
         display: "flex",
+        flexDirection: "column",
         height: "100%",
-        justifyContent: "space-around",
+        alignItems: "center",
     },
-
 }))
 
 export const Page = ({ children } : ChildrenProps) => {
@@ -89,7 +87,7 @@ export const Horizontal = ({ children, align = "left" , valign, spacing } : Chil
 export const Vertical = ({children } : ChildrenProps) => {
     const classes = useStyles()
     return (
-        <div className={ classes.verticalCenter} >
+        <div className={classes.verticalCenter} >
             {children}
         </div>
     )

@@ -50,7 +50,7 @@ export const TimeSeriesAreaChart = ( chartData  : ChartData ) => {
       <YAxis name="Asset 1" scale="auto" id="asset1" orientation='right' />
       <YAxis name="Asset 2" scale="auto" id="asset2" orientation='right' />
 
-      <Legend verticalAlign="top" height={30}/>
+      <Legend verticalAlign="bottom" height={30}/>
 
       <CartesianGrid strokeDasharray="1 1" />
       <Tooltip labelFormatter={(unixTime) => moment(unixTime).format('yyyy-MM-DD')} />
@@ -59,8 +59,8 @@ export const TimeSeriesAreaChart = ( chartData  : ChartData ) => {
         type="linear"
         dataKey={chartData.label1}
         stackId="1"
-        stroke="#8884d8"
-        fill="#8884d8"
+        stroke="#64b5f6"
+        fill="#64b5f6"
         isAnimationActive={false}
       />
 

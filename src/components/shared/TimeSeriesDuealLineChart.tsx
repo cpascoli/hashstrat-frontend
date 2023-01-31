@@ -76,7 +76,7 @@ export const TimeSeriesDualLineChart = ( chartData  : ChartData ) => {
         domain={['auto', 'auto'] } 
       />
 
-      <Legend verticalAlign="top" height={30}/>
+      <Legend verticalAlign="bottom" height={30}/>
       <Tooltip 
         labelFormatter={(unixTime) => moment(unixTime).format('yyyy-MM-DD')}
       />
@@ -85,8 +85,8 @@ export const TimeSeriesDualLineChart = ( chartData  : ChartData ) => {
         type="linear"
         dataKey={chartData.label1}
         yAxisId="right-axis"
-        stroke="#8884d8"
-        fill="#8884d8"
+        stroke="#64b5f6"
+        fill="#64b5f6"
         isAnimationActive={false}
         dot={false}
       />

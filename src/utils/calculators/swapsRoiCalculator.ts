@@ -122,8 +122,8 @@ const roiInfoForSwaps = (
         let riskAssetAmountBefore = riskAssetAmount
         let stableAssetAmountBefore = stableAssetAmount
      
-        //// FIXME
         //// update token balances according to the swap performed 
+        // the computed stableAssetAmount/riskAssetAmount balances don't take into account the actual balance of the pools (depositTokenBalance/investTokenBalance) that can vary due to deposits & withdrawals
         if (data.side === 'BUY') {
             const stableAssetSold = stableAssetAmount * stableAssetPercTraded
             stableAssetAmount -= stableAssetSold

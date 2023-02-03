@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom"
-import { useTokenBalance, Velas } from "@usedapp/core"
+import { useTokenBalance } from "@usedapp/core"
 
 import { makeStyles, Box, Link, Typography, Button, Paper,  Stepper, StepLabel, Step, Popover    } from "@material-ui/core"
 import { Info } from "@material-ui/icons"

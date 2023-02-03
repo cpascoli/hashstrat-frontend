@@ -5,7 +5,7 @@ import { Button, Typography, makeStyles, Divider, Link, Box, Paper } from "@mate
 import { Link as LinkRouter } from "react-router-dom"
 import { InfoBox } from "./InfoBox"
 
-import { Horizontal } from "./Layout"
+import { Horizontal, Vertical } from "./Layout"
 import { FaqContent } from "./faq/FaqContent"
 import { StrategyCarousel } from "./home/StrategyCarousel"
 
@@ -16,12 +16,30 @@ import dao from "./img/dao.svg"
 import experienceDefi from "./img/experience-defi.png"
 
 
+import background from "./img/homepage-bg.jpg"
+import backgroundSmall from "./img/homepage-bg-small.jpg"
+import backgroundDark from "./img/homepage-bg-dark.jpg"
+import backgroundDarkSmall from "./img/homepage-bg-dark-small.jpg"
 
 const useStyle = makeStyles(theme => ({
 
     topSection: {
+
         paddingTop: 70,
         paddingBottom: 50,
+
+        height: "80vh", 
+        minHeight: 600,
+
+        backgroundImage: theme.palette.type === 'light' ? `url( ${background} )` : `url( ${backgroundDark} )` ,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+
+        [theme.breakpoints.down('xs')]: {
+            backgroundImage: theme.palette.type === 'light' ? `url( ${backgroundSmall} )` :  `url( ${backgroundDarkSmall} )` ,
+        },
+
         [theme.breakpoints.down('sm')]: {
             paddingTop: 50,
             paddingBottom: 50,
@@ -33,38 +51,63 @@ const useStyle = makeStyles(theme => ({
         margin: "auto",
         paddingLeft: 10,
         paddingRight: 10,
+        // width: '100%',
         [theme.breakpoints.down('sm')]: {
             maxWidth: 600,
         },
     },
+
     title: {
         margin: 0,
-        maxWidth: 800,
         fontFamily: "Alexandria",
         fontWeight: 600,
-        fontSize: "2.8rem",
         color:  theme.palette.type === 'light' ? theme.palette.grey[800] : theme.palette.text.primary,
+        
+        [theme.breakpoints.down('xl')]: {
+            fontSize: "4.8rem",
+            maxWidth: 1300,
+            marginRight: 200,
+            marginBottom: 50,
+        },
+
+        [theme.breakpoints.down('lg')]: {
+            fontSize: "2.8rem",
+            maxWidth: 900,
+            marginRight: 30,
+        },
 
         [theme.breakpoints.down('xs')]: {
             fontSize: "1.9rem",
-            textAlign: 'center'
+            textAlign: 'center',
+            maxWidth: 800,
+            marginRight: 0
         },
     },
+
     subtitle: {
         fontFamily: "Roboto",
         fontWeight: 300,
         maxWidth: 800,
         fontSize: "1.5rem",
         color: theme.palette.type === 'light' ? theme.palette.grey[700] : '#ffaf49',
+
+        [theme.breakpoints.down('xl')]: {
+            fontSize: "1.8rem",
+            fontWeight: 400,
+            maxWidth: 1200,
+        },
+        [theme.breakpoints.down('lg')]: {
+            fontSize: "1.5rem",
+            maxWidth: 900,
+        },
         [theme.breakpoints.down('xs')]: {
             fontSize: "1.3rem",
-            textAlign: 'center'
+            textAlign: 'left'
         },
     },
 
-
     actionButtons: {
-        marginTop: 60, 
+        paddingTop: 50, 
         marginBottom: 30,
         maxWidth: 500,
         margin: 'auto',
@@ -72,6 +115,13 @@ const useStyle = makeStyles(theme => ({
             marginTop: 60,
         },
     },
+
+    secondaryButton: {
+        width: 200, 
+        height: 40, 
+        backgroundColor: theme.palette.type === 'light' ? 'rgb(255, 255, 255, 0.7)': 'rgba(0, 0, 0, 0.7)'
+    },
+
     carouselSection: {
         margin: "auto",
         paddingTop: 0,
@@ -115,9 +165,9 @@ const useStyle = makeStyles(theme => ({
          maxWidth: 1200,
          margin: "auto",
 
-         [theme.breakpoints.down('sm')]: {
-            maxWidth: 400,
-        },
+        // [theme.breakpoints.down('sm')]: {
+        //     maxWidth: 900,
+        // },
     },
 
     valuesSection: {
@@ -141,11 +191,13 @@ const useStyle = makeStyles(theme => ({
             display: "none",
         },
     },
+
     imageDeFi: {
         content: `url( ${experienceDefi} )`,
         maxWidth: "320px",
         filter: theme.palette.type === 'light' ? "grayscale(0.6)" : "grayscale(0.6)",
     },
+    
     brightnessFilter: {
         filter:  theme.palette.type === 'light' ? "brightness(1)" : "brightness(1)"
     },
@@ -170,9 +222,9 @@ export const Home = ({ chainId }: HomeProps) => {
         <Divider style={{ marginTop: 0, marginBottom: 0 }} />
 
             <section className={classes.topSection}>
-                    
-                        <div className={classes.titleSection} >
-                            <Horizontal align="center">
+               <Vertical>
+                    <div className={classes.titleSection} >
+                            <Horizontal>
                                 <div>
                                     <div>
                                         <div className={classes.title}>
@@ -180,8 +232,12 @@ export const Home = ({ chainId }: HomeProps) => {
                                         </div>
                                         <div className={classes.subtitle}>
                                             <ul>
-                                                <li>Use proven on-chain strategies to build your digital asset portfolio, capture volatility and manage risk in your investment. </li>
-                                                <li>Stay in control of your assets and watch your portfolio grow. </li>
+                                                <li style={{ paddingBottom: 10 }}>
+                                                    Use proven on-chain strategies to build your digital asset portfolio, capture volatility and manage risk in your investment.
+                                                </li>
+                                                <li>
+                                                    Stay in control of your assets and watch your portfolio grow.
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -191,40 +247,44 @@ export const Home = ({ chainId }: HomeProps) => {
                                                 <Button variant="contained" color="primary" style={{ width: 200, height: 40 }} >Launch App</Button>
                                             </Link>
                                             <Link href="./whitepaper.pdf" target="_blank" style={{ textDecoration: 'none' }} >
-                                                <Button variant="outlined" color="primary" style={{ width: 200, height: 40 }} >White paper</Button>
+                                                <Button variant="outlined" color="primary" className={classes.secondaryButton} >White paper</Button>
                                             </Link>
                                         </Horizontal>
                                     </div>
                                 </div>
 
-                                <Paper>
-                                    <div className={classes.infoSection}>
+                                
+                                <div className={classes.infoSection}>
+                                    <Paper>
                                         <div className={classes.brightnessFilter}>
                                             <img className={classes.imageDeFi} alt="Info graphics"/>
                                         </div>
-                                        <Horizontal> 
+                                       <Box pb={3}>
                                             <ol>
                                                 <li>
                                                     <Typography variant="body2" >Build your digital asset portfolio</Typography> 
                                                 </li>
                                                 <li>
-                                                <Typography variant="body2" >Earn DAO tokens</Typography> 
+                                                    <Typography variant="body2" >Earn DAO tokens</Typography> 
                                                 </li>
                                                 <li>
-                                                <Typography variant="body2" >Participate in DAO Governance</Typography> 
+                                                    <Typography variant="body2" >Participate in DAO Governance</Typography> 
                                                 </li>
                                                 <li>
-                                                <Typography variant="body2" >Collect protocol dividends</Typography> 
+                                                    <Typography variant="body2" >Collect protocol dividends</Typography> 
                                                 </li>
                                             </ol>
-                                        </Horizontal>
-                                    </div>
-                                </Paper>
+                                        </Box>
+
+                                    </Paper>
+                                 </div>
+                                
 
                             </Horizontal>
-                        </div>
-             
-
+                    
+                    </div>
+                </Vertical>
+              
             </section>
 
             <section className={classes.carouselSection} >

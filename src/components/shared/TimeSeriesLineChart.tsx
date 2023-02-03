@@ -1,5 +1,4 @@
 import moment from 'moment'
-import { scaleLog } from 'd3-scale';
 
 import {
   CartesianGrid,

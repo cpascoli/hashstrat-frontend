@@ -24,10 +24,6 @@ import { SimHome } from "./simulator/SimHome"
 
 import { Footer } from "./Footer"
 
-import background from "./img/homepage-bg.jpg"
-import backgroundSmall from "./img/homepage-bg-small.jpg"
-import backgroundDark from "./img/homepage-bg-dark.jpg"
-import backgroundDarkSmall from "./img/homepage-bg-dark-small.jpg"
 
 interface MainProps {
     toggleDark: boolean,
@@ -36,14 +32,9 @@ interface MainProps {
 
 const useStyle = makeStyles( theme => ({
     container: {
+        transform: "scale(1.0)",
         margin: "auto",
         backgroundColor: theme.palette.type === 'light' ? 'white' : theme.palette.grey[900],
-        backgroundImage: theme.palette.type === 'light' ? `url( ${background} )` : `url( ${backgroundDark} )` ,
-
-        [theme.breakpoints.down('xs')]: {
-            backgroundImage: theme.palette.type === 'light' ? `url( ${backgroundSmall} )` :  `url( ${backgroundDarkSmall} )` ,
-        },
-
     }
 }))
 

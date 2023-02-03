@@ -86,7 +86,7 @@ const App = () => {
 		<ThemeProvider theme={{ ...appTheme }}>
 			<DAppProvider config={useDappConfig}>
 				<CssBaseline />
-				<Container maxWidth="xl" disableGutters>
+				<Container maxWidth={false} disableGutters>
 					<Main toggleDark={toggleDark} setToggleDark={setToggleDark} />
 				</Container>
 			</DAppProvider>

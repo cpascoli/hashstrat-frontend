@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import moment from 'moment'
-import { makeStyles, Box, Paper, TextField, MenuItem, Tab, Typography } from  "@material-ui/core"
+import { makeStyles, Box, Paper, TextField, MenuItem, Tab } from  "@material-ui/core"
 import { TabContext, TabList, TabPanel } from "@material-ui/lab"
 
 import { SimulatorInastance, StrategyName } from "../../services/simulator/SimulatorService"

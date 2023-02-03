@@ -40,7 +40,10 @@ export const VPieChart = ( chartData : ChartData ) => {
   
     labels: categories,
     legend: {
-      position: 'bottom'
+      position: 'bottom',
+      labels: {
+        useSeriesColors: true
+      },
     },
 
     chart: {

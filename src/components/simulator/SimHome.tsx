@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import moment from 'moment'
-import { makeStyles, Box, Paper, TextField, Typography, Select, MenuItem } from  "@material-ui/core"
+import { makeStyles, Box, Paper, TextField, Typography, MenuItem } from  "@material-ui/core"
 
 import { SimulatorInastance, StrategyName } from "../../services/simulator/SimulatorService"
 import { DepositToken, InvestTokens } from "../../utils/pools"

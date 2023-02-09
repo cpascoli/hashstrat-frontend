@@ -104,8 +104,6 @@ export const StrategyPlayground = ({ chainId, strategy, from, to, symbol, chartH
 
     const classes = useStyle()
 
-    // const [searchParams] = useSearchParams();
-
     const fromParam =  moment(from, 'YYYY-MM-DD').isValid() ?
             moment(from).toDate().toISOString() :
             '2019-01-07T00:00:00'

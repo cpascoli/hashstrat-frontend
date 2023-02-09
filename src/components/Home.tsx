@@ -307,8 +307,8 @@ export const Home = ({ chainId }: HomeProps) => {
 
                     <InfoBox title="Self-sovereignty" image={key}>
                         <Typography variant="body2">
-                            Users interact directly with the blockchain through their digital wallets.
-                            Users stay in control of their funds at all times.<br />
+                            Users stay in control of their funds at all times 
+                            and interact directly with the blockchain through their digital wallets.
                             No personal information is ever shared or leaked.
                         </Typography>
                     </InfoBox>

@@ -20,7 +20,7 @@ export const TrendFollowingSummary = () => {
             <div style={{marginTop: 10}}>
                 <Link href="https://medium.com/@hashstrat/trend-following-strategy-7dce9756eaa" target="_blank" > Learn More <Launch style={{ height: 15, transform: "translateY(2px)" }} />  </Link>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <Link href="https://github.com/cpascoli/hashstrat/blob/main/contracts/strategies/TrendFollowV1.sol">GitHub <Launch style={{ height: 15, transform: "translateY(2px)" }} /> </Link>
+                <Link href="https://github.com/hashstrat-labs/hashstrat-pool/blob/master/contracts/strategies/TrendFollowV1.sol">GitHub <Launch style={{ height: 15, transform: "translateY(2px)" }} /> </Link>
             </div>
         </div>
     )

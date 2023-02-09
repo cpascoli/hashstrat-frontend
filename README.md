@@ -1,6 +1,6 @@
 # HashStrat Frontend
 
-This is the frontend to the [HashStrat Smart Contracts](https://github.com/cpascoli/hashstrat) implemented in TypeScript and ReactJS.
+This is the frontend to the [HashStrat Smart Contracts](https://github.com/orgs/hashstrat-labs/repositories) implemented in TypeScript and ReactJS.
 
 The `ethers` and `@usedapp` libraries to facilitate the integration with web3 wallets and the blockchian.
 `material-ui` is used to help making the interface responsive and and the look and feel consistent.

@@ -41,14 +41,11 @@ export class MeanReversion implements Strategy {
     }
 
 
-
     simulate(from: Date, to: Date, amount: number): PoolTokensSwapsInfo | undefined {
 
         // set moving average
         this.movingAverage = this.averagePrice(from, this.movingAveragePeriod) /// 47,957 (350D)
         this.lastEvalTime = ( from.getTime() / 1000 )
-
-
 
         const lastPrice = this.feed.getPrice(to)
         const swaps : SwapInfo[] | undefined = this.getSwaps(from, to, amount)
@@ -88,9 +85,8 @@ export class MeanReversion implements Strategy {
         this.feed.getPrices(from, to).forEach( (it, idx) => {
             
             // update MA only when the strategy is supposed to execute
-            if ((it.date.getTime() / 1000) > this.lastEvalTime + this.executionInterval) {
+            if ((it.date.getTime() / 1000) >= this.lastEvalTime + this.executionInterval) {
                 this.updateMovingAverage(it.price, it.date)
-                // console.log("updateMA: ", it.date.toISOString().split('T')[0], it.price, this.movingAverage)
             }
             
             response.push({
@@ -124,7 +120,6 @@ export class MeanReversion implements Strategy {
 
             // update current price, moving average and lastEvalTimestamp
             this.updateMovingAverage(it.price, it.date)
-         
 
             // evaluate strategy
             const { action, amountIn } = this.evaluateTrade()

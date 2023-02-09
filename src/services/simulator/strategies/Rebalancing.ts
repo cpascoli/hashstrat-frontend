@@ -73,9 +73,9 @@ export class Rebalancing implements Strategy {
         return price.toString()
     }
 
-    getSwaps(from: Date, to: Date, amount: number) : SwapInfo[] | undefined {
+    getSwaps(from: Date, to: Date, initialDepositTokenBalance: number) : SwapInfo[] | undefined {
 
-        this.depositTokenBalance = amount
+        this.depositTokenBalance = initialDepositTokenBalance
 
         // filter for price range
         const prices = this.feed.getPrices(from, to)
@@ -84,7 +84,7 @@ export class Rebalancing implements Strategy {
 
         prices.forEach( (it, idx) => {
 
-            if ( (it.date.getTime() / 1000) < this.lastEvalTime + this.executionInterval) {
+            if (idx > 0 && (it.date.getTime() / 1000) < this.lastEvalTime + this.executionInterval) {
                 return
             }
             

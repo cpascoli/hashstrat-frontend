@@ -86,7 +86,7 @@ export class TrendFollowing implements Strategy {
         this.feed.getPrices(from, to).forEach( (it, idx) => {
             
             // update MA only when the strategy is supposed to execute
-            if ((it.date.getTime() / 1000) > this.lastEvalTime + this.executionInterval) {
+            if ((it.date.getTime() / 1000) >= this.lastEvalTime + this.executionInterval) {
                 this.updateMovingAverage(it.price, it.date)
                 // console.log("updateMA: ", it.date.toISOString().split('T')[0], it.price, this.movingAverage)
             }
@@ -117,10 +117,10 @@ export class TrendFollowing implements Strategy {
             if (idx > 0 && (it.date.getTime() / 1000) < this.lastEvalTime + this.executionInterval) {
                 return
             }
-
+         
             // update current price, moving average and lastEvalTimestamp
             this.updateMovingAverage(it.price, it.date)
-         
+
             // evaluate strategy
             const { action, amountIn } = this.evaluateTrade()
 

@@ -380,8 +380,30 @@ export const DepositWorkflow = ({ chainId, depositToken, investTokens, isInitial
                          <Typography variant="h4" align="center">
                             Deposit
                         </Typography>
-                        <Typography variant="body1"  style={{marginTop: 5}} align="center">
+                        {/* <Typography variant="body1"  style={{marginTop: 5}} align="center">
                             Select a combination of risk assets and portfolio management strategies for this deposit.
+                        </Typography> */}
+
+
+                        <Typography variant="body1" align="center" style={{marginTop: 5}}>
+                            {
+                                (selectedAsset === undefined && selectedPool === undefined) && 
+                                <label>Select the risk assets you want to hold</label>
+                            }
+
+                            {
+                               (selectedAsset !== undefined && selectedPool === undefined) && 
+                               <label>Select the strategy to manage your assets</label>
+                            }
+                            {
+                               (!depositCompleted && selectedAsset !== undefined && selectedPool !== undefined) &&
+                                <label>Now deposit some {depositToken.symbol} and your strategy will invest it</label>
+                            }
+                            {
+                                depositCompleted && <label>Deposit completed!</label>
+                            }
+                            
+                            {/* Select a combination of risk assets, select your portfolio management strategy, deposit {depositToken.symbol}, and HashStrat will build your portfolio. <br/> */}
                         </Typography>
                     </Box>
 
@@ -409,10 +431,6 @@ export const DepositWorkflow = ({ chainId, depositToken, investTokens, isInitial
                             </Box>
                         </Popover> 
 
-                        <Typography variant="body1" style={{marginTop: 10}}>
-                            Select a combination of risk assets, select your portfolio management strategy, deposit {depositToken.symbol}, and HashStrat will build your portfolio. <br/>
-                        </Typography>
-
                     </Box>
                 }
 
@@ -424,9 +442,19 @@ export const DepositWorkflow = ({ chainId, depositToken, investTokens, isInitial
                         <Step key={label} completed={ stepCompleted }>
                         <StepLabel children={
                             <Box>
-                                { (!stepCompleted || idx === steps.length -1) && <Typography>{label}</Typography> }
+                                { (!stepCompleted ) && <Typography>{label}</Typography> }
+                                { (stepCompleted && idx === steps.length -1) && 
+                                    <Link >
+                                        <Typography>{label}</Typography>                                
+                                    </Link>
+                                }
                                 <Link onClick={ e => handleGoBackToStep(idx) } >
-                                    <Typography variant="body2">{ idx === 0 ? assetSelectionStep : idx === 1 ? strategySelectionStep : '' }</Typography>
+                                    <Typography variant="body2">
+                                        { 
+                                            idx === 0 ? assetSelectionStep : 
+                                            idx === 1 ? strategySelectionStep : '' 
+                                        }
+                                    </Typography>
                                 </Link>
                             </Box>
                         } />
@@ -487,13 +515,10 @@ export const DepositWorkflow = ({ chainId, depositToken, investTokens, isInitial
 
                 { depositCompleted && 
                     <Box mt={3}>
-                        <Horizontal align="center">
-                            <StyledAlert severity="info">Deposit completed</StyledAlert>
-                        </Horizontal>
                         <Box mt={3}>
                             <Horizontal align="center">
                                 <Button color="primary" variant="contained" onClick={handleClose}>
-                                    { isInitialDeposit ? 'View Portfolio' : 'Close'}
+                                    View Portfolio
                                 </Button>
                             </Horizontal>
                         </Box>

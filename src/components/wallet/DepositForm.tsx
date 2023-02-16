@@ -186,7 +186,7 @@ export const DepositForm = ({ chainId, poolId, token, balance, handleSuccess, ha
             setAmountDecimals("")
         }
 
-    }, [notifications, chainId, approveLink, depositLink, formattedAllowance, handleSuccess])
+    }, [notifications, chainId, approveLink, depositLink, formattedAllowance])
 
     
     const showApproveButton =  (isApproveMining || (!allowanceOk && !isDepositMining)) // !allowanceOk  &&  !isDepositMining
@@ -246,9 +246,7 @@ export const DepositForm = ({ chainId, poolId, token, balance, handleSuccess, ha
                                 <Grid item xs={8} >
                                     <Horizontal valign="center">
                                         <Input className={classes.amount} inputProps={{min: 0, style: { textAlign: 'right' }}}  
-                                            value={amount} placeholder="0.0" autoFocus onChange={handleInputChange} />  
-                                        
-                                        
+                                            value={amount} placeholder="0.0" autoFocus onChange={handleInputChange} />
                                     </Horizontal>
                                 </Grid> 
                                 <Grid item xs={4} >

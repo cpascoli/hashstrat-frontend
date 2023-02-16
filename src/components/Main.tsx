@@ -69,7 +69,6 @@ export const Main = ( { toggleDark, setToggleDark } : MainProps  ) =>  {
         console.log(">>> Main networkChangedHandler:", chainId, account)
         setConnectedChainId(chainId)
         setChainId(defaultChainId)
-        // initialContext.connectedChainId = chainId
     }
 
 

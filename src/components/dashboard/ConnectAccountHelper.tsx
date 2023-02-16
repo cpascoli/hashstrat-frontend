@@ -33,27 +33,27 @@ export const ConnectAccountHelper = ( { connectedChainId, userMessage } : Connec
 
     const classes = useStyles()
     const { switchNetwork, chainId, account } = useEthers()
-
-    console.log("ConnectAccountHelper - chainId: ", chainId, account)
-
     const isPolygon = connectedChainId === Polygon.chainId
-
     const [showError, setShowError]= useState(false)
-
     const purposeMessage = userMessage ?? "interact with HashStrat"
 
     useEffect(() => {
-        let timer = setTimeout( () => setShowError(true), 1000 )
-
+        let timer = setTimeout( () => setShowError(true), 750 )
         return () => {
             clearTimeout(timer)
         }
-
     }, [])
 
 
+    useEffect(() => {
+        console.log("ConnectAccountHelper - useEffect - connectedChainId : ", connectedChainId, "chainId", chainId, "account", account)
+    }, [chainId, account])
+
+
+    console.log("ConnectAccountHelper - connectedChainId: ", connectedChainId, "chainId", chainId, "account", account, "isPolygon", isPolygon)
+
     return (
-        <Box>
+        <Box mx={2} >
             { showError && <Box className={classes.container}>
                 <StyledAlert severity={ isPolygon ? "info" : "warning"} >
                     <Box>
@@ -67,7 +67,7 @@ export const ConnectAccountHelper = ( { connectedChainId, userMessage } : Connec
 
                             <div style={{ marginTop: 30, marginBottom: 20 }} >
                                 { !isPolygon && 
-                                    <Button color="primary" variant="contained" fullWidth onClick={() => switchNetwork(Polygon.chainId)} disabled={chainId === Polygon.chainId}>
+                                    <Button color="primary" variant="contained" fullWidth onClick={() => switchNetwork(Polygon.chainId)} disabled={connectedChainId === Polygon.chainId}>
                                         Switch Network
                                     </Button>
                                 }

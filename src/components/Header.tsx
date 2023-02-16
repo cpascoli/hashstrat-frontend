@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { useEthers, shortenAddress } from "@usedapp/core";
+import { useEthers, shortenAddress, Polygon } from "@usedapp/core";
 import { styled } from "@material-ui/core/styles"
 
 import { useTheme, Button, Link, Menu, MenuProps, MenuItem, Divider, Typography, makeStyles, Box, Switch } from "@material-ui/core"
@@ -113,6 +113,10 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId, netw
 	const lightMode = theme.palette.type === 'light'
 	const logImg = lightMode ? homeLight : homeDark
 
+	// watch the network name to show the user the real network connected
+	const { chainId, account, deactivate } = useEthers()
+	console.log("Header useEthers - chainId:", chainId)
+
 
 	const [networkName, setNetworkName] = useState<string>("")
 
@@ -121,16 +125,16 @@ export const Header = ({ toggleDark, setToggleDark, setAccount, setChainId, netw
 		setToggleDark(!toggleDark);
 	};
 
-	// watch the network name to show the user the real network connected
-	const { account, deactivate, chainId } = useEthers()
 
+	
 	useEffect(() => {
+		console.log("Header useEffect - chainId:", chainId, "account", account)
 		setAccount(account)
 		if (chainId) {
 			const network = NetworkName(chainId) ?? "Unknown"
 			setNetworkName(network)
 			networkChangedHandler(chainId)
-		}
+		} 
 	
 	}, [chainId, account, networkChangedHandler, setAccount])
 	
